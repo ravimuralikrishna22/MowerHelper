@@ -1,0 +1,76 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+        @using (Html.BeginForm("viewcomments", "AdminFaqs", FormMethod.Get, null))
+    {
+    <div>
+           @{
+              WebGrid commentgrid = new WebGrid(rowsPerPage: 10);}
+                                            @{WebGrid grid1 = commentgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totalnorec), source: Model, autoSortAndPage: false);
+                                              if (grid1.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid1.Pager().ToString();
+                                                  string pageno = (Request["page"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid1.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid1.Columns(
+                                          grid1.Column("", "#", canSort: false, format:@<text>
+                                                   @{
+                                                       int count1 = 0;
+                                                       int norec = Convert.ToInt32(ViewBag.totalnorec);
+                                                       for (var i = 0; i < norec; i++)
+                                                      {
+                                                          count1=count1+1;
+                                                       }
+                                                       <label>@count1</label>
+                                                   }
+                                                   </text>
+                                                    
+),
+                                                  grid1.Column("Comment", "Comment", canSort: false),
+                                                   grid1.Column("Postedby", "Posted by", canSort: false),
+                                                   grid1.Column("Rate_value", "Rating", canSort: false),
+                                                    grid1.Column("CreatedOn", "Createdon", canSort: false,format:@<text>
+                                            @{
+                                                string create1=item.CreatedOn;
+                                                string[] create2 = create1.Split(' ');
+                                            }
+                                            <span>@create2[0].ToString()</span>
+                                                 </text>
+                                                 
+                                                    )
+                                                  )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>    
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table cellspacing="0" id="tblrecords" runat="server" cellpadding="0" width="100%" border="0" align="center">
+     <tr class="white_color" runat="server">
+                <td align="center" height="25px" valign="middle" width="100%">
+                  <label id="lblmsg" style="font-weight:bold; font-size:13px;">No Comments found.</label>
+                   </td>
+        </tr>
+     </table>
+                                              }
+                                              }  
+    </div>
+        }
+</body>
+</html>

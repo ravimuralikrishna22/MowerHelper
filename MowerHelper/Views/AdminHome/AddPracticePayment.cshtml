@@ -1,0 +1,1222 @@
+﻿@model List<MowerHelper.Models.BLL.Billing.CCProcess>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ExCardNumber").bind('contextmenu', function (e) {
+                e.preventDefault();
+                //  alert('Right Click is not allowed');
+            });
+            var pracname = "@ViewBag.pracname";
+            document.getElementById("lblpracneme").innerHTML = pracname;
+            //$("#txtpayDate").datepicker({
+            //    dateFormat: 'mm/dd/yy',
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    //                showCurrentAtPos: 1,
+            //    showWeeks: true,
+            //    inline: true,
+            //    numberOfMonths: [1, 1],
+            //    yearRange: "1950:2020",
+            //    showOn: "button",
+            //    buttonImage: "../Images/calender.gif",
+            //    buttonImageOnly: true
+
+            //});
+           
+        });
+</script>
+<script type="text/javascript">
+    function isValidDate(strDate) {
+        var dateStr = strDate; var datePat = /^(\d{1,2})(\/|-)(\d{1,2})\2(\d{4})$/; var month, day, year; var monthArray = new Array(); var matchArray = dateStr.match(datePat); var intShowI; var args; var strError = ""; monthArray[0] = "January"; monthArray[1] = "February"; monthArray[2] = "March"; monthArray[3] = "April"; monthArray[4] = "May"; monthArray[5] = "June"; monthArray[6] = "July"; monthArray[7] = "August"; monthArray[8] = "September"; monthArray[9] = "October"; monthArray[10] = "November"; monthArray[11] = "December"; args = IsValidDate.arguments
+        if (dateStr != "") {
+            if (matchArray == null)
+            { strError = "Please enter date in mm/dd/yyyy format."; return strError; }
+            month = matchArray[1]; day = matchArray[3]; year = matchArray[4]; if (year <= 1753)
+            { strError = "Please enter a year greater than 1753."; return strError; }
+            if (month < 1 || month > 12)
+            { strError = "Month must be between 1 and 12."; return strError; }
+            if (day < 1 || day > 31)
+            { strError = "Day must be between 1 and 31."; return strError; }
+            if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+                strError = monthArray[month - 1] + " doesn't have 31 days!"
+                return strError;
+            }
+            if (month == 2) {
+                var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)); if (day > 29 || (day == 29 && !isleap))
+                { strError = "February " + year + " doesn't have " + day + " days!"; return strError; }
+            }
+        }
+        return strError;
+    }
+    function ValidatePaymentInfo() {
+        ClearInlineAlert('lblPayErrCNote', 'tdAPNote', '#FFFFFF')
+        ClearInlineAlert('lblPayErrDate', 'tdAPDate', '#FFFFFF')
+        ClearInlineAlert('lblErrPamount', 'tdApAmount', '#FFFFFF')
+            if (document.getElementById('txtpayDate').value == "") {
+                //            Glb_ShowAlert("Invalid Charge Info!!! Charge date can not be empty."); 
+                InlineAlert('lblPayErrDate', 'tdAPDate', 'Invalid Charge Info!!! Charge date can not be empty.')
+                document.getElementById('txtpayDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblPayErrDate', 'tdAPDate', '#FFFFFF')
+                var strRetAlert = isValidDate(document.getElementById('txtpayDate').value)
+                if (strRetAlert != "") {
+                    //                Glb_ShowAlert(strRetAlert);
+                    InlineAlert('lblPayErrDate', 'tdAPDate', strRetAlert)
+                    document.getElementById('txtpayDate').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblPayErrDate', 'tdAPDate', '#FFFFFF')
+                }
+                if (document.getElementById('txtpayDate').value.length > 0) {
+                    var date = document.getElementById('txtpayDate').value;
+                    var len = document.getElementById('txtpayDate').value.length;
+                    for (var i = 0; i < len; i++) {
+                        var k = date.charAt(i); var digits = "0123456789/";
+                        if ((digits.indexOf(k, 0)) == -1) {
+                            //                        Glb_ShowAlert('Please enter valid date');
+                            InlineAlert('lblPayErrDate', 'tdAPDate', 'Please enter valid date')
+                            document.getElementById('txtpayDate').value = '';
+                            document.getElementById('txtpayDate').focus();
+                            return false;
+                        }
+                        else {
+                            ClearInlineAlert('lblPayErrDate', 'tdAPDate', '#FFFFFF')
+                        }
+                    }
+                }
+                var dtCur = new Date();
+                var dtGiven = new Date(document.getElementById('txtpayDate').value);
+                if (dtCur < dtGiven) {
+                    //                Glb_ShowAlert("Invalid Charge Info!!! Charge date exceeding the current system date.");
+                    InlineAlert('lblPayErrDate', 'tdAPDate', "Invalid Charge Info!!! Charge date exceeding the current system date.")
+                    document.getElementById('txtpayDate').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblPayErrDate', 'tdAPDate', '#FFFFFF')
+                }
+                if (document.getElementById('txtPayAmount').value == "") {
+                    InlineAlert('lblErrPamount', 'tdApAmount', "Invalid Charge Info!!! Charge Amount can not be empty.")
+                    document.getElementById('txtPayAmount').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrPamount', 'tdApAmount', '#FFFFFF')
+                }
+                if (document.getElementById('txtPayAmount').value != '') {
+                    if (parseFloat(document.getElementById('txtPayAmount').value) == '0') {
+                        InlineAlert('lblErrPamount', 'tdApAmount', "Invalid Charge Info!!! Charge Amount can not be zero.")
+                        document.getElementById('txtPayAmount').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblErrPamount', 'tdApAmount', '#FFFFFF')
+                    }
+                    if (document.getElementById('txtPayAmount').value == '.') {
+                        InlineAlert('lblErrPamount', 'tdApAmount', "Invalid Charge Info!!! Please enter valid charge amount.")
+                        document.getElementById('txtPayAmount').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblErrPamount', 'tdApAmount', '#FFFFFF')
+                    }
+                }
+                if (document.getElementById('txtPayAmount').value == "0") {
+                    InlineAlert('lblErrPamount', 'tdApAmount', "Invalid Charge Info!!! Charge Amount can not be zero.")
+                    document.getElementById('txtPayAmount').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrPamount', 'tdApAmount', '#FFFFFF')
+                }
+                if (document.getElementById('txtPayAmount').value.length > 0) {
+                    var amount = document.getElementById('txtPayAmount').value;
+                    var len = document.getElementById('txtPayAmount').value.length;
+                    for (var i = 0; i < len; i++) {
+                        var k = amount.charAt(i); var digits = "0123456789.";
+                        if ((digits.indexOf(k, 0)) == -1) {
+                            InlineAlert('lblErrPamount', 'tdApAmount', "Invalid Charge Info!!! Please enter valid charge amount.")
+                            document.getElementById('txtPayAmount').value = '';
+                            document.getElementById('txtPayAmount').focus();
+                            return false;
+                        }
+                        else {
+                            ClearInlineAlert('lblErrPamount', 'tdApAmount', '#FFFFFF')
+                        }
+                    }
+                }
+
+                if (document.getElementById('txtPayNotes').value != "") {
+                    if (document.getElementById('txtPayNotes').value.length > 1000) {
+                        InlineAlert('lblPayErrCNote', 'tdAPNote', "Invalid Charge Info!!! Charge Notes is exceeding the limit of 1000 characters.")
+                        document.getElementById('txtPayNotes').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblPayErrCNote', 'tdAPNote', '#FFFFFF')
+                    }
+                }
+            }
+            if (document.getElementById('ddlPayment').value == "2") {
+                document.getElementById('tblpayment').style.display = "none";
+                document.getElementById('tblcreditprocess').style.display = "";
+
+                document.getElementById('btnsave1').style.display = "none";
+                document.getElementById('btncancel1').style.display = "none";
+                document.getElementById('btnsave2').style.display = "";
+                document.getElementById('btncancel2').style.display = "";
+
+                $('#lblamount').text("$ " + document.getElementById('txtPayAmount').value);
+                $('#Exhdmamount').val(document.getElementById('txtPayAmount').value);
+                return false;
+        }
+            else {
+                document.getElementById('tblpayment').style.display = "";
+                document.getElementById('tblcreditprocess').style.display = "none";
+        }
+    }
+</script>
+
+          <script type="text/javascript">
+              $(document).ready(function () {
+                  // $("#ECardType").attr("MasterCard");
+                  var obj = "@ViewBag.practice_ind";
+                  if ('@ViewBag.cardnumber' == "") {
+                      obj = "Y";
+                      $('#Extxtfirstname').val('@ViewBag.PFirstName');
+                      $('#Extxtlastname').val('@ViewBag.PLastName');
+                  }
+              //alert(obj);
+              if (obj == "Y") {
+                  // alert("1");
+                  document.getElementById('Echkaddress').checked = true;
+              }
+              else {
+                  document.getElementById('Echkaddress').checked = false;
+              }
+              var date = new Date();
+              var Nextyear = date.getFullYear() + 1;
+              $('#Exyear').val(Nextyear);
+
+             
+
+
+              
+
+            
+          });
+          function exclick() {
+              document.getElementById('extrmsgdiv').style.display = 'none';
+              document.getElementById('extrdiv').style.display = '';
+
+          }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $("#txtEZip").keyup(function () {
+                if ($(this).val().length == 5) {
+                    $("#DDEState").focus();
+                }
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        var Cards = new makeArray(8);
+        Cards[0] = new CardType("MasterCard", "51,52,53,54,55", "16");
+        var MasterCard = Cards[0];
+        Cards[1] = new CardType("Visa", "4", "13,16");
+        var Visa = Cards[1];
+        Cards[2] = new CardType("AmExCard", "34,37", "15");
+        var AmExCard = Cards[2];
+        Cards[3] = new CardType("DinersClubCard", "30,36,38", "14");
+        var DinersClubCard = Cards[3];
+        Cards[4] = new CardType("DiscoverCard", "6011", "16");
+        var DiscoverCard = Cards[4];
+        Cards[5] = new CardType("enRouteCard", "2014,2149", "15");
+        var enRouteCard = Cards[5];
+        Cards[6] = new CardType("JCBCard", "3088,3096,3112,3158,3337,3528,3530,3566", "16");
+        var JCBCard = Cards[6];
+        var LuhnCheckSum = Cards[7] = new CardType();
+
+        /*************************************************************************\
+        CheckCardNumber(form)
+        function called when users click the "check" button.
+        \*************************************************************************/
+        function CheckCardNumber() {
+            var tmpyear;
+
+            if (document.getElementById('ExCardNumber1').value.length == 0) {
+                Glb_ShowAlert("Please enter a Card Number.");
+                document.getElementById('ExCardNumber').focus();
+                return false;
+            }
+            if (document.getElementById('ExCardNumber1').value.length > 0) {
+                var ccnum = document.getElementById('ExCardNumber1').value;
+                var sum = 0;
+                var mods = ccnum.length % 2;
+                var i = 0;
+                while (i < ccnum.length) {
+                    var digit = parseInt(ccnum.charAt(i));
+                    if (i % 2 == mods)
+                        digit = digit * 2;
+                    if (digit > 9) {
+                        digit = digit - 9;
+                    }
+                    sum += digit;
+                    i += 1;
+                }
+                if ((sum % 10) != 0) {
+                    //                    Glb_ShowAlert("This is not a valid credit card number.");
+                    document.getElementById('Exlblcardnumber').style.display = '';
+                    document.getElementById('Exlblcardnumber').innerHTML = 'This is not a valid credit card number.';
+                    document.getElementById('ExCardNumber').focus();
+                    document.getElementById('ExTableCell25').bgColor = "orange";
+                    return false;
+                }
+            }
+
+            /*if (form.ExpYear.value.length == 0) {
+            Glb_ShowAlert("Please enter the Expiration Year.");
+            form.ExpYear.focus();
+            return;
+            }
+
+            if (form.ExpYear.value > 96)
+            tmpyear = "19" + form.ExpYear.value;
+            else if (form.ExpYear.value < 21)
+            tmpyear = "20" + form.ExpYear.value;
+            else {
+            Glb_ShowAlert("The Expiration Year is not valid.");
+            return;
+            }*/
+            tmpyear = document.getElementById('Exyear').options[document.getElementById('Exyear').selectedIndex].value;
+            tmpmonth = document.getElementById('Exmonth').options[document.getElementById('Exmonth').selectedIndex].value;
+            card = document.getElementById('ExCardType').options[document.getElementById('ExCardType').selectedIndex].text;
+            if (card == "American Express") {
+                card = "AmExCard";
+            }
+            var retval = eval(card + ".checkCardNumber(\"" + document.getElementById('ExCardNumber1').value +
+"\", " + tmpyear + ", " + tmpmonth + ");");
+            cardname = "";
+            //            alert(retval);
+            if (retval)
+
+                // comment this out if used on an order form
+                //Glb_ShowAlert("This card number appears to be valid.");
+                return true;
+
+            else {
+                // The cardnumber has the valid luhn checksum, but we want to know which
+                // cardtype it belongs to.
+                for (var n = 0; n < Cards.size; n++) {
+                    //                    alert("1");
+                    //                    alert(form.CardNumber1.value);
+                    //                    alert(tmpyear);
+                    //                    alert(tmpmonth);
+                    //                    alert(Cards[0]);
+                    if (Cards[n].checkCardNumber(document.getElementById('ExCardNumber1').value, tmpyear, tmpmonth)) {
+                        // alert("1.1");
+                        cardname = Cards[n].getCardType();
+                        //  alert(cardname);
+                        break;
+                    }
+                }
+                //  alert(cardname.length);
+                //                alert(cardname);
+                if (cardname.length > 0) {
+                    //                    alert(cardname.length);
+                    //                    alert("well");
+                    //Glb_ShowAlert("This is  " + cardname + " number,not  " + card + " number.");
+                    //                    Glb_ShowAlert("Please verify the card type.");
+                    //                    alert("Please verify the card type.");
+                    //                    return false;
+                    document.getElementById('Exlbcardtype').style.display = '';
+                    //                    alert("1");
+                    document.getElementById('Exlbcardtype').innerHTML = 'Please verify the card type.';
+                    //                    alert("2");
+                    document.getElementById('ExTableCell29').bgColor = "orange";
+                    //                    alert("3");
+                    document.getElementById('ExCardType').focus();
+                    //                    alert("4");
+                    return false;
+                }
+                else {
+                    //                    alert('76');
+                    document.getElementById('Exlbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('ExTableCell29').bgColor = "white";
+                    Glb_ShowAlert("This card number is not valid.");
+                    document.getElementById('ExCardNumber').focus();
+                    return false;
+                }
+            }
+
+            // The following line doesn't work in IE3, you need to change it
+            // to something like "(new CardType())...".
+            // if (!CardType().isExpiryDate(tmpyear, tmpmonth)) {
+
+        }
+
+        /*************************************************************************\
+        Object CardType([String cardtype, String rules, String len, int year, 
+        int month])
+        cardtype    : type of card, eg: MasterCard, Visa, etc.
+        rules       : rules of the cardnumber, eg: "4", "6011", "34,37".
+        len         : valid length of cardnumber, eg: "16,19", "13,16".
+        year        : year of expiry date.
+        month       : month of expiry date.
+        eg:
+        var VisaCard = new CardType("Visa", "4", "16");
+        var AmExCard = new CardType("AmEx", "34,37", "15");
+        \*************************************************************************/
+        function CardType() {
+            var n;
+            var argv = CardType.arguments;
+            var argc = CardType.arguments.length;
+
+            this.objname = "object CardType";
+
+            var tmpcardtype = (argc > 0) ? argv[0] : "invalid card";
+            var tmprules = (argc > 1) ? argv[1] : "0,1,2,3,4,5,6,7,8,9";
+            var tmplen = (argc > 2) ? argv[2] : "13,14,15,16,19";
+
+            this.setCardNumber = setCardNumber;  // set CardNumber method.
+            this.setCardType = setCardType;  // setCardType method.
+            this.setLen = setLen;  // setLen method.
+            this.setRules = setRules;  // setRules method.
+            this.setExpiryDate = setExpiryDate;  // setExpiryDate method.
+
+            this.setCardType(tmpcardtype);
+            this.setLen(tmplen);
+            this.setRules(tmprules);
+            if (argc > 4)
+                this.setExpiryDate(argv[3], argv[4]);
+
+            this.checkCardNumber = checkCardNumber;  // checkCardNumber method.
+            this.getExpiryDate = getExpiryDate;  // getExpiryDate method.
+            this.getCardType = getCardType;  // getCardType method.
+            this.isCardNumber = isCardNumber;  // isCardNumber method.
+            this.isExpiryDate = isExpiryDate;  // isExpiryDate method.
+            this.luhnCheck = luhnCheck; // luhnCheck method.
+            return this;
+        }
+
+        /*************************************************************************\
+        boolean checkCardNumber([String cardnumber, int year, int month])
+        return true if cardnumber pass the luhncheck and the expiry date is
+        valid, else return false.
+        \*************************************************************************/
+        function checkCardNumber() {
+            // alert('5');
+            var argv = checkCardNumber.arguments;
+            var argc = checkCardNumber.arguments.length;
+            var cardnumber = (argc > 0) ? argv[0] : this.cardnumber;
+            var year = (argc > 1) ? argv[1] : this.year;
+            var month = (argc > 2) ? argv[2] : this.month;
+            //  alert(cardnumber);
+            this.setCardNumber(cardnumber);
+            this.setExpiryDate(year, month);
+
+            if (!this.isCardNumber())
+                return false;
+            //            if (!this.isExpiryDate())
+            //                return false;
+            return true;
+        }
+        /*************************************************************************\
+        String getCardType()
+        return the cardtype.
+        \*************************************************************************/
+        function getCardType() {
+            return this.cardtype;
+        }
+        /*************************************************************************\
+        String getExpiryDate()
+        return the expiry date.
+        \*************************************************************************/
+        function getExpiryDate() {
+            return this.month + "/" + this.year;
+        }
+        /*************************************************************************\
+        boolean isCardNumber([String cardnumber])
+        return true if cardnumber pass the luhncheck and the rules, else return
+        false.
+        \*************************************************************************/
+        function isCardNumber() {
+            var argv = isCardNumber.arguments;
+            var argc = isCardNumber.arguments.length;
+            // alert(argv);
+            // alert(argc);
+            var cardnumber = (argc > 0) ? argv[0] : this.cardnumber;
+            //  alert(cardnumber);
+            if (!this.luhnCheck())
+                return false;
+
+            for (var n = 0; n < this.len.size; n++)
+                if (cardnumber.toString().length == this.len[n]) {
+                    for (var m = 0; m < this.rules.size; m++) {
+                        var headdigit = cardnumber.substring(0, this.rules[m].toString().length);
+                        if (headdigit == this.rules[m])
+                            return true;
+                    }
+                    return false;
+                }
+            // return false;
+        }
+
+        /*************************************************************************\
+        boolean isExpiryDate([int year, int month])
+        return true if the date is a valid expiry date,
+        else return false.
+        \*************************************************************************/
+        function isExpiryDate() {
+            var argv = isExpiryDate.arguments;
+            var argc = isExpiryDate.arguments.length;
+
+            year = argc > 0 ? argv[0] : this.year;
+            month = argc > 1 ? argv[1] : this.month;
+
+            if (!isNum(year + ""))
+                return false;
+            if (!isNum(month + ""))
+                return false;
+            today = new Date();
+            expiry = new Date(year, month);
+            if (today.getTime() > expiry.getTime())
+                return false;
+            else
+                return true;
+        }
+
+        /*************************************************************************\
+        boolean isNum(String argvalue)
+        return true if argvalue contains only numeric characters,
+        else return false.
+        \*************************************************************************/
+        function isNum(argvalue) {
+            argvalue = argvalue.toString();
+
+            if (argvalue.length == 0)
+                return false;
+
+            for (var n = 0; n < argvalue.length; n++)
+                if (argvalue.substring(n, n + 1) < "0" || argvalue.substring(n, n + 1) > "9")
+                    return false;
+
+            return true;
+        }
+
+        /*************************************************************************\
+        boolean luhnCheck([String CardNumber])
+        return true if CardNumber pass the luhn check else return false.
+        Reference: http://www.ling.nwu.edu/~sburke/pub/luhn_lib.pl
+        \*************************************************************************/
+        function luhnCheck() {
+            var argv = luhnCheck.arguments;
+            var argc = luhnCheck.arguments.length;
+
+            var CardNumber = argc > 0 ? argv[0] : this.cardnumber;
+
+            if (!isNum(CardNumber)) {
+                return false;
+            }
+
+            var no_digit = CardNumber.length;
+            var oddoeven = no_digit & 1;
+            var sum = 0;
+
+            for (var count = 0; count < no_digit; count++) {
+                var digit = parseInt(CardNumber.charAt(count));
+                if (!((count & 1) ^ oddoeven)) {
+                    digit *= 2;
+                    if (digit > 9)
+                        digit -= 9;
+                }
+                sum += digit;
+            }
+            if (sum % 10 == 0) {
+                // alert("true");
+                return true;
+            }
+            else {
+                //alert("false");
+                return false;
+            }
+        }
+
+        /*************************************************************************\
+        ArrayObject makeArray(int size)
+        return the array object in the size specified.
+        \*************************************************************************/
+        function makeArray(size) {
+            this.size = size;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setCardNumber(cardnumber)
+        return the CardType object.
+        \*************************************************************************/
+        function setCardNumber(cardnumber) {
+            this.cardnumber = cardnumber;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setCardType(cardtype)
+        return the CardType object.
+        \*************************************************************************/
+        function setCardType(cardtype) {
+            this.cardtype = cardtype;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setExpiryDate(year, month)
+        return the CardType object.
+        \*************************************************************************/
+        function setExpiryDate(year, month) {
+            this.year = year;
+            this.month = month;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setLen(len)
+        return the CardType object.
+        \*************************************************************************/
+        function setLen(len) {
+            // Create the len array.
+            if (len.length == 0 || len == null)
+                len = "13,14,15,16,19";
+
+            var tmplen = len;
+            n = 1;
+            while (tmplen.indexOf(",") != -1) {
+                tmplen = tmplen.substring(tmplen.indexOf(",") + 1, tmplen.length);
+                n++;
+            }
+            this.len = new makeArray(n);
+            n = 0;
+            while (len.indexOf(",") != -1) {
+                var tmpstr = len.substring(0, len.indexOf(","));
+                this.len[n] = tmpstr;
+                len = len.substring(len.indexOf(",") + 1, len.length);
+                n++;
+            }
+            this.len[n] = len;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setRules()
+        return the CardType object.
+        \*************************************************************************/
+        function setRules(rules) {
+            // Create the rules array.
+            if (rules.length == 0 || rules == null)
+                rules = "0,1,2,3,4,5,6,7,8,9";
+
+            var tmprules = rules;
+            n = 1;
+            while (tmprules.indexOf(",") != -1) {
+                tmprules = tmprules.substring(tmprules.indexOf(",") + 1, tmprules.length);
+                n++;
+            }
+            this.rules = new makeArray(n);
+            n = 0;
+            while (rules.indexOf(",") != -1) {
+                var tmpstr = rules.substring(0, rules.indexOf(","));
+                this.rules[n] = tmpstr;
+                rules = rules.substring(rules.indexOf(",") + 1, rules.length);
+                n++;
+            }
+            this.rules[n] = rules;
+            return this;
+        }
+        function clearalerts() {
+            document.getElementById('Exlbcardtype').style.display = 'none';
+            document.getElementById('ExTableCell29').bgColor = "white";
+            document.getElementById('ExTableCell25').bgColor = "White";
+            document.getElementById('Exlblcardnumber').style.display = 'none';
+            document.getElementById('ExTd2').bgColor = "white";
+            document.getElementById('Exlblfirstname').style.display = 'none';
+            document.getElementById('ExTd4').bgColor = "White";
+            document.getElementById('Exlbllastname').style.display = 'none';
+            document.getElementById('ExTableCell31').bgColor = "white";
+            document.getElementById('ExlblExpyear').style.display = 'none';
+            document.getElementById('ExTableCell35').bgColor = "white";
+            document.getElementById('Exlbladdress').style.display = 'none';
+            document.getElementById('EDtdzip').bgColor = "white";
+            document.getElementById('EDlblzip').style.display = 'none';
+            document.getElementById('EDtdstate').bgColor = "White";
+            document.getElementById('EDlblstate').style.display = 'none';
+            document.getElementById('EDtdcity').bgColor = "white";
+            document.getElementById('EDlblcity').style.display = 'none';
+
+        }
+        function creditcardProcess() {
+            clearalerts()
+            var my_str = document.getElementById('ExCardNumber').value;
+            var str = "*";
+            if (my_str.indexOf(str) == -1) {
+               
+                document.getElementById('ExCardNumber1').value = document.getElementById('ExCardNumber').value;
+            }
+            else {
+
+                if (document.getElementById('ExCardNumber1').value == '') {
+
+                   
+                    document.getElementById('ExCardNumber1').value = document.getElementById('ExCardNumber').value;
+                }
+                else if (document.getElementById('ExCardNumber1').value != '' && document.getElementById('ExCardNumber').value != '') {
+                   
+                    if (document.getElementById('Ehdncardnumber').value != document.getElementById('ExCardNumber').value) {
+                      
+                        //				                Glb_ShowAlert("Please enter valid Credit Card Number");
+                        document.getElementById('Exlblcardnumber').style.display = '';
+                        document.getElementById('Exlblcardnumber').innerHTML = 'Please enter valid Credit Card Number';
+                        document.getElementById('ExTableCell25').bgColor = "orange";
+                        document.getElementById('ExCardNumber').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('ExTableCell25').bgColor = "White";
+                        document.getElementById('Exlblcardnumber').style.display = 'none';
+                    }
+                }
+            }
+            if (document.getElementById('ExCardNumber').value == '') {
+                
+                //                 alert('5')
+                //Glb_ShowAlert("Please enter credit card number");
+                //					    document.frmCreditCard.lblcardnumber.style.display = '';
+                document.getElementById('Exlblcardnumber').style.display = '';
+                document.getElementById('Exlblcardnumber').innerHTML = 'Please enter credit card number';
+                document.getElementById('ExTableCell25').bgColor = "orange";
+                document.getElementById('ExCardNumber').focus();
+                return false;
+            }
+            else {
+                document.getElementById('ExTableCell25').bgColor = "White";
+                document.getElementById('Exlblcardnumber').style.display = 'none';
+            }
+            var StrCardValue;
+            StrCardValue = document.getElementById('ExCardNumber').value;
+
+            if (StrCardValue.length < 13) {
+               
+                document.getElementById('Exlblcardnumber').style.display = '';
+                //                Glb_ShowAlert("Please enter 13 Digit Card Number");
+                document.getElementById('Exlblcardnumber').innerHTML = 'Please enter 13 Digit Card Number';
+                document.getElementById('ExTableCell25').bgColor = "orange";
+                document.getElementById('ExCardNumber').focus();
+                return false;
+            }
+            else {
+                document.getElementById('ExTableCell25').bgColor = "White";
+                document.getElementById('Exlblcardnumber').style.display = 'none';
+            }
+
+            if (CheckCardNumber() == true) {
+                var strfirstname = trim(document.getElementById('Extxtfirstname').value);
+                document.getElementById('Extxtfirstname').value = strfirstname;
+                if (MyChars(document.getElementById('Extxtfirstname')) == 'BlankError') {
+                   
+                    //						    Glb_ShowAlert("Please enter first name");
+                    document.getElementById('Exlbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('ExTableCell29').bgColor = "white";
+                    document.getElementById('Exlblfirstname').style.display = '';
+                    document.getElementById('Exlblfirstname').innerHTML = 'Please enter first name';
+                    document.getElementById('ExTd2').bgColor = "orange";
+                    document.getElementById('Extxtfirstname').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('ExTd2').bgColor = "white";
+                    document.getElementById('Exlblfirstname').style.display = 'none';
+                }
+
+                if (MyChars(document.getElementById('Extxtfirstname')) == "NumError") {
+                 
+                    //						    Glb_ShowAlert("Please enter first name in alphabets");
+                    document.getElementById('Exlbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('ExTableCell29').bgColor = "white";
+                    document.getElementById('Exlblfirstname').style.display = '';
+                    document.getElementById('Exlblfirstname').innerHTML = 'Please enter first name in alphabets';
+                    document.getElementById('ExTd2').bgColor = "orange";
+                    document.getElementById('Extxtfirstname').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('ExTd2').bgColor = "white";
+                    document.getElementById('Exlblfirstname').style.display = 'none';
+                }
+
+
+                var strlastname = trim(document.getElementById('Extxtlastname').value);
+                document.getElementById('Extxtlastname').value = strlastname;
+                if (MyChars(document.getElementById('Extxtlastname')) == 'BlankError') {
+                    
+                    //						    Glb_ShowAlert("Please enter Last Name");
+                    document.getElementById('Exlbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('ExTableCell29').bgColor = "white";
+                    document.getElementById('Exlbllastname').style.display = '';
+                    document.getElementById('Exlbllastname').innerHTML = 'Please enter Last Name';
+                    document.getElementById('ExTd4').bgColor = "orange";
+                    document.getElementById('Extxtlastname').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('ExTd4').bgColor = "White";
+                    document.getElementById('Exlbllastname').style.display = 'none';
+
+                }
+
+                if (MyChars(document.getElementById('Extxtlastname')) == "NumError") {
+                   
+                    //						    Glb_ShowAlert("Please enter last name in alphabets");
+                    document.getElementById('Exlbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('ExTableCell29').bgColor = "white";
+                    document.getElementById('Exlbllastname').style.display = '';
+                    document.getElementById('Exlbllastname').innerHTML = 'Please enter last name in alphabets';
+                    document.getElementById('ExTd4').bgColor = "orange";
+                    document.getElementById('Extxtlastname').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('ExTd4').bgColor = "White";
+                    document.getElementById('Exlbllastname').style.display = 'none';
+                }
+                var tmpyear = document.getElementById('Exyear').value;
+                var tmpmonth = document.getElementById('Exmonth').value;
+                //            alert(tmpyear);
+                //            alert(tmpmonth);
+
+                var today = new Date();
+                var expiry = new Date(tmpyear, tmpmonth);
+                //            alert(today);
+                //            alert(expiry);
+                if (today.getTime() > expiry.getTime()) {
+                   
+                    document.getElementById('Exlbcardtype').style.display = 'none';
+                    document.getElementById('ExTableCell29').bgColor = "white";
+                    document.getElementById('ExlblExpyear').style.display = '';
+                    document.getElementById('ExlblExpyear').innerHTML = 'This card has already expired';
+                    document.getElementById('ExTableCell31').bgColor = "orange";
+                    return false;
+                }
+                else {
+                    document.getElementById('ExTableCell31').bgColor = "white";
+                    document.getElementById('ExlblExpyear').style.display = 'none';
+                }
+
+
+                var str_BAddress1;
+                str_BAddress1 = trim(document.getElementById('EditAddress1').value);
+                document.getElementById('EditAddress1').value = str_BAddress1;
+                if (str_BAddress1 == '') {
+                  
+                    //                    Glb_ShowAlert("Please enter billing address");
+                    document.getElementById('Exlbladdress').style.display = '';
+                    document.getElementById('Exlbladdress').innerHTML = 'Please enter billing address';
+                    document.getElementById('ExTableCell35').bgColor = "orange";
+                    document.getElementById('EditAddress1').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('ExTableCell35').bgColor = "white";
+                    document.getElementById('Exlbladdress').style.display = 'none';
+                }
+                if (document.getElementById('txtEZip').value == '') {
+                   
+                    //						Glb_ShowAlert("Please enter zip");
+                    document.getElementById('EDlblzip').style.display = '';
+                    document.getElementById('EDlblzip').innerHTML = 'Please enter zip';
+                    document.getElementById('EDtdzip').bgColor = "orange";
+                    document.getElementById('txtEZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('EDtdzip').bgColor = "white";
+                    document.getElementById('EDlblzip').style.display = 'none';
+                }
+                var txtZip = document.getElementById('txtEZip').value;
+                if (!txtZip.match("^[a-zA-Z0-9]*$")) {
+
+                    //						Glb_ShowAlert("Please enter valid zip");
+                    document.getElementById('EDlblzip').style.display = '';
+                    document.getElementById('EDlblzip').innerHTML = 'Please enter valid zip';
+                    document.getElementById('EDtdzip').bgColor = "orange";
+                    document.getElementById('txtEZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('EDtdzip').bgColor = "white";
+                    document.getElementById('EDlblzip').style.display = 'none';
+                }
+                if (document.getElementById('txtEZip').value.length != 5) {
+                   
+                    //						Glb_ShowAlert("Please enter valid zip");
+                    document.getElementById('EDlblzip').style.display = '';
+                    document.getElementById('EDlblzip').innerHTML = 'Please enter valid zip';
+                    document.getElementById('EDtdzip').bgColor = "orange";
+                    document.getElementById('txtEZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('EDtdzip').bgColor = "white";
+                    document.getElementById('EDlblzip').style.display = 'none';
+                }
+                if (document.getElementById('DDEState').selectedIndex == 0) {
+                  
+                    //						Glb_ShowAlert("Please select state");
+                    document.getElementById('EDlblstate').style.display = '';
+                    document.getElementById('EDlblstate').innerHTML = 'Please select state';
+                    document.getElementById('EDtdstate').bgColor = "orange";
+                    document.getElementById('DDEState').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('EDtdstate').bgColor = "White";
+                    document.getElementById('EDlblstate').style.display = 'none';
+                }
+
+                if (document.getElementById('DDECity').selectedIndex == 0) {
+                   
+                    //					    Glb_ShowAlert("Please select city");
+                    document.getElementById('EDlblcity').style.display = '';
+                    document.getElementById('EDlblcity').innerHTML = 'Please select city';
+                    document.getElementById('EDtdcity').bgColor = "orange"
+                    document.getElementById('DDECity').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('EDtdcity').bgColor = "white";
+                    document.getElementById('EDlblcity').style.display = 'none';
+                }
+            }
+            else {
+                return false;
+            }
+            //$('#updateDialog').dialog({ modal: true, dialogClass: 'updateDialog', width: 500, draggable: false, resizable: false });
+            document.getElementById('Exhdnadd1').value = document.getElementById('EditAddress1').value;
+            document.getElementById('Exhdnadd2').value = document.getElementById('EditAddress2').value;
+            document.getElementById('Exhdnzip').value = document.getElementById('txtEZip').value;
+            document.getElementById('Exhdnstate').value = document.getElementById('DDEState').value;
+            document.getElementById('Exhdncity').value = document.getElementById('DDECity').value;
+            document.body.style.cursor = 'wait';
+            document.getElementById("ExupdNote").style.display = '';
+            //$('#ExupdNote').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //                  }       
+            //            document.getElementById("tblProcess").style.display = 'none';
+            //            $("#updateDialog").dialog({
+            //                modal: true,
+            //                width: 500,
+            //                resizable: false,
+            //                closeOnEscape: false,
+            //                open: function (event, ui) { $(".ui-dialog-titlebar").hide(); }
+
+            //            });
+
+        }
+
+    </script>
+</head>
+<body>
+ @using (Ajax.BeginForm("AddPracticePayment", "AdminHome", new AjaxOptions
+ {
+     InsertionMode = InsertionMode.Replace,
+     HttpMethod = "POST",
+     OnSuccess = "updateSuccess",
+     OnComplete = "SessionExpireFail"
+
+ }, new { @id = "newPayform" }))
+ {
+        <table border="0" cellpadding="6" cellspacing="1" class="border_style" width="100%" id="tblpayment">
+                <tr class="white_color" >
+                <td width="20%" align="right">
+                <font color="red">*</font><strong>Provider Name :&nbsp;</strong>
+                </td>
+                <td><span id="lblpracneme"></span></td>
+                </tr>
+               <tr class="white_color" >
+                <td width="20%" align="right">
+                <font color="red">*</font><strong>Payment date :&nbsp;</strong>
+                </td>
+                <td id="tdAPDate">
+                  @Html.TextBox("txtpayDate", DateTime.Now.ToString("MM/dd/yyyy"), new { @class = "textfield Datefield", @style = "width:90px" })&nbsp;&nbsp;
+                        <span id="lblPayErrDate" style="color: Black; font-weight: bold;"></span>
+                </td>
+                </tr>
+                <tr class="white_color" >
+                <td width="20%" align="right">
+                <font color="red">*</font><strong>Amount paid($) :&nbsp;</strong>
+                </td>
+                <td id="tdApAmount">
+                
+                @Html.TextBox("txtPayAmount", null, new { @class = "textfield", @maxLength = 10, @style = "width:90px", @onkeypress = "return checkValidNumeric(txtPayAmount,8,2,event)" })&nbsp;&nbsp;<span
+                            id="lblunPaidamount" style="font-weight: bold; "></span><span id="lblErrPamount"
+                                style="color: Black; font-weight: bold;"></span></td>
+                </tr>
+                <tr class="white_color" >
+                <td width="20%" align="right">
+                <font color="red">*</font><strong>Payment mode :&nbsp;</strong>
+                </td>
+                <td>
+                @Html.DropDownList("ddlPayment", new List<SelectListItem> { new SelectListItem { Value = "1", Text = "Cash" }, new SelectListItem { Value = "2", Text = "Credit card" }, new SelectListItem { Value = "3", Text = "Check" } })
+                </td>
+                </tr>
+                <tr class="white_color" >
+                <td width="20%" align="right">
+                 <strong>Notes :&nbsp;</strong>
+                </td>
+                <td id="tdAPNote">
+                  @Html.TextArea("txtPayNotes", null, 3, 3, new { @class = "textfield", @style = "width:350px;height:78px;" })&nbsp;&nbsp;(Maximum
+                        length 1000 characters)&nbsp&nbsp;<br />
+                        <span id="lblPayErrCNote" style="color: Black; font-weight: bold;"></span>
+                </td>
+                </tr>
+                </table>
+     
+     
+             <input type="hidden" id="ExCardNumber1" name="ExCardNumber1" />
+        <input id="Ehdncardnumber" type="hidden" name="Ehdncardnumber" /> 
+        <input type="hidden" id="ExHdnPractice_ID" name="ExHdnPractice_ID" value="@ViewBag.Practice_ID" />
+        <input type="hidden" id="ExHdnProvider_ID" name="ExHdnProvider_ID" value="@ViewBag.Provider_ID" />
+          <input type="hidden" id="ExhdnCardid" name="ExhdnCardid" value="@ViewBag.CardID" />
+        <input type="hidden" id="Exhdnadd1" name="Exhdnadd1" value="" />
+        <input type="hidden" id="Exhdnadd2" name="Exhdnadd2" value="" />
+        <input type="hidden" id="Exhdnzip" name="Exhdnzip" value="" />
+        <input type="hidden" id="Exhdnstate" name="Exhdnstate" value="" />
+        <input type="hidden" id="Exhdncity" name="Exhdncity" value="" />
+     <input type="hidden" id="hdnvaultid" name="hdnvaultid" value="@ViewBag.vaultid" />
+        <div id="Exupdate-message" style="padding-left: 250px; font-weight: bold;">
+        </div>
+                <table id="tblcreditprocess" align="center" width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style" style="display:none;">
+                    <tr class="white_color" id="Erow12">
+                        <td align="right" style="width: 30%" id="ETableCell28" runat="server">
+                            <font color="red">*</font><strong>Card type :&nbsp;</strong>
+                        </td>
+                        <td id="ExTableCell29" runat="server">
+                            @Html.DropDownList("ExCardType", null, new { @class = "textfield", @style = "height:25px" })
+                            &nbsp;&nbsp;&nbsp;<span id="Exlbcardtype" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Erow10" class="nav_blue_color">
+                        <td id="ETableCell24" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Credit card number :&nbsp;</strong>
+                        </td>
+                        <td id="ExTableCell25" runat="server">
+                            @Html.TextBox("ExCardNumber", (string)ViewBag.cardnumber, new { @class = "textfield", @onkeydown = "return isValidNumeric(ExCardNumber,16,0,event);", autocomplete = "off" })
+                            <b>Cvv :&nbsp;</b>
+                            @Html.TextBox("ExtxtCVV2", (string)ViewBag.cvv2, new
+                       {
+                           @style = "width:50px",
+                           @class = "textfield",
+                           @onkeypress = "return AlphaNumbers(event);"
+                       })
+                            <img src="~/Images/help2.png" id="Img2" style="vertical-align: middle" />
+                            <div id="divCvv" style="display: none">
+                                <table id="Table7" width="100%" runat="server">
+                                    <tr>
+                                        <td>
+                                            <img src="~/Images/cvv2.jpg" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="Exlblcardnumber" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Etrfirstname" class="white_color">
+                        <td id="ETd1" align="Right" style="width: 30%">
+                            <font color="red">*</font><strong>First name :</strong>&nbsp;
+                        </td>
+                        <td id="ExTd2" runat="server">
+                            @Html.TextBox("Extxtfirstname", (string)ViewBag.FirstName, new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                id="Exlblfirstname" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Etrlastname" class="nav_blue_color">
+                        <td id="ETd3" align="Right" style="width: 30%">
+                            <font color="red">*</font><strong>Last name :</strong>&nbsp;
+                        </td>
+                        <td id="ExTd4" runat="server">
+                            @Html.TextBox("Extxtlastname", (string)ViewBag.LastName, new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                id="Exlbllastname" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Erow13" class="white_color">
+                        <td id="ETableCell30" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Card expiry date :&nbsp;</strong>
+                        </td>
+                        <td id="ExTableCell31" runat="server">
+                            @Html.DropDownList("Exmonth", null, new { @class = "textfield", @style = "width:50px" })
+                            @Html.DropDownList("Exyear", null, new { @class = "textfield", @style = "width:100px" })
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span id="ExlblExpyear" style="display: none;"></span>
+                        </td>
+                    </tr>
+                    <tr id="row14" runat="server" class="nav_blue_color">
+                                    <td id="TableCell32" runat="server" align="right" style="width: 30%">
+
+                                        <strong>Amount :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell33" runat="server">
+                                    @Html.Hidden("Exhdmamount", "1")
+                                    @* @Html.TextBox("amt", "$1.00", new { @style = "width:50px;", disabled = "true" })*@
+                                  @* <span id="spanamt">$1.00</span>*@
+                                         @Html.Label(" ", new { id="lblamount" } )
+                                   @if (ViewBag.regFee != null)
+                                   {
+                                   <img src="~/Images/help2.png" id="Img3" onmouseover="ddrivetip('@ViewBag.regFee',300)" onmouseout="hideddrivetip()" style="vertical-align:middle" />
+                                   }
+                                    </td>
+                                </tr>
+                    <tr class="white_color" id="Erow15">
+                        <td id="ETableCell34" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Billing address 1 :&nbsp;</strong>
+                        </td>
+                        <td id="ExTableCell35" runat="server">
+                            @Html.TextBox("EditAddress1", (string)ViewBag.PAddress1, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })&nbsp;&nbsp;&nbsp;<span
+                                id="Exlbladdress" style="display: none"></span>
+                            @Html.CheckBox("Echkaddress")&nbsp;&nbsp;&nbsp; <strong>Same as mower helper address
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr id="Erow16" class="nav_blue_color">
+                        <td id="ETableCell36" align="right" style="width: 30%">
+                            <strong>Address 2 :&nbsp;</strong>
+                        </td>
+                        <td id="ETableCell37" runat="server">
+                            @Html.TextBox("EditAddress2", (string)ViewBag.PAddress2, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })
+                        </td>
+                    </tr>
+                     @Html.Partial("_CitiesStatesPaymentMetod", Model)
+                </table>
+                <br />
+                <div id="ExupdNote" title="Process" class="dvLoading" style="display:none;">
+        <table id="ExtblBusyMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+            <tr>
+                <th align="center">
+                    <img id="imgp" src="~/Images/loading.gif" /><br />
+                    <font size="2"><strong>Credit card transaction is under process, it will take few minutes.&nbsp;<br />
+                                                                Kindly bear.&nbsp;</strong></font>
+                    <br />
+                    <font color="#a52a2a" size="2">Do not click either <i><b>Back</b></i> or any other button
+                                                                till the process is complete.</font>
+                </th>
+            </tr>
+        </table>
+    </div>
+   
+    <table border="0" cellpadding="0" cellspacing="0" width="98%">
+                <tr style="height: 50px">
+                    <td align="right">
+                        <input id="btnsave1" type="submit" value="save" class="button" name="btnsave1" onclick="return ValidatePaymentInfo();"/>
+                        <input id="btncancel1" type="button" name="btncancel1" class="payclose button" value="Cancel" />
+
+                         <input type="submit" name="btnsave2" id="btnsave2" value="Process" class="button"
+                                onclick="return creditcardProcess();"  style="display:none;"/>
+
+ <input id="btncancel2" type="button" class="button" name="btncancel2" value="Cancel" onclick="return cancelcreditcard();" style="display:none;" />
+                    </td>
+                </tr>
+            </table>
+ }
+</body>
+        <script type="text/javascript">
+          
+            var objcardtype = "@Model[0].strx_card_code" == "VisaCard" ? "Visa" : "@Model[0].strx_card_code";
+            var objmonth = "@Model[0].StrExpMon";
+            var objyear = "@Model[0].StrExpYear";
+            if (objcardtype != '') {
+                //alert(objcardtype)
+                $("#ExCardType option:contains(" + objcardtype + ")").attr('selected', 'selected');
+            }
+            if (objmonth != '') {
+                $("#Exmonth").val(objmonth);
+            }
+            if (objyear != '') {
+                $("#Exyear").val(objyear);
+            }
+            $(document).ready(function () {
+
+                $('#Img2').mouseover(function () {
+                    document.getElementById("divCvv").style.zIndex = '1005';
+                    document.getElementById("divCvv").style.left = '500px';
+                    document.getElementById("divCvv").style.top = '50px';
+                    document.getElementById("divCvv").style.position = 'absolute';
+                    document.getElementById("divCvv").style.display = '';
+                });
+                $('#Img2').mouseout(function () {
+
+                    document.getElementById('divCvv').style.display = 'none';
+                });
+            });
+    </script>
+    <script type="text/javascript" language="JavaScript">
+        window.history.forward();
+    </script>
+     <script type="text/javascript">
+         function cancelcreditcard() {
+             document.getElementById('tblpayment').style.display = "";
+             document.getElementById('tblcreditprocess').style.display = "none";
+
+             document.getElementById('btnsave1').style.display = "";
+             document.getElementById('btncancel1').style.display = "";
+             document.getElementById('btnsave2').style.display = "none";
+             document.getElementById('btncancel2').style.display = "none";
+         }
+    </script>
+     <script type="text/javascript">
+
+         function updateSuccess(data) {
+          
+             if (data != '' & data.Success == true) {
+                 $('#divAdminPayment').dialog('close');
+                 var Provider_id = data.Object.Provider_id
+                 var ProviderName = data.Object.ProviderName
+                 //alert(Provider_id);
+                 //alert(ProviderName);
+                 @*window.location.href = '@Url.Action("AdminLevelTransactionsList", new { pracId = ViewBag.Provider_id, pracname = ViewBag.ProviderName })';*@
+                 window.location.href = '../AdminHome/AdminLevelTransactionsList?pracId=' + Provider_id + '&pracname=' + ProviderName;
+             }
+             //else if (data.ErrorMessage == 'expire') {
+             //    window.location.href = '../Home/SessionExpire';
+             //}
+            else {
+                 //$('#updateDialog').dialog('close');
+                 if (data != '_Logon_') {
+                     alert(data.ErrorMessage);
+                     document.body.style.cursor = 'default';
+                     
+                 }
+                 
+                 document.body.style.cursor = 'normal';
+                 document.getElementById("ExupdNote").style.display = 'none';
+                //document.getElementById("tblProcess").style.display = '';
+            }
+        }
+    </script>
+</html>

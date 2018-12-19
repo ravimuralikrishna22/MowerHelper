@@ -1,0 +1,76 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+     <title>Mower Helper-Find an Mower Helper</title>
+   <link href="~/Content/common.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+    @using (Html.BeginForm("Activate", "Home", FormMethod.Post, null))
+     {
+        @Html.AntiForgeryToken()   
+         @Html.Hidden("code");
+   <div id="wrapper">
+         @Html.Partial("_TopSection")
+      @*  <div id="flttop">
+            <div id="header01">
+                 <div id="headermain02">
+                        <div id="logopublic">
+                            <a id="logo_find1" runat="server" href="@Url.Action("Index", "Home", null)" title="Home" style="text-decoration: none;" class="bluemenuPublic">
+                               Mower Helper-Find an Mower Helper</a></div>
+                        <div id="mainnavcon">
+                            <div class="mainnav">
+                                <ul>
+                                    @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                    <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                    }
+                                     <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>*@
+        <div id="flt02">
+                <div id="bodycon">
+                     <div id="contentpannel" class="padding-top">
+                     <div style="height: 450px; margin-top: 110px;padding:15px;">
+                            <p style="font-family: Arial; font-weight: bold; font-size: 15px; text-align: justify;line-height:30px;">
+                                Please check your email, we sent an email with an activation link. When you click on the activation link, we will be able to confirm your email address.
+                                   
+                            </p>
+                        </div>
+                </div>
+                    <div id="footercon">
+                        <div id="footerpublic" style="text-align: center;">
+                            <ul id="footer-nav" style="padding:20px 0 0 350px;">                             
+                                <li >
+                                    @Html.ActionLink("Frequently Asked Questions", "FAQs", "Search")
+                                </li>
+                                <li style="display:none;">
+                                    @Html.ActionLink("Contact Us", "contact")
+                                </li>                           
+                            </ul>
+                            <div class="copy" style="font-size: small;">
+                                 Copyright © 2018.Mower Helper, Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    }
+</body>
+</html>

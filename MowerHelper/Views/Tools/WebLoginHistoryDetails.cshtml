@@ -1,0 +1,81 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <style type="text/css">
+        /*.useragent
+        {
+            width: 400px;
+        }*/
+        .ipaddress
+        {
+            width: 100px;
+        }
+        .LoginOut
+        {
+            width: 150px;
+        }
+        .sucess
+        {
+            width:50px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="content-box">
+
+        <div class="content-box-content">
+            <div id="gridcontent">
+                @{ WebGrid provgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.pagesize ?? "10"), ajaxUpdateContainerId: "gridcontent");}
+                @{WebGrid grid = provgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                 
+                    @grid.GetHtml(tableStyle: "gridTable1", headerStyle: "gridHead1", rowStyle: "gridRow1", alternatingRowStyle: "gridAltRow1",footerStyle: "gridFooter1",
+
+                                                      columns: grid.Columns(
+
+                                                      grid.Column("IPAddress", "IPAddress", canSort: false,style:"ipaddress"),
+                                                      grid.Column("UserAgent", "User agent", canSort: false),
+                                                                                                   
+                                           grid.Column("LogIn_DateTime", "Logged In/Out", canSort: false, style:"LoginOut",format:@<text>
+
+                    @{
+                                                string loginout = null;
+                                                if (item.LogOut_DateTime != "" && item.LogOut_DateTime != null)
+                                                {
+                                                    loginout = item.LogIn_DateTime + " - " + item.LogOut_DateTime;
+                                                }
+                                                else
+                                                {
+                                                    loginout = item.LogIn_DateTime;
+                                                }
+                    }
+                    <span>@loginout</span>
+                    </text>   ),
+                    grid.Column("logsuccess", "Success", canSort: false,style:"sucess")));
+                    <br />                        
+                    <br />
+                                              }
+                                              else
+                                              {
+                    <table id="divoutmsg" width="100%">
+                        <tr>
+                            <td align="center" valign="middle" height="25px">
+                                <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">No web login history details found </span>
+                            </td>
+                        </tr>
+                    </table>
+                                              }
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,237 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    
+</head>
+<body>
+    @using (Html.BeginForm("EditDocument", "Directory", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        <div id="update-message" class="error" style="padding-left: 250px; font-weight: bold;">
+        </div>
+        <input type="hidden" id="hdndocid" name="hdndocid" value="@ViewBag.docid" />
+        <input type="hidden" id="hdnPaTH" name="hdnPaTH" value="@ViewBag.hdnPaTH" />
+        <input type="hidden" id="hdnPathSuffix" name="hdnPathSuffix" value="@ViewBag.Path_Suffix" />
+        <input type="hidden" id="hdnstrpath" name="hdnstrpath" value="@ViewBag.strpath" />
+        <div class="content-box">
+           @* <div class="content-box-header">
+                <h3>
+                    <span id="lblattribute">Add document</span>
+                </h3>
+                <div class="clear">
+                </div>
+            </div>*@
+            <div class="content-box-content">
+                <table id="tblProvAttributes" border="0" cellspacing="1" cellpadding="6" width="100%"
+                    class="border_style" align="center">
+                    <tr class="white_color">
+                        <td style="font-weight:bold;" align="right" width="40%">
+                            <span style="color: Red;">*</span>Title :&nbsp;
+                        </td>
+                        <td width="60%" align="Left" id="tdtitlemain1">
+                            @Html.TextBox("txtTitle1", (string)ViewBag.txtTitle, new { @class = "textfield", maxlength = "100", style = "width:300px;" })
+                            @* <asp:TextBox ID="txtTitle"  class="textfield" MaxLength="100" Width="300px"></asp:TextBox>*@
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td align="right" width="40%">
+                            <b>Description :&nbsp;</b>
+                        </td>
+                        <td width="60%" align="Left" id="tddescriptionmain1">
+                            @Html.TextArea("txtDescription1", (string)ViewBag.txtDescription, 3, 3, new { @class = "textfield", maxlength = "1000", style = "width:500px;height:100px;" })
+                            @*<asp:TextBox ID="txtDescription"  Rows="3" class="textfield" TextMode="MultiLine"
+                            Height="100px" Width="500px"></asp:TextBox>*@<br />
+                            &nbsp;&nbsp;<span>(Maximum length 1000 characters)</span>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td style="height: 15px" align="right" width="40%">
+                            <a id="FileName" href="Download/@ViewBag.docid" style="text-align:justify;">@ViewBag.FileName</a>&nbsp;&nbsp; &nbsp;&nbsp;<font color="red">*</font><span
+                                id="Label2" style="font-weight:bold;">Replace with new file :</span> &nbsp;
+                        </td>
+                        <td style="height: 15px" width="60%" align="Left" id="tduploadmain1">
+                            @*<table cellspacing="1" cellpadding="1" id="tblFiles" width="100%" border="0">
+                                <tr id="attachcheck">@(string)@ViewBag.FileName,@(string)@ViewBag.hypLnkAttachedFileName
+                                    <td>
+                                        <div id="inputsPlace">
+                                            <div id="div1">
+                                                <input type="checkbox" id="check1" style="display:none;" /><input type="file" id="myFile1" name="myFile1"
+                                                    style="margin-left: 0px; background-color: White;" />&nbsp;&nbsp;(Maximum file
+                                                size : 10mb)
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>*@
+                             <a ID="hypLnkAttachedFileName"  href="#">@ViewBag.hypLnkAttachedFileName </a>
+                            <input type="file" id="FileUpLoad" onselectstart="return false;" style="background-color: White;"
+                                onpaste="return false;" onkeypress="return false;" onkeydown="return false;"
+                                onkeyup="return false;" runat="server" name="FileUpLoad" /><font id="fonttxt">&nbsp;&nbsp;(Maximum file size
+                                                                        : 10mb)</font>
+                        </td>
+                    </tr>
+                    <tr class="white_color" id="trpublic">
+                        <td style="font-weight:bold;" align="right" width="40%">
+                            <span style="color: Red;">*</span>Display in public :&nbsp;
+                        </td>
+                        <td width="60%" align="left">
+                        @{
+        bool rbtyes = false;
+        bool rbtno = false;
+        if (ViewBag.Displayinpublic == "Y")
+        {
+            rbtyes = true;
+            rbtno = false;
+        }
+        else
+        {
+            rbtno = true;
+            rbtyes = false;
+        }
+                            }
+                            @Html.RadioButton("rbtyes", "Yes", rbtyes, new { @onclick = "return checkyes();" })&nbsp;Yes&nbsp;@Html.RadioButton("rbtno", "No", rbtno, new { @onclick = "return checkno();" })&nbsp;No
+                            @*  <asp:RadioButton ID="rbtyes"  Text="&nbsp;Yes" GroupName="grppublic" />&nbsp;
+                        <asp:RadioButton ID="rbtno"  Text="&nbsp;No" GroupName="grppublic" />*@
+                        </td>
+                    </tr>
+                </table>
+                <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" id="tblmain1"
+                    style="display: none;">
+                    <tr class="white_color" align="center">
+                        <td id="tdtitle1" height="30px" style="display: none;">
+                            <span id="lbltitle1" style="font-weight:bold;color:Black;" ></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tddescription1" height="30px" style="display: none;">
+                            <span id="lbldescription1" style="font-weight:bold;color:Black;"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdupload1" height="30px" style="display: none;">
+                            <span id="lblupload1" style="font-weight:bold;color:Black;"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            <table id="tblbuttons" width="100%">
+                <tr>
+                    <td width="100%" align="right" style="padding-right: 10px; padding-bottom: 5px;">
+                        <input type="submit" id="imgbtnSaveFile" value="Save" class="button" onclick="return EditValidate('');" />
+                        <input type="button" class="close button" name="Cancel" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        
+    }
+</body>
+    <script type="text/javascript">
+        function clearalerts() {
+            ValidateAlertClear('tblmain1', 'lbltitle1', 'tdtitle1', 'tdtitlemain1', 'white');
+            ValidateAlertClear('tblmain1', 'lbldescription1', 'tddescription1', 'tddescriptionmain1', 'white');
+            ValidateAlertClear('tblmain1', 'lblupload1', 'tdupload1', 'tduploadmain1', 'white');
+        }
+        function EditValidate(Ext) {
+            var str_Title;
+            str_Title = trim(document.getElementById('txtTitle1').value);
+            document.getElementById('txtTitle1').value = str_Title;
+            if (str_Title == '') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter title");
+                document.getElementById('tblmain1').style.display = '';
+                document.getElementById('lbltitle1').innerHTML = "Please enter title";
+                document.getElementById('tdtitle1').style.display = '';
+                document.getElementById('tdtitle1').bgColor = "orange";
+                document.getElementById('tdtitlemain1').bgColor = "orange";
+                document.getElementById('txtTitle1').focus();
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblmain1', 'lbltitle1', 'tdtitle1', 'tdtitlemain1', 'white');
+            }
+            var ta = document.getElementById('txtDescription1');
+            if (ta.value.length > 1000) {
+                clearalerts();
+                //Glb_ShowAlert('Please enter description less than  1000 characters');
+                document.getElementById('tblmain1').style.display = '';
+                document.getElementById('lbldescription1').innerHTML = "Please enter description less than  1000 characters";
+                document.getElementById('tddescription1').style.display = '';
+                document.getElementById('tddescription1').bgColor = "orange";
+                document.getElementById('tddescriptionmain1').bgColor = "orange";
+                document.getElementById('txtDescription1').focus();
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblmain1', 'lbldescription1', 'tddescription1', 'tddescriptionmain1', 'white');
+            }
+            var lblvalue = document.getElementById('FileName');
+            if (document.getElementById('FileUpLoad').value == '' && document.getElementById('FileName').innerHTML == '') {
+                clearalerts();
+                //Glb_ShowAlert('Please select a file name');
+                document.getElementById('tblmain1').style.display = '';
+                document.getElementById('lblupload1').innerHTML = "Please select a file name";
+                document.getElementById('tdupload1').style.display = '';
+                document.getElementById('tdupload1').bgColor = "orange";
+                document.getElementById('tduploadmain1').bgColor = "orange";
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblmain1', 'lblupload1', 'tdupload1', 'tduploadmain1', 'white');
+            }
+            if (document.getElementById("FileUpLoad").style.display == '') {
+                clearalerts();
+                if (document.getElementById('FileUpLoad').value != "") {
+                    clearalerts();
+                    var str = document.getElementById('FileUpLoad').value;
+                    var Strr = str.toUpperCase();
+                    //                     if ((Strr.indexOf(".DOC") == -1) && (Strr.indexOf(".DOCX") == -1) && (Strr.indexOf(".TXT") == -1) && (Strr.indexOf(".XLS") == -1) && (Strr.indexOf(".PPS") == -1) && (Strr.indexOf(".PPT") == -1) && (Strr.indexOf(".PDF") == -1) && (Strr.indexOf(".XLSX") == -1) && (Strr.indexOf(".PPTX") == -1) && (Strr.indexOf(".ZIP") == -1) && (Strr.indexOf(".RAR") == -1)) {
+                    if ((Strr.indexOf(".DOC") == -1) && (Strr.indexOf(".DOCX") == -1) && (Strr.indexOf(".TXT") == -1) && (Strr.indexOf(".XLS") == -1) && (Strr.indexOf(".PPS") == -1) && (Strr.indexOf(".PPT") == -1) && (Strr.indexOf(".PDF") == -1) && (Strr.indexOf(".XLSX") == -1) && (Strr.indexOf(".PPTX") == -1) && (Strr.indexOf(".ZIP") == -1) && (Strr.indexOf(".RAR") == -1) && (Strr.indexOf(".GIF") == -1) && (Strr.indexOf(".PNG") == -1) && (Strr.indexOf(".JPG") == -1)) {
+                        clearalerts();
+                        //Glb_ShowAlert("Please select only doc,docx,txt,xls,pps,ppt,pdf,zip,rar files for document file");
+                        document.getElementById('tblmain1').style.display = '';
+                        document.getElementById('lblupload1').innerHTML = "Please select only doc, docx, txt, xls, pps, ppt, pdf, zip, rar, gif, jpg, png files for document file";
+                        document.getElementById('tdupload1').style.display = '';
+                        document.getElementById('tdupload1').bgColor = "orange";
+                        document.getElementById('tduploadmain1').bgColor = "orange";
+                        return false;
+                    }
+                    else {
+
+                        ValidateAlertClear('tblmain1', 'lblupload1', 'tdupload1', 'tduploadmain1', 'white');
+                    }
+                }
+            }
+            //            document.getElementById('divloading').style.display = '';
+            //            document.body.style.cursor = 'wait';
+        }
+        function checkyes() {
+
+            document.getElementById("rbtyes").checked = true;
+            document.getElementById("rbtno").checked = false;
+
+        }
+        function checkno() {
+            document.getElementById("rbtyes").checked = false;
+            document.getElementById("rbtno").checked = true;
+        }
+        var PopupWin = null;
+        function Open(FilePath) {
+            if (PopupWin != null) PopupWin.close();
+            PopupWin = window.open(FilePath);
+            //document.getElementById('hdnInd').value = 1;
+            return false;
+        }
+    </script>
+</html>

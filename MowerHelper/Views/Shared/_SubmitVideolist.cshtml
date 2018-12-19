@@ -1,0 +1,40 @@
+﻿ <style>
+.gridAltRow td{padding: 6px;}
+.gridRow td { padding: 6px; }
+.CPTCodewidth{width:10%;}  
+.Description {width:80%;}
+.ProviderFee {width:10%; }
+</style>
+ <script type="text/javascript">
+        var obj = "@ViewBag.title";
+        if (obj != null) {
+            document.getElementById("container-grid").style.display = 'none';
+        }
+</script>
+<div id="searchResults">
+   @{WebGrid grid = new WebGrid(Model, ajaxUpdateContainerId: "searchResults");
+  if(ViewBag.totrec!=0)
+  {
+@grid.GetHtml(htmlAttributes: new { id = "grid" },
+              tableStyle: "gridTable", headerStyle: "gridHead", footerStyle: "gridFooter", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow", selectedRowStyle: "select",
+        columns:
+        grid.Columns(
+              grid.Column("Sino", "#", style: "width: 700px;", canSort: false),
+         grid.Column("Title", "Title", canSort: false, format: @<text><a  href="#"    id="asid @item.Sino" onclick="return selected('@item.Title','@item.Helpmedia_ID');">@item.Title</a></text>),
+                   grid.Column("Description", "Description name", canSort: false)
+
+                            )
+
+                            )
+    }
+    else{
+      <table id="tblOutMsg" width="98%" align="Center">
+            <tr id="troutmsg">
+                <td align="center" height="60px" valign="Middle" style="padding-left:200px;">
+                    <span id="lblOutputMsg" style="font-weight: bold;" class="errormsg">No videos found.</span>
+                </td>
+            </tr>
+        </table>   
+    }
+    }
+    </div>

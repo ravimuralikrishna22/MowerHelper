@@ -1,0 +1,511 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    @Styles.Render("~/Content/themes/base/jqueryCSS")
+    @Scripts.Render("~/Scripts/Thscriptscript")
+       <style type="text/css">
+       .ui-datepicker-trigger{ margin-left: 5px; vertical-align: middle; }</style>
+    <script type="text/javascript">
+        function getrespid() {
+
+            //            for (var Count = 0; Count < document.elements.length; Count++) {
+            //                if (document.elements[Count].type == "radio") {
+            //                    var objname = document.elements[Count].name;
+
+            //                    if (objname.indexOf('Xyzparty') != -1) {
+
+            //                        if (document.elements[Count].checked == true) {
+            //                            document.getElementById("rdoID").value = document.elements[Count].value;
+            //                        }
+            //                    }
+
+            //                }
+            //            }
+            // alert(document.getElementById("rdoNOnCustom_Custom").checked);
+            if (document.getElementById("rdoNOnCustom_Custom").checked == true) {
+                //  alert("1");
+                if (document.getElementById('txtFromDate').value == '' || document.getElementById('txtFromDate').value == 'mm/dd/yyyy') {
+                    //				        Glb_ShowAlert("Enter the from date");
+                    ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Please enter the from date')
+                    document.getElementById('txtFromDate').focus();
+                    return false;
+                }
+                else {
+                    ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF')
+                }
+                if (document.getElementById('txtFromDate').value != '' && document.getElementById('txtFromDate').value != 'mm/dd/yyyy') {
+                    //                alert("2");
+                    var Dateid = document.getElementById('txtFromDate').value;
+                    var Dat = Dateid.split("/");
+                    var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+                    var yearid = Dat[2];
+                    var Monthid = Dat[0];
+                    var MyId = Dat[1];
+                    var CurDt = new Date()
+                    var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+                    var matchArray = Dateid.match(DatePat);
+
+                    if (matchArray == null) {
+                        //                    alert("3");
+                        //Glb_ShowAlert('Invalid date of birth format!!! should be like mm/dd/yyyy');
+                        ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Invalid from date format!!! should be like mm/dd/yyyy');
+                        document.getElementById('txtFromDate').focus();
+                        return false;
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF');
+                    }
+                    if (yearid < 1900) {
+                        //Glb_ShowAlert('Invalid date of birth!!! year should be greater than 1900');
+                        ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Invalid from date!!! year should be greater than 1900');
+                        document.getElementById('txtFromDate').focus();
+                        return false
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF');
+                    }
+                    if (Monthid > 12 || Monthid == 0) {
+                        //Glb_ShowAlert('Invalid date of birth!!! month should be entered in between 1 to 12');
+                        ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Invalid from date!!! month should be entered in between 1 to 12');
+                        document.getElementById('txtFromDate').focus();
+                        return false
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF');
+                    }
+                    if (MyId > 31 || MyId == 0) {
+                        //Glb_ShowAlert('Invalid date of birth!!! date should be entered in between 1 to 31');
+                        ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Invalid from date!!! date should be entered in between 1 to 31');
+                        document.getElementById('txtFromDate').focus();
+                        return false
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF');
+                    }
+                    if (myDat > CurDt) {
+                        //Glb_ShowAlert('Invalid date of birth!!! should be less than current date');
+                        ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Invalid from date!!! should be less than current date');
+                        document.getElementById('txtFromDate').focus();
+                        return false;
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF');
+                    }
+                    if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+                        ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Invalid from date !!! there is no February 29 in ' + yearid);
+                        document.getElementById('txtFromDate').focus();
+                        return false;
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF');
+                    }
+                    if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+                        ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Invalid from date !!! please enter valid date');
+                        document.getElementById('txtFromDate').focus();
+                        return false;
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF');
+                    }
+                }
+
+                if (document.getElementById('txtToDate').value == '' || document.getElementById('txtToDate').value == 'mm/dd/yyyy') {
+                    //				        Glb_ShowAlert("Enter the to date");
+                    ValidateAlert('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', 'Please enter the to date')
+                    document.getElementById('txtToDate').focus();
+                    return false;
+                }
+                else {
+                    ValidateAlertClear('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', '#FFFFFF')
+                }
+
+                if (document.getElementById('txtToDate').value != '' && document.getElementById('txtToDate').value != 'mm/dd/yyyy') {
+                    //                alert("2");
+                    var Dateid = document.getElementById('txtToDate').value;
+                    var Dat = Dateid.split("/");
+                    var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+                    var yearid = Dat[2];
+                    var Monthid = Dat[0];
+                    var MyId = Dat[1];
+                    var CurDt = new Date()
+                    var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+                    var matchArray = Dateid.match(DatePat);
+
+                    if (matchArray == null) {
+                        //                    alert("3");
+                        //Glb_ShowAlert('Invalid date of birth format!!! should be like mm/dd/yyyy');
+                        ValidateAlert('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', 'Invalid to date format!!! should be like mm/dd/yyyy');
+                        document.getElementById('txtToDate').focus();
+                        return false;
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', '#FFFFFF');
+                    }
+                    if (yearid < 1900) {
+                        //Glb_ShowAlert('Invalid date of birth!!! year should be greater than 1900');
+                        ValidateAlert('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', 'Invalid to date!!! year should be greater than 1900');
+                        document.getElementById('txtToDate').focus();
+                        return false
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', '#FFFFFF');
+                    }
+                    if (Monthid > 12 || Monthid == 0) {
+                        //Glb_ShowAlert('Invalid date of birth!!! month should be entered in between 1 to 12');
+                        ValidateAlert('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', 'Invalid to date!!! month should be entered in between 1 to 12');
+                        document.getElementById('txtToDate').focus();
+                        return false
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', '#FFFFFF');
+                    }
+                    if (MyId > 31 || MyId == 0) {
+                        //Glb_ShowAlert('Invalid date of birth!!! date should be entered in between 1 to 31');
+                        ValidateAlert('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', 'Invalid to date!!! date should be entered in between 1 to 31');
+                        document.getElementById('txtToDate').focus();
+                        return false
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', '#FFFFFF');
+                    }
+                    if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+                        ValidateAlert('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', 'Invalid to date !!! there is no February 29 in ' + yearid);
+                        document.getElementById('txtToDate').focus();
+                        return false;
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', '#FFFFFF');
+                    }
+                    if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+                        ValidateAlert('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', 'Invalid to date !!! please enter valid date');
+                        document.getElementById('txtToDate').focus();
+                        return false;
+                    }
+                    else {
+                        ValidateAlertClear('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', '#FFFFFF');
+                    }
+                }
+                if (document.getElementById('txtFromDate').value != '') {
+                    if (document.getElementById('txtToDate').value != '') {
+                        var StDate = new Date(document.getElementById('txtFromDate').value);
+
+                        var EndDate = new Date(document.getElementById('txtToDate').value);
+
+
+                        var cDate = new Date()
+                        if (StDate > cDate) {
+                            //						        Glb_ShowAlert('Start date cannot be greater than current  date');
+                            ValidateAlert('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', 'Start date cannot be greater than current  date')
+                            document.getElementById('txtFromDate').focus();
+                            return false;
+                        }
+                        else {
+                            ValidateAlertClear('tblErrDate', 'lblErrFrom', 'tdErrFrom', 'tdEFrom', '#FFFFFF')
+                        }
+                        if (EndDate < StDate) {
+                            //						        Glb_ShowAlert('End date cannot be less than start date');
+                            ValidateAlert('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', 'End date cannot be less than start date')
+                            ddocument.getElementById('txtToDate').focus();
+
+                            return false;
+
+                        }
+                        else {
+                            ValidateAlertClear('tblErrDate', 'lblErrTodate', 'tdErrTodate', 'tdETo', '#FFFFFF')
+                        }
+                    }
+                }
+            }
+        }
+        function custom() {
+            if (document.getElementById("rdoNOnCustom_Custom").checked == true) {
+                document.getElementById("tbldate").style.display = '';
+                document.getElementById("rdoNOnCustom_Today").checked = false;
+                document.getElementById("rdoNOnCustom_Last7Days").checked = false;
+                document.getElementById("rdoNOnCustom_Last30Days").checked = false;
+            }
+        }
+        function Today() {
+            if (document.getElementById("rdoNOnCustom_Today").checked == true) {
+                document.getElementById("tbldate").style.display = 'none';
+                document.getElementById("rdoNOnCustom_Custom").checked = false;
+                document.getElementById("rdoNOnCustom_Last7Days").checked = false;
+                document.getElementById("rdoNOnCustom_Last30Days").checked = false;
+            }
+        }
+        function Last7Days() {
+            if (document.getElementById("rdoNOnCustom_Last7Days").checked == true) {
+                //alert("1");
+                document.getElementById("tbldate").style.display = 'none';
+                document.getElementById("rdoNOnCustom_Custom").checked = false;
+                document.getElementById("rdoNOnCustom_Today").checked = false;
+                document.getElementById("rdoNOnCustom_Last30Days").checked = false;
+            }
+        }
+        function Last30Days() {
+            if (document.getElementById("rdoNOnCustom_Last30Days").checked == true) {
+                document.getElementById("tbldate").style.display = 'none';
+                document.getElementById("rdoNOnCustom_Custom").checked = false;
+                document.getElementById("rdoNOnCustom_Last7Days").checked = false;
+                document.getElementById("rdoNOnCustom_Today").checked = false;
+            }
+        }
+        $(document).ready(function () {
+            document.getElementById("rdoNOnCustom_Today").checked = true;
+            $("#txtFromDate,#txtToDate").datepicker({
+                dateFormat: 'mm/dd/yy',
+                changeMonth: true,
+                changeYear: true,
+                //                showCurrentAtPos: 1,
+                showWeeks: true,
+                inline: true,
+                numberOfMonths: [1, 1],
+                yearRange: "1950:2020",
+                showOn: "button",
+                buttonImage: "../Images/calender.gif",
+                buttonImageOnly: true
+
+            });
+           
+           // var obj = "@ViewBag.id";
+           // var obj1 = obj.split(' ');
+           // document.getElementById("hdnid").value = obj;
+           // document.getElementById(obj).checked = true;
+           // document.getElementById("hdnrespid").value = obj1[1];
+            document.getElementById("hdntype").value = "8";
+
+        });
+        //        function Selected(id, type) {
+        ////            alert(id);
+        ////            alert(type);
+        ////            alert(document.getElementById("hdnid").value);
+        //            if (document.getElementById("hdnid").value == '') {
+        //                var obj = "rdoselect " + id;
+        //                document.getElementById("hdnid").value = obj;
+        //                document.getElementById("rdoselect " + id).checked = true;
+        //                document.getElementById("hdntype").value = type;
+        //                document.getElementById("hdnrespid").value = id;
+        //            }
+        //            else {
+        //                var obj = document.getElementById("hdnid").value;
+        //                document.getElementById(obj).checked = false;
+        //                document.getElementById("rdoselect " + id).checked = true;
+        //                document.getElementById("hdnid").value = "rdoselect " + id;
+        //                document.getElementById("hdntype").value = type;
+        //                document.getElementById("hdnrespid").value = id;
+        //            }
+        //        }
+        //function chkchange(obj) {
+        //    if (document.getElementById("hdnchktype").value == '') {
+        //        document.getElementById("hdnchktype").value = document.getElementById(obj).value;
+        //    }
+        //    else {
+        //        if (document.getElementById("hdnchktype").value != '' && document.getElementById("hdnchktype").value.indexOf(document.getElementById(obj).value) != '-1') {
+        //            //   alert("if");
+        //            document.getElementById("hdnchktype").value = "," + document.getElementById("hdnchktype").value + ",";
+        //            document.getElementById("hdnchktype").value = document.getElementById("hdnchktype").value.replace("," + document.getElementById(obj).value + ",", ",");
+        //            document.getElementById("hdnchktype").value = document.getElementById("hdnchktype").value.substr(1, document.getElementById("hdnchktype").value.length);
+        //            document.getElementById("hdnchktype").value = document.getElementById("hdnchktype").value.substr(0, document.getElementById("hdnchktype").value.length - 1);
+        //        }
+        //        else {
+        //            document.getElementById("hdnchktype").value = document.getElementById("hdnchktype").value + "," + document.getElementById(obj).value;
+        //        }
+        //    }
+        //    //alert(document.getElementById("hdnchktype").value);
+        //}
+    </script>
+</head>
+<body>
+@using(Html.BeginForm("PrintBill","Clients",FormMethod.Post))
+{
+ <div>@{Html.RenderAction("Topsection", "Tools");}</div> 
+    <input type="hidden" id="hdnid" name="hdnid" />
+    <input id="hdnrespid" name="hdnrespid" type="hidden" />
+     <input id="hdntype" name="hdntype" type="hidden" />
+     <input type="hidden" name="hdnchktype" id="hdnchktype" value="2,3,4,5" />
+     <input id="rdoID" name="rdoID" type="hidden" runat="server" />
+    <div id="main-content">
+       @if (Session["RoleID"].ToString() == "1")
+       {
+        @Html.Partial("_NavigationTool")
+       }
+        <div class="content-box">
+            <div class="content-box-header">
+                <h3>
+                    Print bill</h3>
+                <div class="clear">
+                </div>
+            </div>
+            <div class="content-box-content">
+                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                    border="0">
+                    <tr height="25px">
+                       @* <td colspan="1" class="tr_bgcolor" width="40%" align="center">
+                            Billable party
+                        </td>*@
+                       @* <td colspan="1" class="tr_bgcolor" width="18%" align="center">
+                            Print options
+                        </td>*@
+                        <td colspan="1" class="tr_bgcolor" width="50%" align="center">
+                            Span
+                        </td>
+                        <td colspan="1" class="tr_bgcolor" width="50%" align="center">
+                            Message on bill
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        @*<td colspan="1" valign="top" width="40%">
+                      @{string DSMpagesize = "10";
+                        WebGrid patgrid = new WebGrid(rowsPerPage: 10);}
+                    @{WebGrid grid = patgrid.Bind(Model, rowCount: 10, autoSortAndPage: false);
+                      if (grid.TotalRowCount != 0)
+                      {
+                                @grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                columns: grid.Columns(grid.Column("", "Options", canSort: false, style: "width: 100px;", format: @<text>
+                                @if (item.Status_Ind == "A" & item.Type == "8")
+                                {
+                                    
+                                <input type="radio" id="rdoselect @item.ID" name="rdoselect @item.ID"    onclick="return Selected(@item.ID,@item.Type)" />
+                                }
+                                else
+                                {
+                                     <input type="radio" id="rdoselect @item.ID" name="rdoselect @item.ID" onclick="return Selected(@item.ID,@item.Type)"  />
+                                }
+                                </text>),
+                                            grid.Column("Name", "Billable party", canSort: false, style: "width: 100px;")
+                                            
+                                           ))
+                      }
+                            }
+                        </td>*@
+                        @*<td valign="top" colspan="1" width="18%">
+                        <table width="100%" CellSpacing="1" CellPadding="6" border="0" class="border_style">
+                        <tr class="tr_bgcolor">
+                        <td width="80%">
+                        <strong>Print options</strong>
+                        </td>
+                        <td width="20%">
+                        <strong>Status</strong>
+                        </td>
+                        </tr>
+                            <tr>
+                                <td>
+                                 <strong>Customer name</strong>
+                                </td>
+                                <td>
+                               
+                                @Html.CheckBox("chkptname", true, new { @value = "2", onclick = "return chkchange('chkptname');" })
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>
+                                 <strong>Electrician name</strong>
+                                </td>
+                                <td>
+                                @Html.CheckBox("chkprovidername", true, new { @value = "3", onclick = "return chkchange('chkprovidername');" })
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>
+                                 <strong>Previous balance</strong>
+                                </td>
+                                <td>
+                                @Html.CheckBox("chkprevbal", true, new { @value = "4", onclick = "return chkchange('chkprevbal');" })
+                                </td>
+                            </tr>
+                             <tr>
+                                <td>
+                                 <strong>Display days outstanding</strong>
+                                </td>
+                                <td>
+                                @Html.CheckBox("chkdaysoutstand", true, new { @value = "5", onclick = "return chkchange('chkdaysoutstand');" })
+                                </td>
+                            </tr>
+                            
+                        </table>
+                           
+                        </td>*@
+                        <td align="left" colspan="1" valign="top" width="50%" style="padding-left: 300px;">
+                            @Html.RadioButton("rdoNOnCustom_Today", "Today", new { @onclick = "return Today();" })&nbsp; <strong>Today</strong> <br /><br />
+                            @Html.RadioButton("rdoNOnCustom_Last7Days", "Last7Days", new { @onclick = "return Last7Days();" })&nbsp; <strong>Last
+                            7 days</strong><br /><br />
+                            @Html.RadioButton("rdoNOnCustom_Last30Days", "Last30Days", new { @onclick = "return Last30Days();" })&nbsp; <strong>Last
+                            30 days</strong><br /><br />
+                            @Html.RadioButton("rdoNOnCustom_Custom", "Custom", new { @onclick = "return custom();" })&nbsp; <strong>Custom</strong><br /><br />
+                            <table id="tbldate" style="display: none;" runat='server' width="100%">
+                                <tr>
+                                    <td width="20%" align="right">
+                                        <strong>From :</strong>&nbsp;
+                                    </td>
+                                    <td width="80%" align="left" id="tdEFrom" runat="server">
+                                        <input type="text" name="txtFromDate" id="txtFromDate" class="textfield" maxlength="10"
+                                            style="width: 75px;" />
+                                    </td>
+                                   
+                                </tr>
+                                <tr>
+                                    <td width="20%" align="right">
+                                        <strong>To :</strong>&nbsp;
+                                    </td>
+                                    <td width="80%" align="left" id="tdETo" runat="server">
+                                        <input type="text" name="txtToDate" id="txtToDate" class="textfield" maxlength="10"
+                                            style="width: 75px;" />
+                                    </td>
+                                   
+                                </tr>
+                            </table>
+                        </td>
+                        <td align="center" colspan="1" valign="top" width="50%">
+                            @Html.DropDownList("ddlMessage", null, new { @style = "width:270px;height:25px;font-size:13px;" })
+                        </td>
+                    </tr>
+                </table>
+                 <table border="0" cellpadding="0" cellspacing="0" width="100%" id="tblErrDate"  style="display:none">
+                <tr class="white_color" align="center">
+                        <td id="tdErrFrom" height="30px" style="display: none;">
+                            <span id="lblErrFrom"  style="font-weight:bold;color:Black;" ></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdErrTodate" height="30px" style="display: none;">
+                            <span id="lblErrTodate"  style="font-weight:bold;color:Black;" ></span>
+                        </td>
+                    </tr>
+           </table>
+                <table cellspacing="0" cellpadding="0" width="98%" align="center" border="0">
+                    <tr class="background_color" id="trnone2" runat="server" style="display: none;">
+                        <td align="center">
+                            <b>Message on bill</b>
+                        </td>
+                    </tr>
+                    <tr class="background_color">
+                        <td align="center">
+                        </td>
+                    </tr>
+                    <tr class="background_color">
+                        <td align="center">
+                        </td>
+                    </tr>
+                    <br />
+                    <tr class="background_color">
+                        <td align="right">
+                      @*  @Html.ActionLink("Print","*@
+                            <input type="submit" value="Print" class="button" onclick="return getrespid();" />
+                            &nbsp;
+                            @Html.ActionLink("Cancel", "ClientsHome", "Clients", new { @class = "button", @style = "width:34px;height:12px;" })
+                        </td>
+                    </tr>
+                </table>
+                <br />
+            </div>
+        </div>
+    </div>
+   <div>   @{Html.RenderAction("Bottomsections", "Tools");}</div> 
+}
+</body>
+</html>

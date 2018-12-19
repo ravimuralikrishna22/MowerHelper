@@ -1,0 +1,727 @@
+﻿@model MowerHelper.Models.BLL.Providers.Reg_ProvidersDetailInfo
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+     <title>Mower Helper-Find an Mower Helper</title>
+      @Styles.Render("~/Content/common")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/SCRIPTS/scriptCognetwork")
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+     @Scripts.Render("~/SCRIPTS/outflytooltip")
+    <script src="~/Scripts/CCValidation.js"></script>
+
+      <style type="text/css">
+        td{padding: 6px;}
+        .confirmDialog1{background: url("../../../../images/bg-button-green.gif") repeat-x scroll left top #459300 !important;border: 1px solid #459300 !important;border-radius: 4px;color: #FFFFFF !important;cursor: pointer;display: inline-block;font-family: Verdana,Arial,sans-serif;font-size: 11px !important; padding: 4px 7px !important;}
+        .confirmDialog{background: url("../../../../images/bg-button-green.gif") repeat-x scroll left top #459300 !important; border: 1px solid #459300 !important;border-radius: 4px;color: #FFFFFF !important;cursor: pointer;display: inline-block;font-family: Verdana,Arial,sans-serif; font-size: 11px !important;padding: 4px 7px !important;}
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#CardNumber").bind('contextmenu', function (e) {
+                e.preventDefault();
+                //  alert('Right Click is not allowed');
+            });
+            var date = new Date();
+            var Nextyear = date.getFullYear() + 1;
+            $('#year').val(Nextyear);
+        
+            //$('#txtZip').change(function () {
+                
+          //  });
+        });
+    </script>
+    <script type="text/javascript">
+        function cancel() {
+            var retValue = confirm("Do You Want to Stop Registration?");
+            if (retValue == true) {
+                window.location.href = "index";
+                return false;
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+
+ @* ***************************************************************@
+
+
+    <script type="text/javascript">
+        function clearalerts() {
+            document.getElementById('lbcardtype').style.display = 'none';
+            document.getElementById('TableCell29').bgColor = "White";
+            document.getElementById('TableCell25').bgColor = "white";
+            document.getElementById('lblcardnumber').style.display = 'none';
+            document.getElementById('tdfl2').bgColor = "white";
+            document.getElementById('lblfullname').style.display = 'none';
+            //document.getElementById('Td2').bgColor = "white";
+            //document.getElementById('lblfirstname').style.display = 'none';
+            //document.getElementById('Td4').bgColor = "White";
+            //document.getElementById('lbllastname').style.display = 'none';
+            document.getElementById('TableCell31').bgColor = "White";
+            document.getElementById('lblExpyear').style.display = 'none';
+            document.getElementById('TableCell35').bgColor = "white";
+            document.getElementById('lbladdress').style.display = 'none';
+            document.getElementById('Etdzip').bgColor = "white";
+            document.getElementById('Elblzip').style.display = 'none';
+            document.getElementById('Etdstate').bgColor = "White";
+            document.getElementById('Elblstate').style.display = 'none';
+            document.getElementById('Etdcity').bgColor = "white";
+            document.getElementById('Elblcity').style.display = 'none';
+
+        }
+        function CognodeProcess() {
+            //var pwd = '@Session["PWD"]';
+    // alert(pwd);
+    var my_str = document.getElementById('CardNumber').value;
+    var str = "*";
+    if (my_str.indexOf(str) == -1) {
+        clearalerts()
+        document.getElementById('CardNumber1').value = document.getElementById('CardNumber').value;
+    }
+    else {
+        if (document.getElementById('CardNumber1').value == '') {
+            clearalerts()
+            document.getElementById('CardNumber1').value = document.getElementById('CardNumber').value;
+        }
+        else if (document.getElementById('CardNumber1').value != '' && document.getElementById('CardNumber').value != '') {
+            clearalerts()
+            if (document.getElementById('hdncardnumber').value != document.getElementById('CardNumber').value) {
+                clearalerts()
+                //				                Glb_ShowAlert("Please enter valid Credit Card Number");
+                document.getElementById('lblcardnumber').style.display = '';
+                document.getElementById('lblcardnumber').innerHTML = 'Please enter valid Credit Card Number';
+                document.getElementById('TableCell25').bgColor = "orange";
+                document.getElementById('CardNumber').focus();
+                return false;
+            }
+            else {
+                document.getElementById('TableCell25').bgColor = "white";
+                document.getElementById('lblcardnumber').style.display = 'none';
+            }
+        }
+    }
+    if (document.getElementById('CardNumber').value == '') {
+        clearalerts()
+        //                 alert('5')
+        //Glb_ShowAlert("Please enter credit card number");
+        //					    document.frmCreditCard.lblcardnumber.style.display = '';
+        document.getElementById('lblcardnumber').style.display = '';
+        document.getElementById('lblcardnumber').innerHTML = 'Please enter credit card number';
+        document.getElementById('TableCell25').bgColor = "orange";
+        document.getElementById('CardNumber').focus();
+        return false;
+    }
+    else {
+        document.getElementById('TableCell25').bgColor = "white";
+        document.getElementById('lblcardnumber').style.display = 'none';
+    }
+    var StrCardValue;
+    StrCardValue = document.getElementById('CardNumber').value;
+    //            alert(StrCardValue);
+    if (StrCardValue.length < 13) {
+        clearalerts()
+        document.getElementById('lblcardnumber').style.display = '';
+        //                Glb_ShowAlert("Please enter 13 Digit Card Number");
+        document.getElementById('lblcardnumber').innerHTML = 'Please enter 13 Digit Card Number';
+        document.getElementById('TableCell25').bgColor = "orange";
+        document.getElementById('CardNumber').focus();
+        return false;
+    }
+    else {
+        document.getElementById('TableCell25').bgColor = "white";
+        document.getElementById('lblcardnumber').style.display = 'none';
+    }
+
+    if (CheckCardNumber() == true) {
+        var strfullname = trim(document.getElementById('FullName').value);
+        document.getElementById('FullName').value = strfullname;
+        if (MyChars(document.getElementById('FullName')) == 'BlankError') {
+            clearalerts()
+            //						    Glb_ShowAlert("Please enter first name");
+            //document.getElementById('lbcardtype').style.display = 'none';
+            //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+            //document.getElementById('TableCell29').bgColor = "White";
+            document.getElementById('lblfullname').style.display = '';
+            document.getElementById('lblfullname').innerHTML = 'Please enter name on card';
+            document.getElementById('tdfl2').bgColor = "orange";
+            document.getElementById('FullName').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdfl2').bgColor = "white";
+            document.getElementById('lblfullname').style.display = 'none';
+        }
+
+        if (MyChars(document.getElementById('FullName')) == "NumError" || MyChars(document.getElementById('FullName')) == "InvalidCharAtFirstError") {
+            clearalerts()
+            //						    Glb_ShowAlert("Please enter first name in alphabets");
+           // document.getElementById('lbcardtype').style.display = 'none';
+            //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+            //document.getElementById('TableCell29').bgColor = "White";
+            document.getElementById('lblfullname').style.display = '';
+            document.getElementById('lblfullname').innerHTML = 'Please enter name on card in alphabets';
+            document.getElementById('tdfl2').bgColor = "orange";
+            document.getElementById('FullName').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdfl2').bgColor = "white";
+            document.getElementById('lblfullname').style.display = 'none';
+        }
+
+
+        //var strlastname = trim(document.getElementById('txtlastname').value);
+        //document.getElementById('txtlastname').value = strlastname;
+        //if (MyChars(document.getElementById('txtlastname')) == 'BlankError') {
+        //    clearalerts()
+        //    //						    Glb_ShowAlert("Please enter Last Name");
+        //    document.getElementById('lbcardtype').style.display = 'none';
+        //    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+        //    document.getElementById('TableCell29').bgColor = "White";
+        //    document.getElementById('lbllastname').style.display = '';
+        //    document.getElementById('lbllastname').innerHTML = 'Please enter Last Name';
+        //    document.getElementById('Td4').bgColor = "orange";
+        //    document.getElementById('txtlastname').focus();
+        //    return false;
+        //}
+        //else {
+        //    document.getElementById('Td4').bgColor = "White";
+        //    document.getElementById('lbllastname').style.display = 'none';
+
+        //}
+
+        //if (MyChars(document.getElementById('txtlastname')) == "NumError") {
+        //    clearalerts()
+        //    //						    Glb_ShowAlert("Please enter last name in alphabets");
+        //    document.getElementById('lbcardtype').style.display = 'none';
+        //    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+        //    document.getElementById('TableCell29').bgColor = "White";
+        //    document.getElementById('lbllastname').style.display = '';
+        //    document.getElementById('lbllastname').innerHTML = 'Please enter last name in alphabets';
+        //    document.getElementById('Td4').bgColor = "orange";
+        //    document.getElementById('txtlastname').focus();
+        //    return false;
+        //}
+        //else {
+        //    document.getElementById('Td4').bgColor = "White";
+        //    document.getElementById('lbllastname').style.display = 'none';
+        //}
+        var tmpyear = document.getElementById('year').value;
+        var tmpmonth = document.getElementById('month').value;
+        //            alert(tmpyear);
+        //            alert(tmpmonth);
+
+        var today = new Date();
+        var expiry = new Date(tmpyear, tmpmonth);
+        //            alert(today);
+        //            alert(expiry);
+        if (today.getTime() > expiry.getTime()) {
+            clearalerts();
+            document.getElementById('lbcardtype').style.display = 'none';
+            document.getElementById('TableCell29').bgColor = "White";
+            document.getElementById('lblExpyear').style.display = '';
+            document.getElementById('lblExpyear').innerHTML = 'This card has already expired';
+            document.getElementById('TableCell31').bgColor = "orange";
+            return false;
+        }
+        else {
+            document.getElementById('TableCell31').bgColor = "White";
+            document.getElementById('lblExpyear').style.display = 'none';
+        }
+
+
+        var str_BAddress1;
+        str_BAddress1 = trim(document.getElementById('EAddress1').value);
+        document.getElementById('EAddress1').value = str_BAddress1;
+        if (str_BAddress1 == '') {
+            clearalerts()
+            //                    Glb_ShowAlert("Please enter billing address");
+            document.getElementById('lbladdress').style.display = '';
+            document.getElementById('lbladdress').innerHTML = 'Please enter billing address';
+            document.getElementById('TableCell35').bgColor = "orange";
+            document.getElementById('EAddress1').focus();
+            return false;
+        }
+        else {
+            document.getElementById('TableCell35').bgColor = "white";
+            document.getElementById('lbladdress').style.display = 'none';
+        }
+        $('#txtZip').keypress(function (e) {
+            var code = e.keyCode;
+            //var pressedKey = String.fromCharCode(code);
+
+            if (parseInt($('#txtZip').val().length) > 4) {
+                if (code != "8") {
+
+                    return false;
+                }
+            }
+        });
+        if (document.getElementById('txtZip').value == '') {
+            clearalerts()
+            //						Glb_ShowAlert("Please enter zip");
+            document.getElementById('Elblzip').style.display = '';
+            document.getElementById('Elblzip').innerHTML = 'Please enter zip';
+            document.getElementById('Etdzip').bgColor = "orange";
+            document.getElementById('txtZip').focus();
+            return false;
+        }
+        else {
+            document.getElementById('Etdzip').bgColor = "white";
+            document.getElementById('Elblzip').style.display = 'none';
+        }
+
+        if (document.getElementById('txtZip').value.length != 5) {
+            clearalerts()
+            //						Glb_ShowAlert("Please enter valid zip");
+            document.getElementById('Elblzip').style.display = '';
+            document.getElementById('Elblzip').innerHTML = 'Please enter valid zip';
+            document.getElementById('Etdzip').bgColor = "orange";
+            document.getElementById('txtZip').focus();
+            return false;
+        }
+        else {
+            document.getElementById('Etdzip').bgColor = "white";
+            document.getElementById('Elblzip').style.display = 'none';
+        }
+        if (document.getElementById('DDState').selectedIndex == 0) {
+            clearalerts()
+            //						Glb_ShowAlert("Please select state");
+            document.getElementById('Elblstate').style.display = '';
+            document.getElementById('Elblstate').innerHTML = 'Please select state';
+            document.getElementById('Etdstate').bgColor = "orange";
+            document.getElementById('DDState').focus();
+            return false;
+        }
+        else {
+            document.getElementById('Etdstate').bgColor = "White";
+            document.getElementById('Elblstate').style.display = 'none';
+        }
+
+        if (document.getElementById('DDCity').selectedIndex == 0) {
+            clearalerts()
+            //					    Glb_ShowAlert("Please select city");
+            document.getElementById('Elblcity').style.display = '';
+            document.getElementById('Elblcity').innerHTML = 'Please select city';
+            document.getElementById('Etdcity').bgColor = "orange"
+            document.getElementById('DDCity').focus();
+            return false;
+        }
+        else {
+            document.getElementById('Etdcity').bgColor = "white";
+            document.getElementById('Elblcity').style.display = 'none';
+        }
+    }
+    else {
+        return false;
+    }
+    document.getElementById('hdnadd1').value = document.getElementById('EAddress1').value;
+    document.getElementById('hdnadd2').value = document.getElementById('EAddress2').value;
+    document.getElementById('hdnzip').value = document.getElementById('txtZip').value;
+    document.getElementById('hdnstate').value = document.getElementById('DDState').value;
+    document.getElementById('hdncity').value = document.getElementById('DDCity').value;
+    //                  }  
+    //  var pwd = '@Session["PWD"]';
+    // alert(pwd);
+    document.getElementById("tblProcess").style.display = 'none';
+    $("#updateDialog").dialog({
+        modal: true,
+        width: 500,
+        resizable: false,
+        closeOnEscape: false,
+        open: function (event, ui) { $(".ui-dialog-titlebar").hide(); $('body').css('overflow', 'hidden'); $('.ui-widget-overlay').css('width', '100%'); },
+        close: function (event, ui) { $('body').css('overflow', 'auto'); }
+
+    });
+}
+        $.ajaxSetup({ cache: false });
+        $(".confirmDialog").live("click", function (e) {
+            $("#dialog-confirm").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.location = '@Url.Action("Index", "Home")';
+
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog('open');
+            return false;
+        });
+    </script>
+</head>
+<body>
+    @using (Ajax.BeginForm("CCProcess", "Registration", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess"
+
+        }, new { @id = "updateCarForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="CardNumber1" />
+        <input id="hdncardnumber" type="hidden" /> 
+        <input type="hidden" id="HdnPractice_ID" name="HdnPractice_ID" value="@TempData["Practice_ID"]" />
+        <input type="hidden" id="HdnProvider_ID" name="HdnProvider_ID" value="@TempData["Provider_ID"]" />
+         
+        <input type="hidden" id="hdnadd1" name="hdnadd1" value="" />
+        <input type="hidden" id="hdnadd2" name="hdnadd2" value="" />
+        <input type="hidden" id="hdnzip" name="hdnzip" value="" />
+        <input type="hidden" id="hdnstate" name="hdnstate" value="" />
+        <input type="hidden" id="hdncity" name="hdncity" value="" />
+        <div id="wrapper">
+              @Html.Partial("_TopSection")
+         @*   <div id="flttop">
+                <div id="header01">
+                    <div id="headermain02">
+                        <div id="logopublic">
+                            <a id="logo_find1"  title="Home" href="@Url.Action("Index", "Home", null)" style="text-decoration: none;" class="bluemenuPublic">Mower Helper-Find an Mower Helper</a>
+                        </div>
+                        <div id="mainnavcon">
+                            <div class="mainnav">
+                                <ul>
+                                                                                                            
+                                       @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                    <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                       }
+                                     <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div id="flt02">
+                <div id="bodycon">
+                    <div id="contentpannel">
+                        <div class="content" style="height: 510px; width: 95%;padding-left:25px;">
+                            <table class="regnav" cellspacing="1" cellpadding="8" width="100%" align="center"
+                                border="0" id="tblHeading">
+                                <tr height="25">
+                                    <td colspan="2" align="left">&nbsp;&nbsp;&nbsp;<h3>New Mower Helper Registration Process</h3>
+                                        @*<div id="update-message" class="error invisible">
+                                        </div>*@
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <table align="center" width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style">
+                                  <tr id="row14" class="white_color">
+                                    <td id="TableCell32" align="right" style="width: 30%">
+
+                                        <strong>Amount :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell33">
+                                        @Html.Hidden("hdmamount", "1")
+                                        @* @Html.TextBox("amt", "$1.00", new { @style = "width:50px;", disabled = "true" })*@
+                                        <span id="spanamt">$1.00</span>
+                                        @if (ViewBag.regFee != null)
+                                        {
+                                            <img src="~/Images/help2.png" id="Img3" onmouseover="ddrivetip('@ViewBag.regFee',300)" onmouseout="hideddrivetip()" style="vertical-align:middle" />
+                                        }
+                                    </td>
+                                </tr>
+                                <tr class="nav_blue_color" id="row12">
+                                    <td align="right" style="width: 30%" id="TableCell28">
+
+                                        <font color="red">*</font><strong>Card name :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell29">
+                                        @Html.DropDownList("CardType", null, new { @class = "textfield", @style = "height:25px" })
+                                        &nbsp;&nbsp;&nbsp;
+                                        @Html.TextBox("IssuingBank",null , new { @class = "textfield", autocomplete = "off",placeholder="Issuing Bank",maxlength="50" })
+                                        <img src="~/Images/help2.png" id="ImgIsBank" style="vertical-align: middle" onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.IssuingNotes' ,300);" />
+                                        <span id="lbcardtype" style="display: none"></span>
+                                    </td>
+                                </tr>
+
+                                <tr id="row10" class="white_color">
+                                    <td id="TableCell24" align="right" style="width: 30%">
+                                        <font color="red">*</font><strong>Credit card number :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell25">
+                                        @Html.TextBox("CardNumber", null, new { @class = "textfield", @onkeydown = "return isValidNumeric(CardNumber,16,0,event);", autocomplete = "off" })
+                                        <b>Cvv :&nbsp;</b>
+                                        @Html.TextBox("txtCVV2", null, new
+                                   {
+                                       @style = "width:50px",
+                                       @class = "textfield",
+                                       @onkeypress = "return AlphaNumbers(event);"
+                                   })
+                                        <img src="~/Images/help2.png" id="Img2" style="vertical-align: middle" />
+                                        <div id="divCvv" style="display: none">
+                                            <table id="Table7" width="100%">
+                                                <tr>
+                                                    <td>
+                                                        <img src="~/Images/cvv2.jpg" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="lblcardnumber" style="display: none"></span>
+                                    </td>
+                                </tr>
+                                 <tr id="row13" class="nav_blue_color">
+                                    <td id="TableCell30" align="right" style="width: 30%">
+                                        <font color="red">*</font><strong>Card expiry date :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell31">
+                                        @Html.DropDownList("month", null, new { @class = "textfield", @style = "width:50px" })
+                                        @Html.DropDownList("year", null, new { @class = "textfield", @style = "width:100px" })
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<span id="lblExpyear" style="display: none;"></span>
+                                    </td>
+                                </tr>
+                                 <tr id="trfirstlastname" class="white_color" >
+                                   <td id="tdfl1" align="Right" style="width: 30%">
+                                    <font color="red">*</font><strong>Name on card :</strong>&nbsp;
+                                   </td>
+                                <td id="tdfl2" runat="server">
+                                 @Html.TextBox("FullName",(Model.FirstName + ' ' + Model.LastName), new { @class = "textfield",style = "width:230px", autocomplete = "off", placeholder="First and Last name" })&nbsp;&nbsp;&nbsp;&nbsp;
+                                 <span id="lblfullname" style="display:none"></span>
+                                </td>
+                             </tr>
+                                <tr id="trfirstname" class="white_color" style="display:none">
+                                    <td id="Td1" align="Right" style="width: 30%">
+                                        <font color="red">*</font><strong>First name :</strong>&nbsp;
+                                    </td>
+                                    <td id="Td2">
+                                        @Html.TextBox("txtfirstname", Model.FirstName, new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span id="lblfirstname" style="display: none"></span>
+                                    </td>
+                                </tr>
+
+                                <tr id="trlastname" class="nav_blue_color" style="display:none">
+                                    <td id="Td3" align="Right" style="width: 30%">
+                                        <font color="red">*</font><strong>Last name :</strong>&nbsp;
+                                    </td>
+                                    <td id="Td4">
+                                        @Html.TextBox("txtlastname", Model.LastName, new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span id="lbllastname" style="display: none"></span>
+                                    </td>
+                                </tr>
+                                <tr class="white_color" id="row15">
+                                    <td id="TableCell34" align="right" style="width: 30%">
+
+                                        <font color="red">*</font><strong>Billing address 1 :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell35">
+                                        @Html.TextBox("EAddress1", Model.Address1, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })&nbsp;&nbsp;&nbsp;<span id="lbladdress" style="display: none"></span>
+                                        @Html.CheckBox("chkaddress", true)&nbsp;&nbsp;&nbsp;
+                                         <strong>Same as mower helper address </strong>
+                                    </td>
+                                </tr>
+
+
+
+                                <tr id="row16" class="nav_blue_color">
+                                    <td id="TableCell36" align="right" style="width: 30%">
+
+                                        <strong>Address 2 :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell37">
+                                        @Html.TextBox("EAddress2", Model.Address2, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })
+                                    </td>
+                                </tr>
+                                @Html.Partial("_CitiesStatesNewPaymentMetod",Model)
+                            </table>
+                            <br />
+
+                            <table width="100%" id="tblProcess">
+                                <tr id="TableRow7">
+                                    <td id="TableCell11" width="100%" align="right">
+
+                                        <input type="submit" name="btnProcess2" id="btnProcess2" value="Process"
+                                            class="confirmDialog1" onclick="return CognodeProcess();" />
+                                        &nbsp;
+                                     <input type="button" name="btncancel" value="Cancel" id="btncancel" class="confirmDialog" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+                        <p>
+                            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                            Do you want to stop registration?
+                        </p>
+                    </div>
+                      @Html.Partial("_Footer")
+                   @*   <div id="footercon">
+            <div id="footerpublic">
+                <div >
+                     @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                            {
+                            <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                         
+                                <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.ShowArticles == "Y")
+                            {
+                                <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.Showforums == "Y")
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                      <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li style="display:none;">
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                    
+                            </ul>
+                            }
+                                    </div>
+                            <div class="copy">
+                                Copyright © 2016.Mower Helper-Find an Mower Helper , Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    }
+    <div id="updateDialog" title="Process" style="display: none;">
+        <table id="tblBusyMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+            <tr>
+                <th align="center">
+                    <img id="imgp" src="~/Images/loading.gif" /><br />
+                    <font size="2"><strong>Credit card transaction is under process, it will take few minutes.&nbsp;<br />
+                                                                Kindly bear.&nbsp;</strong></font>
+                    <br />
+                    <font color="#a52a2a" size="2">Do not click either <i><b>Back</b></i> or any other button
+                                                                till the process is complete.</font>
+                </th>
+            </tr>
+        </table>
+    </div>
+
+   
+</body>
+     <script type="text/javascript">
+         function preventBack() {
+             window.history.forward();
+         }
+         setTimeout("preventBack()", 0);
+         window.onunload = function () { null };
+    </script>
+    <script type="text/javascript">
+
+        function updateSuccess(data) {
+             
+            if (data != '' & data.Success == true) {
+                $('#updateDialog').dialog('close');
+                var Practice_ID = data.Object.Practice_ID
+                var Provider_ID = data.Object.Provider_ID
+                window.location.href = "../../../" + Practice_ID + "/Confirmation/" + Provider_ID + "/Registrationcomplete";
+                    //'@Url.RouteUrl("Confirmation", new { Uid1 = ViewBag.Practice_ID, Uid2 = ViewBag.Provider_ID })';
+            }
+            else {
+                $('#updateDialog').dialog('close');
+                alert("Process Failed.");
+                document.getElementById("tblProcess").style.display = '';
+            }
+        }
+        $(document).ready(function () {
+            $('#Img2').mouseover(function () {
+                //document.getElementById("divCvv").style.zIndex = '1005';
+               // document.getElementById("divCvv").style.left = '750px';
+                //document.getElementById("divCvv").style.top = '120px';
+                document.getElementById("divCvv").style.position = 'absolute';
+                document.getElementById("divCvv").style.display = '';
+            });
+            $('#Img2').mouseout(function () {
+
+                document.getElementById('divCvv').style.display = 'none';
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        window.history.forward();
+    </script>
+</html>

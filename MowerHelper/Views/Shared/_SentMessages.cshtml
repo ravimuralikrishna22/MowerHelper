@@ -1,0 +1,219 @@
+﻿
+
+
+ <div class="content-box-content">
+                                        @{string Msgpagesize = (ViewBag.Msgpagesize == null ? "10" : ViewBag.Msgpagesize);
+                                          WebGrid SentMsgGrid = new WebGrid(rowsPerPage: Convert.ToInt32(Msgpagesize));}
+                                        @{WebGrid grid = SentMsgGrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                          if (grid.TotalRowCount != 0)
+                                          {
+                                              int count = 0;
+
+                                              string pager = grid.Pager().ToString();
+                                              string pageno = (string.IsNullOrEmpty( Request["page"]) ? "1" : Request["page"]);
+                                              string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                              if (ViewBag.Type != "Archive")
+                                              {
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("SLno", "#"),
+                                                  grid.Column("SendingDate", "Date"),
+                                                   grid.Column("Sender", "Sender"),
+                                                    grid.Column("Receiver", "Receiver"),
+
+                                                       grid.Column("topic", "Topic", canSort: false,
+                                                      format:@<text>
+                                                         @{int id = (int)item.Reply_ID;
+                                                           string topic=(string)item.topic;
+                                                          
+                                                           if (id!=0)
+                                                           {
+                                                               topic = "Re:" + topic;
+                                                               
+                                                              <span>@HttpUtility.HtmlDecode(topic)</span>
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@HttpUtility.HtmlDecode(item.topic)</span>
+                                                           }
+                                                           }
+                                                
+                                                </text> ),
+
+
+                                                                                              grid.Column("MessageBody", "Message", canSort: false,
+                                                      format:@<text>
+                                                         @{string description = (string)item.MessageBody;
+                                                           if (description.Length > 100)
+                                                           {
+                                                               count = count + 1;
+                                                               description = description.Substring(0, 100);
+                                                           
+                                                           <span>@description</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 500px; height: 100px; display: none;  left:500px;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Description :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@HttpUtility.HtmlDecode(item.MessageBody)</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                           else
+                                                           {
+                                                               
+                                                               <span>@HttpUtility.HtmlDecode(item.MessageBody)</span>
+                                                           }
+                                                           }
+                                                
+                                                </text> ),
+                                                      //grid.Column("AttachmentFilename", "Attachment", style: "width:18%"),
+
+                                                           grid.Column(header: "Attachment", format: (item) =>
+                                                           {
+                                                               var str = item.AttachmentFilename;
+                                                               if (str == "")
+                                                                   return Html.Label("-");
+
+                                                               else
+                                                                   return Html.ActionLink((string)item.AttachmentFilename, "Download", "Messages", new { Imgpath = (string)item.AttachmentFilename }, new { @style = "font-weight:bold;color:#0066CC;cursor:pointer;" });
+                                                           }),
+                                                                                                          grid.Column("", "Archive", canSort: false, style: "Width:12%",
+                                                      format:@<text>@Html.ActionLink("Archive", "ArchiveToSentMessages", new { Msg_ID = (int)item.Message_ID, Rec_ID = (int)item.Reciever_ID },
+                                             new { @style = "font-weight:bold;color:#0066CC;cursor:pointer;", @class = "confirmDialog", @title = "Click here to delete contact" })</text>)
+                                                      //grid.Column("Archive", "Archive", style: "width:18%")
+
+                                                     )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                            @(new HtmlString(gridhtml))
+                                            <br />
+                                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                              }
+                                              else
+                                              {
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+columns: grid.Columns(grid.Column("SlNo", "#"),
+grid.Column("SendingDate", "Date"),
+grid.Column("Sender", "Sender"),
+ grid.Column("Receiver", "Receiver"),
+  grid.Column("topic", "Topic"),
+                                           grid.Column("MessageBody", "Message", canSort: false,
+   format:@<text>
+                                                         @{string description = (string)item.MessageBody;
+                                                           if (description.Length > 100)
+                                                           {
+                                                               count = count + 1;
+                                                               description = description.Substring(0, 100);
+                                                           
+                                                           <span>@description</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 500px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Description :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@item.MessageBody</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@item.MessageBody</span>
+                                                           }
+                                                           }
+                                                
+                                                </text> ),
+                                                      //grid.Column("AttachmentFilename", "Attachment", style: "width:18%"),
+
+        grid.Column(header: "AttachmentFilename", format: (item) =>
+        {
+            var str = item.AttachmentFilename;
+            if (str == "")
+                return Html.Label("-");
+
+            else
+                return Html.ActionLink((string)item.AttachmentFilename, "Download", "Messages", new { Imgpath = (string)item.AttachmentFilename }, new { @style = "font-weight:bold;color:#0066CC;cursor:pointer;" });
+        })
+
+  )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                            @(new HtmlString(gridhtml))
+                                            <br />
+                                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                              }
+                                            <br />
+
+
+
+                                          }
+                                          else
+                                          {
+                                            <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                <tr id="trdsmerror" class="white_color">
+                                                    <td align="center" height="25px" valign="middle" colspan="2">
+                                                        <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                            No messages found</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                          }
+                                        }
+                                    </div>
+      <div>
+                                 @if (grid.Rows.Count <= 9)
+              {
+                  if (grid.Rows.Count <= 3)
+                  {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+                  }
+                  else
+                  {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                  }
+              }
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+
+
+
+<script>
+    $("#FromElectricianHelp").html("");
+    $("#SentMessages").html("");
+    $("#FromTennisHelp").text('From Mower Helper' + '(' + '@ViewBag.FromThhelpCount' + ')');
+
+    $("#SentMessages").text('Sent messages' + '(' + '@ViewBag.Sentcount' + ')');
+    $('.gridFooter a').click(function () {
+        //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        var href = $(this).attr("href");
+        $(this).attr("href", "#");
+        var queryString = href.substring(href.indexOf('?'), href.length);
+        var requestUrl = '@Url.Action("DisplaySentMessages", "Messages")' + queryString;
+                //$('#gridcontent1').load(requestUrl);
+
+        $.ajax({
+
+            url: requestUrl,
+            type: "get",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+
+                $('#SentMessageslist').html(data);
+                $("#dvLoading").dialog('close');
+            }
+
+        });
+        return false;
+    });
+    $(".gridHead th a").click(function () {
+
+        return false;
+    });
+    curPage = '@Request["page"]';
+</script>

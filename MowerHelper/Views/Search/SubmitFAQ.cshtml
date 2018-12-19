@@ -1,0 +1,353 @@
+﻿@model Publicfaq
+
+@{
+    ViewBag.Title = "SubmitFAQ";
+    Layout = "~/Views/Shared/_ArticlesMaster.cshtml";
+}
+<!DOCTYPE html>
+<html>
+  <head>
+  @*        <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+            @* @Scripts.Render("~/Scripts/Thscriptscript")  *@
+        @Styles.Render("~/Content/themes/base/jqueryCSS")
+    @Scripts.Render("~/Scripts/Thscriptscript")
+    @Scripts.Render("~/ThScripts/Thjquerycripts")
+    <script type="text/javascript">
+        function FaqCog() {
+            this.Category_Id = "";
+            this.Username = "";
+            this.Email = "";
+            this.Question = "";
+            this.verificationcode = "";
+            this.hdnverificationcode = "";
+        }
+
+    </script>
+<script type="text/javascript">
+    function cancel() {
+        //alert(content);
+        //  alert('Your request will be processed soon.');
+        window.location.href = '@Url.RouteUrl("FAQSHome")';
+    }
+
+
+    function chkqus() {
+        if (document.getElementById('txtName').value == '') {
+            alert("Enter  your name");
+            document.getElementById('txtName').focus();
+            return false;
+        }
+        if (document.getElementById('txtEmail').value == '') {
+            alert("Enter  email id");
+            document.getElementById('txtEmail').focus();
+            return false;
+        }
+        if (document.getElementById('txtEmail').value != '') {
+            if (ValidateEmail(document.getElementById('txtEmail')) == 0) {
+                alert("Enter valid email id");
+                document.getElementById('txtEmail').focus();
+                return false;
+            }
+        }
+        if (document.getElementById('Category').selectedIndex == "0") {
+            alert("Select category");
+            document.getElementById('Category').focus();
+            return false;
+        }
+        if (document.getElementById('txtMessage').value == '') {
+            alert("Enter  question");
+            document.getElementById('txtMessage').focus();
+            return false;
+        }
+        //if (document.getElementById('txtMessage').value != '') {
+        //    if (MyChars(document.getElementById('txtMessage')) == "SpaceError") {
+        //        alert("Please Enter message without space first");
+        //        document.getElementById('txtMessage').focus();
+        //        return false;
+        //    }
+        //}
+        if (document.getElementById('txtimgKey').value == '') {
+            alert("Enter verification code");
+            document.getElementById('txtimgKey').focus();
+            return false;
+        }
+    }
+@*    $(document).ready(function () {
+        $('#btnSend').click(function () {
+            //alert('123');
+            var _blnInd = true;
+            if (document.getElementById('txtName').value == '') {
+                _blnInd = false;
+                alert("Enter  your name");
+                document.getElementById('txtName').focus();
+                return false;
+            }
+            if (document.getElementById('txtEmail').value == '') {
+                _blnInd = false;
+                alert("Enter  email id");
+                document.getElementById('txtEmail').focus();
+                return false;
+            }
+            if (document.getElementById('txtEmail').value != '') {
+                if (ValidateEmail(document.getElementById('txtEmail')) == 0) {
+                    _blnInd = false;
+                    alert("Enter valid email id");
+                    document.getElementById('txtEmail').focus();
+                    return false;
+                }
+            }
+            //alert(document.getElementById('Category').selectedIndex);
+            if (document.getElementById('Category').selectedIndex == "0") {
+                alert("Select category");
+                document.getElementById('Category').focus();
+                return false;
+            }
+            if (document.getElementById('txtMessage').value == '') {
+                _blnInd = false;
+                alert("Enter  question");
+                document.getElementById('txtMessage').focus();
+                return false;
+            }
+            if (document.getElementById('txtMessage').value != '') {
+                if (MyChars(document.getElementById('txtMessage')) == "SpaceError") {
+                    _blnInd = false;
+                    alert("Please Enter message without space first");
+                    document.getElementById('txtMessage').focus();
+                    return false;
+                }
+            }
+            if (document.getElementById('txtimgKey').value == '') {
+                _blnInd = false;
+                alert("Enter verification code");
+                document.getElementById('txtimgKey').focus();
+                return false;
+            }
+
+            if (_blnInd = true) {
+
+                var cnt = new FaqCog();
+                cnt.Username = $("#txtName").val();
+                cnt.Email = $("#txtEmail").val();
+                cnt.Question = $("#txtMessage").val();
+                cnt.verificationcode = $("#txtimgKey").val();
+                cnt.hdnverificationcode = $("#hdnkey").val();
+                cnt.Category_Id = $("#Category").val();
+                var postData = JSON.stringify(cnt);
+
+                $.ajax({
+                    url: '@Url.Action("Submitnewfaq","Search")',
+                    type: 'POST',
+                    data: JSON.stringify(cnt), //you can serialize a form here as well OR simply put in the name value pairs of your data, ex. myTextBox='something'
+                    dataType: 'json',
+                    processData: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+//                        alert(data);
+                        if (data == 'true') {
+                           // alert('123');
+                            window.location.href = '@Url.RouteUrl("FAQSHome")';
+                        }
+                        else {
+                            alert("You need to enter valid Security Code to register...");
+                            window.location.href = '@Url.RouteUrl("SubmitFaq")';
+                        }
+                    }
+                    // error: function () { alert("You need to enter valid Security Code to register..."); window.location.href = "contact"; }
+                });
+                // $.post('Submitcontact', postData, recipeSuccess);
+                // document.body.style.cursor = 'wait';
+
+            }
+        });
+    });*@
+    
+</script>
+       <script language="javascript" type="text/javascript">
+
+          
+           function ValidateEmail(ctrl) {
+               if (document.layers || document.getElementById || document.all) {
+                   var str = ctrl.value
+                   
+                   var filter = /^([\w-]+(?:\.[\w-]+)*)@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
+                   if (filter.test(str))
+                       testresults = true
+                   else
+                       testresults = false
+
+                   if (testresults == true) {
+                       var sindex = str.indexOf("@@");
+                       var strlength = str.length;
+                       var mailstr = str.substring(sindex, strlength);
+                       var eindex = mailstr.indexOf(".");
+                       if (eindex < 4)
+                           testresults = false
+                       else
+                           testresults = true
+                   }
+
+                   return (testresults)
+               }
+               else
+                   return true;
+           }
+           function chkname() {
+               var strname = document.getElementById('txtName').value;
+               strname = strname.replace(/^\s+/, '');
+               document.getElementById('txtName').value = strname;
+           }
+           function chkemail() {
+               var stremail = document.getElementById('txtEmail').value;
+               stremail = stremail.replace(/^\s+/, '');
+               document.getElementById('txtEmail').value = stremail;
+           }
+           function chkquestion() {
+               var strquestion = document.getElementById('txtQuestion').value;
+               strquestion = strquestion.replace(/^\s+/, '');
+               document.getElementById('txtQuestion').value = strquestion;
+           }
+           function chkver() {
+               var strver = document.getElementById('txtimgKey').value;
+               strver = strver.replace(/^\s+/, '');
+               document.getElementById('txtimgKey').value = strver;
+           }         
+         
+        </script>
+      </head>
+<body>
+              @using (Ajax.BeginForm("SubmitFaq", "Search", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess"
+
+        }, new { @id = "updateCarForm" }))
+          {
+          <div class="video-library">
+         
+        <div class="article-search">
+            <h4 >
+                 @Html.RouteLink("Frequently Asked Questions", "FAQSHome",null, new { @style="color:#044a7d;text-decoration:none;"})
+                </h4>
+                </div>
+          </div>
+
+        <div class="article-library" id="divbottom" runat="server">
+        <div class="affairs1">
+         @*<table style="display:none;">
+        <tr height="20px">
+            <td>
+            </td>
+        </tr>
+    </table>*@
+    <table cellpadding="10" cellspacing="1" border="0" width="100%" align="center" class="border_style" >
+        <tr  class="white_color" >
+            <td align="right" width="30%">
+                <font color="red" size="2pt">* </font>
+                <label id="lblName" style="font-family:Arial; Font-Size:9pt;"><b>Your Name :</b>&nbsp;</label>
+                </td>
+            <td align="left" width="70%" >
+               <input type="text" id="txtName" name="txtName"  class="textfield" onkeyup="return chkname();" style=" font-size: 9pt; width: 200px;" autocomplete="off" />
+            </td>
+        </tr>
+        <tr  class="white_color" >
+            <td align="right" width="30%" >
+                <font color="red" size="2pt">* </font>
+                 <label id="lblEmail" style="font-family:Arial; Font-Size:9pt;"><b>Your E-mail :</b>&nbsp;</label>
+                           </td>
+            <td align="left" width="70%" >
+             
+                <input type="text" id="txtEmail" name="txtEmail"  class="textfield" onkeyup="return chkemail();" style=" font-size: 9pt; width: 200px; font-Names: arial;" autocomplete="off" />
+            </td>
+        </tr>
+        <tr  class="white_color" >
+            <td align="right" width="30%" >
+                <font color="red" size="2pt">* </font>
+                  <label id="lblTopic" style="font-family:Arial; Font-Size:9pt;"><b>Topic :</b>&nbsp;</label>
+                           </td>
+            <td align="left" width="70%" >         
+             
+             @Html.DropDownListFor(x => Model.Category, Model.CategoryList, "--Select Category--")     
+            </td>
+        </tr>
+        <tr height="30px" class="white_color" >
+            <td align="right" width="30%">
+                <font color="red" size="2pt">* </font>
+                <label id="lblQuestion" style="font-family:Arial; Font-Size:9pt;"><b>Your Question :</b>&nbsp;</label>
+                          </td>
+            <td align="left" width="70%" >
+              
+                    
+                     <textarea id="txtMessage" name="txtMessage" class="text" rows="2" cols="2" maxlength="1000" style="width:400px; height: 150px;"></textarea>
+                <br />
+                (Maximum length 1000 characters)
+            </td>
+        </tr>
+        <tr height="30px" class="white_color" >
+            <td align="right" >
+                <font color="red" size="2pt">* </font>
+                 <label id="lblValidationCode" style="font-family:Arial; Font-Size:9pt;"><b>Validation Code :</b>&nbsp;</label>
+                           </td>
+            <td align="left"  >
+               
+                    <input type="text" id="txtimgKey" name="txtimgKey"  class="textfield" onkeyup="return chkver();" style=" font-size: 9pt; width: 80px;" autocomplete="off" />
+             <img style="padding-left:20px;width: 110px;" src="@Url.Action("ShowCaptchaImage","Home")" />
+            </td>
+        </tr>
+        <tr class="white_color" >
+            <td colspan="2"  align="center" style="padding-right: 210px; padding-top: 5px; padding-bottom: 5px;">
+            <div style="float:right;">
+              
+          @*          <input id="btnSend"  value="Submit Question"  style="width: 150px; Font-Size: 9pt;" class="adv-search-bt"/>*@
+                <input id="btnSend" value="Submit Question" type="submit" class="button"
+                                                         onclick="return chkqus();" />
+                    </div>
+            </td>
+        </tr>
+    </table>
+    <table align="right">
+        <tr >
+            <td align="left">
+            <a >
+             
+                <input value="Back" type="button" class="button" style="width: 60px;" id="btnclose" onclick="return cancel();"/></a>
+               
+            </td>
+        </tr>
+    </table>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+     </div>
+       </div>
+              }
+    </body>
+      <script type="text/javascript">
+
+          function updateSuccess(data) {
+
+              if (data != '' & data.Success == true) {
+                  //$('#dvLoading').dialog('close');
+                  window.location.href = '@Url.RouteUrl("FAQSHome")';
+              return false;
+              }
+              else if (data.ErrorMessage == 'expire') {
+                  window.location.href = '../Home/SessionExpire';
+              }
+          else {
+              //$('#dvLoading').dialog('close');
+                  if (data != '_Logon_') {
+                      alert(data.ErrorMessage);
+                  }
+
+              document.getElementById('txtimgKey').focus();
+
+              return false;
+          }
+      }
+    </script>   
+    </html>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<template xmlns="obout:editor:template-schema">
+  <property name="Appearance" value="full" />
+
+  <collection name="Buttons">
+    <!--Add a separator-->
+    <item name="HorizontalSeparator" />
+    <!--Add a custom button-->
+    <item name="Custom">
+      <property name="OnClientClick" value="myImageUpload" /><!--Client-sde method on click-->
+      <property name="ImageName" value="ed_upload_image_n.gif" /><!--Image of the button-->
+      <property name="ToolTip" value="Upload image" /><!--Title-->
+    </item>
+  </collection>
+</template>

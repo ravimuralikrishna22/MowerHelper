@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />*@
+ @*   <meta name="viewport" content="width=device-width" />*@
+    <title>audioPlay</title>
+   @* <script  src="~/Scripts/jquery-ui-1.8.11.js" type="text/javascript"></script>*@
+
+</head>
+<body>   
+    <div align="center" style="padding-top:15px">  
+        @if (HttpContext.Current.Request.Browser.Type.Contains("InternetExplorer"))
+        {
+            @Video.MediaPlayer(@ViewBag.getApptfilename,width: "500", height: "320", autoStart: true) 
+        }
+        else
+        {
+          <audio controls autoplay >
+             <source src="@ViewBag.getApptfilename" type="audio/mp4" />
+               @*<source src="@ViewBag.getApptfilename" type="audio/AAC">*@
+          </audio>
+        }
+      @*  @Video.MediaPlayer(@ViewBag.getApptfilename,width: "500", height: "320", autoStart: true)       *@
+   </div>
+     
+</body>
+</html>

@@ -1,0 +1,150 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+               @Styles.Render("~/Content/themes/base/jqueryCSS")
+            @Scripts.Render("~/Scripts/Thscriptscript")
+    <style type="text/css">
+          
+          tr.gridHead th:nth-child(1) { width: 50px; }
+          tr.gridHead th:nth-child(2) { width: 100px; }
+          tr.gridHead th:nth-child(3) { width: 200px; }
+          tr.gridHead th:nth-child(4) { width: 200px; }
+          tr.gridHead th:nth-child(5) { width: 100px; }
+          
+         .dvLoading .ui-dialog-titlebar{display:none;}
+    </style>
+        <script type="text/javascript">
+         function cancel() {
+            window.location.href = "@Url.Action("Tools", "AdminHome",new{sectionid="333"})"; 
+         }
+            $(document).ready(function () {
+                var TopIndex = '@Session["TopIndex"]';
+                 $("#Menu0").removeClass();
+                 $("#Menu1").removeClass();
+                 $("#Menu2").removeClass();
+                 $("#Menu3").addClass("active");
+             });
+    </script>
+
+</head>
+<body>
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div>
+        
+        <div id="main-content">
+        @Html.Partial("_NavigationTool")
+
+                                                            <div class="content-box">
+                                                                            <div class="content-box-header" runat="server" style="height: 25px">
+                                            <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                                <tr>
+                                                    <td width="80%" align="left">
+                                                        <h3>
+                                                            System event log</h3>
+                                                    </td>
+@*                                                                                                        <td width="20%" align="center">
+                                                        <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                           
+                                                            <li>
+ <a id="lnkaddemailopt" href="" style="color: #0066CC;font-weight:bold;font-size:14px;">System / Application&nbsp;&nbsp;</a>
+                                                            </li>
+                                                        </ul>
+                                                    </td>*@
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="content-box-content">
+                                            @{
+                                              WebGrid grid = new WebGrid(Model, rowsPerPage:50);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                                                                       grid.Column(header: "Type", format: @<text>@{string ind = Convert.ToString(item.EntryType); if (ind == "Warning")
+                                                                                                                                                    {<img
+                                        src="../Images/warning.png" alt="" style="no-repeat;height: 20px;width:20px;padding-left:10px;padding-bottom:10px;" />}
+                                                                                                                                                    else if (ind == "Error")
+                                                                                                                                                    {<img
+                                        src="../Images/error.png" alt="" style="no-repeat;height: 20px;width:20px;padding-left:10px;padding-bottom:10px;" /> }
+                                                                                                                                                    else
+                                                                                                                                                    { <img
+                                        src="../Images/info.png" alt="" style="no-repeat;height: 20px;width:20px;padding-left:10px;padding-bottom:10px;" /> }
+                                                                                                                                                           }</text>),
+                                                  grid.Column("EntryType", "TOF", canSort: false),
+                                                 grid.Column("TimeGenerated", "Date/Time", canSort: false),
+                                                  grid.Column("Source", "Source", canSort: false),
+                                                   grid.Column("EventID", "Event id", canSort: false),
+                                                   grid.Column("Message", "Message", canSort: false)
+
+                                                 )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                    <tr id="trcpterror" class="white_color">
+                                                        <td align="center" height="25px" valign="middle" colspan="2">
+                                                            <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                               No system event logs found</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                              }
+                                          @*  }*@
+                                        </div>
+                                </div>
+                                <br />
+    </div>
+    <table  runat="server" width="98%">
+                                    <tr class="background_color">
+                                        <td align="right">
+                                               <input value="Cancel" type="button" class="button" style="width: 60px;" id="btnclose1" onclick="return cancel();"/>
+                                           
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+        
+        <div>
+                      @if (grid.Rows.Count <= 9)
+                      {
+                          if (grid.Rows.Count <= 4)
+                          {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+                          }
+                          else
+                          {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                          }
+                      }
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+</body>
+</html>

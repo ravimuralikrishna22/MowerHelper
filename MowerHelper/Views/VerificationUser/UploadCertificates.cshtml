@@ -1,0 +1,209 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+      <title>Mower Helper-Find an Mower Helper</title>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <style>
+       .gridTable
+        {
+            margin: 0px;
+            padding: 0px;
+            min-width: 100%;
+            background-color: #CAD7EA;
+        }
+        .gridTable td
+        {
+            border-color: #CAD7EA;
+        }
+        .gridHead th
+        {
+            background: #92AFD2 !important;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+        }
+        .gridHead strong
+        {
+            color: #fff;
+        }
+        .gridHead a:link, .gridHead a:visited, .gridHead a:active, .gridHead a:hover
+        {
+            color: #fff;
+        }
+        .gridTable tr.gridAltRow
+        {
+            background-color: #efeeef;
+        }
+        .gridTable tr:hover
+        {
+            background-color: #f6f70a;
+        }
+        .gridAltRow td
+        {
+            padding: 10px;
+            margin: 5px;
+            background: White !important;
+        }
+        .gridRow td
+        {
+            padding: 10px;
+            background: #fff !important;
+        }
+        
+        .gridFooter td
+        {
+            padding: 10px;
+            text-align: center;
+        }
+        .gridFooter a:link
+        {
+            padding: 2px 6px;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            background-color: #EBECEE;
+            border: 1px solid #B5BAC0;
+        }
+        .gridFooter a
+        {
+            text-decoration: none;
+            color: #004586;
+            font-size: 1.0em;
+            border: 1px solid #B5BAC0;
+        }
+        .gridFooter a:link
+        {
+            background-color: #EBECEE;
+            border: 1px solid #B5BAC0;
+            font-size: 15px;
+            padding: 2px 6px;
+        }
+        /*.gridFooter span
+        {
+            background: #469400 url('../images/bg-button-green.gif') top left repeat-x !important;
+            border: 1px solid #B5BAC0 !important;
+            color: #fff !important;
+            padding: 3px 7px;
+            font-size: 15px;
+        }*/
+        .gridFooter a:hover
+        {
+            text-decoration: underline;
+        }
+        .PayerIdwidth
+        {
+            width:30px;
+        }
+        .Payername
+        {
+            width:500px;
+        }
+        .payerstate
+        {
+            width:150px;
+        }
+         .selected
+    {
+        background: #469400 url('../images/bg-button-green.gif') top left repeat-x !important;
+            border: 1px solid #B5BAC0 !important;
+            color: #fff !important;
+        padding: 3px 7px;
+            font-size: 15px;
+       margin:5px;
+    }
+      
+      </style>
+         <script type="text/javascript">
+             function ondescriptionover(obj) {
+                 //alert(obj);
+                 document.getElementById(obj).style.position = 'absolute';
+                 document.getElementById(obj).style.display = '';
+                 return false;
+             }
+             function ondescriptionout(obj) {
+                 document.getElementById(obj).style.display = 'none';
+                 return false;
+             }
+    </script>
+
+</head>
+<body>
+  @using (Ajax.BeginForm("UploadCertificates", "VerificationUser", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess"
+
+        }, new { @id = "updateCarForm" }))
+  {
+      <div id="update-message" class="error invisible">
+        </div>
+                        WebGrid grid = new WebGrid(rowsPerPage: 10, ajaxUpdateContainerId: "grid", ajaxUpdateCallback: "update");
+
+  
+                            grid.Bind(Model, rowCount: ViewBag.totrec1, autoSortAndPage: false);
+                            if (grid.TotalRowCount != 0)
+                            {
+                                int count = 0;
+                               @grid.GetHtml(htmlAttributes: new { id = "grid" },
+              tableStyle: "gridTable", headerStyle: "gridHead", footerStyle: "gridFooter", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow", selectedRowStyle: "select",
+                                columns: grid.Columns(
+                                                                                  grid.Column("Title", "Title", canSort: true,
+                                                  format: @<text>@{  count = count + 1;
+                                                                     }
+                                                  @Html.ActionLink((string)item.Title, null, null, new { @onclick = "return false;", onmouseover = "return ondescriptionover('Ptbldesc " + count + "');", onmouseout = "return ondescriptionout('Ptbldesc " + count + "');", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                  @{
+                                                    
+                                                       <div id="Ptbldesc @count" style="width: 1050px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Description :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td class="white_color" style="width:1050px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@item.DocDescription</span> </td> </tr>
+                                                             </table> </div>
+                                                      
+                                                      }
+                                                  
+                                                   </text>),
+                                      grid.Column("", "File name", canSort: false, format: @<text>@Html.ActionLink((string)item.FileName, "CertificateDownload", "VerificationUser", new { @id = (int)item.ProviderDocument_ID, @provid = ViewBag.provid, @practiceid = ViewBag.practiceid }, new { @title = "Click here to download the file", style = "font-weight:bold;" })   </text>),
+                                      grid.Column("CreatedOn", "Date of creation", canSort: false)
+
+
+                                                  )
+
+
+                                                  )
+
+
+                            }
+                            else
+                            {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">No
+                                            No providers found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            }
+          <br /><br />       <br /><br />
+<br /> <br />   <br />
+ 
+    <table id="tblbuttons" width="100%">
+                <tr>
+                    <td width="100%" align="right" style="padding-right: 10px; padding-bottom: 5px;">
+                        <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+<br />}
+</body>
+</html>

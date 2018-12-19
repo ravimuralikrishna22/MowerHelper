@@ -1,0 +1,376 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+        <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+    <title>CustomerTransactions</title>
+ 
+</head>
+<body>
+   @using (Ajax.BeginForm("CustomerTransactions", "Schedule", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "InfocustSuccess",
+            OnComplete = "SessionExpireFail"
+
+        }, new { @id = "AddTransupdateCarForm" }))
+    {
+        <div style="width:100%">
+             <input type="hidden" id="hdncustmid" name="hdncustmid" value="@ViewBag.custmid" />
+              <input type="hidden" id="hdnschetype" name="hdnschetype" value="@ViewBag.schetype" />
+            <input type="hidden" id="hdnproid" name="hdnproid" value="@ViewBag.proid" />
+            <input type="hidden" id="hdnappid" name="hdnappid" value="@ViewBag.appid" />
+             <input type="hidden" id="hdnAppdate" name="hdnAppdate" value="@ViewBag.Appdate" />
+            <input type="hidden" id="hdnPaymentMode" name="hdnPaymentMode" /> 
+            <input type="hidden" id="hdnclientphone" name="hdnclientphone" value="@ViewBag.clientphone" /> 
+           
+        <table border="0" cellpadding="6" cellspacing="1" class="border_style" width="100%">
+            <tr class="white_color" id="trcomboPat">
+                <td width="20%" align="right">
+                   <strong>Client name :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdcombopt">
+ <span id="lblcustmnm" >@ViewBag.customernm</span>
+                </td>
+            </tr>
+                                  <tr class="white_color">
+                    <td width="20%" align="right">
+                    <strong>Email :&nbsp;</strong>
+                    </td>
+                    <td align="left" id="tdEmail">
+                    @Html.TextBox("txtEmailID", (string)ViewBag.custmemail, new { @class = "textfield", @style = "width:240px" }) &nbsp;&nbsp;<span id="lblErrEmail" style="color: Black; font-weight: bold;"></span>
+                    </td>
+                </tr>
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <strong>Mode of transaction :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdtransactionmode">
+                                  @Html.DropDownList("ddlPayment", new List<SelectListItem> { new SelectListItem { Value = "3", Text = "Charge & Payment" }, new SelectListItem { Value = "1", Text = "Charge" }, new SelectListItem { Value = "2", Text = "Payment" } },new { @class = "textfield", @style = "height:30px;width:155px" })
+                    <span id="lbltransmode" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>
+                               <tr class="white_color" id="trpaymentmode">
+                    <td width="20%" align="right">
+                   <strong>Mode of payment : &nbsp;</strong>
+                    </td>
+                    <td align="left" id="tdEpMode" >
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td width="15%">
+                                @Html.DropDownList("ddlPaymentMode", new SelectList(ViewBag.ddlPaymentMode,"PaymentMode_ID","PaymentMode"), null, new { @class = "textfield", @style = "height:30px;width:130px" })
+                                </td>
+                                <td id="tdcheckNo"  style="display:none; text-align:center; width:20%;padding-left:10px;">
+                                    <input type="text" id="txtCheckNo" name="txtCheckNo" value="Check number" autocomplete="off" onfocus="return Clearcheckno();" class="textfield" maxlength="50" style="width: 150px;" />
+                                </td>
+                                <td id="tdAuth"  style="display:none; padding-left:10px;">
+                                    <input type="text" id="txtAuthNum" name="txtAuthNum" value="Last 4 digits of credit card" autocomplete="off" onfocus="return Ccno();" class="textfield" maxlength="4" style="width: 180px;" />
+                                </td>
+                                <td>
+                                &nbsp;&nbsp;<span id="lblErrMode" style="color: Black; font-weight: bold;"></span>
+                                </td>
+                            </tr>
+                        </table>
+               
+                    </td>
+                </tr>
+             <tr class="white_color">
+                <td width="20%" align="right">
+                    <font color="red">*</font><strong>Date of transaction :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdEPdate">
+                    @Html.TextBox("txtPayApptDate", DateTime.Now.ToString("MM/dd/yyyy"), new { @class = "textfield Datefield", @style = "width:100px" })&nbsp;&nbsp;
+                    <span id="lblErrPdate" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>
+            <tr class="white_color">
+                    <td width="20%" align="right">
+                    <font color="red">*</font><strong>Amount :&nbsp;</strong>
+                    </td>
+                    <td align="left" id="tdEPamount">
+                    @Html.TextBox("txtPayAmount", null, new { @class = "textfield", @maxLength = 10, @style = "width:100px", @onkeypress = "return checkValidNumeric(txtPayAmount,8,2,event)" }) &nbsp;&nbsp;<span id="lblMunPaidamount" style="font-weight:bold;">@ViewBag.balanceamt</span><span id="lblErrPamount" style="color: Black; font-weight: bold;"></span>
+                    </td>
+                </tr>
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <strong>Notes :&nbsp;</strong>
+                </td>
+                <td align="left" id="TdEPnotes">
+                        <table>
+                            <tr>
+<td>
+    <table style="width:100%;">
+        <tr style="width:100%;">
+            <td style="width:30%;"> 
+                <table>
+                    <tr>
+                        <td>@Html.TextArea("txtNotes", null, 3, 3, new { @class = "textfield", @style = "width:340px;height:78px;" })&nbsp;&nbsp;</td>
+                        <td><img src="~/Images/help2.png" id="Img3" onmouseover="ddrivetip('@ViewBag.pmtNote',300)" onmouseout="hideddrivetip()" style="vertical-align:middle" /></td>
+                    </tr>
+                </table>
+                 </td>
+            <td style="width:70%;">
+                <table style="width:100%;">
+                    <tr>
+                        <td  ><span>(These notes won't be sent to client. They are for your usage.)</span>
+                            <br />
+                            </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            (Maximum length 1000 characters)
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</td>
+                            </tr>
+                            <tr>
+                                <td>
+<span id="lblEpNotes" style="color: Black; font-weight: bold;"></span>
+                                    </td>
+                            </tr>
+                        </table>
+                    </td>
+            
+            </tr>
+                                    <tr class="white_color">
+                    <td align="center" colspan="2">
+              <span style="font-weight: bold;">   @Html.CheckBox("chkemailrecipt", true, new { onkeypress = "return fnsetfocus(event,'btnSave')", autocomplete = "off" })
+                  <label id="chkAgree" for="chkAgree">Email receipt to client</label>
+              </span>
+                    </td>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tr style="height: 50px">
+                <td align="right">
+                <input type="submit" value="save" class="button" name="btnsave" onclick="return ValidatecustomertransactionInfo();"/>
+                    <input type="button" name="btnCancel" class="transclose button" value="Cancel"  />
+                </td>
+            </tr>
+        </table>
+        </div>
+    }
+       <script type="text/javascript">
+           $(function () {
+               $("#ddlPaymentMode").change(function () {
+                   if (document.getElementById('ddlPaymentMode').value == 3) {
+                       document.getElementById('tdcheckNo').style.display = '';
+                       document.getElementById('tdAuth').style.display = 'none';
+                       $('#txtCheckNo').val("Check number");
+                   }
+                   else if (document.getElementById('ddlPaymentMode').value == 2) {
+                       document.getElementById('tdAuth').style.display = '';
+                       document.getElementById('tdcheckNo').style.display = 'none';
+                       $('#txtAuthNum').val("Last 4 digits of credit card");
+                   }
+                   else {
+                       document.getElementById('tdcheckNo').style.display = 'none';
+                       document.getElementById('tdAuth').style.display = 'none';
+                   }
+               });
+               $("#ddlPayment").change(function () {
+                   if (document.getElementById('ddlPayment').value == 1) {
+                       document.getElementById('trpaymentmode').style.display = 'none';
+                       document.getElementById('hdnPaymentMode').value = "1";
+                       ClearInlineAlert('lblErrMode', 'tdEpMode', '#FFFFFF');
+                   }
+                   else if (document.getElementById('ddlPayment').value == 2) {
+                       document.getElementById('trpaymentmode').style.display = '';
+                       ClearInlineAlert('lblErrMode', 'tdEpMode', '#FFFFFF');
+                       document.getElementById('hdnPaymentMode').value = "0";
+                   }
+                   else if (document.getElementById('ddlPayment').value == 3) {
+                       document.getElementById('trpaymentmode').style.display = '';
+                       ClearInlineAlert('lblErrMode', 'tdEpMode', '#FFFFFF');
+                       document.getElementById('hdnPaymentMode').value = "0";
+                   }
+               });
+           });
+           //$("#txtPayApptDate").datepicker({
+           //    dateFormat: 'mm/dd/yy',
+           //    changeMonth: true,
+           //    changeYear: true,
+           //    //                showCurrentAtPos: 1,
+           //    showWeeks: true,
+           //    inline: true,
+           //    numberOfMonths: [1, 1],
+           //    yearRange: "1950:2020",
+           //    showOn: "button",
+           //    buttonImage: "../Images/calender.gif",
+           //    buttonImageOnly: true
+
+           //});
+          
+        </script>
+    <script type="text/javascript">
+      
+        function ValidatecustomertransactionInfo() {
+            ClearInlineAlert('lblErrPamount', 'tdEPamount', '#FFFFFF');
+            ClearInlineAlert('lblErrEmail', 'tdEmail', '#FFFFFF')
+            ClearInlineAlert('lblErrMode', 'tdEpMode', '#FFFFFF');
+            ClearInlineAlert('lblEpNotes', 'TdEPnotes', '#FFFFFF');
+            var stremail = trim(document.getElementById('txtEmailID').value);
+            document.getElementById('txtEmailID').value = stremail;
+
+
+            if (document.getElementById('txtEmailID').value != '') {
+                if (ValidateEmail(document.getElementById('txtEmailID')) == 0) {
+                    InlineAlert('lblErrEmail', 'tdEmail', 'Please enter valid email.')
+                    document.getElementById('txtEmailID').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrEmail', 'tdEmail', '#FFFFFF')
+                }
+            }
+
+            //if (document.getElementById('ddlPayment').value != 1) {
+            //    if (document.getElementById('ddlPaymentMode').value == '--Select Payment Mode--' || document.getElementById('ddlPaymentMode').value == '') {
+            //        InlineAlert('lblErrMode', 'tdEpMode', 'Please select payment mode.'); document.getElementById('ddlPaymentMode').focus(); return false;
+            //    }
+            //    else { ClearInlineAlert('lblErrMode', 'tdEpMode', '#FFFFFF'); }
+
+            //}
+            if (document.getElementById('txtPayApptDate').value == '' || document.getElementById('txtPayApptDate').value == 'mm/dd/yyyy') { InlineAlert('lblErrPdate', 'tdEPdate', 'Please enter date'); document.getElementById('txtPayApptDate').focus(); return false; }
+            else {
+                ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); var strRetAlert = isValidDate(document.getElementById('txtPayApptDate').value);
+                if (strRetAlert != "") { InlineAlert('lblErrPdate', 'tdEPdate', strRetAlert); document.getElementById('txtPayApptDate').focus(); return false; }
+                else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+            }
+            if (document.getElementById('txtPayApptDate').value.length > 0) {
+                var date = document.getElementById('txtPayApptDate').value; var len = document.getElementById('txtPayApptDate').value.length;
+                for (var i = 0; i < len; i++) {
+                    var k = date.charAt(i); var digits = "0123456789/";
+                    if ((digits.indexOf(k, 0)) == -1) { InlineAlert('lblErrPdate', 'tdEPdate', 'Please enter valid date'); document.getElementById('txtPayApptDate').value = ''; document.getElementById('txtPayApptDate').focus(); return false; }
+                    else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+                }
+            }
+            var dtCur = new Date(); var dtGiven = new Date(document.getElementById('txtPayApptDate').value);
+            if (dtCur < dtGiven) { InlineAlert('lblErrPdate', 'tdEPdate', 'Invalid payment info!!! charge date exceeding the current date.'); document.getElementById('txtPayApptDate').focus(); return false; }
+            else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+            if ((document.getElementById('txtPayAmount').value == '') || (parseFloat(document.getElementById('txtPayAmount').value) <= 0) || document.getElementById('txtPayAmount').value == "$0.00" || document.getElementById('txtPayAmount').value == '.') {
+                InlineAlert('lblErrPamount', 'tdEPamount', 'Please enter valid amount'); document.getElementById('txtPayAmount').focus(); return false;
+            }
+            else { ClearInlineAlert('lblErrPamount', 'tdEPamount', '#FFFFFF'); }
+            if (document.getElementById('txtPayAmount').value.length > 0) {
+                var amount = document.getElementById('txtPayAmount').value; var len = document.getElementById('txtPayAmount').value.length;
+                for (var i = 0; i < len; i++) {
+                    var k = amount.charAt(i); var digits = "0123456789.";
+                    if ((digits.indexOf(k, 0)) == -1) { InlineAlert('lblErrPamount', 'tdEPamount', 'Please enter valid amount'); document.getElementById('txtPayAmount').value = ''; document.getElementById('txtPayAmount').focus(); return false; }
+                }
+            }
+
+            var strNotes = document.getElementById('txtNotes').value;
+            if (strNotes.length > 1000) { InlineAlert('lblEpNotes', 'TdEPnotes', 'Notes can be up to 1000 characters'); document.getElementById('txtNotes').focus(); return false; }
+            else { ClearInlineAlert('lblEpNotes', 'TdEPnotes', '#FFFFFF'); }
+
+            var objradNotAgree = document.getElementById('chkemailrecipt');
+            if (objradNotAgree.checked == true) {
+                if (document.getElementById('txtEmailID').value == "") {
+                    InlineAlert('lblErrEmail', 'tdEmail', 'Please enter email.')
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrEmail', 'tdEmail', '#FFFFFF')
+                }
+            }
+            $('#divcustmtransaction').dialog("close");
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        }
+        function isValidDate(strDate) {
+            var dateStr = strDate; var datePat = /^(\d{1,2})(\/|-)(\d{1,2})\2(\d{4})$/; var month, day, year; var monthArray = new Array(); var matchArray = dateStr.match(datePat); var intShowI; var args; var strError = ""; monthArray[0] = "January"; monthArray[1] = "February"; monthArray[2] = "March"; monthArray[3] = "April"; monthArray[4] = "May"; monthArray[5] = "June"; monthArray[6] = "July"; monthArray[7] = "August"; monthArray[8] = "September"; monthArray[9] = "October"; monthArray[10] = "November"; monthArray[11] = "December"; args = IsValidDate.arguments
+            if (dateStr != "") {
+                if (matchArray == null)
+                { strError = "Please enter date in mm/dd/yyyy format."; return strError; }
+                month = matchArray[1]; day = matchArray[3]; year = matchArray[4]; if (year <= 1753)
+                { strError = "Please enter a year greater than 1753."; return strError; }
+                if (month < 1 || month > 12)
+                { strError = "Month must be between 1 and 12."; return strError; }
+                if (day < 1 || day > 31)
+                { strError = "Day must be between 1 and 31."; return strError; }
+                if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+                    strError = monthArray[month - 1] + " doesn't have 31 days!"
+                    return strError;
+                }
+                if (month == 2) {
+                    var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)); if (day > 29 || (day == 29 && !isleap))
+                    { strError = "February " + year + " doesn't have " + day + " days!"; return strError; }
+                }
+            }
+            return strError;
+        }
+        function Clearcheckno() {
+            if (document.getElementById('txtCheckNo').value == 'Check number') {
+                document.getElementById('txtCheckNo').value = '';
+            }
+
+        }
+        function Ccno() {
+            if (document.getElementById('txtAuthNum').value == 'Last 4 digits of credit card') {
+                document.getElementById('txtAuthNum').value = '';
+            }
+
+        }
+    </script>
+</body>
+    <script type="text/javascript">
+       
+        function InfocustSuccess(data) {
+            if (data.Success == true) {
+                var custmtran = data.Object.schedule_type;
+                $('#dvLoading').dialog('destroy');
+                if (custmtran == "day") {
+                    window.location.href = '../Schedule/Schedulespecs';
+                }
+                else {
+                    window.location.href = '../Schedule/WeeklyAppts';
+                }
+            }
+            //else if (data.ErrorMessage == 'expire') {
+            //    window.location.href = '../Home/SessionExpire';
+            //}
+            else {
+                $('#divcustmtransaction').show();
+                
+                InlineAlert('lblErrEmail', 'tdEmail', data.ErrorMessage);
+                document.getElementById('txtEmailID').focus();
+                return false;
+                //$('#CCDialog').dialog('open');
+                //document.body.style.cursor = 'pointer';
+                //document.getElementById("div10").style.display = '';
+                //document.getElementById("updNote").style.display = 'none';
+                //$("#update-message").html(data.ErrorMessage);
+                // $("#update-message").show();
+            }
+        }
+       
+            $('#txtEmailID').keyup(
+             function (event) {
+                
+                 if (document.getElementById("txtEmailID").value != "") {
+                  
+                     document.getElementById("chkAgree").innerHTML = "Email receipt to client  " + "at&nbsp;" + document.getElementById("txtEmailID").value; @*+ '@ViewBag.custmemail&nbsp;'*@
+                 }
+                else {
+                         document.getElementById("chkAgree").innerHTML = "Email receipt to client  ";@* + '@ViewBag.custmemail&nbsp;'*@
+               
+                 }        
+
+             }
+                );
+        if ('@ViewBag.custmemail' != null) {
+            document.getElementById("chkAgree").innerHTML = "Email receipt to client  " + '@ViewBag.custmemail&nbsp;' ; @*+ '@ViewBag.custmemail&nbsp;'*@
+        }
+       
+    </script>
+</html>

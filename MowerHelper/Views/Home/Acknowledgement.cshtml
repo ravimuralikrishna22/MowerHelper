@@ -1,0 +1,43 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @* <meta name="viewport" content="width=device-width" />*@
+    @Styles.Render("~/Content/common")
+    <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+    <div id="wrapper">
+        @Html.Partial("_TopSection")
+
+        <div id="flt02">
+            <div id="bodycon">
+                <div id="contentpannel" class="padding-top">
+                    <div style="height: 450px; margin-top: 130px; margin-left: 200px; margin-right: 200px;">
+                        <p style="font-family: Arial; font-weight: bold; font-size: 18px; text-align: justify; line-height: 25px; color: green">
+                            Thank you for contacting us . we will reach you shortly.
+                            <br />
+
+                        </p>
+                    </div>
+                </div>
+                @* <div id="contentpannel">
+                    <div id="leftcon">
+                        <div class="content">
+                            <b>Thank you for contacting us . we will reach you shortly.</b>
+                        </div>
+                    </div>
+                    <div class="clearme">
+                                  <img id="imgspace" runat="server" src="~/Images/speacer.gif" /></div>
+                   
+                </div>*@
+                @Html.Partial("_Footer")
+            </div>
+        </div>
+    </div>
+</body>
+</html>

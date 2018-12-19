@@ -1,0 +1,199 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+    <script type="text/javascript">
+        function cancelscript() {
+            var proid = document.getElementById('hdnproid').value;
+            var proname = document.getElementById('hdnproname').value;
+            window.location = '../AdminHome/AdminLevelTransactionsList?pracId=' + proid + '&pracname=' + proname;
+        }
+        $(document).ready(function () {
+            //$("#txtDateRangeTo,#txtDateRangeFrom,#txtInvoiceDate").datepicker({
+            //    dateFormat: 'mm/dd/yy',
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    //                showCurrentAtPos: 1,
+            //    showWeeks: true,
+            //    inline: true,
+            //    numberOfMonths: [1, 1],
+            //    yearRange: "1950:2020",
+            //    showOn: "button",
+            //    buttonImage: "../Images/calender.gif",
+            //    buttonImageOnly: true
+
+            //});
+
+
+            $("#txtDateRangeFrom").on('change keyup paste mouseup', function () {
+                //  alert("1");
+                if ($(this).val().length == 10) {
+                    //alert("2");
+                    if (CheckValidDate(document.getElementById('txtDateRangeFrom')) == 0) { return false; }
+                    var St = document.getElementById('txtDateRangeFrom').value; St = new Date(St);
+                    // alert(St);
+                    var targetDate = new Date(St);
+                    targetDate.setDate(targetDate.getDate() + 365);
+                    //   alert(targetDate);
+                    var todaydate = new Date();
+                    todaydate.setDate(todaydate.getDate());
+                    var dd = todaydate.getDate();
+                    var mm = todaydate.getMonth() + 1; //January is 0!
+                    var yyyy = todaydate.getFullYear();
+                    var today = mm + '/' + dd + '/' + yyyy;
+                    var dd1 = targetDate.getDate();
+                    var mm1 = targetDate.getMonth() + 1;
+                    var yyyy1 = targetDate.getFullYear();
+                    var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+                    //  alert(target1);
+                    if (targetDate > todaydate) { document.getElementById('txtDateRangeTo').value = today; return false; }
+                    else { document.getElementById('txtDateRangeTo').value = target1; return false; }
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function validInvoice() {
+            if (document.getElementById('txtDateRangeFrom').value == '') {
+                alert("Please select from date");
+                document.getElementById('txtDateRangeFrom').focus();
+                return false;
+            }
+            if (document.getElementById('txtDateRangeTo').value == '') {
+                alert("Please select to date");
+                document.getElementById('txtDateRangeTo').focus();
+                return false;
+            }
+            if (document.getElementById('txtInvoiceDate').value == '') {
+                alert("Please select Invoice date");
+                document.getElementById('txtInvoiceDate').focus();
+                return false;
+            }
+            var FromDate = new Date(document.getElementById('txtDateRangeFrom').value);
+            var ToDate = new Date(document.getElementById('txtDateRangeTo').value);
+            var TodayDate = new Date();
+
+            if (ToDate > TodayDate) {
+                if (TodayDate.getFullYear() == ToDate.getFullYear() && TodayDate.getMonth() == ToDate.getMonth() && TodayDate.getDate() == ToDate.getDate()) {
+                    return true;
+                }
+                else {
+                    alert('To date must be lessthan or equal  to current date');
+                    document.getElementById('txtDateRangeTo').focus();
+                    return false;
+                }
+            }
+            if (FromDate > ToDate) {
+                alert('From date must be less than todate');
+                document.getElementById('txtDateRangeFrom').focus();
+                return false;
+            }
+            var invoicedate, TodayDatecompa;
+            invoicedate = new Date(document.getElementById('txtInvoiceDate').value);
+            TodayDatecompa = new Date();
+
+            if (invoicedate.getFullYear() == TodayDatecompa.getFullYear() && invoicedate.getMonth() == TodayDatecompa.getMonth() && invoicedate.getDate() == TodayDatecompa.getDate()) {
+                return true;
+            }
+            else {
+                alert('Invoice date must equal to current date');
+                document.getElementById('txtInvoiceDate').focus();
+                return false;
+            }
+        }
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+              $("#Menu0").removeClass();
+              $("#Menu1").removeClass();
+              $("#Menu2").removeClass();
+              $("#Menu3").addClass("active");
+          });
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("InvoiceWizardSearch", "AdminHome", FormMethod.Post, null))
+    {
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div>
+        <div id="main-content">
+        @Html.Partial("_NavigationTool")
+             <input type ="hidden" id="hdnproid" name="hdnproid" value="@ViewBag.proid" />
+             <input type ="hidden" id="hdnproname" name="hdnproname" value="@ViewBag.proname" />
+            <div class="content-box">
+                <div class="content-box-header">
+                    <h3>
+                        Invoice Wizard</h3>
+                </div>
+                <div class="content-box-content">
+                    <table class="border_style" cellpadding="6" cellspacing="1" align="center" border="0"
+                        width="100%">
+                        <tr class="nav_blue_color">
+                            <td align="right">
+                                <font color="red">*</font><strong>Date range&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td width="50%">
+                                From&nbsp;:&nbsp;@Html.TextBox("txtDateRangeFrom", (string)@ViewBag.begindate, new { @class = "textfield Datefield", @style = "width:75px" })
+                                &nbsp;&nbsp;&nbsp;&nbsp;To&nbsp;:&nbsp;@Html.TextBox("txtDateRangeTo", null, new { @class = "textfield Datefield", @style = "width:75px" })
+                            </td>
+                        </tr>
+                        <tr class="white_color">
+                            <td align="right">
+                                <strong>Invoice Date&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td width="50%" align="left">
+                                @Html.TextBox("txtInvoiceDate", null, new { @class = "textfield Datefield", @style = "width:75px" })
+                            </td>
+                        </tr>
+                        <tr class="nav_blue_color">
+                            <td align="right">
+                                <strong>Message to client&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td width="50%" align="left">
+                                @Html.DropDownList("ddlMessagetoClient", new List<SelectListItem> { new SelectListItem { Text = "Thankyou", Value = "Thankyou" } }, new { @style = "width:110px;" })
+                            </td>
+                        </tr>
+                        <tr class="white_color">
+                            <td align="right">
+                                <strong>Terms&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td width="50%" align="left">
+                                @Html.DropDownList("ddlTerms", new List<SelectListItem> { new SelectListItem { Text = "Thankyou", Value = "Thankyou" }, new SelectListItem { Text = "Due in 30 days", Value = "Due in 30 days" } }, new { @style = "width:135px;" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="height: 20px">
+            </div>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="background_color">
+                    <td align="right">
+                        <input type="submit" value="Proceed" class="button" name="btnProceed" onclick="return validInvoice();" />&nbsp;&nbsp;
+                        <input type="button" name="btnProceedCancel" class="button" value="Cancel" onclick="return cancelscript();" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="height: 240px">
+        </div>
+        <div>
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+    }
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</body>
+</html>

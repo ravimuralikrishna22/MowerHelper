@@ -1,0 +1,418 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+       @Styles.Render("~/Content/themes/base/TherpistStyles")
+   @Scripts.Render("~/ThScripts/ThAjaxscripts")
+   <script src="~/SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#updateDialog');
+                dialogDiv.dialog('close');
+            });
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#updateDialog1');
+                dialogDiv.dialog('close');
+            });
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#updateDialog2');
+                dialogDiv.dialog('close');
+            });
+        });
+
+    </script>
+  
+</head>
+<body>
+    @{Html.RenderAction("Topsection", "Tools");}
+    <div id="main-content">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr class="background_color">
+                <td align="left" valign="top" width="100%">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr id="trtabs">
+                            <td width="100%" class="navigation">
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" id="aprovider" href="ViewIdentifyingInfo">
+                                       @if (Session["Roleid"].ToString()=="1")
+                            {
+                                <span>@Session["Elebusenessnm"].ToString()</span>
+                            }
+                            else{
+                                <span>Mower Helper Info</span>
+                            }
+
+
+                                    </a>
+                                </div>
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" id="acontent" href="ViewElectricianAdvancedSearch"><span>Content Settings</span> </a>
+                                </div>
+                             @*   <div class="admin-tab">
+                                    <a class="inadmin-link" id="avideo" href="VideoAudioFiles"><span>Video/Audio Files</span> </a>
+                                </div>*@
+                                <div class="admin-tab">
+                                    <a class="admin-link" id="adocument" href="ViewElectricianDocumentInfo"><span>Certificates & Youtube Video Files</span> </a>
+                                </div>
+                               @* <div class="admin-tab">
+                                    <a class="inadmin-link" id="aproviderschedule" href="ProviderSchedule"><span>Schedule Settings</span> </a>
+                                </div>
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" id="astatistic" href="Sitestatistics"><span>Site Statistics</span> </a>
+                                </div>*@
+                            </td>
+                        </tr>
+                        <tr class="background_color">
+                            <td id="tdtabs" width="100%" class="tab-background">
+                                                           
+                                <div class="content-box">
+                                    <div class="content-box-header">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                            <tr>
+                                                <td width="80%" align="left">
+                                                    <h3>
+                                                        <span id="lblcert" >Mower helper license certificates (for your license verification by Mower Helper)
+                                                        </span>
+                                                    </h3>
+                                                </td>
+                                                <td width="20%" align="center">
+                                                    <ul style="list-style: none!important; padding-right: 5px;" class="content-box-tabs">
+                                                        <li style="padding: 0px; margin: 0px;"><a id="ImgBtnAddNewPayer2" href="#" style="color: #0066CC;font-weight:bold;font-size:15px;" onclick="return Displaydialog('updateDialog1','AddProviderCertificate','auto',800,'dvLoading',null,null);">Add new electrician certificate&nbsp;&nbsp;</a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="content-box-content">
+                                      @{Html.RenderAction("ProviderCertificates", "Directory");}
+                                       @* <table id="tblOutMsg1" width="98%" align="Center">
+                                            <tr id="troutmsg1">
+                                                <td align="center" height="60px" valign="Middle">
+                                                    <span id="lblOutputMsg1" style="font-weight:bold;" class="errormsg">Upload scanned copies of your Drivers license, Professional licenses and Education certificates.&nbsp;&nbsp;After we verify these documents, we will show your profile on our public domain and allow patient registration.</span>
+                                                </td>
+                                            </tr>
+                                        </table>*@
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div class="content-box" id="tblFilesGrid">
+                        <div class="content-box-header1">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                <tr>
+                                    <td width="16%" align="left">
+                                        <h3>List of video files</h3>
+                                    </td>
+                                    <td align="center" width="68%">
+                                        <ul style="list-style: none!important;" class="content-box-tabs1">
+                                            <li style="padding: 0px; margin: 0px;">
+                                                <a id="LinkButton2" style="font-weight: bold;">Help to add Videos to your profile </a>
+                                            </li>
+                                            <li style="padding: 0px; margin: 0px;">
+                                                <a id="HyperLink5" target="_blank" style="font-weight: bold;" href="http://www.youtube.com/watch?v=9w-gQAwS2uc">http://www.youtube.com/watch?v=9w-gQAwS2uc</a>
+                                            </li>
+                                            <li style="padding: 0px; margin: 0px;">
+                                                <a id="HyperLink3" target="_blank" style="font-weight: bold;" href="http://www.youtube.com/watch?NR=1&v=ZnehCBoYLbc&feature=endscreen">http://www.youtube.com/watch?NR=1&v=ZnehCBoYLbc&feature=endscreen</a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td width="16%" align="center">
+                                        <ul style="list-style: none!important; padding-right: 15px;" class="content-box-tabs1">
+                                            <li style="padding: 0px; padding-right: 10px; margin: 0px;">
+                                                <a id="lnkAudioVideoFile" style="font-weight: bold; font-size: 15px; cursor: pointer" href="Addvideo" onclick="return Displaydialog('updateDialog2','Addvideo','auto',800,'dvLoading', null, null);">Add new</a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="clear">
+                            </div>
+                        </div>
+                        <div class="content-box-content">
+                            <table align="center" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td valign="top" width="100%">
+                                        @{string vpagesize = "10";
+                                          WebGrid videogrid = new WebGrid(rowsPerPage: Convert.ToInt32(vpagesize));}
+                                        @{WebGrid grid = videogrid.Bind(rowCount: Convert.ToInt32(ViewBag.videototrec), source: Model, autoSortAndPage: false);
+                                          if (grid.TotalRowCount != 0)
+                                          {
+                                              int count = 0;
+
+                                              string pager = grid.Pager().ToString();
+                                              string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                              string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                              string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                              columns: grid.Columns(
+                                              grid.Column("", "Title", canSort: false, style: "Vtitle",
+                                              format:@<text>@Html.ActionLink((string)item.Title, "Playvideo", "Directory", new { @id = (int)item.Provider_Greeting_ID }, new { @class = "Playvideofile", title = "Click here to play video", style = "font-weight:bold;" }) </text> ),
+                                              grid.Column("", "Status", canSort: false, format:@<text>@Html.ActionLink((string)item.Status_Ind, "StatusChange", "Directory", new { @id = (int)item.Provider_Greeting_ID, status = (string)item.Status_Ind }, new { @title = "Click here to change the status", style = "font-weight:bold;" })   </text>),
+                                              grid.Column("", "Description", canSort: false, style: "Vdescription",
+                                              format:@<text>
+                                            @{string description = (string)item.Description;
+                                              if (description.Length > 100)
+                                              {
+                                                  count = count + 1;
+                                                  description = description.Substring(0, 100);
+                                                           
+<span>@description</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+<div id="tbldesc @count" style="width: 500px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Description :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@item.Description</span> </td> </tr>
+                                                             </table> </div>
+                                              }
+                                              else
+                                              {
+<span>@item.Description</span>
+                                              }
+                                            }
+
+                                            </text> ),
+                                              grid.Column("ViewedCount", "View count", canSort: false),
+                                              grid.Column("", "Delete", canSort: false,
+                                              format:@<text>@Html.ActionLink(" ", "Delete", new { id = (int)item.Provider_Greeting_ID },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog", @title = "Click here to delete video" })</text>))).ToString();
+                                              gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                            @(new HtmlString(gridhtml))
+                                            <br />
+                                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                            <br />
+
+
+
+                                          }
+                                          else
+                                          {
+                                            <table id="Table28" width="98%" align="center">
+                                                <tr id="trerror">
+                                                    <td align="center" height="60px" valign="middle">
+                                                        <span class="errormsg" id="lblerrormsg" style="font-weight: bold;">No video/audio file links are added, you can upload your video greeting to YouTube and give us the link, we will play it on your profile page.</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                          }
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                                @* <br />
+                                <div class="content-box" id="divdoc">
+                                    <div class="content-box-header">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                            <tr>
+                                                <td width="83%" align="left">
+                                                    <h3>
+                                                        <span id="lbldoc">Public documents (for public display in your profile)</span>
+                                                    </h3>
+                                                </td>
+                                                <td width="17%" align="center">
+                                                    <ul style="list-style: none!important; padding-right: 5px;" class="content-box-tabs">
+                                                        <li style="padding: 0px; margin: 0px;"><a id="ImgBtnAddNewPayer" href="AddProviderDocument" style="color: #0066CC;font-weight:bold;font-size:15px;"
+                                                            >Add new provider document&nbsp;&nbsp;</a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="content-box-content">
+                                        @{Html.RenderAction("ProviderDocuments", "Directory");}
+                                    </div>
+                                </div>*@
+
+                                <br />
+                                <table id="TdlDownCancelBtn" width="98%">
+                                    <tr class="background_color">
+                                        <td align="right">
+                                            <input type="button" id="ImgBtnDCancel" class="button" value="Cancel" style="display:none;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+     <div id="updateDialog" title="Add Document"></div>
+      <div id="updateDialog1" title="Add electrician certificate"></div>
+      <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+      <div id="updateDialog2" title="Add video file">
+    </div>
+    <div id="playvideodialog" title="Playing Video File"></div>
+     <div id="dialog-confirmvideo" title="Mower Helper" style="display: none;">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            Do you want to delete the Video?
+        </p>
+    </div>
+    @{Html.RenderAction("Bottomsections", "Tools");}
+    <script type="text/javascript">
+        $(".confirmDialog").live("click", function (e) {
+
+            var url = $(this).attr('href');
+            $("#dialog-confirmvideo").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.location = url;
+
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirmvideo").dialog('open');
+            return false;
+        });
+        
+        var linkObj;
+        $(function () {
+            $('#updateDialog').dialog({
+                autoOpen: false,
+                width: 800,
+                resizable: false,
+                modal: true
+            });
+            //$('#updateDialog1').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+            //});
+            $("#ImgBtnAddNewPayer").click(function () {
+                linkObj = $(this);
+                var dialogDiv = $('#updateDialog');
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = linkObj.attr('href');
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    $('#dvLoading').dialog('close');
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            });
+            //$("#ImgBtnAddNewPayer2").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#updateDialog1');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            //$('#updateDialog2').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+            $('#playvideodialog').dialog({
+                autoOpen: false,
+                width: 800,
+                height: 500,
+                resizable: false,
+                modal: true,
+                buttons: [{
+
+                    text: "Cancel",
+                    "class": 'button',
+                    click: function () {
+
+                        $(this).dialog("close");
+                    }
+
+                }
+                ]
+            });
+            //$("#lnkAudioVideoFile").click(function () {
+            //    //change the title of the dialog
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#updateDialog2');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            $(".Playvideofile").click(function () {
+                //change the title of the dialog
+                linkObj = $(this);
+                var dialogDiv = $('#playvideodialog');
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                // alert(dialogDiv);
+                var viewUrl = linkObj.attr('href');
+                // alert(viewUrl);
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    $('#dvLoading').dialog('close');
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            });
+        });
+        function updateSuccess(data) {
+            if (data != '' & data.Success == true) {
+                location.reload();
+                $('#updateDialog').dialog('close');
+            }
+            else {
+                $("#update-message").html(data.ErrorMessage);
+                $("#update-message").show();
+            }
+        }
+        function updateSuccess2(data) {
+            if (data != '' & data.Success == true) {
+                //we update the table's info
+                location.reload();
+                $('#updateDialog2').dialog('close');
+            }
+            else if (data.ErrorMessage == 'expire') {
+                window.location.href = '../Home/SessionExpire';
+            }
+            else {
+                $("#update-message1").html(data.ErrorMessage);
+                $("#update-message1").show();
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").addClass("active");
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").removeClass();
+        });
+    </script>
+</body>
+</html>

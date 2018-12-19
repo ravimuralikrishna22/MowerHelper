@@ -1,0 +1,278 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+      <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+
+   <script language="javascript" type="text/javascript">
+       function rbtncheck_Edit() {
+           document.getElementById('rdStatus_0_Edit').checked = true;
+           document.getElementById('rdStatus_1_Edit').checked = false;
+
+
+       }
+       function rbtncheck1_Edit() {
+           document.getElementById('rdStatus_1_Edit').checked = true;
+           document.getElementById('rdStatus_0_Edit').checked = false;
+       }
+        </script>
+   <script type="text/javascript">
+
+             $(function () {
+                
+                 //$("#txtDate_Edit,#txtEndDateforDaily,#txtEndDateforWeek").datepicker({
+                 //    dateFormat: 'mm/dd/yy',
+                 //    changeMonth: true,
+                 //    changeYear: true,
+                 //    //                showCurrentAtPos: 1,
+                 //    showWeeks: true,
+                 //    inline: true,
+                 //    numberOfMonths: [1, 1],
+                 //    yearRange: "1950:2020",
+                 //    showOn: "button",
+                 //    buttonImage: "../Images/calender.gif",
+                 //    buttonImageOnly: true
+
+                 //});
+             });
+       </script>
+   <script type="text/javascript">
+
+           function clearalerts_Edit() {
+               ClearInlineAlert('lbltaskname_Edit', 'tdTitle_Edit', 'white')
+               ClearInlineAlert('lblErrDate_Edit', 'tdDate_Edit', '#FFFFFF')
+               ClearInlineAlert('lblnote_Edit', 'tdnote', 'white')
+           }
+           function validatetask_Edit() {
+               if (trim(document.getElementById('txt_title_Edit').value) == '') {
+                   clearalerts_Edit()
+                   var strcptcode = document.getElementById('txt_title_Edit').value;
+                   strcptcode = strcptcode.replace(/^\s+/, '');
+                   document.getElementById('txt_title_Edit').value = strcptcode;
+                   InlineAlert('lbltaskname_Edit', 'tdTitle_Edit', 'Please enter title!');
+                   document.getElementById('txt_title_Edit').focus();
+                   return false;
+               }
+               else {
+                   ClearInlineAlert('lbltaskname_Edit', 'tdTitle_Edit', 'white')
+               }
+
+               if (document.getElementById('txt_title_Edit').value.length > 150) {
+                   clearalerts_Edit()
+                   InlineAlert('lbltaskname_Edit', 'tdTitle_Edit', 'Please enter 150 chars only!');
+                   document.getElementById('txt_title_Edit').focus();
+                   return false;
+               }
+               else {
+                   ClearInlineAlert('lbltaskname_Edit', 'tdTitle_Edit', 'white')
+               }
+               if (document.getElementById('txtDate_Edit').value != '' && document.getElementById('txtDate_Edit').value != 'mm/dd/yyyy') {
+                   //            if (CheckValidDate(document.getElementById('txtDate_Edit')) == 0) {
+                   //                return false;
+                   //            }
+                   clearalerts_Edit()
+                   if (document.getElementById('txtDate_Edit').value != '' && document.getElementById('txtDate_Edit').value != 'mm/dd/yyyy') {
+                       clearalerts_Edit()
+                       var Dateid = document.getElementById('txtDate_Edit').value;
+                       var Dat = Dateid.split("/");
+                       var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+                       var yearid = Dat[2];
+                       var Monthid = Dat[0];
+                       var MyId = Dat[1];
+                       var CurDt = new Date()
+                       var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+                       var matchArray = Dateid.match(DatePat);
+                       if (matchArray == null) {
+
+                           InlineAlert('lblErrDate_Edit', 'tdDate_Edit', 'The date  format!!! should be like mm/dd/yyyy');
+                           document.getElementById('txtDate_Edit').focus();
+                           return false;
+                       }
+                       else {
+
+                           ClearInlineAlert('lblErrDate_Edit', 'tdDate_Edit', '#FFFFFF')
+                       }
+                       if (yearid < 1900) {
+                           clearalerts_Edit()
+                           InlineAlert('lblErrDate_Edit', 'tdDate_Edit', 'Please enter a valid 4 digit year between 1900 and 2060');
+                           document.getElementById('txtDate_Edit').focus();
+                           return false
+                       }
+                       else {
+                           ClearInlineAlert('lblErrDate_Edit', 'tdDate_Edit', '#FFFFFF')
+                       }
+                       if (Monthid > 12 || Monthid == 0) {
+                           clearalerts_Edit()
+                           InlineAlert('lblErrDate_Edit', 'tdDate_Edit', 'Please enter a valid month');
+                           document.getElementById('txtDate_Edit').focus();
+                           return false
+                       }
+                       else {
+                           ClearInlineAlert('lblErrDate_Edit', 'tdDate_Edit', '#FFFFFF')
+                       }
+                       if (MyId > 31 || MyId == 0) {
+                           clearalerts_Edit()
+                           InlineAlert('lblErrDate_Edit', 'tdDate_Edit', 'Please enter a valid day');
+                           document.getElementById('txtDate_Edit').focus();
+                           return false
+                       }
+                       else {
+                           ClearInlineAlert('lblErrDate_Edit', 'tdDate_Edit', '#FFFFFF')
+                       }
+                       if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+                           clearalerts_Edit()
+                           InlineAlert('lblErrDate_Edit', 'tdDate_Edit', 'Please enter a valid day');
+                           document.getElementById('txtDate_Edit').focus();
+                           return false;
+                       }
+                       else {
+                           ClearInlineAlert('lblErrDate_Edit', 'tdDate_Edit', '#FFFFFF')
+                       }
+                       if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+                           clearalerts_Edit()
+                           InlineAlert('lblErrDate_Edit', 'tdDate_Edit', 'Please enter a valid day');
+                           document.getElementById('txtDate_Edit').focus();
+                           return false;
+                       }
+                       else {
+                           ClearInlineAlert('lblErrDate_Edit', 'tdDate_Edit', '#FFFFFF')
+                       }
+                   }
+               }
+
+               if (document.getElementById('txtnotes_Edit').value != '') {
+                   var strwebsite = trim(document.getElementById('txtnotes_Edit').value);
+                   document.getElementById('txtnotes_Edit').value = strwebsite;
+               }
+               if (document.getElementById('txtnotes_Edit').value.length > 1000) {
+                   clearalerts_Edit()
+                   InlineAlert('lblnote_Edit', 'tdnote', 'Notes can be up to 1000 characters.');
+                   document.getElementById('txtnotes_Edit').focus();
+                   return false;
+               }
+               else {
+                   ClearInlineAlert('lblnote_Edit', 'tdnote', 'white')
+               }
+           }
+</script>
+</head>
+<body>
+@using (Html.BeginForm("Edittask", "Task", FormMethod.Post, null))
+
+      
+ {
+       <input type="hidden" id="hdnchktype" name="hdnchktype" value="" />
+    
+     <input type="hidden" id="Hdntask_ID" name="Hdntask_ID" value="@ViewBag.taskId" />
+      <div id="update-message" class="error" style="padding-left:150px;font-weight:bold;">
+        </div>
+     <div id="div10" class="content-box" >
+    <div class="content-box-content">
+         <table align="center" border="0" class="border_style" cellpadding="8" cellspacing="1"
+                                        width="100%">
+                                        <tr class="white_color">
+                                            <td align="right" width="10%">
+                                                <font color="Red"><b>&nbsp;*</b></font><strong>Title &nbsp;:&nbsp;</strong>
+                                            </td>
+                                             <td align="left" width="30%" id="tdTitle_Edit">
+                                                         @Html.TextBox("txt_title_Edit", (string)ViewBag.TaskTitle, null, new { @class = "textfield", MaxLength = "150", style = "width:450px", autocomplete = "off" })
+                                                         &nbsp;&nbsp;<span id="lbltaskname_Edit" style="font-weight: bold; color: Black;"></span>
+                                                         <br />
+                                                           (Maximum length 150 characters)
+                                                         </td>
+                                            </tr>
+
+
+                                         <tr class="white_color" id="trDOB">
+                                                        <td align="right">
+                                                            <font color="blue"><b>&nbsp;</b></font><strong>Due date&nbsp;:&nbsp;</strong>
+                                                        </td>
+                                                        <td align="left" width="70%" id="tdDate_Edit">
+                                                         @Html.TextBox("txtDate_Edit", (string)ViewBag.DueDate, new { @class = "textfield Datefield", @style = "width:82px" }) &nbsp;&nbsp;
+                                                         <span id="lblErrDate_Edit" style="font-weight: bold; color: Black;"></span>
+                                                        </td>
+                                                    </tr>
+                                                     <tr class="nav_blue_color">
+                                                        <td align="right">
+                                                            <strong>Status&nbsp;:&nbsp;</strong>
+                                                        </td>
+                                                        <td align="left" width="70%">
+                                                                                                                               @{
+                                                                          bool str1 = false;
+                                                                          bool str2 = false;
+                                                                             }
+                                                                           @if (ViewBag.IsDone != null)
+                                                                           {
+                                                                               if (ViewBag.IsDone.ToString() == "Y")
+                                                                               {
+                                                                                   str1 = true;
+                                                                                   str2 = false;
+                                                                               }
+                                                                               else
+                                                                               {
+                                                                                   str1 = false;
+                                                                                   str2 = true;
+                                                                               }
+                                                                           }
+
+                                                         @Html.RadioButton("rdStatus_0_Edit", "Complete",str1, new { @GroupName = "grpoffice", onclick = "return rbtncheck_Edit();" })Complete&nbsp;
+                                                         @Html.RadioButton("rdStatus_1_Edit", "InComplete",str2, new { @GroupName = "grpoffice", onclick = "return rbtncheck1_Edit();" })InComplete &nbsp;&nbsp;
+                                                            @if(ViewBag.roleid !="1"){
+                                                                            bool ContWLMsg;
+                                                                           if (ViewBag.ChkStatus_Ind == "Y")
+                                                                           {
+                                                                               ContWLMsg = true;
+                                                                           }
+                                                                           else
+                                                                           {
+                                                                               ContWLMsg = false;
+                                                                           }
+                                                        @Html.CheckBox("chkmsg_Edit", ContWLMsg)                                       
+                                                        <strong>Show this task on my schedule</strong>
+                                                            }
+                                                       &nbsp;
+                                                        
+                                                        </td>
+                                                       
+                                                        </tr>
+
+
+                                                          <tr id="Tr5" class="white_color">
+                                                        <td align="right">
+                                                            &nbsp;&nbsp;&nbsp;<strong>Comments&nbsp;:&nbsp;</strong>
+                                                        </td>
+                                                        <td align="left" width="70%" id="tdnote">
+                                                        @Html.TextArea("txtnotes_Edit", (string)ViewBag.Notes, 3, 3, new { @class = "textfield", @style = "width:350px;height:110px;" })&nbsp;&nbsp;
+                                                        <span id="lblnote_Edit" style="font-weight: bold; color: Black;"></span><br />
+                                                            (Maximum length 1000 characters)
+                                                        </td>
+                                                    </tr>
+                                                    </table>
+                                                    
+
+                                                    
+                                                 
+    </div>
+    <table border="0" cellpadding="5" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td width="66%">
+                        </td>
+                        <td align="right" width="64%">
+                        <input type="submit" title="Save" value="Save" class="button" onclick="return validatetask_Edit();" />
+                            &nbsp;
+                           <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+    </div>
+    
+ }
+     
+</body>
+</html>

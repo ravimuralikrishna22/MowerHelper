@@ -1,0 +1,98 @@
+﻿@model MowerHelper.Models.BLL.Billing.RPBilling
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>CusInvoice</title>
+    
+</head>
+<body>
+                 @using (Html.BeginForm("CustInvoice", "Clients", FormMethod.Post))
+                 {
+                      <input type="hidden" id="PatientID" name="PatientID" value="@Model.PatientID" />
+                      <input type="hidden" id="Provider_id" name="Provider_id" value="@Model.Provider_id" />
+                     <input type="hidden" id="ProviderLoginID" name="ProviderLoginID" value="@Model.ProviderLoginID" />
+                     
+                      <input type="hidden" id="NoOfRecords" name="NoOfRecords" value="@Model.NoOfRecords" />
+                      <input type="hidden" id="Date_range" name="Date_range" value="@Model.Date_range" />
+                     @*<input type="hidden" id="hdnPid" name="hdnPid" value="@ViewBag.hdnPid" />*@
+                      <input type="hidden" id="PatientLogin_ID" name="PatientLogin_ID" value="@Model.PatientLogin_ID" />
+                      <input type="hidden" id="FromDate" name="FromDate" value="@Model.FromDate" />
+                     <input type="hidden" id="ToDate" name="ToDate" value="@Model.ToDate" />
+                       <input type="hidden" id="clientphone" name="clientphone" value="@Model.clientphone" />
+                     <input type="hidden" id="Ind" name="Ind" value="@Model.Ind" />
+    <div>
+                                                                            <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                                                                        border="0">
+            <tr class="white_color">
+                                                                            <td width="28%" align="right">
+                                                                                 <span style="color: #ff0000">*</span> <strong>Client email&nbsp;:</strong>
+                                                                            </td>
+                                                                            <td style="text-align:left" id="tdemailmain">
+                                                                                @Html.TextBox("Customer_Email", null, new { @class = "textfield CustInvoiceEmail", MaxLength = "50", style = "width:240px;", autocomplete = "off" })
+                                                                                &nbsp;&nbsp;
+                                                                             <span id="lblErremail" style="font-weight: bold; color: Black"></span>
+                                                                            </td>
+                                                                        </tr>
+        </table>
+        <br />
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+  
+                                             <input type="submit" id="submit" value="Save" title="Save" class="button" onclick="return fnValidateData();" />
+
+                                                          &nbsp;
+                                              <input type="button" class="invclose button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+    </div>
+                 }
+    <script type="text/javascript">
+        $(".ui-dialog-titlebar-close").click(function () {
+            $('.ddlactionclass').val("0");
+        })
+    </script>
+</body>
+   @* <script type="text/javascript">
+        function InvoiceSuccess(data)
+        {
+            if (data != '' & data.Success == true) {
+                var patientID = data.Object.PatientID;
+                var CustEmail = data.Object.Customer_Email;
+                var ProId = data.Object.Provider_id;
+                var Ind = data.Object.Ind;
+                var ProLogId = data.Object.ProviderLoginID;
+                var PatLogId = data.Object.PatientLogin_ID;
+                var ddlrecords = data.Object.NoOfRecords;
+                var dt_filter = data.Object.Date_range
+                var fdate = data.Object.FromDate;
+                var tdate = data.Object.ToDate;
+                var clientphone = data.Object.clientphone;
+                $('#divInvoice').dialog('close');
+                if (Ind == "C") {
+                    $.ajax({
+                        url: '@Url.Action("CustomerInvoice", "Clients")',
+                        data: { PatientID: patientID, Customer_Email: CustEmail, Provider_id: ProId, Ind: Ind, ProviderLoginID: ProLogId, PatientLogin_ID: PatLogId },
+                        dataType: 'json',
+                        type: 'GET'
+                    });
+                }
+                else {
+                    $.ajax({
+                        url: '@Url.Action("CustomerInvoice", "Clients")',
+                        data: { PatientID: patientID, Customer_Email: CustEmail, Provider_id: ProId, Ind: Ind, ProviderLoginID: ProLogId, PatientLogin_ID: PatLogId, NoOfRecords: ddlrecords, Date_range: dt_filter, FromDate: fdate, ToDate: tdate, clientphone: clientphone },
+                        dataType: 'json',
+                        type: 'GET'
+                    });
+                }
+            }
+        }
+    </script>*@
+</html>

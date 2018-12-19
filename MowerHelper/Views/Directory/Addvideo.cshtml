@@ -1,0 +1,218 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    @* <link href="../../Content/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="../../SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>*@
+   @*  <script src="../../Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui-1.8.11.js" type="text/javascript"></script>*@
+    
+</head>
+<body>
+   @using (Ajax.BeginForm("Addvideo", "Directory", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess2"
+
+        }, new { @id = "updateCarForm" }))
+   {
+        <div id="update-message1" class="error" style="padding-left:250px;font-weight:bold;">
+        </div>
+    <table id="tblVideoFile" border="0" cellpadding="4" cellspacing="0" width="100%">
+        <tr class="white_color">
+            <td align="left">
+                <a id="lbltips" style="font-weight:bold;" forecolor="#0066CC">Help to add Videos to your profile
+                </a>
+            </td>
+        </tr>
+        <tr class="white_color">
+            <td align="left" style="padding-left: 20px;">
+                <a id="HyperLink1" target="_blank" href="http://www.youtube.com/watch?v=9w-gQAwS2uc"
+                    forecolor="#0066CC">http://www.youtube.com/watch?v=9w-gQAwS2uc</a>
+            </td>
+        </tr>
+        <tr class="white_color">
+            <td align="left" style="padding-left: 20px;">
+                <a id="HyperLink4" target="_blank" href="http://www.youtube.com/watch?NR=1&v=ZnehCBoYLbc&feature=endscreen"
+                    forecolor="#0066CC">http://www.youtube.com/watch?NR=1&v=ZnehCBoYLbc&feature=endscreen</a>
+            </td>
+        </tr>
+        <tr class="background_color">
+            <td align="center" id="tdlbl">
+                <span id="lblErrMsg" visible="false" class="errormsg" forecolor="Red"></span>
+            </td>
+        </tr>
+    </table>
+    <div class="content-box" >
+       @* <div class="content-box-header">
+            <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                <tr>
+                    <td width="100%" align="left">
+                        <h3>
+                            List of video/audio files</h3>
+                    </td>
+                </tr>
+            </table>
+        </div>*@
+        <div class="content-box-content">
+            <table border="0" cellpadding="4" cellspacing="1" width="100%" align="center" class="border_style">
+                <tr class="white_color">
+                    <td class="formfields" align="right" width="25%" style="height: 22px">
+                        <span style="color: Red;">*</span><strong>Title :</strong>
+                    </td>
+                    <td align="left" width="50%" id="tdvideotitlemain" style="height: 22px">
+                    @Html.TextBox("txtYTitle", null, new { @class = "textfield", style = "width:250px", maxlength = "50", ondrop = "return false" })
+                       @* <asp:textbox id="txtTitle" cssclass="textfield"  width="250px" maxlength="50"
+                            ondrop="return false"></asp:textbox>*@
+                    </td>
+                </tr>
+                <tr class="white_color">
+                    <td class="formfields" align="right" width="25%">
+                        <span style="color: Red;">*</span><strong>Description :</strong>
+                    </td>
+                    <td align="left" id="tdvideodescriptionmain">
+                    @Html.TextArea("txtDecription", null, 3, 3, new { @class = "textfield", style = "width:550px;height:100px;", maxlength = "1000" })
+                       @* <asp:textbox id="txtDecription" cssclass="textfield" textmode="MultiLine" 
+                            height="100px" width="550px" maxlength="1000"></asp:textbox>*@
+                        &nbsp;&nbsp;(Maximum length 1000 characters)
+                    </td>
+                </tr>
+                <tr class="white_color" id="trEmbeddedText" >
+                    <td align="right" class="formfields">
+                        <font color="red"><b>*</b></font><strong>Youtube embed text&nbsp;:&nbsp;</strong>
+                    </td>
+                    <td align="left" id="tdyoutbmain">
+                       @Html.TextArea("txtYouTubetxt", null, 3, 3, new { @class = "textfield", style = "width:550px;height:100px;" })
+                       @* <asp:textbox id="txtYouTubetxt"  textmode="multiLine" width="550px"
+                            height="100" cssclass="textfield"></asp:textbox>*@
+                    </td>
+                </tr>
+            </table>
+            <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" id="tblvideomain"
+                style="display: none;">
+                <tr class="white_color" align="center">
+                    <td id="tdvideotitle" height="30px" style="display: none;">
+                        <span id="lblvideotitle" style="font-weight:bold;"  forecolor="Black" ></span>
+                    </td>
+                </tr>
+                <tr class="white_color" align="center">
+                    <td id="tdvideodescription" height="30px" style="display: none;">
+                        <span id="lbldescription1" style="font-weight:bold;"  forecolor="Black" ></span>
+                    </td>
+                </tr>
+                <tr class="white_color" align="center">
+                    <td id="tdyoutb" height="30px" style="display: none;">
+                        <span id="lblyoutbtext" style="font-weight:bold;"  forecolor="Black" ></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+  
+    <table border="0" cellpadding="0" cellspacing="0" width="98%" id="tblsave" >
+        <tr class="background_color" width="100%">
+            <td>
+            </td>
+            <td>
+                <table border="0" cellpadding="5" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td width="66%">
+                        </td>
+                        <td align="right" width="34%">
+                        <input type="submit" id="imgbtnSaveFile" value="Save" class="button"  onclick="return fnValidateFiles1();"  />
+                           @* <asp:button id="imgbtnSaveFile"  onclientclick="return fnValidateFiles1();"
+                                text="Save" cssclass="button" />*@
+                            &nbsp;
+                           <input type="button" class="close button" name="Cancel" value="Cancel" />
+                            @*<asp:button id="imgbtnCancelFile"  text="Cancel" cssclass="button" />*@
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+   }
+</body>
+    <script type="text/javascript">
+        function clearalerts() {
+            ValidateAlertClear('tblvideomain', 'lblvideotitle', 'tdvideotitle', 'tdvideotitlemain', 'white');
+            ValidateAlertClear('tblvideomain', 'lbldescription1', 'tdvideodescription', 'tdvideodescriptionmain', 'white');
+            ValidateAlertClear('tblvideomain', 'lblyoutbtext', 'tdyoutb', 'tdyoutbmain', 'white');
+        }
+
+        function fnValidateFiles1() {
+            var strtitle = trim(document.getElementById('txtYTitle').value);
+            document.getElementById('txtYTitle').value = strtitle;
+            if (document.getElementById('txtYTitle').value == "") {
+                clearalerts();
+                //Glb_ShowAlert("Please enter title");
+                document.getElementById('tblvideomain').style.display = '';
+                document.getElementById('lblvideotitle').innerHTML = "Please enter title";
+                document.getElementById('tdvideotitle').style.display = '';
+                document.getElementById('tdvideotitle').bgColor = "orange";
+                document.getElementById('tdvideotitlemain').bgColor = "orange";
+                document.getElementById('txtYTitle').focus();
+                return false;
+            } //if(document.getElementById('txtTitle').value=="")
+            else {
+                ValidateAlertClear('tblvideomain', 'lblvideotitle', 'tdvideotitle', 'tdvideotitlemain', 'white');
+            }
+
+            var strdescription = trim(document.getElementById('txtDecription').value);
+            document.getElementById('txtDecription').value = strdescription;
+            if (document.getElementById('txtDecription').value == "") {
+                clearalerts();
+                //Glb_ShowAlert("Please enter description");
+                document.getElementById('tblvideomain').style.display = '';
+                document.getElementById('lbldescription1').innerHTML = "Please enter description";
+                document.getElementById('tdvideodescription').style.display = '';
+                document.getElementById('tdvideodescription').bgColor = "orange";
+                document.getElementById('tdvideodescriptionmain').bgColor = "orange";
+                document.getElementById('txtDecription').focus();
+                return false;
+            } // if(document.getElementById('txtDecription').value=="") 
+            else {
+                ValidateAlertClear('tblvideomain', 'lbldescription1', 'tdvideodescription', 'tdvideodescriptionmain', 'white');
+            }
+
+            //flUploadVideo
+            var des = document.getElementById('txtDecription');
+            if (document.getElementById('txtDecription').value.length > 1000) {
+                clearalerts();
+                //Glb_ShowAlert('Please enter description less than  1000 characters');
+                document.getElementById('tblvideomain').style.display = '';
+                document.getElementById('lbldescription1').innerHTML = "Please enter description less than  1000 characters";
+                document.getElementById('tdvideodescription').style.display = '';
+                document.getElementById('tdvideodescription').bgColor = "orange";
+                document.getElementById('tdvideodescriptionmain').bgColor = "orange";
+                document.getElementById('txtDecription').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblvideomain', 'lbldescription1', 'tdvideodescription', 'tdvideodescriptionmain', 'white');
+            }
+            var stryoutube = trim(document.getElementById('txtYouTubetxt').value);
+            document.getElementById('txtYouTubetxt').value = stryoutube;
+            if (document.getElementById('txtYouTubetxt').value == '') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter youtube embed text.");
+                document.getElementById('tblvideomain').style.display = '';
+                document.getElementById('lblyoutbtext').innerHTML = "Please enter youtube embed text.";
+                document.getElementById('tdyoutb').style.display = '';
+                document.getElementById('tdyoutb').bgColor = "orange";
+                document.getElementById('tdyoutbmain').bgColor = "orange";
+                document.getElementById('txtYouTubetxt').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblvideomain', 'lblyoutbtext', 'tdyoutb', 'tdyoutbmain', 'white');
+            }
+
+        }
+    </script>
+</html>

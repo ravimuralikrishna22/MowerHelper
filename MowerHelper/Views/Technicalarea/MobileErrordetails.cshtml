@@ -1,0 +1,85 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+    <title>MobileErrordetails</title>
+</head>
+<body>
+        <div class="content-box">
+        <div class="content-box-content">
+        <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+            <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    &nbsp; <strong>Name :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.Name</label>
+                </td>
+            </tr>
+                                    <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    &nbsp; <strong>Date and Time :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_Date</label>
+                </td>
+            </tr>
+                                    <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                    &nbsp; <strong>Class Name :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_Class</label>
+                </td>
+            </tr>
+                                    <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    &nbsp; <strong>Method Name :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_Method</label>
+                </td>
+            </tr>
+                        <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                    &nbsp; <strong>Exception_Name :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.Exception_Name</label>
+                </td>
+            </tr>
+                        <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    &nbsp; <strong>ErrSource :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.ErrSource</label>
+                </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Description :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_Description</label>
+                    </td>
+            </tr>
+        </table>
+         </div>
+        </div>
+    <table  runat="server" width="100%">
+                                    <tr class="background_color">
+                                        <td align="right" style="padding-top:10px;">
+                                                <input type="button" name="btnCancel" class="close button" value="Cancel"  />
+                                           
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+</body>
+</html>

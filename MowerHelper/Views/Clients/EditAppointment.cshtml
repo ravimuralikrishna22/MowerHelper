@@ -1,0 +1,948 @@
+﻿@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@model MowerHelper.Models.AddAppointmentModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('#DailyReccur').keypress(
+           function (event) {
+               if (checkNumeric(event) == false) { return false; }
+
+           }
+       );
+        $('#WeeklyReccur').keypress(
+           function (event) {
+               if (checkNumeric(event) == false) { return false; }
+
+           }
+       );
+        function EditApptSuccess(data) {
+
+            if (data.Success == true) {
+                //window.location = '../Clients/ClentAppointments';
+                $('#EditlDialog').dialog('close');
+                $('#divLoading2').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                $("#appList").load('../Clients/DisplayClientApptList' + '?S1P1=' + '@Model.FromPage' + '&S1sortdir=' + document.getElementById("S1sortdir").value + '&S1sort=' + document.getElementById("S1sort").value, function (data) { $('#divLoading2').dialog('close'); });
+                //$('#divLoading2').dialog('close');
+            }
+            else {
+                if (data.ErrorMessage == "1") {
+                    alert('Appointment already exists for the given time to the client');
+                    $('#EditlDialog').dialog('open');
+                }
+                else if (data.ErrorMessage == "2") {
+                    alert('Appointment already exists for the given time.');
+                    $('#EditlDialog').dialog('open');
+                }
+                else if (data.ErrorMessage == "Please select valid cpt code") {
+                    alert('Please select valid cpt code.');
+                    $('#EditlDialog').dialog('open');
+                    document.getElementById('txtCptcode').focus();
+                }
+                @*else if (data.ErrorMessage == 'false') {
+                    alert('Session is expired. You will be redirected to session expired page');
+                    window.location = '@Url.Action("SessionExpire", "Home")';
+             }*@
+                else if (data.ErrorMessage == "\r\nThere is a conflict on selected date time.\r\n Do you still want to create appointment?") {
+                    var obj = confirm(data.ErrorMessage);
+                    if (obj == true) {
+                        document.getElementById("Editfutreapnt_Ind").value = "Y";
+                        $("#EditapptForm").submit();
+                        $('#EditlDialog').dialog('close');
+                    }
+                    else {
+                        $('#EditlDialog').dialog('close');
+                    }
+                }
+                else if (data.ErrorMessage == "Do you want to update future appointments?") {
+                    var obj = confirm(data.ErrorMessage);
+                    if (obj == true) {
+                        document.getElementById("Editfutreapnt_Ind").value = "Y";
+                        $("#EditapptForm").submit();
+                        $('#EditlDialog').dialog('close');
+                    }
+                    else {
+                        document.getElementById("Editfutreapnt_Ind").value = "N";
+                        $("#EditapptForm").submit();
+                        $('#EditlDialog').dialog('close');
+
+                    }
+                }
+                else {
+                    if (data != "_Logon_") {
+                        var obj = confirm(data.ErrorMessage);
+                        if (obj == true) {
+                            document.getElementById("Editfutreapnt_Ind").value = "Null";
+                            $("#EditapptForm").submit();
+                            $('#EditlDialog').dialog('close');
+                        }
+                        else {
+                            $('#EditlDialog').dialog('close');
+                        }
+                    }
+                }
+    }
+}
+    </script>
+</head>
+<body>    
+    @using (Ajax.BeginForm("EditAppointment", "Clients", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "EditApptSuccess",
+        OnComplete = "SessionExpireFail"
+
+    }, new { @id = "EditapptForm" }))
+    {
+        @Html.AntiForgeryToken()
+            @Html.Hidden("S1sort")
+       @Html.Hidden("S1sortdir")
+        @*@Html.Hidden("apptstatus")
+        @Html.Hidden("hidPatientID")
+        @Html.Hidden("hidPatientLoginID")
+         @Html.Hidden("hidTreckingID");
+        @Html.Hidden("ApptId")
+        @Html.Hidden("hdnFacRef_ID")                        
+        @Html.Hidden("weekenddate")
+        @Html.Hidden("dayenddate")        
+        @Html.Hidden("ApptType")*@       
+        @Html.Hidden("strTime")
+        @Html.Hidden("AppointmentStatus_ID")
+        @Html.Hidden("ToReference_ID")
+        @Html.Hidden("ToReferenceLogin_ID")
+        @Html.Hidden("AppointmentTracking_ID")
+        @Html.Hidden("AppointmentID")
+        @Html.Hidden("FacilityReference_ID")
+          @Html.Hidden("dayEndDate")
+         @Html.Hidden("weekEndDate")
+        @Html.Hidden("EndDate")
+        @Html.Hidden("ApptType")
+         <input type="hidden" id="cellphone" name="cellphone" value="@Model.cellphone" />
+            
+         @Html.Hidden("Wselection")
+    @Html.Hidden("chkweek")
+    @Html.Hidden("AppointmentRec")
+         @Html.Hidden("interdayvalue")
+        @Html.Hidden("AppointmentRecurrence_ID")
+    @Html.Hidden("Editfutreapnt_Ind")
+    @Html.Hidden("interweekvalue")
+        @Html.Hidden("IntervalValue")
+            @Html.Hidden("cancelappt")
+         @Html.Hidden("Startdate") 
+         @Html.Hidden("VoiceFileName")    
+         <input id="hdnselectEother" type="hidden" name="hdnselectEother" value="My Location" />
+        <input id="hdnEplaceind" type="hidden" name="hdnEplaceind" value="@ViewBag.hdnEplaceind" />
+        //<input id="hdntechpos" type="hidden" name="hdntechpos" value="@ViewBag.techpositions"/> 
+        <input type="hidden" id="Hdnapt_date" name="Hdnapt_date" value="@Model.AppointmentDate" />
+        //<input type="hidden" id="hdntechids" name="hdntechids" value="@ViewBag.technician_ids" />
+         //<input type="hidden" id="hdntecid1" name="hdntecid1" value="@ViewBag.tecid1" />
+        <table class="border_style" id="tblEditAppt" runat="server" cellspacing="1" cellpadding="8"
+            width="100%" align="center" border="0">
+            <tr class="white_color" height="20" id="trprovidername" runat="server" style="display: none">
+                <td align="right" width="25%" style="font-size: 13px;">
+                    <strong>Provider name :&nbsp;</strong>
+                </td>
+                <td width="75%" style="font-size: 13px;">
+                    @Model.ProviderName
+                </td>
+            </tr>
+            <tr class="nav_blue_color" id="trPatientName" height="20" runat="server">
+                <td align="right" width="25%" style="font-size: 13px;">&nbsp;<strong>Client name :&nbsp;</strong>
+                </td>
+                <td width="75%" style="font-size: 13px;">
+                    @Model.PatientName
+                </td>
+            </tr>
+            @*<tr id="trtechnician1" class="white_color">
+                <td width="25%" style="font-size: 13px; text-align: right">
+
+                   <font color="red">*</font> <strong>Technician name :&nbsp;</strong>
+                </td>
+                <td>
+                      @Html.Obout(new Obout.Mvc.ComboBox.ComboBox("combobox5")
+                 {
+                     Width = 400,
+                     CssSettings = new ComboBoxCssSettings() { ItemsContainer = "ob_iCboIC multcolumn2" },
+                     Height = 180,
+                     AutoClose = false,
+                     AllowCustomText = true,
+                     AutoValidate = true,
+                     AllowEdit = false,
+                     MenuWidth = 400,
+                     SelectionMode = ComboBoxSelectionMode.Multiple,
+                     ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+                       @:<div class="item"> @Html.CheckBox("CheckBox2")<div class="item c1">@(((MowerHelper.Models.BLL.Technicians.TechniciansInfo)item.DataItem).Technician_Name)</div></div>
+),
+                     ClientSideEvents = new ComboBoxClientSideEvents()
+                     {
+                         OnOpen = "combobox115_Open",
+                         OnFocus = "combobox115_Focus"
+                     }
+                 })
+                </td>
+
+            </tr>*@
+          @*  <tr class="nav_blue_color" id="trPtnotes1" visible="false" runat="server" height="20">
+                <td align="right" width="25%" style="font-size: 13px;">
+                    <strong>Client added notes :&nbsp;</strong>
+                </td>
+                <td style="font-size: 13px;">
+                    @ViewBag.Patnote
+                </td>
+            </tr>*@
+            <tr class="nav_blue_color" height="20" id="traptype">
+                <td align="right" width="25%" style="font-size: 13px;">
+                    <strong>Appointment type :&nbsp;</strong>
+                </td>
+                <td width="75%" style="font-size: 13px;">
+                    @Model.ApptType
+                </td>
+            </tr>
+                 <tr id="trEPlaceofAppointment" class="nav_blue_color" height="20" >
+                <td width="25%" style="font-size: 13px; text-align: right">
+                    <strong>Court location :&nbsp;</strong>
+                </td>
+                <td>                    
+        @*            @Html.RadioButton("rdoEApptPlace", "PatientEname", false)<span id="lblEPatPlace">@ViewBag.patname's place</span>
+         &nbsp;&nbsp; @Html.RadioButton("rdoEApptPlace", "ProvideErname", true)@Session["FullName"]'s office*@
+                    <table width="100%">
+                        <tr>
+                            <td width="35%" align="left">
+                     @Html.DropDownList("EOtherAddressItemList", new List<SelectListItem> {new SelectListItem{Text="New Location",Value="0"}}, new { @class = "textfield", @style = "width:200px;" })
+                                </td><td id="tdEditcourtlocation"  align="left" style="display:none">
+                                @Html.TextBox("CourtLocationName", "", new { @class = "textfield", autocomplete = "off", style = "width:200px",placeholder="Court location name", MaxLength="100" })
+                                   
+                                 </td>
+                            <td>
+                            <span id="tdEditcourtlocation1" width="60%" align="left" >
+                                <strong>Name :&nbsp;</strong><span id="lblEditcourtlocation"></span>                               
+                                 </span>
+                              @*<input type="checkbox"  name="ChkDefaultCourt" id="ChkDefaultCourt"  title="Default coach location" />*@
+                                @Html.CheckBox("ChkDefaultCourt",false,new { onkeypress = "return fnsetfocus(event,'btnSave')", autocomplete = "off", title="Default coach location" })
+                                <strong>Default court location</strong>
+                                </td>
+                        </tr></table>
+                </td>
+            </tr>
+           @*  <tr id="trEPlaceofAppointment" class="nav_blue_color" height="20" style="display:none">*@
+               @* <td width="25%" style="font-size: 13px; text-align: right">
+                    <strong>Court location :&nbsp;</strong>
+                </td>*@
+               @* <td> *@                   
+        @*            @Html.RadioButton("rdoEApptPlace", "PatientEname", false)<span id="lblEPatPlace">@ViewBag.patname's place</span>
+         &nbsp;&nbsp; @Html.RadioButton("rdoEApptPlace", "ProvideErname", true)@Session["FullName"]'s office*@
+                   @* <table width="100%">*@
+                       @* <tr>
+                            <td width="35%" align="left">
+                     @Html.DropDownList("EOtherAddressItemList", null, new { @class = "textfield", @style = "width:200px;" })
+                                 </td><td id="tdEditcourtlocation" width="60%" align="left" style="display:none">
+                                @Html.TextBox("txtEditcourtlocation", "", new { @class = "textfield", autocomplete = "off", style = "width:200px",placeholder="Court location name" })
+                                 </td>
+                            <td> <span id="tdEditcourtlocation1" width="55%" align="left" >
+                                <strong>Name :&nbsp;</strong><span id="lblEditcourtlocation"></span>                                 
+                                 </span>
+                                 <input type="checkbox" name="defaultCoachAddressE" id="defaultCoachAddressE"  title="Default coach location" />
+                                <strong>Default coach location</strong>
+                            </td>
+                            <td>        </td>
+                        </tr>*@@*</table>*@
+             @*   </td>
+            </tr>*@
+            <tr id="trEotherdeatails" class="nav_blue_color" height="20" style="display:none">
+                <td width="25%" style="font-size: 13px; text-align: right">
+                    <strong>Address :&nbsp;</strong>
+                </td>
+                <td>
+                     <table cellpadding="4" cellspacing="0" border="0" width="100%">
+                        <tr >
+                            <td style="width:18%"><strong>Address1 :&nbsp;</strong></td>
+                            <td style="width:35%;text-align:left"><span id="lblEoAddress1"></span></td>
+                            <td style="width:8%"><strong>Zip :&nbsp;</strong></td>
+                            <td style="width:35%;text-align:left"> <span id="lblEocityzip"></span></td>
+                        </tr>
+                          <tr >
+                            <td style="width:13%"><strong>State :&nbsp;</strong></td>
+                            <td style="width:37%;text-align:left"><span id="lblEostate"></span> </td>
+                            <td style="width:13%"><strong>City :&nbsp;</strong></td>
+                            <td style="width:37%;text-align:left"><span id="lblEocity"></span> </td>
+                        </tr>
+                     </table>
+                    
+                </td>
+            </tr>  
+            <tr id="trEotherAddress" class="nav_blue_color" height="40" style="display:none">
+                <td width="25%" style="font-size: 13px; text-align: right"><strong>Address :&nbsp;</strong></td>
+                <td  width="75%"  runat="server" style="font-size: 13px;">
+                     <table cellpadding="4" cellspacing="0" border="0" width="100%" >
+                       @Html.Partial("_OtherCitiesStates")
+                     </table>
+                </td>
+            </tr>
+             @*<tr id="trEPlaceofAppointment" class="nav_blue_color" height="20" style="display:none">
+                <td width="30%" style="font-size: 13px; text-align: right">
+                    <strong>Place of appointment :&nbsp;</strong>
+                </td>
+                <td>                    
+                    @Html.RadioButton("rdoEApptPlace", "PatientEname", false)<span id="lblEPatPlace">@ViewBag.patname's place</span>
+         &nbsp;&nbsp; @Html.RadioButton("rdoEApptPlace", "ProvideErname", true)@Session["FullName"]'s office
+                </td>
+            </tr>*@
+            <tr class="white_color" height="20" id="trduration1">
+                <td align="right" width="25%" style="font-size: 13px;">&nbsp;<font color="red">*</font><strong>Date/Time/Duration :&nbsp;</strong>
+                </td>
+                <td width="75%" id="tdEDate" runat="server" style="font-size: 13px;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tr>
+                            <td width="20%">
+                                 @Html.TextBox("AppointmentDate", DateTime.Now.ToString("MM/dd/yyyy"), new { @class = "textfield Datefield", @style = "width:90px" })
+                            </td>
+                            <td width="25%">
+                                @Html.Obout(new ComboBox("cboEtime") { MenuWidth = 300, SelectedIndex=ViewBag.index , CssSettings = new ComboBoxCssSettings() { ItemsContainer = "ob_iCboIC multcolumn" }, SelectionMode = ComboBoxSelectionMode.Single })
+                            </td>
+                            <td width="7%">
+                                @Html.DropDownList("ddlETimeMer", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="AM", Value = "0", Selected =true },
+                                                               new SelectListItem{ Text="PM", Value = "1" }
+                                                              }, new { @class = "textfield", @style = "width:55px;" })
+                            </td>
+                            <td>
+                                @Html.DropDownList("ddlEDuration", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="30", Value = "30", Selected =true },
+                                                               new SelectListItem{ Text="60", Value = "60" },
+                                                               new SelectListItem{ Text="90", Value = "90" },
+                                                               new SelectListItem{ Text="120", Value = "120" }
+                                                              }, new { @class = "textfield", @style = "width:55px;" })&nbsp;<strong>(Minutes)</strong>
+                            </td>
+                        </tr>
+                    </table>                  
+                </td>
+            </tr>
+            <tr id="trnotes" class="nav_blue_color" runat="server" height="20">
+                <td align="right" width="25%" style="font-size: 13px;">
+                    <strong>&nbsp;&nbsp;&nbsp;Notes :&nbsp;</strong>
+                </td>
+                <td width="75%" id="tdENotes" runat="server" style="font-size: 13px;">
+                    @Html.TextArea("Notes", Model.Notes, 3, 3, new { @class = "textfield", wrap = "virtual", @style = "width:350px;height:78px;" })&nbsp;&nbsp;(Maximum length 1000 characters)                                      
+                </td>
+            </tr>
+             @if (ViewBag.ShowRecurrence == "Y")
+             {
+              <tr height="20" id="trrecurring1" runat="server" class="white_color">
+                    <td align="right" width="20%" style="font-size: 13px;">
+                        <strong>Recurring :&nbsp;</strong>
+                    </td>
+                    <td width="80%">
+                    @Model.RepeatType
+                   <input id="chkRecurrence" type="checkbox" name="chkRecurrence" style="margin-right:5px"/><span id="lblchgrec" runat="server" class="bluemenu" style="font-weight:bold;font-size: 13px; display:none" >Change recurrence</span>
+                    </td>
+                </tr>
+                 <tr id="trRecurType" style="display: none;" class="white_color" >
+         <td  width="25%" style="font-size: 13px; text-align:right">
+        <strong>Recurring :&nbsp;</strong>
+         </td>
+         <td>       
+         &nbsp;@Html.RadioButton("Recurring", "Daily", false)Daily
+         &nbsp;@Html.RadioButton("Recurring", "Weekly", false)Weekly         
+         </td>
+         </tr>
+         <tr class="nav_blue_color" id="trrecurr" runat="server" style="display: none;">
+                        <td>
+                        </td>
+                        <td>
+                            <table class="border_style" id="RecurDaily" style="display: none; width: 100%; height: 45px"
+                                cellspacing="1" cellpadding="1" border="0" >
+                                <tr class="nav_blue_color" height="20">
+                                    <td id="tdEDay" runat="server" align="left" style="font-size: 13px;">
+                                        <font color="red"><b>*</b></font>Every : &nbsp;
+                                        @Html.TextBox("DailyReccur", null, new { @class = "textfield", @style = "width:30px", Maxlength="3" })&nbsp;
+                                       Day(s)
+                                    </td>
+                                </tr>
+                                <tr class="white_color" height="20">
+                                    <td id="tdEendDay" runat="server" style="font-size: 13px;">
+                                        <font color="red"><b>*</b></font>Ends On : &nbsp;
+                                        @Html.TextBox("EndDateForDaily", "mm/dd/yyyy", new { @class = "textfield Datefield", @style = "width:90px" })
+                                        
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="border_style" id="RecurWeekly" style="display: none; width: 100%; height: 45px"
+                                cellspacing="1" cellpadding="1" border="0">
+                                <tr class="nav_blue_color" height="20">
+                                    <td align="left" id="tdEWeek" runat="server" style="font-size: 13px;">
+                                        <font color="red"><b>*</b></font>Every : &nbsp;
+                                        @Html.TextBox("WeeklyReccur", null, new { @class = "textfield", @style = "width:30px", Maxlength="3"})
+                                       Week(s)
+                                    </td>
+                                </tr>
+                                <tr class="white_color" height="20">
+                                    <td align="left" id="tdEchkWeek1" style="font-size: 13px;">
+                                
+                                     @foreach (var item in ViewBag.weeklylist)
+                                     {
+                                         var chkid = "chkweekselect" + @item.Key;
+                                     <input id="@chkid" type="checkbox"  value="@item.Key" class="chkweekselect"  style="margin-right:5px"/>@item.Value 
+                                     }
+                                    </td>
+                                </tr>
+                                <tr class="nav_blue_color" height="20">
+                                    <td align="left" id="tdEendWeek" runat="server" style="font-size: 13px;">
+                                        <font color="red"><b>*</b></font>Ends On : &nbsp;
+                                      
+                                            @Html.TextBox("EndDateForWeek", "mm/dd/yyyy", new { @class = "textfield Datefield", @style = "width:90px" })
+                                      
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>   
+             }
+        </table>
+        <br />
+        <table border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tr style="text-align: right">
+                <td>
+                    <input type="button" name="btndelete" value="Delete this appointment" id="btncancel" class="confirmDialog1" />
+                    <input class="button" type="submit" name="Save" value="Save" onclick="return checkpage();" />&nbsp;
+                  <input type="button" class="EditApptclose button" name="Cancel" value="Cancel" />
+                    <br /><br />
+                </td>
+            </tr>
+        </table>
+          <div id="dialog-confirm1" title="Mower Helper" style="display: none;">
+                            <p>
+                                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                                Do you want to delete appointment?
+                            </p>
+                        </div>
+    }
+</body>
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
+        $(".confirmDialog1").live("click", function (e) {
+            $("#dialog-confirm1").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        var apptDelid = document.getElementById('AppointmentID').value;
+                        @*  window.location.href = '@Url.Action("Deleteappoint", "Clients")?apptDelid=' + apptDelid;*@
+                        $('#EditlDialog').dialog('close');
+                        var val= '@Model.FromPage';
+                        if ('@ViewBag.pageRecCount' == "1") {
+                            val = parseInt('@Model.FromPage');
+                            val = val - 1;
+                            $("#appList").load('@Url.Action("Deleteappoint", "Clients")?apptDelid=' + apptDelid + "&S1P1=" + val + '&S1sortdir=' + document.getElementById("S1sortdir").value + '&S1sort=' + document.getElementById("S1sort").value);
+                        }
+                        else {
+                            $("#appList").load('@Url.Action("Deleteappoint", "Clients")?apptDelid=' + apptDelid + "&S1P1=" + '@Model.FromPage' + '&S1sortdir=' + document.getElementById("S1sortdir").value + '&S1sort=' + document.getElementById("S1sort").value);
+                        }
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirm1").dialog('open');
+            return false;
+        });
+
+
+
+    </script>
+<script type="text/javascript">
+    $(function () {
+        var ShowRecurrence = "@ViewBag.ShowRecurrence";
+        if (ShowRecurrence == "Y") {
+            var recmsg = "@Model.RepeatType";
+            var chkweek = "@ViewBag.chkweek";
+            $("#Wselection").val(chkweek);
+            if (recmsg == "No Repeat") {
+
+                document.getElementById('chkRecurrence').style.display = 'none';
+                document.getElementById("lblchgrec").style.display = 'none';
+            }
+            else {
+                document.getElementById('chkRecurrence').style.display = '';
+                document.getElementById("lblchgrec").style.display = '';
+            }
+
+            $("#chkRecurrence").change(function () {
+                if ($(this).is(":checked")) {
+                    var weedayShow = "@Model.WeekDay";
+                    if (weedayShow == "DayShow") {
+                        document.getElementById("trRecurType").style.display = '';
+                        document.getElementById("trrecurr").style.display = '';
+                        document.getElementById("RecurDaily").style.display = '';
+                        $('input:radio[name="Recurring"]').filter('[value="Daily"]').attr('checked', 'checked');
+                        var dayEndDate = "@Model.dayEndDate";
+                        var dayIntervalue = "@Model.interdayvalue";
+                        $("#EndDateForDaily").val(dayEndDate);
+                        $("#DailyReccur").val(dayIntervalue);
+                        document.getElementById("RecurWeekly").style.display = 'none';
+                    }
+                    else {
+                        document.getElementById("trRecurType").style.display = '';
+                        document.getElementById("trrecurr").style.display = '';
+                        document.getElementById("RecurDaily").style.display = 'none';
+                        var dayEndDate = "@Model.weekEndDate";
+                        var dayIntervalue = "@Model.interweekvalue";
+                        document.getElementById("RecurWeekly").style.display = '';
+                        $("#WeeklyReccur").val(dayIntervalue);
+                        $("#EndDateForWeek").val(dayEndDate);
+                        $('input:radio[name="Recurring"]').filter('[value="Weekly"]').attr('checked', 'checked');
+                        var strchk = "@ViewBag.chkweek";
+                        $("#Wselection").val(strchk);
+                        // alert(strchk);
+                        var obj1 = new Array();
+                        obj1 = strchk.split(",");
+                        var i;
+                        for (i = 0; i <= obj1.length - 1; i++) {
+                            var obj2 = document.getElementById("chkweekselect" + obj1[i]);
+                            if (obj2 != null) {
+                                document.getElementById("chkweekselect" + obj1[i]).checked = true;
+                            }
+                        }
+                    }
+                    $(':radio[name=Recurring]').change(function () {
+                        if ($(this).val() == 'Daily') {
+                            document.getElementById("trRecurType").style.display = '';
+                            document.getElementById("trrecurr").style.display = '';
+                            document.getElementById("RecurDaily").style.display = '';
+                            $('input:radio[name="Recurring"]').filter('[value="Daily"]').attr('checked', 'checked');
+                            var dayEndDate = "@Model.dayEndDate";
+                            var dayIntervalue = "@Model.interdayvalue";
+                            $("#EndDateForDaily").val(dayEndDate);
+                            $("#DailyReccur").val(dayIntervalue);
+                            document.getElementById("RecurWeekly").style.display = 'none';
+                        }
+                        else if ($(this).val() == 'Weekly') {
+                            document.getElementById("trRecurType").style.display = '';
+                            document.getElementById("trrecurr").style.display = '';
+                            document.getElementById("RecurDaily").style.display = 'none';
+                            var dayEndDate = "@Model.weekEndDate";
+                            var dayIntervalue = "@Model.interweekvalue";
+                            document.getElementById("RecurWeekly").style.display = '';
+                            $("#WeeklyReccur").val(dayIntervalue);
+                            $("#EndDateForWeek").val(dayEndDate);
+                            $('input:radio[name="Recurring"]').filter('[value="Weekly"]').attr('checked', 'checked');
+
+                            var strchk = "@ViewBag.chkweek";
+                            $("#Wselection").val(strchk);
+                            var obj1 = new Array();
+                            obj1 = strchk.split(",");
+                            var i;
+                            for (i = 0; i <= obj1.length - 1; i++) {
+                                var obj2 = document.getElementById("chkweekselect" + obj1[i]);
+                                if (obj2 != null) {
+                                    document.getElementById("chkweekselect" + obj1[i]).checked = true;
+                                }
+                            }
+                        }
+                    });
+            }
+            else {
+                document.getElementById("trRecurType").style.display = 'none';
+                document.getElementById("trrecurr").style.display = 'none';
+                document.getElementById("RecurDaily").style.display = 'none';
+                document.getElementById("RecurWeekly").style.display = 'none';
+            }
+            });
+    }    
+    });
+    $(document).ready(function () {
+       @* alert('@ViewBag.SelectedAddress');*@
+        @*if ('@ViewBag.SelectedAddress' == "Y") {       
+            // $("#defaultCoachAddressE").attr("checked") ? alert("Checked") : alert("Unchecked"); 
+            $('#defaultCoachAddressE').attr('checked', true);
+        }*@
+       @* if ('@ViewBag.changedAddress1' == '@ViewBag.SelectedAddressD') {
+            $('#ChkDefaultCourt').attr('checked', true);
+        }*@
+
+        if ('@ViewBag.SelectedAddress' == "Y") {
+            // $("#defaultCoachAddress1").attr("checked") ? alert("Checked") : alert("Unchecked"); 
+            $('#ChkDefaultCourt').attr('checked', true);
+            $("#EOtherAddressItemList option:contains(" + "New Location" + ")").attr('selected', 'selected');
+        }
+        else {
+            $('#ChkDefaultCourt').attr('checked', false);
+        }
+        @*$("#combobox5").val("@ViewBag.technician_ids");*@
+        $("#AppointmentStatus_ID").val("@Model.AppointmentStatus_ID");
+        $("#ToReference_ID").val("@Model.ToReference_ID");
+        $("#ToReferenceLogin_ID").val("@Model.ToReferenceLogin_ID");
+        $("#AppointmentID").val("@Model.AppointmentID");
+        $("#FacilityReference_ID").val("@Model.FacilityReference_ID");
+        $("#AppointmentTracking_ID").val("@Model.AppointmentTracking_ID");
+
+        var apptdate = "@Model.AppointmentDate";
+        if (apptdate != "") {
+            $("#AppointmentDate").val(apptdate);
+        }
+        $("#ddlETimeMer").val("@ViewBag.getAMPM");
+        $("#ddlEDuration").val("@Model.Duration");
+
+      //  $("#ddEAuto").val("@ViewBag.ddEAuto");
+    });
+</script>
+
+     <script type="text/javascript">
+         $(document).ready(function () {
+               
+             var itemsel = "@Model.Aptplaceofservice";
+             document.getElementById("tdEditcourtlocation").style.display = "none";
+             document.getElementById("tdEditcourtlocation1").style.display = "none";
+             $.ajax({
+                 url: "@Url.Action("FillCourtLocations", "Schedule")",
+                 type: "get",
+                 dataType: "json",
+                 contentType: "application/json;charset=utf-8",
+                 success: function (data) {
+                     $("#EOtherAddressItemList").empty();
+                     $.each(data, function (index, value) {
+                         $('#EOtherAddressItemList').append($('<option> </option>').val(data[index].Value).html(data[index].Text));
+                         $("#EOtherAddressItemList option[value='']").prop('disabled', true);
+                     });
+                     if (itemsel == "O") {
+                         //alert("2");
+                         var spname = "@Model.Aptplaceofservicename";
+                         var myArray1 = new Array();
+                         var myArray1 = spname.split(',');
+                         $('#EOtherAddressItemList option').filter(function () { return $.trim($(this).text()) == myArray1[0]; }).attr('selected', true);
+                         $("#EOtherAddressItemList").val("@ViewBag.SelectedAddressid");
+                         var recordtext = $("#EOtherAddressItemList option:selected").text();
+                         $("#CourtLocationName").val("");
+                         $("#lblEditcourtlocation").html("");
+                         document.getElementById('hdnselectEother').value = recordtext;
+                         $.getJSON("GetOtherAddressDetails", { AppAddressId: $("#EOtherAddressItemList option:selected").val(), custId: $("#ToReference_ID").val() },
+                                 function (data) {
+                                     $('#tblEditAppt tr[id="trEotherdeatails"]').show();
+                                     $('#tblEditAppt tr[id="trEotherAddress"]').hide();
+                                     document.getElementById("tdEditcourtlocation").style.display = "none";
+                                     $("#lblEoAddress1").html(data.Address1);//.replace(",", ""));
+                                     var cityEaray = new Array();
+                                     var cityEaray = data.cityzip.split('-');
+                                     $("#lblEocityzip").html(cityEaray[1]);
+                                     $("#lblEostate").html(data.State);
+                                     $("#lblEocity").html(cityEaray[0]);
+                                     if (data.CourtLocationName == '' || data.CourtLocationName == null) {
+                                         document.getElementById("tdEditcourtlocation").style.display = "";
+                                         document.getElementById("tdEditcourtlocation1").style.display = "none";
+                                     }
+                                     else if (data.CourtLocationName != '') {
+                                         document.getElementById("tdEditcourtlocation").style.display = "none";
+                                         document.getElementById("tdEditcourtlocation1").style.display = "";
+                                         $("#lblEditcourtlocation").html(data.CourtLocationName);
+                                     }
+                                     else if (data.ErrorMessage == 'false') {
+                                         alert('Session is expired. You will be redirected to session expired page');
+                                         window.location = '@Url.Action("SessionExpire", "Home")';
+                                     }
+                                 });
+                         // $('#EOtherAddressItemList').change();
+                     }
+                 }
+             });
+            
+             var apptType = "@Model.ApptType";
+             if (apptType == "Client") {
+                 $("#trPatientName").show();
+             }
+             else {
+                 $("#trPatientName").hide();
+             }
+             var Roleid = '@Session["Roleid"]';
+             if (Roleid != 8) {
+
+                 $('#tblEditAppt tr[id="traptype"]').removeClass("nav_blue_color");
+                 $('#tblEditAppt tr[id="traptype"]').addClass("white_color");
+                 $('#tblEditAppt tr[id="trduration1"]').removeClass("white_color");
+                 $('#tblEditAppt tr[id="trduration1"]').addClass("nav_blue_color");
+                 $('#tblEditAppt tr[id="trnotes"]').removeClass("nav_blue_color");
+                 $('#tblEditAppt tr[id="trnotes"]').addClass("white_color");
+             }
+             var selectEplace = "@Model.Aptplaceofservice";
+             if (document.getElementById('hdnEplaceind').value == "Y") {
+                 document.getElementById("trEPlaceofAppointment").style.display = "";
+             }
+             else {
+                 document.getElementById("trEPlaceofAppointment").style.display = "none";
+             }
+             $("#EOtherAddressItemList").change(function () {
+                 $("#EOtherAddressItemList option[value='']").prop('disabled', true);
+                 $("#ChkDefaultCourt").show(); $("#trEPlaceofAppointment").show();
+                 var recordtext = $("#EOtherAddressItemList option:selected").text();
+                 //alert(recordtext);
+                 document.getElementById('hdnselectEother').value = recordtext;
+                 document.getElementById("tdEditcourtlocation").style.display = "none";
+                 document.getElementById("tdEditcourtlocation1").style.display = "none";
+                 $("#CourtLocationName").val("");
+                 $("#lblEditcourtlocation").html("");
+                 if (recordtext == 'New Location') {
+                     $('#tblEditAppt tr[id="trEotherdeatails"]').hide();
+                     $('#tblEditAppt tr[id="trEotherAddress"]').show();
+                     document.getElementById("tdEditcourtlocation").style.display = "";
+                  // document.getElementById("tdEditcourtlocation1").style.display = "none";
+                     $('#ChkDefaultCourt').attr('checked', false);
+                 $("#tdEditcourtlocation1").hide();
+                 }
+                 else {
+                     $('#dvLoading1').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                     $.getJSON("GetOtherAddressDetails", { AppAddressId: $("#EOtherAddressItemList option:selected").val(), custId: $("#ToReference_ID").val() },
+                         function (data) {
+                             $('#dvLoading1').dialog('close');
+                             $('#tblEditAppt tr[id="trEotherdeatails"]').show();
+                             $('#tblEditAppt tr[id="trEotherAddress"]').hide();
+                             $("#lblEoAddress1").html(data.Address1);//.replace(",", ""));
+                             var cityEaray = new Array();
+                             var cityEaray = data.cityzip.split('-');
+                             $("#lblEocityzip").html(cityEaray[1]);
+                             $("#lblEostate").html(data.State);
+                             $("#lblEocity").html(cityEaray[0]);
+                             document.getElementById("tdEditcourtlocation").style.display = "none";
+                             if (data.Default_addr == "Y") {
+                                 $('#ChkDefaultCourt').attr('checked', true);
+                             }
+                             else {
+                                 $('#ChkDefaultCourt').attr('checked', false);
+                             }
+                             if (data.CourtLocationName == '' || data.CourtLocationName == null) {
+                                 document.getElementById("tdEditcourtlocation").style.display = "";
+                                 document.getElementById("tdEditcourtlocation1").style.display = "none";
+                             }
+                             else if (data.CourtLocationName != '') {
+                                 document.getElementById("tdEditcourtlocation").style.display = "none";
+                                 document.getElementById("tdEditcourtlocation1").style.display = "";
+                                 $("#lblEditcourtlocation").html(data.CourtLocationName);
+                             }
+                             else if (data.ErrorMessage == 'false') {
+                                 alert('Session is expired. You will be redirected to session expired page');
+                                 window.location = '@Url.Action("SessionExpire", "Home")';
+                            }
+                             
+                         });
+                 }
+              });
+         });
+    </script>
+
+    <script type="text/javascript">
+        function checkpage() {
+           // var apptType1 = "@Model.ApptType";
+           if (document.getElementById('trEotherAddress').style.display == "" || document.getElementById('trEotherAddress').style.display != "none") {
+                document.getElementById('otherAddress').value = trim(document.getElementById('otherAddress').value);
+                if (document.getElementById('otherAddress').value == '') {
+                    alert('Please enter Address1'); document.getElementById('otherAddress').focus(); return false;
+                }
+                if (document.getElementById('zip').value == '') {
+                    alert('Please enter Zip code'); document.getElementById('zip').focus(); return false;
+                }
+                if (document.getElementById('zip').value != '') {
+                    if (document.getElementById('zip').value.length != 5) {
+                        alert('Invalid zip code');
+                        document.getElementById('zip').focus(); return false;
+                    }
+                    if (fnStringFieldValidate(document.getElementById('zip'), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 0) {
+                        alert('Invalid zip code!!! zip code must be in alphanumeric only.');
+                        document.getElementById('zip').focus(); return false;
+                    }
+                }
+                if (document.getElementById('stateid').selectedIndex == 0) {
+                    alert('Please select state');
+                    document.getElementById('stateid').focus();
+                    return false;
+                }
+                if (document.getElementById('cityid').selectedIndex == 0) {
+                    alert('Please select city');
+                    document.getElementById('cityid').focus();
+                    return false;
+                }
+            }
+            if (document.getElementById('AppointmentDate').value == 0 || document.getElementById('AppointmentDate').value == '' || document.getElementById('AppointmentDate').value == 'mm/dd/yyyy') {
+                alert('Please enter the appointment date.');
+                document.getElementById('AppointmentDate').focus();
+                return false;
+            }
+            if (document.getElementById('AppointmentDate').value != '' && document.getElementById('AppointmentDate').value != 'mm/dd/yyyy') {
+                var Dateid = document.getElementById('AppointmentDate').value;
+                var Dat = Dateid.split("/");
+                var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1]);
+                var yearid = Dat[2];
+                var Monthid = Dat[0];
+                var MyId = Dat[1];
+                var CurDt = new Date();
+                var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+                var matchArray = Dateid.match(DatePat);
+                if (matchArray == null) {
+                    alert('The date format!!! should be like mm/dd/yyyy');
+                    document.getElementById('AppointmentDate').focus();
+                    return false;
+                }
+                if (yearid < 1900 || yearid > 2060) {
+                    alert('Please enter a valid 4 digit year between 1900 and 2060');
+                    document.getElementById('AppointmentDate').focus();
+                    return false;
+                }
+                if (Monthid > 12 || Monthid == 0) {
+                    alert('Please enter a valid month');
+                    document.getElementById('AppointmentDate').focus();
+                    return false;
+                }
+                if (MyId > 31 || MyId == 0) {
+                    alert('Please enter a valid day');
+                    document.getElementById('AppointmentDate').focus();
+                    return false;
+                }
+                if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+                    alert('Please enter a valid day');
+                    document.getElementById('AppointmentDate').focus();
+                    return false;
+                }
+                if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+                    alert('Please enter a valid day');
+                    document.getElementById('AppointmentDate').focus();
+                    return false;
+                }
+            }
+            var EnteredDate;
+            EnteredDate = document.getElementById('AppointmentDate').value;
+            EnteredDate = new Date(EnteredDate);
+            //if ((document.getElementById('ddlEhr2').value == '') || (document.getElementById('ddlEhr2').value == "00")) {
+            //    alert('Please choose the appointment time.');
+            //    document.getElementById('ddlEhr2').focus();
+            //    return (false);
+            //}
+            if (document.getElementById('ddlEDuration').value == '') {
+                alert('Please choose the appointment duration.');
+                document.getElementById('ddlEDuration').focus();
+                return (false);
+            }
+            if (document.getElementById('Notes').value.length > 1000) {
+                alert('Please enter at most 1000 characters in the notes field');
+                document.getElementById('Notes').focus();
+                return false;
+            }
+            if (document.getElementById("RecurDaily").style.display == "") {
+                //                alert("i1");
+                document.getElementById('DailyReccur').value = trim(document.getElementById('DailyReccur').value);
+                if (document.getElementById('DailyReccur').value == '' || document.getElementById('DailyReccur').value == 0) {
+                    //                    alert("i2");
+                    alert("Please enter the days of recurring.");
+                    document.getElementById('DailyReccur').focus();
+                    return false;
+                }
+                if (document.getElementById('EndDateForDaily').value == '' || document.getElementById('EndDateForDaily').value == 'mm/dd/yyyy') {
+                    //                    alert("i3");
+                    alert("Please enter the end date.");
+                    document.getElementById('EndDateForDaily').focus();
+                    return false;
+                }
+                if (document.getElementById('EndDateForDaily').value != '' && document.getElementById('EndDateForDaily').value != 'mm/dd/yyyy') {
+                    //                    alert("i4");
+                    var Dateid = document.getElementById('EndDateForDaily').value; var Dat = Dateid.split("/");
+                    var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1]); var yearid = Dat[2]; var Monthid = Dat[0]; var MyId = Dat[1];
+                    var CurDt = new Date(); var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/; var matchArray = Dateid.match(DatePat);
+                    if (matchArray == null) { alert('The date format!!! should be like mm/dd/yyyy'); document.getElementById('EndDateForDaily').focus(); return false; }
+
+                    if (yearid < 1900) { alert('Please enter a valid 4 digit year between 1900 and 2060'); document.getElementById('EndDateForDaily').focus(); return false; }
+
+                    if (Monthid > 12 || Monthid == 0) { alert('Please enter a valid month'); document.getElementById('EndDateForDaily').focus(); return false; }
+
+                    if (MyId > 31 || MyId == 0) { alert('Please enter a valid day'); document.getElementById('EndDateForDaily').focus(); return false; }
+
+                    if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) { alert('Please enter a valid day'); document.getElementById('EndDateForDaily').focus(); return false; }
+
+                    if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) { alert('Please enter a valid day'); document.getElementById('EndDateForDaily').focus(); return false; }
+
+                }
+                var EndingDate = new Date(document.getElementById('EndDateForDaily').value);
+                if (EndingDate <= EnteredDate) {
+                    //                    alert("i5");
+                    alert('End date should be greater than the appointment date.'); document.getElementById('EndDateForDaily').focus(); return false;
+                }
+
+                var RecurDate = new Date(); var month = RecurDate.getMonth(); RecurDate.setMonth(month + 3);
+                if (EndingDate > RecurDate) {
+                    //                    alert("i6");
+                    alert('Recurring period should not exceed 3 months'); document.getElementById('EndDateForDaily').focus(); return false;
+                }
+
+            }
+            //            alert("8");
+            if (document.getElementById("RecurWeekly").style.display == "") {
+                document.getElementById('WeeklyReccur').value = trim(document.getElementById('WeeklyReccur').value);
+                if (document.getElementById('WeeklyReccur').value == '' || document.getElementById('WeeklyReccur').value == 0) {
+                    alert("Please enter the week(s) of recurring.");
+                    document.getElementById('WeeklyReccur').focus();
+                    return false;
+                }
+                var selectedValues = [];
+                $("[id*=tdEchkWeek1] input:checked").each(function () {
+                    selectedValues.push($(this).val());
+                });
+                if (selectedValues.length > 0) {
+                    //                       alert("Checkbox selected value(s): " + selectedValues);
+                    $("#Wselection").val(selectedValues);
+                } else {
+                    alert("Please select the recurred day");
+                    return false;
+                }
+
+                if (document.getElementById('EndDateForWeek').value == '' || document.getElementById('EndDateForWeek').value == 'mm/dd/yyyy') {
+                    alert('Please enter the end date.');
+                    //                       document.getElementById('txtEndDateforWeek').focus(); 
+                    return false;
+                }
+                if (document.getElementById('EndDateForWeek').value != '' && document.getElementById('EndDateForWeek').value != 'mm/dd/yyyy') {
+                    var Dateid = document.getElementById('EndDateForWeek').value;
+                    var Dat = Dateid.split("/"); var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1]);
+                    var yearid = Dat[2]; var Monthid = Dat[0]; var MyId = Dat[1];
+                    var CurDt = new Date(); var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/; var matchArray = Dateid.match(DatePat);
+                    if (matchArray == null) { alert('The date format!!! should be like mm/dd/yyyy'); document.getElementById('EndDateForWeek').focus(); return false; }
+
+                    if (yearid < 1900) { alert('Please enter a valid 4 digit year between 1900 and 2060'); document.getElementById('EndDateForWeek').focus(); return false; }
+
+                    if (Monthid > 12 || Monthid == 0) { alert('Please enter a valid month'); document.getElementById('EndDateForWeek').focus(); return false; }
+
+                    if (MyId > 31 || MyId == 0) { alert('Please enter a valid day'); document.getElementById('EndDateForWeek').focus(); return false; }
+
+                    if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) { alert('Please enter a valid day'); document.getElementById('EndDateForWeek').focus(); return false; }
+
+                    if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) { alert('Please enter a valid day'); document.getElementById('EndDateForWeek').focus(); return false; }
+
+                }
+                var EndingDate = new Date(document.getElementById('EndDateForWeek').value);
+                if (EndingDate <= EnteredDate) { alert('End date should be greater than the appointment date.'); document.getElementById('EndDateForWeek').focus(); return (false); }
+
+                var CheckDate = new Date(EnteredDate); CheckDate.setDate(CheckDate.getDate() + 6);
+                if (EndingDate < CheckDate) { alert('The difference between end and start date should atleast one week.'); document.getElementById('EndDateForWeek').focus(); return false; }
+
+                var MaxWeekDate = new Date(EnteredDate); var month1 = MaxWeekDate.getMonth(); MaxWeekDate.setMonth(month1 + 3);
+                if (EndingDate > MaxWeekDate) { alert('Recurring period should not exceed 3 months.'); document.getElementById('EndDateForWeek').focus(); return false; }
+
+            }
+        }
+</script>
+</html>

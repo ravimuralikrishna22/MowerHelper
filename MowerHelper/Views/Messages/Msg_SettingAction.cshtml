@@ -1,0 +1,169 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <title>Mower Helper-Find an Mower Helper</title>
+   @* @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")*@
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+             $("#Menu0").removeClass();
+             $("#Menu1").removeClass();
+             $("#Menu2").removeClass();
+             $("#Menu3").addClass("active");
+         });
+    </script>
+</head>
+<body>
+    @*<div>
+        @{Html.RenderAction("Topsection", "Tools");}
+    </div>*@
+    @using (Html.BeginForm("Msg_SettingAction", "Messages", FormMethod.Post, null))
+    {
+        @Html.Hidden("HdnTr")
+        @Html.Hidden("HdnFr")
+        @*<div id="main-content">
+        @Html.Partial("_NavigationTool")
+            <div class="content-box" style="width: 778px; margin: 0 auto;">
+                <div id="th_HeaderID" class="content-box-header">
+                    <h3>
+                        <strong>&nbsp;&nbsp;New settings</strong></h3>
+                </div>
+                <div class="content-box-content">*@
+                    <table border="0" cellpadding="8" cellspacing="1" width="100%" class="border_style">
+                        <tr class="white_color">
+                            <td align="right" width="35%">
+                                <strong><font color="red">*</font>From role&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.DropDownList("fromrolesDdl", null, "--Select Role--", new { @onchange = "return ddlFromRole(this.value);", @style = "font-family:arial;font-size:13px;height:30px;width:300px;" })
+                            </td>
+                        </tr>
+                        <tr class="nav_blue_color">
+                            <td align="right" width="35%">
+                                <strong><font color="red">*</font>To role&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.DropDownList("toRolesDdl", null, "--Select Role--", new { @onchange = "return ddlToRole(this.value);", @style = "font-family:arial;font-size:13px;height:30px;width:300px;" })
+                            </td>
+                        </tr>
+                        <tr class="white_color">
+                            <td align="right" width="35%">
+                                <strong><font color="red">*</font>Group name&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.TextBox("txtGroupName", null, new { @class = "textfield", @maxLength = "50", @title = "Enter Group Name", @style = "width:300px" })
+                            </td>
+                        </tr>
+                        <tr class="nav_blue_color">
+                            <td align="right" width="35%">
+                                <strong><font color="red">*</font>Category&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.DropDownList("CatDdl", null, "--Select Category--", new { @style = "font-family:arial;font-size:13px;height:30px;width:300px;" })
+                            </td>
+                        </tr>
+                        <tr class="white_color">
+                            <td align="right" width="35%">
+                                <strong>Can send user level messages&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.CheckBox("chkUser")
+                            </td>
+                        </tr>
+                        <tr class="nav_blue_color">
+                            <td align="right" width="35%">
+                                <strong>Can send group level messages&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.CheckBox("chkGroup")
+                            </td>
+                        </tr>
+                    </table>
+                @*</div>
+            </div>*@
+            <br />
+            <table cellpadding="0" cellspacing="0" align="center" width="778px">
+                <tr class="background_color">
+                    <td align="right">
+                        <input name="btnSave" value="Save" id="btnSave" title="Click here to save the information"
+                            class="button" type="submit" />
+                        &nbsp;<input name="btnCancel" value="Cancel" id="btnCancel" title="Click here to cancel the operation and return to main window"
+                            class="button" type="button" />
+                    </td>
+                </tr>
+            </table>
+        <br />
+        @*</div>*@
+    }
+    @*<div style="height: 150Px">
+    </div>
+    <div>
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>*@
+</body>
+<script type="text/javascript">
+    function ddlFromRole(ddlid) {
+        document.getElementById("HdnFr").value = ddlid;
+        $('#CatDdl').empty();
+        $('#CatDdl').append('<option value>--Select Category--</option>');
+        $.getJSON("FillRoles", { Fr: ddlid,Tr: null }, function (data) {
+            var vData = data.Object;
+            if (vData.length > 0) {
+                var vItems = [];
+                vItems.push('<option value>--Select Role--</option>');
+                for (var i = 0; i < vData.length; i++) {
+                    vItems.push('<option value="' + vData[i].Roleid + '">' + vData[i].RoleName + '</option>');
+                }
+                $('#toRolesDdl').empty();
+                $('#toRolesDdl').append(vItems.join(''));
+                $('#toRolesDdl').val("")
+                return true;
+            }
+            else {
+                $('#toRolesDdl').empty();
+                vItems.push('<option value>--Select Role--</option>');
+                $('#CatDdl').empty();
+                $('#CatDdl').append('<option value>--Select Category--</option>');
+                return false;
+            }
+            //$('#toRolesDdl').val('@ViewData["toRolesDdl"]');
+        });
+        //window.location = "../Messages/Msg_SettingAction?Fr=" + ddlid;
+    }
+    function ddlToRole(dToId) {
+        if (dToId == '' || dToId == null) {
+            $('#CatDdl').empty();
+            $('#CatDdl').append('<option value>--Select Category--</option>');
+        }
+        else {
+            $.getJSON("FillRoles", { Tr: dToId, Fr: $('#HdnFr').val() }, function (data) {
+                var vData = data.Object;
+                if (vData.length > 0) {
+                    var vItems = [];
+                    vItems.push('<option value>--Select Category--</option>');
+                    for (var i = 0; i < vData.length; i++) {
+                        vItems.push('<option value="' + vData[i].MsgCategory_ID + '">' + vData[i].Category + '</option>');
+                    }
+                    $('#CatDdl').empty();
+                    $('#CatDdl').append(vItems.join(''));
+                    return true;
+                }
+                else {
+                    $('#CatDdl').empty();
+                    $('#CatDdl').append('<option value>--Select Category--</option>');
+                    return false;
+                }
+                //$('#CatDdl').val('@ViewData["CatDdl"]');
+            });
+        }
+        //window.location = "../Messages/Msg_SettingAction?Tr=" + dToId + '&Fr=' + document.getElementById("HdnFr").value;
+    }
+</script>
+</html>

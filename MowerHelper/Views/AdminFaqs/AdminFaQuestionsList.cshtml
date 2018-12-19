@@ -1,0 +1,311 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+          <title>Mower Helper-Find an Mower Helper</title>
+      <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+        @Styles.Render("~/Content/themes/base/jqueryCSS")
+           @Styles.Render("~/Content/themes/base/autocomplete")
+                 @Scripts.Render("~/Scripts/Thscriptscript")
+         <script type="text/javascript">
+             $(function () {
+                 JqAutocomplete1('Getquestion', 'txtquestions');
+       
+             $(document).ready(function () {
+                 var TopIndex = '@Session["TopIndex"]';
+       $("#Menu0").removeClass();
+       $("#Menu1").removeClass();
+       $("#Menu2").removeClass();
+       $("#Menu3").addClass("active");
+             });
+             });
+</script>
+      
+    <script type="text/javascript">
+        function cancelclick() {
+            window.location.href = "../AdminFaqs/Help";
+        }
+        $(document).ready(function () {
+
+            $("#txt_FromDate").on('change keyup paste mouseup', function () {
+                //  alert("1");
+                if ($(this).val().length == 10) {
+                    //alert("2");
+                    if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+                    var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+                    // alert(St);
+                    var targetDate = new Date(St);
+                    targetDate.setDate(targetDate.getDate() + 365);
+                    //   alert(targetDate);
+                    var todaydate = new Date();
+                    todaydate.setDate(todaydate.getDate());
+                    var dd = todaydate.getDate();
+                    var mm = todaydate.getMonth() + 1; //January is 0!
+                    var yyyy = todaydate.getFullYear();
+                    var today = mm + '/' + dd + '/' + yyyy;
+                    var dd1 = targetDate.getDate();
+                    var mm1 = targetDate.getMonth() + 1;
+                    var yyyy1 = targetDate.getFullYear();
+                    var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+                    //  alert(target1);
+                    if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+                    else { document.getElementById('txt_ToDate').value = target1; return false; }
+                }
+            });
+
+
+            var frm = $("#formname");
+            $('#dt_filter').change(function () {
+                if (document.getElementById('dt_filter').value == 'Custom') {
+                    document.getElementById('tddaterange').style.display = '';
+                    $('#txt_FromDate').val("");
+                    $('#txt_ToDate').val("");
+                }
+                else {
+                    document.getElementById('tddaterange').style.display = 'none';
+                    $('#txt_FromDate').val("");
+                    $('#txt_ToDate').val("");
+                }
+                return false;
+            });
+        });
+</script>
+    <script type="text/javascript">
+
+        $(function () {
+          
+          
+            var category = $('#hdncategory').val();
+           
+            if (category != '' && category!=null) {
+                $('#ddlcategorys').val(category);
+            }
+           
+            var status = $('#hdnstatus').val();
+            if ( status != '' && status!=null) {
+                $('#ddlstatus').val(status);
+            }
+
+            var fromdate = $('#hdnFromdate').val();
+            if (fromdate != '' && fromdate!=null) {
+                $('#txt_FromDate').val(fromdate);
+                document.getElementById('tddaterange').style.display = '';
+            }
+            else {
+                $('#txt_FromDate').val("");
+                document.getElementById('tddaterange').style.display = 'none';
+
+            }
+
+            var todate = $('#hdnTodate').val();
+            if (todate != '' && todate!=null) {
+                $('#txt_ToDate').val(todate);
+                document.getElementById('tddaterange').style.display = '';
+            }
+            else {
+                $('#txt_ToDate').val("");
+                document.getElementById('tddaterange').style.display = 'none';
+
+            }
+
+            var drange = $('#hdndaterange').val();
+            if (drange != '' && drange!=null) {
+                $('#dt_filter').val(drange);
+
+            }
+            else {
+                $('#dt_filter').val("0");
+
+
+            }
+           
+           
+            //$("#txt_FromDate,#txt_ToDate").datepicker({
+            //    dateFormat: 'mm/dd/yy',
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    //                showCurrentAtPos: 1,
+            //    showWeeks: true,
+            //    inline: true,
+            //    numberOfMonths: [1, 1],
+            //    yearRange: "1950:2020",
+            //    showOn: "button",
+            //    buttonImage: "../Images/calender.gif",
+            //    buttonImageOnly: true
+
+            //});
+        });
+
+    </script>
+        <script type="text/javascript">
+            @*$(document).ready(function () {
+                alert("@ViewBag.question123");
+            })*@
+            $(function () {
+                var question = $('#hdnquestion').val();
+                document.getElementById('txtquestions').value = question;
+            });
+
+    </script>
+      <script type="text/javascript">
+          function ValidSearch() {
+
+              if (document.getElementById('dt_filter').selectedIndex == 0) {
+                  alert("Select date");
+                  return false;
+              }
+              if (document.getElementById('dt_filter').value == 'Custom') {
+
+                  if (document.getElementById('txt_FromDate').value != '' && document.getElementById('txt_FromDate').value != "mm/dd/yyyy") {
+                      if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) {
+                          return false;
+                      }
+                  }
+                  if (document.getElementById('txt_ToDate').value != '' && document.getElementById('txt_ToDate').value != "mm/dd/yyyy") {
+                      if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) {
+                          return false;
+                      }
+                  }
+                  var CDate = new Date()
+                  var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear();
+                  var FromDate = document.getElementById('txt_FromDate').value;
+                  if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == "mm/dd/yyyy") {
+                      alert('Select from date');
+                      document.getElementById('txt_FromDate').focus();
+                      return false;
+                  }
+                  if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == "mm/dd/yyyy") {
+                      alert('Select to date');
+                      document.getElementById('txt_ToDate').focus();
+                      return false;
+                  }
+                  var St = document.getElementById('txt_FromDate').value;
+                  St = new Date(St);
+                  var En = document.getElementById('txt_ToDate').value
+                  En = new Date(En);
+                  if (St > En) {
+                      alert("From date should not be greater than to date")
+                      return false;
+                  }
+
+              }
+              //AdminFaqs/AdminFaQuestionsList?hdnFromdate=01%2F01%2F2016&hdnTodate=08%2F03%2F2016&hdnquestion=&hdncategory=&hdnstatus=-Select-&hdndaterange=Custom&txtquestions=&ddlcategorys=&ddlstatus=-Select-&dt_filter=Custom&txt_FromDate=01%2F04%2F2001&txt_ToDate=08%2F03%2F2016&btnsearch=Search&btncancel1=Cancel
+              if (document.getElementById('dt_filter').value == 'Custom') {
+                  //ddlrecords=' + document.getElementById('ddlrecords').value + '&
+                  window.location.href = '@Url.Action("AdminFaQuestionsList", "AdminFaqs")?txt_FromDate=' + document.getElementById('txt_FromDate').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value + '&ddlstatus=' + document.getElementById('ddlstatus').value + '&txtquestions=' + document.getElementById('txtquestions').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&ddlcategorys=' + document.getElementById('ddlcategorys').value;
+               }
+              else {//ddlStatus=' + document.getElementById("ddlstatus").options[document.getElementById('ddlstatus').selectedIndex].text +
+                  window.location.href = '@Url.Action("AdminFaQuestionsList", "AdminFaqs")?ddlstatus=' + document.getElementById('ddlstatus').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&txtquestions=' + document.getElementById('txtquestions').value + '&ddlcategorys=' + document.getElementById('ddlcategorys').value;
+                         }
+          }
+
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("AdminFaQuestionsList", "AdminFaqs", FormMethod.Get, null))
+{
+ <div>
+
+            @{Html.RenderAction("Topsection", "Tools");}
+     
+        @Html.Partial("_NavigationTool")
+        </div> 
+        <input type="hidden" id="hdnFromdate" name="hdnFromdate" value="@ViewBag.frodate" />
+        <input type="hidden" id="hdnTodate" name="hdnTodate" value="@ViewBag.todate" />
+        <input type="hidden" id="hdnquestion" name="hdnquestion" value="@ViewBag.question123" />
+        <input type="hidden" id="hdncategory" name="hdncategory" value="@ViewBag.category" />
+        <input type="hidden" id="hdnstatus" name="hdnstatus" value="@ViewBag.status" />
+        <input type="hidden" id="hdndaterange" name="hdndaterange" value="@ViewBag.date" />
+    <div>
+            <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+            <tr style="background:none; height:45px">
+                <td align="right" width="8%">
+                    <strong>Question :&nbsp;</strong> 
+                </td>
+                <td  align="left" style="width: 10%;">
+                   <input type="text" id="txtquestions" name="txtquestions" class="textfield" style="width:200px; height:20px;" />
+                           @* <asp:TextBox ID="txtquestions" Height="20" AutoPostBack="true" Width="200px" CssClass="textfield" runat="server" onkeypress="return fnsetfocus(event,'btnsearch')" onkeydown="return fnsetfocus(event,'btnsearch')">
+                            </asp:TextBox>*@
+                         
+                </td>
+                <td align="right" width="6%">
+                    <strong>Category :&nbsp;</strong>
+                </td>
+                <td align="left" width="8%">
+                 @Html.DropDownList("ddlcategorys", Model.CategoryList, "--Select Category--", new { @style = "width:180px;height:25px;font:13px;" })
+                   
+                </td>
+                <td align="right" width="6%">
+                    <strong>Status :&nbsp;</strong> 
+                </td>
+                <td align="left" width="7%">
+                      @{string[] PreArray = { "-Select-", "Active", "Inactive" };}
+                                                 @Html.DropDownList("ddlstatus", new SelectList(PreArray, null), new { @style = "width:80px;height:25px;font-size:13px;" })
+                
+                </td>
+                 <td align="right" width="8%">
+                    <b>Date range :&nbsp;</b>
+                </td>
+                <td align="left" width="35%">
+                   <table runat="server" style="padding-top:10px; padding-bottom:10px;">
+                        <tr class="background_color">
+                        <td width="25%" align="left" style="padding-left:2px;">
+                                                
+                                                                                    @Html.DropDownList("dt_filter", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                        </td>
+                        <td width="75%" id="tddaterange" runat="server" style="display:none" align="left">
+                    <strong> From : </strong> &nbsp;
+                                                              <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield Datefield" maxlength="10" style="width: 75px;" />
+                                                             &nbsp; <strong> To : </strong> &nbsp;
+                                                             <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield Datefield" maxlength="10" style="width: 75px;" />
+                        </td>
+                       
+                        </tr>
+                        </table>
+                </td>
+                 <td align="left" width="10%">
+                 @*<input type="button" id="btnsearch" name="btnsearch" class="button" value="Search" onclick="return ValidSearch();" />*@
+                     <a id="btnSearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                 </td>
+            </tr>
+        </table>
+
+        @{ Html.RenderAction("FAQuestionsList", "AdminFaqs", null);}
+          <br />
+            <table cellspacing="0" cellpadding="0" width="97%" align="center" border="0">
+            <tr style="background:none;">
+                <td align="right">
+                    <input id="btncancel1" name="btncancel1" class="button" value="Cancel" onclick="return cancelclick();" style="width:40px;" />
+                 
+                </td>
+            </tr>
+        </table> 
+    </div>
+     <div>
+     @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+    }
+</body>
+<script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</html>

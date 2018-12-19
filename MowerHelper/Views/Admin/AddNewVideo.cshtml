@@ -1,0 +1,437 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+     <title>Mower Helper-Find an Mower Helper</title>
+      @Styles.Render("~/Content/styles")
+             @Styles.Render("~/Content/themes/base/TherpistStyles")
+@*              @Scripts.Render("~/Scripts/Thscriptscript")*@
+      <script type="text/javascript" src="~/Scripts/jquery-1.7.1.js">    </script>
+    <script  src="~/Scripts/jquery-ui-1.8.20.js" type="text/javascript"></script>
+    <script  src="~/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script  src="~/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script  src="~/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script  src="~/Scripts/flytooltip.js" type="text/javascript"></script>
+    <script src="~/Scripts/scriptCognetwork.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#chkactive').change(function () {
+                if (document.getElementById('chkactive').checked == true) {
+                    document.getElementById('chkinactive').checked = false;
+                }
+            });
+            $('#chkinactive').change(function () {
+                if (document.getElementById('chkinactive').checked == true) {
+                    document.getElementById('chkactive').checked = false;
+                }
+            });
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        });
+    </script>
+    <script type="text/javascript">
+        function Validate() {
+            ValidateAlertClear('tblmain', 'lbltitle', 'tdlbltitle', 'tdmaintitle', 'white');
+            ValidateAlertClear('tblmain', 'lbldesc', 'tdlbldesc', 'tdmaindesc', 'White');
+            ValidateAlertClear('tblmain', 'lblshonline', 'tdlblshonline', 'tdmainshonline', 'white');
+            ValidateAlertClear('tblmain', 'lblembtext', 'tdlblembtext', 'tdmainembtext', 'white');
+            ValidateAlertClear('tblmain', 'lbltime', 'tdlbltime', 'tdmaintime', 'white');
+            if (document.getElementById('txtTitle').value == '') {
+                //Glb_ShowAlert("Enter media title")
+                ValidateAlert('tblmain', 'lbltitle', 'tdlbltitle', 'tdmaintitle', 'Please enter media title');
+                document.getElementById('txtTitle').focus();
+                return false;
+            }
+            if (MyChars(document.getElementById('txtTitle')) == 'SpaceError') {
+                //Glb_ShowAlert('Enter media title without Space');
+                ValidateAlert('tblmain', 'lbltitle', 'tdlbltitle', 'tdmaintitle', 'Please enter media title without Space');
+                document.getElementById('txtTitle').focus();
+                return false;
+            }
+
+            var stranswer = '';
+            stranswer =trim(document.getElementById('txtDescription').value);
+            if (stranswer == '') {
+                //Glb_ShowAlert('Enter description');
+                ValidateAlert('tblmain', 'lbldesc', 'tdlbldesc', 'tdmaindesc', 'Please enter description');
+                document.getElementById('txtDescription').focus();
+                return false;
+            }
+           
+            if (stranswer != "") {
+                if (stranswer.length > 500) {
+                    //Glb_ShowAlert("Description can be up to 500 characters");
+                    ValidateAlert('tblmain', 'lbldesc', 'tdlbldesc', 'tdmaindesc', 'Description can be up to 500 characters');
+                    document.getElementById('txtDescription').focus();
+                    return false;
+                }
+            }
+            var strembtext = '';
+            var editorObject = oboutGetEditor("txtembedtext").getContent();
+           // strembtext = document.getElementById('txtembedtext').innerHTML.value();
+           // alert(editorObject);
+            if (editorObject == '') {
+                //Glb_ShowAlert('Enter description');
+                ValidateAlert('tblmain', 'lblembtext', 'tdlblembtext', 'tdmainembtext', 'Please enter youtube embed text');
+              //  document.getElementById('txtembedtext').focus();
+                return false;
+            }
+
+
+        }
+       
+
+    </script>
+    <script type="text/javascript">
+        function CancelAction() {
+            window.location.href = "../Admin/publicVideos";
+        }
+        function selected(obj, meid) {
+            document.getElementById('DataList1').style.display = '';
+            var delvideoid = document.getElementById('hdndelmeid').value;
+
+            if (delvideoid != "" && delvideoid != null) {
+                var str = delvideoid;
+                var suffix = ",";
+                var con = endsWith(str, suffix);
+
+                if (con != true) {
+                    str = str + ",";
+                }
+
+                var term = meid + ","; // for the term "World",
+                var index = str.indexOf(term); // and get its index.
+                if (index != -1) {
+
+                    document.getElementById('hdndelmeid').value = str.replace(term, '');
+
+                }
+                else {
+
+                }
+
+            }
+            var table = document.getElementById("DataList1");
+            var row = document.createElement("tr");
+            var td2 = document.createElement("td");
+            var td3 = document.createElement("td");
+            var td4 = document.createElement("td");
+            td4.setAttribute("style", "display:none;");
+            if (document.getElementById('hdncnt').value != '' && document.getElementById('hdncnt').value != null) {
+
+                var cnt1 = document.getElementById('hdncnt').value;
+
+                var cnt3 = 1;
+
+                var cnt2 = cnt1++;
+                document.getElementById('hdncnt').value = +cnt2;
+                if (document.getElementById('hndmediaid').value != "" && document.getElementById('hndmediaid').value != null) {
+                    var str1 = document.getElementById('hndmediaid').value;
+                    var suffix1 = ",";
+                    var con1 = endsWith(str1, suffix1);
+                    if (con1 != true) {
+                        document.getElementById('hndmediaid').value = document.getElementById('hndmediaid').value + ',' + meid;
+                    }
+                    else {
+                        document.getElementById('hndmediaid').value = document.getElementById('hndmediaid').value + meid;
+                    }
+                }
+                else {
+                    document.getElementById('hndmediaid').value = meid;
+                }
+            }
+            else {
+                var cnt = 1;
+                document.getElementById('hdncnt').value = cnt;
+                document.getElementById('hndmediaid').value = meid;
+            }
+            var obj2 = document.createElement("span");
+            obj2.setAttribute("id", "lbl2");
+            obj2.innerHTML = obj;
+            td2.appendChild(obj2);
+
+            var obj3 = document.createElement("img");
+            obj3.setAttribute("src", "../Images/cross.png");
+            obj3.setAttribute("id", meid);
+            obj3.setAttribute("onclick", "deleteRow(this,id)");
+            td3.appendChild(obj3);
+            var obj4 = document.createElement("input");
+            obj4.setAttribute("type", "hidden");
+            var hdnid = "hdn" + meid;
+            obj4.setAttribute("id", hdnid);
+            obj4.setAttribute("name", hdnid);
+            obj4.setAttribute("value", obj);
+            td4.appendChild(obj4)
+            row.appendChild(td2);
+            row.appendChild(td3);
+            row.appendChild(td4);
+            table.appendChild(row);
+            $('#divaddvideo').dialog('close');
+        }
+        function endsWith(str, suffix) {
+            return str.indexOf(suffix, str.length - suffix.length) !== -1;
+        }
+        function deleteRow(btn, id) {
+           // document.getElementById('DataList1').style.display = 'none';
+            if (document.getElementById('hdndelmeid').value != "" && document.getElementById('hdndelmeid').value != null) {
+                var meid12 = document.getElementById('hdndelmeid').value;
+                var suffix = ",";
+                var condition = endsWith(meid12, suffix);
+                if (condition != true) {
+                    document.getElementById('hdndelmeid').value = document.getElementById('hdndelmeid').value + "," + id;
+                }
+                else {
+                    document.getElementById('hdndelmeid').value = document.getElementById('hdndelmeid').value + id;
+                }
+            }
+            else {
+                document.getElementById('hdndelmeid').value = id;
+            }
+            var dellist = document.getElementById('hdndelmeid').value;
+
+            if (dellist != "" && dellist != null) {
+                var medi3 = dellist.split(",");
+
+                for (var i = 0, len = medi3.length; i < len; i++) {
+                    var media = document.getElementById('hndmediaid').value;
+
+                    var suffix = ",";
+                    var condition = endsWith(media, suffix);
+
+                    if (condition != true) {
+                        media = media + ",";
+
+                    }
+
+                    if (medi3[i] != "" && medi3[i] != null) {
+                        if (media.indexOf(medi3[i]) > -1) {
+                            var text = medi3[i] + ",";
+                            media = media.replace(text, '');
+                            document.getElementById('hndmediaid').value = media;
+                        }
+                    }
+
+                }
+            }
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+    </script>
+       <script type="text/javascript">
+           $(function () {
+               $(".mediaclose").live("click", function (e) {
+                   e.preventDefault();
+                   $('#divaddvideo').dialog('close');
+
+               });
+               //$('#divaddvideo').dialog({
+               //    autoOpen: false,
+               //    width: 900,
+               //    resizable: false,
+               //    modal: true
+
+               //});
+               $("#adots").click(function () {
+               //    linkObj = $(this);
+               //    var dialogDiv = $('#divaddvideo');
+               //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                   var media = document.getElementById('hndmediaid').value;
+
+                   var delmeid = document.getElementById('hdndelmeid').value;
+                   var viewUrl = "../Admin/Relatedvideos?media=" + media + "&delmeid=" + delmeid;
+                   Displaydialog('divaddvideo', viewUrl, 'auto', 900, 'dvLoading', null, null);
+               //    $.get(viewUrl, function (data) {
+               //        dialogDiv.html(data);
+               //        $('#dvLoading').dialog('close');
+               //        dialogDiv.dialog('open');
+               //    });
+               //    return false;
+               });
+               $(".mediaclose").click(function () {
+                   $('#divaddvideo').dialog('close');
+               });
+           });
+               </script>
+</head>
+<body>
+    @using (Html.BeginForm("AddNewVideo", "Admin", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+ <div>
+   @{Html.RenderAction("Topsection", "Tools");}
+ </div>   <input type="hidden" id="hndmediaid" name="hndmediaid"/>  
+             <input type="hidden" id="hdndelmeid" name="hdndelmeid"/>  
+          <input type="hidden" id="hdncnt" name="hdncnt" />  
+          <div id="body-wrapper">
+          <div id="main-content"> 
+        @Html.Partial("_NavigationTool")
+           <div class="content-box">  
+           <div class="content-box-header">
+                <h3>Add New video</h3>
+                <div class="clear"></div>
+            </div>
+              <div class="content-box-content">
+            <table class="border_style" cellspacing="1" cellpadding="4" width="100%" align="center"
+                border="0">
+                    <tr height="30" class="white_color">
+                    <td align="center" colspan="2">
+                      @if (ViewBag.outmsg != null & ViewBag.outmsg != "")
+                      {
+                                                                   
+                                                                         <span ID="lblOutMsg" class="errormsg" style="color:Red;font-size:15px;font-weight:bold;">@ViewBag.outmsg </span>
+                                                                 
+                      }
+               
+                    </td>
+                </tr>
+                  <tr class="white_color">
+                    
+                                        <td colspan="2">
+                                            <a target="_blank" style="font-weight:bold;">Tips and tricks to add the video and get embedded text</a>
+                                            <br /><br />
+                                            <a target="_blank" href="http://www.youtube.com/watch?v=9w-gQAwS2uc">http://www.youtube.com/watch?v=9w-gQAwS2uc</a>
+                                            <br />   <br />
+                                          <a target="_blank" href="http://www.youtube.com/watch?NR=1&v=ZnehCBoYLbc&feature=endscreen">http://www.youtube.com/watch?NR=1&v=ZnehCBoYLbc&feature=endscreen</a>
+                                            <br />
+                                             </td>
+                                    </tr>
+                <tr class="white_color" height="40">
+                    <th style="height: 22px" align="right">
+                        <font color="red"><b>*</b></font><strong>Title&nbsp;:&nbsp;</strong></th>
+                    <td style="height: 22px" width="60%" id="tdmaintitle">
+                        &nbsp;<input type="text" id="txtTitle" name="txtTitle" maxlength="50" autocomplete="off" class="textfield" style="width:350px; height:16px;" />
+                            </td>
+                </tr>
+                <tr class="nav_blue_color" height="40">
+                    <th style="height: 22px" align="right">
+                        <font color="red"><b>*</b></font><strong>Video Description&nbsp;:&nbsp;</strong> </th>
+                    <td style="height: 22px" width="60%" id="tdmaindesc">
+                    <textarea id="txtDescription" name="txtDescription" class="text" rows="2" autocomplete="off" cols="2" maxlength="500" style="width:500px; height: 150px;"></textarea>
+                            (Maximum length 500 characters)
+                    </td>
+                </tr>
+                
+                <tr class="nav_blue_color" id="displaypr" runat="server" height="40">
+                    <th style="height: 25px" align="right">
+                        <font color="red"><b>*</b></font><strong>Show online&nbsp;:&nbsp;</strong> </th>
+                    <td style="height: 25px" width="60%" id="tdmainshonline">
+                        &nbsp;@Html.RadioButton("chkactive", "Yes", true)&nbsp Yes
+                        @Html.RadioButton("chkinactive", "No", false)&nbsp No
+                      </td>
+                </tr>
+                <tr class="white_color">
+                    <th valign="top" align="right">
+                        <strong>Time &nbsp;:</strong> </th>
+                    <th align="left" id="tdmaintime">
+                        &nbsp;<input type="text" id="txtHours" name="txtHours" maxlength="2" autocomplete="off" onkeypress="return AlphaNumbers(event);" class="textfield" style="width:20px;" />
+                       
+                        <b>:</b>
+                        <input type="text" id="txtmins" name="txtmins" maxlength="2" autocomplete="off" onkeypress="return AlphaNumbers(event);" class="textfield" style="width:20px;" />
+                        <b>:</b>
+                        (HH:MM)</th>
+                </tr>
+                  <tr class="white_color">
+                                        <th valign="top" align="right">
+                                            <font color="red"><b>*</b></font><strong>&nbsp;Youtube embed text&nbsp;:&nbsp;</strong>
+                                        </th>
+                                        <td align="left" id="tdmainembtext">
+                                            &nbsp;       @Html.Obout(new Obout.Mvc.HTMLEditor.Editor("txtembedtext") { ShowQuickFormat = false, Height = 225, Template = "example", Submit = false, ModeSwitch = false, ShowWaitMessage = true, NoDrop = true, DefaultContextMenu = false })
+                @*                            <textarea id="txtembedtext" name="txtembedtext" class="text" rows="2" autocomplete="off" cols="2" maxlength="500" style="width:500px; height: 140px;"></textarea>*@
+                                        </td>
+                                    </tr>
+                <tr class="nav_blue_color">
+                                                        <th align="right">
+                                                            <strong>Media links :&nbsp;</strong></th>
+                                                        <td>
+                                                            <table cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                <tr class="nav_blue_color">
+                                                                    <th align="right" width="20%">
+                                                                        <font color="red">*</font><strong>Add link :&nbsp;</strong> </th>
+                                                                    <td width="50%" align="left">
+                                                                    <input type="text" id="TxtLinks" name="TxtLinks" readonly="true" class="textfield" style="width:300px;" />
+                                                                    </td>
+                                                                    <td align="left" width="10%">
+                                                                    <a id="adots" href="#">
+                                                                    <img id="ImgDots" src="~/Images/dots.jpg" /></a>
+                                                                    </td>
+                                                                    <td width="20%" style="display: none;">
+                                                                     <img id="ImgAdd" src="~/Images/dots.jpg" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr width="80%" class="white_color">
+                                                                    <td colspan="4">
+                                                                     
+                                                                                <table id="DataList1" style="display:none;" cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                                    <tr class="white_color">
+                                                                                       
+                                                                                        <td align="left" width="80%">
+                                                                                            <strong>Title</strong> </td>
+                                                                                        <td align="center" width="10%">
+                                                                                           <strong> Delete</strong> </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                           
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+            </table>
+                <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain" runat="server"
+                    style="display: none;">
+                    <tr class="white_color" align="center">
+                        <td id="tdlbltitle" height="30px" style="display: none;">
+                            <label id="lbltitle" style="font-weight:bold; color:black;"></label>
+                           
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlbldesc" height="30px" style="display: none;">
+                            <label id="lbldesc" style="font-weight:bold; color:black;"></label>
+                        </td>
+                    </tr>
+                        <tr class="white_color" align="center">
+                        <td id="tdlblshonline" height="30px" style="display: none;">
+                            <label id="lblshonline" style="font-weight:bold; color:black;"></label>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblembtext" height="30px" style="display: none;">
+                             <label id="lblembtext" style="font-weight:bold; color:black;"></label>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlbltime" height="30px" style="display: none;">
+                             <label id="lbltime" style="font-weight:bold; color:black;"></label>
+                        </td>
+                    </tr>
+                </table>
+                </div>  </div>
+            <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                <tr  height="40">
+                    <td align="right" style="padding-right:10px;">
+                                  <input type="submit" id="btnSave2" name="btnSave2" value="Save" onclick="return Validate();" class="button" />
+                                       <input id="btnCancel2" name="btnCancel2" value="Cancel" onclick="return CancelAction();" style="width:40px;" class="button" />
+                            </td>
+                </tr>
+            </table>
+          
+             </div></div>
+          <div>   <div id="divaddvideo" title="Media list"></div> 
+              <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+                @{Html.RenderAction("Bottomsections", "Tools");}</div>
+    }
+</body>
+</html>
+

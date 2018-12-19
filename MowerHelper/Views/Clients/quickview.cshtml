@@ -1,0 +1,325 @@
+﻿@model MowerHelper.Models.BLL.Patients.Responseparty
+@using MowerHelper.Models.Classes
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+            <script language="javascript" type="text/javascript">
+                function Activate() {
+                    $("#HdnStatusID").val("1");
+                }
+                function Reject() {
+                    $("#HdnStatusID").val("3");
+                }
+            </script>
+</head>
+<body>
+    @using (Html.BeginForm("quickview", "Clients", FormMethod.Post, null))
+    {
+         @Html.AntiForgeryToken()
+        <input type="hidden" id="HdnStatusID" name="HdnStatusID" value="" />
+        <input type="hidden" id="Status_Ind" name="Status_Ind" value="@Model.Status_Ind" />
+        <input type="hidden" id="Patient_ID" name="Patient_ID" value="@Model.Patient_ID" />
+        
+        <input type="hidden" id="Hdnrplist" name="Hdnrplist" value="@ViewBag.RespPartyList" />
+        <input type="hidden" id="Patient_Status_ID" name="Patient_Status_ID" value="@Model.Patient_Status_ID" />
+        <input type="hidden" id="Username" name="Username" value="@Model.Username" />
+<div class="content-box">
+        <div class="content-box-content">
+                        @if (Model.Status_Ind == "New")
+                        {
+                    <table cellspacing="0" cellpadding="0" width="100%" border="0" runat="server" id="tblmsg">
+        <tr class="white_color" runat="server">
+            <td align="center" width="100%" style="padding-bottom:8px; padding-top:8px;">
+                <label id="lblmessage" runat="server" >Currently this Client account status is not active  you need to activate the Client to access profile</label>
+                
+            </td>
+        </tr>
+    </table>
+                        }
+        <table cellspacing="0" cellpadding="0" width="100%" border="0" class="border_style">
+        <tr class="white_color">
+            <td valign="top" width="100%">
+                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+                    <tr class="tr_bgcolor">
+                        <td class="tr_bgcolor" style="padding-left: 10px;" colspan="2">
+                           <strong> Client  information</strong>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td align="right">
+                           <strong> Name :</strong>
+                        </td>
+                        <td width="60%">
+                        <label id="lblname">@Model.PatientName</label>
+                            
+                        </td>
+                    </tr>
+                                        <tr class="nav_blue_color">
+                        <td align="right">
+                           <strong> Address :</strong>
+                        </td>
+                        <td width="60%">
+                        <label id="lbladd">@Model.TotalAddress</label>
+                            
+                        </td>
+                    </tr>
+                   @* <tr class="white_color" style="height:25px">
+                        <td align="right">
+                            <strong>SSN :</strong>
+                        </td>
+                        <td>
+                            <label id="lbl_SSN" runat="server">@ViewBag.SSN</label>
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color" style="height:25px">
+                        <td align="right">
+                            <strong>Date of birth :</strong>
+                        </td>
+                        <td>
+                            <label id="lbl_DOB" runat="server">@ViewBag.DOB</label>
+                        </td>
+                    </tr>*@
+                    @*<tr class="white_color" style="height:25px">
+                        <td align="right">
+                            <strong>Gender :</strong>
+                        </td>
+                        <td>
+                            <label id="lblgender">@ViewBag.Gender</label>
+                        </td>
+                    </tr>*@
+                    @*<tr class="nav_blue_color" style="height:25px">
+                        <td align="right">
+                            <strong>Marital status :</strong>
+                        </td>
+                        <td>
+                            <label id="lbl_MaritalStatus" runat="server">@ViewBag.Gender</label>
+                        </td>
+                        </tr>
+                        <tr class="nav_blue_color" style="height:25px">
+                            <td align="right">
+                               <strong> Employment :</strong>
+                            </td>
+                            <td>
+                                <label id="lbl_Employment" runat="server">@ViewBag.EmployeeType</label>
+                            </td>
+                        </tr>
+                        <tr class="white_color" style="height:25px">
+                            <td align="right">
+                               <strong> Employer ( or school ) :</strong>
+                            </td>
+                            <td>
+                                 <label id="lbl_Employer" runat="server">@ViewBag.EmployerName</label>
+                            </td>
+                        </tr>*@
+                    @if (clsWebConfigsettings.GetConfigSettingsValue("ShowClientDriversLicense").ToUpper() == "YES")
+                    {
+                        <tr class="white_color" style="height:25px">
+                            <td align="right">
+                                <strong>Driver's license number :</strong>
+                            </td>
+                            <td>
+                                <label id="lbl_LicenseNo" runat="server">@Model.DrivingLicenceNo</label>
+                            </td>
+                        </tr>
+                    }
+                          <tr class="nav_blue_color" style="height:25px">
+                        <th align="right">
+                           <strong> Cell phone :</strong>
+                        </th>
+                        <td>
+                            <label id="lbl_Mobile" runat="server"> @Model.MPhone</label>
+                          @* <strong><label id="lbl_Mobile_ind" runat="server"> @ViewBag.MPhone_ind</label></strong> *@
+                        </td>
+                    </tr>
+                        @if (Model.HomePhone != null)
+                        {
+                                            <tr class="white_color" style="height:25px">
+                        <th align="right">
+                            <strong>Home phone :</strong>
+                        </th>
+                        <td>
+                              <label id="lbl_HPhone" runat="server">@Model.HomePhone</label>
+                             
+                        </td>
+                    </tr>
+                        }
+                             @if (Model.WPhone != null)
+                             {
+                    <tr class="white_color" style="height:25px">
+                        <th align="right">
+                            <strong>Work phone :</strong>
+                        </th>
+                        <td>
+                             <label id="lbl_WPhone" runat="server">@Model.WPhone</label>
+                        </td>
+                    </tr>
+                             }
+                  
+                    <tr class="white_color" style="height:25px">
+                        <th align="right">
+                           <strong> Email :</strong>
+                        </th>
+                        <td>
+                            <label id="lbl_EmailID" runat="server">@Model.Email</label>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+           @* <td valign="top" width="48%">
+                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+                    <tr class="tr_bgcolor">
+                        <td  colspan="2" style="padding-left: 10px">
+                           <strong> Emergency contact information</strong>
+                        </td>
+
+                    </tr>
+
+                    <tr class="white_color" style="height:25px">
+                        <th align="right">
+                           <strong> Contact person name :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_ContactName" runat="server">@ViewBag.EmergencyContactName</label>
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color" style="height:25px">
+                        <th align="right">
+                           <strong> Phone :</strong>
+                        </th>
+                        <td>
+                            <label id="lbl_CPhone" runat="server">@ViewBag.Ephone</label>&nbsp;&nbsp;
+                       
+                        </td>
+                    </tr>
+                    <tr class="white_color" style="height:25px">
+                        <th align="right">
+                            <strong>Relation :</strong>
+                        </th>
+                        <td>
+                            <label id="lbl_Relation" runat="server">@ViewBag.EmergencyRelation</label>
+                        </td>
+                    </tr>
+                    @if (ViewBag.PlanOrder != null)
+                    {
+                    <tr class="tr_bgcolor">
+                        <td colspan="2" style="padding-left: 10px">
+                            <strong>Primary insurance information</strong>
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color" style="height: 25px">
+                        <th align="right">
+                            <strong>payer name :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_PayerName" runat="server">@ViewBag.payername</label>
+                        </td>
+                    </tr>
+                    <tr class="white_color" style="height: 25px">
+                        <th align="right">
+                            <strong>Member id :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_Member_ID" runat="server">@ViewBag.Member_ID</label>
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color" style="height: 25px">
+                        <th align="right">
+                            <strong>Name :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_insname" runat="server">@ViewBag.Insname</label>
+                        </td>
+                    </tr>
+                    }
+                     @if (ViewBag.PlanOrder1 != null)
+                     {
+                    <tr class="tr_bgcolor">
+                        <td colspan="2" style="padding-left: 10px">
+                            <strong>Secondary insurance information</strong>
+                        </td>
+                    </tr>
+                         <tr class="white_color" style="height: 25px">
+                        <th align="right">
+                            <strong>Name :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_insname1" runat="server">@ViewBag.Insname1</label>
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color" style="height: 25px">
+                        <th align="right">
+                            <strong>payer name :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_PayerName1" runat="server">@ViewBag.payername1</label>
+                        </td>
+                    </tr>
+                    <tr class="white_color" style="height: 25px">
+                        <th align="right">
+                            <strong>Member id :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_Member_ID1" runat="server">@ViewBag.Member_ID1</label>
+                        </td>
+                    </tr>
+                    
+                     }
+                     @if (ViewBag.Rpaty != "Self")
+                     {
+                  
+                    <tr class="tr_bgcolor">
+                        <td colspan="2" style="padding-left: 10px">
+                            <strong>Responsible party information</strong>
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color" style="height: 25px">
+                        <th align="right">
+                            <strong>Name :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_respName1" runat="server">@ViewBag.RespName</label>
+                        </td>
+                    </tr>
+                    <tr class="white_color" style="height: 25px">
+                        <th align="right">
+                            <strong>Phone :</strong>
+                        </th>
+                        <td width="60%">
+                            <label id="lbl_respmpno" runat="server">@ViewBag.RespMp</label>
+                        </td>
+                    </tr>
+                     }
+                </table>
+            </td>*@
+        </tr>
+    </table>
+            <table border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tr style="height: 50px">
+                <td align="right">
+                @if (Model.Status_Ind != "Active" & Model.Status_Ind != "Archived")
+                {
+                <input type="submit" value="Activate" class="button" name="btnsave" onclick="return Activate();"/>
+                    if (Model.Status_Ind != "Rejected" & Model.Status_Ind != "Suspend")
+                    {
+                <input type="submit" value="Reject" class="button" name="btnsave" onclick="return Reject();"/>
+                    }
+                }
+
+                    <input type="button" name="btnCancel" class="quickcanbtn button" value="Cancel"  />
+                </td>
+            </tr>
+        </table>
+        </div>
+   
+</div>
+    }
+</body>
+</html>

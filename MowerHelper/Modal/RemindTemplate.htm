@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Delete Template</title>
+		<script language="javascript">
+		function RetVal(id)
+		{
+			if (id==1)
+			{
+				window.returnValue='True';
+			}
+			else
+			{
+				window.returnValue='False';
+			}
+			window.close();
+		}
+		var oMSGArray = window.dialogArguments;
+		document.title=oMSGArray[4] + '----------------------------------------------------------------';
+// done hiding -->
+		</script>
+	</head>
+	<body style="BACKGROUND-COLOR:#E9EBED" topmargin="0" leftmargin="0" rightmargin="0" bottommargin="0">
+		<!--INSTRUCTIONS-->
+		<table height="100%" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<!--BODY-->
+			<tr>
+				<td height="100%" width="12" style="background-color:#D2DAE6">&nbsp;&nbsp;</td>
+				<td width="100%" valign="top" style="background-color:#7992B6;padding-top:12; padding-left:12; padding-right:12; padding-bottom:12">
+					<table width="100%" cellspacing="0" cellpadding="5" border="0">
+						<tr>
+							<td>
+								<img border="0" src="../Images/templateimages/Alert.ico" width="32" height="32"></td>
+							<td valign="middle" class="blackText" width="100%">
+								<font face="Verdana" color="#ffffff" size="2">
+									<Script Language="javascript">
+							document.write(oMSGArray[1])
+									</Script>
+								</font>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" height="35" align="right" valign="middle">
+					<button style="FONT-WEIGHT: 900; FONT-SIZE: 11px; WIDTH: 65px; COLOR: white; FONT-FAMILY: Verdana, Arial; HEIGHT: 25px; BACKGROUND-COLOR:#7992b6"
+						onclick="return RetVal(1)" type="button">
+						<Script Language="javascript">
+				document.write(oMSGArray[2])
+						</Script>
+					</button>&nbsp;
+					<button style="FONT-WEIGHT:900; FONT-SIZE:11px; WIDTH:150px; COLOR:white; FONT-FAMILY:Verdana, Arial; HEIGHT:25px; BACKGROUND-COLOR:#7992b6"
+						onclick="return RetVal(0)" type="button">
+						<Script Language="javascript">
+				document.write(oMSGArray[3])
+						</Script>
+					</button>
+				</td>
+				
+			</tr>
+		</table>
+	</body>
+</html>

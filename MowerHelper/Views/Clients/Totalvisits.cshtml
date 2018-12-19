@@ -1,0 +1,100 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+<script src="~/Scripts/Expire.js" type="text/javascript"></script>
+
+    <style type="text/css">
+                .sno
+        {
+            width: 4%;
+        }
+        .code
+        {
+            width: 9%;
+        }
+        .date
+        {
+            width: 25%;
+        }
+        .time
+        {
+            width: 23%;
+        }
+        .status
+        {
+            width: 10%;
+        }
+        .fee
+        {
+            width: 10%;
+        }
+       .note
+        {
+            width: 57%;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="content-box">
+                                        <div class="content-box-content">
+                                             <div id="gridcontentnew">
+                                            @{//string DSMpagesize = (ViewBag.DSMpagesize == null ? "5" : ViewBag.DSMpagesize);
+                                              WebGrid totgrid = new WebGrid(rowsPerPage: 5, ajaxUpdateContainerId: "gridcontentnew");}
+                                            @{WebGrid grid = totgrid.Bind(Model, rowCount: ViewBag.totrec, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                              
+                                              
+                                                  @grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow", footerStyle: "gridFooter",
+                                                  columns: grid.Columns(grid.Column("SlNo", "#", style: "sno", canSort: false), 
+                                                 
+                                      grid.Column("Appointment_Date", "Date Time/Duration", canSort: false, style: "date", format: @<text>
+                                                    @{string Date = (string)item.Appointment_Date;
+                                                      string timeduration = " " + (string)item.Appointment_Time + "/" + (int)item.Length + " Mintues";
+                                                      { @Date.Remove(Date.Length-12)@timeduration
+                                                       }}</text>),
+                                                  //grid.Column(" ", "Time/Duration", canSort: false, style: "time",format:@<text>
+                                                  //@{
+                                                      //string timeduration = (string)item.Appointment_Time + "/" + (int)item.Length + " Mintues";
+                                                  //@timeduration
+                                                   //}
+                                                  //</text>
+                                                  //),
+                                  //grid.Column("ApptStatus", "Status", style: "status", canSort: false),
+                                  //grid.Column("CPTCodeCharge", "Appt fee($)", canSort: false, style: "fee"),
+                                  grid.Column("Notes", "Notes", style: "note", canSort: false)));
+                                            
+                                                   
+                                                <br />
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                    <tr id="trdsmerror" class="white_color">
+                                                        <td align="center" height="25px" valign="middle" colspan="2">
+                                                            <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                                No appointments found</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                                }
+                                                </div>
+                                        </div>
+          @*  <div>
+            </div>*@
+        </div>
+</body>
+</html>

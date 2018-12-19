@@ -1,0 +1,190 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+     <link href="~/Content/common.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="~/Scripts/PublicPagesScript.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-1.7.1.js"></script>
+    <script type="text/javascript">
+        function CheckUserInfo() {
+
+            //if (document.getElementById("txtEmail").value == "") {
+            //    alert("Please enter email.")
+            //    document.getElementById("txtEmail").focus();
+            //    return false;
+            //}
+            //else {
+            //    if (MyChars(document.getElementById("txtEmail")) == 'SpaceError') {
+            //        alert("Invalid entry!!! enter email with out space.")
+            //        document.getElementById("txtEmail").focus();
+            //        return false;
+            //    }
+            //}
+            //if (document.getElementById('txtEmail').value != "") {
+            //    if (ValidateEmail(document.getElementById('txtEmail')) == 0) {
+            //        alert("Please enter valid email");
+            //        document.getElementById('txtEmail').focus();
+            //        return false;
+            //    }
+
+            //}
+            if (document.getElementById('txtAccesscode').value == "") {
+                alert("Please enter accesscode");
+                document.getElementById("txtAccesscode").focus();
+                return false;
+            }
+            else {
+                if (MyChars(document.getElementById('txtAccesscode')) == 'SpaceError') {
+                    alert("Invalid entry!!! enter access code with out space.");
+                    document.getElementById("txtAccesscode").focus();
+                    return false;
+                }
+            }
+            if (document.getElementById("txtPwd").value == "")
+            {
+                alert("Please enter valid password");
+                document.getElementById("txtPwd").focus();
+                return false;
+            }
+            else {
+                if (MyChars(document.getElementById('txtPwd')) == 'SpaceError') {
+                    alert("Invalid entry!!! enter password with out space.");
+                    document.getElementById("txtPwd").focus();
+                    return false;
+                }
+            }
+            if (document.getElementById("txtCpwd").value == "") {
+                alert("Please enter valid confirm password");
+                document.getElementById("txtCpwd").focus();
+                return false;
+            }
+            else {
+                if (MyChars(document.getElementById('txtCpwd')) == 'SpaceError') {
+                    alert("Invalid entry!!! enter confirm password with out space.");
+                    document.getElementById("txtCpwd").focus();
+                    return false;
+                }
+            }
+            if (document.getElementById("txtPwd").value != "" && document.getElementById("txtCpwd").value != "") {
+                if (document.getElementById("txtPwd").value != document.getElementById("txtCpwd").value) {                
+                alert("password and confirm password should be same");               
+                document.getElementById("txtCpwd").focus();
+                return false;
+                }
+            }
+            //alert("success");
+
+        }       
+    </script>
+</head>
+<body>
+     @using (Html.BeginForm("verification", "Home", FormMethod.Post, null))
+    {
+        @Html.AntiForgeryToken()   
+         @Html.Hidden("txtAccesscode");
+    <div id="wrapper">
+          @Html.Partial("_TopSection")
+          @*  <div id="flttop">
+                <div id="header01">
+                    <div id="headermain02">
+                        <div id="logopublic">
+                            <a id="logo_find1" runat="server" href="@Url.Action("Index", "Home", null)" title="Home" style="text-decoration: none;" class="bluemenuPublic">
+                               Mower Helper-Find an Mower Helper</a></div>
+                        <div id="mainnavcon">
+                            <div class="mainnav">
+                                <ul>
+                                    @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                    <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                    }
+                                     <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div id="flt02">
+                <div id="bodycon">
+                    <div style="width: 980px; background-color: #fafafa; height: 500px;" class="padding-top">
+                        <div id="main-content">
+                            <div class="content-box" id="tblUserInfo" style="width: 60%; margin:0 auto">
+                                <div class="login_thera" style="font-weight: bold;">
+                                    <h3 >
+                                        Lost password</h3>
+                                    <div class="clear">
+                                    </div>
+                                </div>
+                                <div class="content-box-content">
+                                   <table width="100%" cellspacing="1" cellpadding="6" border="0">                                                                         
+                                        <tr>
+                                           <td  class="coloum1" align="Right">
+                                               <font color="red">*</font><strong> Enter password &nbsp;:&nbsp;</strong> 
+                                           </td>
+                                           <td  width="50%">
+                                               @Html.Password("txtPwd",null,new{@class="textfield",autocomplete="off",maxlenth="100"})
+                                           </td>
+                                       </tr>
+                                        <tr>
+                                           <td  class="coloum1" align="Right">
+                                               <font color="red">*</font><strong>Enter Confirm Password&nbsp;:&nbsp;</strong> 
+                                           </td>
+                                           <td  width="50%">
+                                               @Html.Password("txtCpwd",null,new{@class="textfield",autocomplete="off",maxlenth="100"})
+                                           </td>
+                                       </tr>
+                                        <tr height="50px" class="row2" >
+                                            <td  colspan="2" align="center" >
+                                                <input type="submit" id="btnNext" value="Submit" class="button" onclick="return CheckUserInfo();" />
+                                                @Html.ActionLink("Cancel","Index","Home",null,new{@class="button",style="text-decoration:none;"})                                               
+                                            </td>
+                                        </tr>
+
+                                   </table>
+                                </div>
+                            </div>                          
+                        </div>
+                    </div>
+                    <div id="footercon">
+                        <div id="footerpublic" style="text-align: center;">
+                            <ul id="footer-nav" style="padding:20px 0 0 350px;display:none;">                             
+                                <li>
+                                    @Html.ActionLink("Frequently Asked Questions", "FAQs", "Search")
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Contact Us", "contact")
+                                </li>                           
+                            </ul>
+                            <div class="copy" style="font-size: small;">
+                                Copyright © 2018.Mower Helper, Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     }
+</body> 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var msg = "@TempData["validmsg"]";
+            if (msg != "" && msg != null) {
+                alert(msg);                
+                window.location.href = "@Url.Action("Index", "Home")";
+            }
+        });
+    </script>
+</html>

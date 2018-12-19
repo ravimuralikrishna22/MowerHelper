@@ -1,0 +1,428 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+     @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+   <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css">
+    .ui-datepicker-trigger{ margin-left: 5px; vertical-align: middle; }
+    .receiveName{ width:35%;}
+    .reason{width:12%;}
+    .mStatus{ width:7%;}
+    .chkall{width:3%;}
+    </style>
+     <script type="text/javascript">
+
+         $(document).ready(function () {
+             var frm = $("#formname");
+             $('#dt_filter').change(function () {
+                 if (document.getElementById('dt_filter').value == 'Custom') {
+                     document.getElementById('tddaterange').style.display = '';
+                     $('#txt_FromDate').val("");
+                     $('#txt_ToDate').val("");
+                 }
+                 else {
+                     document.getElementById('tddaterange').style.display = 'none';
+                     $('#txt_FromDate').val("");
+                     $('#txt_ToDate').val("");
+                 }
+                 return false;
+             });
+             //$("#txt_FromDate").on('change keyup paste mouseup', function () {
+             //    //  alert("1");
+             //    if ($(this).val().length == 10) {
+             //        //alert("2");
+             //        if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+             //        var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+             //        // alert(St);
+             //        var targetDate = new Date(St);
+             //        targetDate.setDate(targetDate.getDate() + 365);
+             //        //   alert(targetDate);
+             //        var todaydate = new Date();
+             //        todaydate.setDate(todaydate.getDate());
+             //        var dd = todaydate.getDate();
+             //        var mm = todaydate.getMonth() + 1; //January is 0!
+             //        var yyyy = todaydate.getFullYear();
+             //        var today = mm + '/' + dd + '/' + yyyy;
+             //        var dd1 = targetDate.getDate();
+             //        var mm1 = targetDate.getMonth() + 1;
+             //        var yyyy1 = targetDate.getFullYear();
+             //        var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+             //        //  alert(target1);
+             //        if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+             //        else { document.getElementById('txt_ToDate').value = target1; return false; }
+             //    }
+             //});
+         });
+</script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var res = '@TempData["Result"]';
+            if (res == "False") {
+                alert("Due to Some Technical issue Mail was not sent. Please try again later");
+                //return false;
+            }
+            var fromdate = $('#hdnFromdate').val();
+            if (fromdate != '') {
+                $('#txt_FromDate').val(fromdate);
+                document.getElementById('tddaterange').style.display = '';
+            }
+            else {
+                $('#txt_FromDate').val("");
+                document.getElementById('tddaterange').style.display = 'none';
+
+            }
+
+            var todate = $('#hdnTodate').val();
+            if (todate != '') {
+                $('#txt_ToDate').val(todate);
+                document.getElementById('tddaterange').style.display = '';
+            }
+            else {
+                $('#txt_ToDate').val("");
+                document.getElementById('tddaterange').style.display = 'none';
+
+            }
+
+            var drange = $('#hdndaterange').val();
+            if (drange != '') {
+                $('#dt_filter').val(drange);
+
+            }
+            else {
+                $('#dt_filter').val("Today");
+
+
+            }
+
+        });
+    </script>
+    <script type="text/javascript">
+        //$(function () {
+        //    $("#txt_FromDate,#txt_ToDate").datepicker({
+        //        dateFormat: 'mm/dd/yy',
+        //        changeMonth: true,
+        //        changeYear: true,
+        //        //                showCurrentAtPos: 1,
+        //        showWeeks: true,
+        //        inline: true,
+        //        numberOfMonths: [1, 1],
+        //        yearRange: "1950:2020",
+        //        showOn: "button",
+        //        buttonImage: "../Images/calender.gif",
+        //        buttonImageOnly: true
+
+        //    });
+        //});
+
+        $(document).ready(function () {
+            var practid = '@ViewBag.pract';
+            var patid = '@ViewBag.pat';
+            if (practid != null && practid != "") {
+                $("#PracticeList").val(practid);
+            }
+            else {
+                $("#PracticeList").val("--Select One--");
+            } if (patid != null && patid != "") {
+                $("#PatList").val(patid);
+            }
+            else {
+                $("#PatList").val("--Select One--");
+            }
+            var setddl = "@ViewBag.Summarypagesize";
+
+            //         alert(setddl);
+            if (setddl != null && setddl != "") {
+                $("#ddlrecords").val(setddl);
+            }
+            else {
+                $("#ddlrecords").val("10");
+            }
+            var statusid = "@ViewBag.statusind";
+            if (statusid != null && statusid != "") {
+                $("#statusddl").val(statusid);
+            }
+            else {
+                $("#statusddl").val("1");
+            }
+            var isrec = "@ViewBag.isrec";
+            if (isrec != null && isrec != "") {
+                if (isrec == "Yes") {
+                    $('input:radio[name="mailType"][value="Yes"]').prop('checked', true);
+                    $('input:radio[name="mailType"][value="No"]').prop('checked', false);
+                }
+                else {
+                    $('input:radio[name="mailType"][value="No"]').prop('checked', true);
+                    $('input:radio[name="mailType"][value="Yes"]').prop('checked', false);
+                }
+            }
+            $("#btnCancel").live("click", function () {
+                window.location = "../AdminHome/Tools";
+            });
+            $("#btnClear").live("click", function () {
+                window.location = "../Admin/MailStatus";
+            });
+            $("#allBox").click(function () {
+                $(".chkStatusbox").attr("checked", $(this).attr("checked") ? true : false);
+            });
+            $("#btnSend").click(function () {
+                var count = 0;
+                $('.chkall').each(function () {
+                    if ($(this).find('input[name=chkStatusbox]').attr('checked')){
+                        count++;
+                    }
+                });
+                if (count == 0)
+                {
+                    alert("Please select atleast one Receiver");
+                    return false;
+                }
+            });
+        });
+        function ondescriptionover(obj) {
+            document.getElementById(obj).style.position = 'absolute';
+            document.getElementById(obj).style.display = '';
+            return false;
+        }
+        function ondescriptionout(obj) {
+            document.getElementById(obj).style.display = 'none';
+            return false;
+        }
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        });
+        function ValidSearch() {
+            
+            //if (document.getElementById('dt_filter').selectedIndex == 0) {
+            //    alert("Select date");
+            //    return false;
+            //}
+            if (document.getElementById('dt_filter').value == 'Custom') {
+
+                if (document.getElementById('txt_FromDate').value != '' && document.getElementById('txt_FromDate').value != "mm/dd/yyyy") {
+                    if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) {
+                        return false;
+                    }
+                }
+                if (document.getElementById('txt_ToDate').value != '' && document.getElementById('txt_ToDate').value != "mm/dd/yyyy") {
+                    if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) {
+                        return false;
+                    }
+                }
+                var CDate = new Date()
+                var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear();
+                var FromDate = document.getElementById('txt_FromDate').value;
+                if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == "mm/dd/yyyy") {
+                    alert('Select from date');
+                    document.getElementById('txt_FromDate').focus();
+                    return false;
+                }
+                if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == "mm/dd/yyyy") {
+                    alert('Select to date');
+                    document.getElementById('txt_ToDate').focus();
+                    return false;
+                }
+                var St = document.getElementById('txt_FromDate').value;
+                St = new Date(St);
+                var En = document.getElementById('txt_ToDate').value
+                En = new Date(En);
+                if (St > En) {
+                    alert("From date should not be greater than to date")
+                    return false;
+                }
+
+            }
+
+                document.forms.item(0).submit();
+            }
+    </script>
+</head>
+<body>
+@{Html.RenderAction("Topsection", "Tools");}
+  @using (Html.BeginForm("MailStatus", "Admin", FormMethod.Get, null))
+  {
+       <input id="hdnFromdate" name="hdnFromdate" type="hidden" value="@ViewBag.txtFromDate"/>
+        <input id="hdnTodate" name="hdnTodate" type="hidden" value="@ViewBag.txtToDate"/>
+        <input id="hdndaterange" name="hdndaterange" type="hidden" value="@ViewBag.Daterange"/>
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+    <div class="content-box">
+        <div class="content-box-header">
+        <h3>Mail status</h3>
+        </div>
+       
+        <div class="content-box-content">
+        <table class="border_style" cellpadding="6" cellspacing="1" align="center" width="100%">
+           <tr class="tr_bgcolor">
+                <td style="width: 10%" align="center">
+                    <b>Mail status</b></td>
+                <td align="center" width="20%">
+                    <b>Mower helper name</b></td>
+                <td align="center" width="20%">
+                    <b>Client&nbsp;name</b></td>
+                <td align="center" width="50%">
+                    <b>Date</b></td>
+               
+            </tr>
+            <tr>
+                <td style="width: 10%" align="center"> 
+                       @Html.DropDownList("statusddl", new List<SelectListItem> 
+                  { 
+                      new SelectListItem { Text = "Pending", Value = "1" }, 
+                      new SelectListItem { Text = "Sent", Value = "2" },
+                      new SelectListItem { Text = "All", Value = "3" }
+                  },
+      new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:80px;" })                                                   
+                </td>
+                <td align="center" width="20%">
+                 @Html.DropDownList("PracticeList", null, "--Select One--", new { onchange = "this.form.submit();", style = "width:250px" })         
+                </td>
+                <td align="center" width="20%">   
+                @Html.DropDownList("PatList", null, "--Select One--", new { style = "width:250px" })              
+</td>
+                <td align="left" width="50%">  
+                    <table style="width:100%;">
+                        <tr>
+                           <td>
+                                <strong>Date range&nbsp;:&nbsp; </strong>
+                                                                                    @Html.DropDownList("dt_filter", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                                 new SelectListItem{ Text="All", Value = "All" }
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })              
+                           </td>
+                             @Html.Partial("_CustomDate")
+                           @* <td id="tddaterange" style="display:none">
+                                 <strong> From : </strong> &nbsp;&nbsp;&nbsp;  
+                                                              <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield" maxlength="10" style="width: 75px;" />
+                                                             &nbsp;&nbsp; <strong> To : </strong> &nbsp;&nbsp;&nbsp; 
+                                                             <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield" maxlength="10" style="width: 75px;" />
+                            </td>*@
+                        </tr>
+                    </table>
+                                  
+                </td>
+               
+            </tr>
+                  </table>                  
+                   </div></div> 
+                   <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="background_color" style="height:40px">
+                    <td align="right"> 
+                    <input  id="btnSend" name="btnSend" value="Send" type="submit" class="button" style="vertical-align:top;"/>&nbsp;&nbsp;
+                        <a id="btnSearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                   @* <input id="btnSearch" name="btnSearch" value="Search" type="submit" class="button" />*@&nbsp;&nbsp;
+                        <a id="btnClear" href="#" @*onclick="return btnclear();"*@ title="Clear"><img alt="" id="" src="~/Images/refreshimages.png" style="width:30px;" /></a>
+                    @*<input id="btnClear" name="btnClear" value="Clear" type="button" class="button"/>*@&nbsp;&nbsp;
+                    <input id="btnCancel" name="btnCancel" value="Cancel" type="button" class="button" style="vertical-align:top;" />
+                    </td>
+                </tr>
+            </table>
+    <br /><br />
+      <div class="content-box">
+        <div class="content-box-header">
+        <h3>Mail status</h3>
+        <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                <li><strong>Rows per page :&nbsp;</strong>
+                                                    @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                                </li>
+                                            </ul>
+        <ul style="list-style: none!important; padding-right: 20px; padding-top: 5px;" class="content-box-tabs">
+         @Html.RadioButton("mailType", "Yes", false, new { onclick = "this.form.submit();" })&nbsp;<span style="font-weight:bold;">Recurring component mail</span>
+                                @Html.RadioButton("mailType", "No", true, new { onclick = "this.form.submit();" })&nbsp;<span style="font-weight:bold;">All</span>
+        </ul>
+          
+        </div>
+    <div>
+                                           @{string heading1;
+                                             if (Request["sort"] == "mailDate" && Request["sortdir"] == "ASC")
+                                             {
+                                                 heading1 = "Mail send date ▲";
+                                             }
+                                             else if (Request["sort"] == "mailDate" && Request["sortdir"] == "DESC")
+                                             {
+                                                 heading1 = "Mail send date ▼";
+                                             }
+                                             else
+                                             {
+                                                 heading1 = "Mail send date ▲";
+                                             }
+             
+                                            }
+                                            @{string Summarypagesize = (ViewBag.Summarypagesize == null ? "10" : ViewBag.Summarypagesize);
+                                              WebGrid Summarygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Summarypagesize));}
+                                            @{WebGrid grid = Summarygrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("receiveName", "Receiver name", style: "receiveName"), grid.Column("practiceName", "Practice name", canSort: false, style: "receiveName"), grid.Column("reason", "Reason for send mail", canSort: false, style: "reason"), grid.Column("mailDate", "Mail send date", canSort: false, style: "reason"), grid.Column("", "Mail_Status", style: "mStatus", format:@<text><a onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');" style="font-family: Arial; font-size: 9pt; color:#0066CC;" >@item.mailstatus</a><div id="tbldesc @count" style="width: 400px; display: none;left:835px;bottom:auto;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Mail details : </h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4" width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style=" text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:5px; padding-top: 5px;" align="left"> <span>@Html.Raw(@item.mailbody)</span> </td> </tr>
+                                                             </table> </div></text>), grid.Column(header: "{ChkMailstatusHeading}", style: "chkall", format: @<text><input class="chkStatusbox"  type="checkbox" id="chkStatusbox" name="chkStatusbox" value="@item.mailId" /></text>))).ToString().Replace("{ChkMailstatusHeading}", "Check All<input type='checkbox' id='allBox'/>");
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdResponse" runat="server" width="100%">
+                                                    <tr>
+                                                        <td align="center" valign="middle" height="25px">
+                                                            <span id="lblResponse" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                                No records found.</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                            }
+                                            </div>
+     </div>
+    </div>
+  }
+@{Html.RenderAction("Bottomsections", "Tools");}
+</body>
+<script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</html>

@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = document.URL;
+        var action = url.split("/");
+        var actname = action[4].split("?");
+        if ('@Session["CurrentUrl"]' == null)
+        {
+            window.location.href = '@Url.Action("SessionExpire","Home")';
+        }
+        $(window).on('hashchange', function (e) {
+            history.replaceState("", document.title, e.originalEvent.oldURL);
+        });
+        if ('@ViewBag.Count' == 1) {
+            $('#nav span').hide().slice(0, 0).show();
+            $("#nav a:eq(0)").text(actname[0]);
+            $("#nav a:eq(0)").click(function () {
+                window.location.href = document.URL;
+            });
+        }
+        if ('@ViewBag.Count' == 2) {
+            $('#nav span').hide().slice(0, 1).show();
+            var obj = '@Session["CurrentUrl"]'.split('/');
+            var obj1 = obj[2].split('?');
+            $("#nav a:eq(0)").text(obj1[0]);
+            $("#nav a:eq(1)").text(actname[0]);
+            $("#nav a:eq(0)").click(function () {
+                window.location.href = '@Session["CurrentUrl"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(1)").click(function () {
+                window.location.href = document.URL;
+            });
+        }
+        if ('@ViewBag.Count' == 3) {
+            $('#nav span').hide().slice(0, 2).show();
+            var obj = '@Session["CurrentUrl"]'.split('/');
+            var obj1 = obj[2].split('?');
+            $("#nav a:eq(0)").text(obj1[0]);
+            obj = '@Session["CurrentUrl1"]'.split('/');
+            obj1 = obj[2].split('?');
+            $("#nav a:eq(1)").text(obj1[0]);
+            $("#nav a:eq(2)").text(actname[0]);
+            $("#nav a:eq(2)").text() == 'Tools' ? $("#nav a:eq(2)").text('TechnicalArea') : $("#nav a:eq(2)").text();
+            $("#nav a:eq(0)").click(function () {
+                window.location.href = '@Session["CurrentUrl"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(1)").click(function () {
+                window.location.href = '@Session["CurrentUrl1"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(2)").click(function () {
+                window.location.href = document.URL;
+            });
+        }
+        if ('@ViewBag.Count' == 4) {
+            $('#nav span').hide().slice(0, 3).show();
+            var obj = '@Session["CurrentUrl"]'.split('/');
+            var obj1 = obj[2].split('?');
+            $("#nav a:eq(0)").text(obj1[0]);
+            obj = '@Session["CurrentUrl1"]'.split('/');
+            obj1 = obj[2].split('?');
+            $("#nav a:eq(1)").text(obj1[0]);
+            obj = '@Session["CurrentUrl2"]'.split('/');
+            obj1 = obj[2].split('?');
+            $("#nav a:eq(2)").text(obj1[0]);
+            $("#nav a:eq(2)").text() == 'Tools' ? $("#nav a:eq(2)").text('TechnicalArea') : $("#nav a:eq(2)").text();
+            $("#nav a:eq(3)").text(actname[0]);
+            $("#nav a:eq(0)").click(function () {
+                window.location.href = '@Session["CurrentUrl"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(1)").click(function () {
+                window.location.href = '@Session["CurrentUrl1"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(2)").click(function () {
+                window.location.href = '@Session["CurrentUrl2"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(3)").click(function () {
+                window.location.href = document.URL;
+            });
+        }
+        if ('@ViewBag.Count' == 5) {
+            $('#nav span').hide().slice(0, 4).show();
+            var obj = '@Session["CurrentUrl"]'.split('/');
+            var obj1 = obj[2].split('?');
+            $("#nav a:eq(0)").text(obj1[0]);
+            obj = '@Session["CurrentUrl1"]'.split('/');
+            obj1 = obj[2].split('?');
+            $("#nav a:eq(1)").text(obj1[0]);
+            obj = '@Session["CurrentUrl2"]'.split('/');
+            obj1 = obj[2].split('?');
+            $("#nav a:eq(2)").text(obj1[0]);
+            $("#nav a:eq(2)").text() == 'Tools' ? $("#nav a:eq(2)").text('TechnicalArea') : $("#nav a:eq(2)").text();
+            obj = '@Session["CurrentUrl3"]'.split('/');
+            obj1 = obj[2].split('?');
+            $("#nav a:eq(3)").text(obj1[0]);
+            $("#nav a:eq(4)").text(actname[0]);
+            $("#nav a:eq(0)").click(function () {
+                window.location.href = '@Session["CurrentUrl"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(1)").click(function () {
+                window.location.href = '@Session["CurrentUrl1"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(2)").click(function () {
+                window.location.href = '@Session["CurrentUrl2"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(3)").click(function () {
+                window.location.href = '@Session["CurrentUrl3"]'.replace(/amp;/gi, '');
+            });
+            $("#nav a:eq(4)").click(function () {
+                window.location.href = document.URL;
+            });
+        }
+        
+    });
+</script>
+<div id="nav" style="padding-left:60px;padding-top:10px;">
+ 
+            @*@Html.ActionLink("Tools", "Tools", "AdminHome") >>*@
+            @for(int i = 1; i<=ViewBag.Count;i++)
+            {
+            <a href ="#" style="color:#1d70ab;font:normal 13pt arial;text-decoration:none;font-weight:bold;"></a>
+                           <span>>></span>
+            }<br /><br /><br />
+            @*<a href ="#" id="lnktext2" class="a1"></a>
+                           <span>></span>
+            <a href ="#" id="lnktext3" class="a1"></a>
+                           <span>></span>
+            <a href ="#" id="lnktext4" class="a1"></a>
+                           <span>></span>
+            <a href ="#" id="lnktext5" class="a1"></a>
+                           <span>></span>*@
+          
+</div>
+

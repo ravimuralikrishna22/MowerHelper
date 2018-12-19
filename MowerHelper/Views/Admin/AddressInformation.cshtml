@@ -1,0 +1,205 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+       <title>Mower Helper-Find an Mower Helper</title>
+    @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <link href="~/Content/themes/base/jquery.ui.autocomplete.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .fullname
+        {
+            width: 30%;
+        }
+        .addressInfo
+        {
+            width: 70%;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if ('@ViewBag.txtProvider' != null && '@ViewBag.txtProvider' != "")
+            {
+                $("#txtProvider").val('@ViewBag.txtProvider');
+            }
+            var setddl = "@ViewBag.Addresspagesize";
+            //         alert(setddl);
+            if (setddl != null && setddl != "") {
+                $("#ddlrecords").val(setddl);
+            }
+            else {
+                $("#ddlrecords").val("10");
+            }
+            $("#btnCancel").live("click", function () {
+                window.location = "../AdminHome/AdminArea";
+            });
+            var ddluser = "@ViewBag.ddlUser";
+            if (ddluser == "5") {
+                document.getElementById("trpatient").style.display = "";
+                document.getElementById("trprovider").style.display = "none";
+            }
+            else {
+                document.getElementById("trpatient").style.display = "none";
+                document.getElementById("trprovider").style.display = "";
+            }
+            JqAutocomplete1('GetPatientfullname', 'txtPatient');
+         
+            JqAutocomplete('@Url.Action("GetProviderNames", "Admin")', 'txtProvider');
+           
+
+        });
+        function ValidSearch() {
+            document.forms.item(0).submit();
+        }
+    </script>
+</head>
+<body>
+    
+    @using (Html.BeginForm("AddressInformation", "Admin", FormMethod.Get, null))
+    {
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+        <div id="main-content">
+            @Html.Partial("_NavigationTool")
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="background_color">
+                    <td width="15%">
+                        &nbsp;
+                    </td>
+                    <td width="30%" align="center">
+                        @Html.DropDownList("ddlUser", new List<SelectListItem>
+{
+new SelectListItem{Text="Clients",Value="5"},
+new SelectListItem{Text="Mower helpers",Value="4"},
+}, new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;width:165px;" })
+                    </td>
+                    <td width="30%">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr id="trprovider" class="background_color" style="display: none">
+                                <td>
+                                    <strong>Name&nbsp;:&nbsp;</strong>@Html.TextBox("txtProvider", null, new { @class = "textfield", style = "width:250px" })
+                                </td>
+                            </tr>
+                            <tr id="trpatient" class="background_color">
+                                <td>
+                                    <strong>Name&nbsp;:&nbsp;</strong>@Html.TextBox("txtPatient", null, new { @class = "textfield", style = "width:250px" })
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td align="left">
+                        @*<input type="submit" id="btnSearch" name="btnSearch" value="Search" class="button" />*@
+                        <a id="btnSearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                    </td>
+                </tr>
+            </table>
+            <div style="height: 15px">
+            </div>
+            <div class="content-box">
+                <div class="content-box-header">
+                    <h3>
+                        Address information</h3>
+                    <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+                        <li><strong>Rows per page :&nbsp;</strong>
+                            @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                        </li>
+                    </ul>
+                </div>
+                <div class="clear">
+                </div>
+                <div class="content-box-content">
+                    @{string heading1;
+                      if (Request["sort"] == "Full_Name" && Request["sortdir"] == "ASC")
+                      {
+                          heading1 = "Name ▲";
+                      }
+                      else if (Request["sort"] == "Full_Name" && Request["sortdir"] == "DESC")
+                      {
+                          heading1 = "Name ▼";
+                      }
+                      else
+                      {
+                          heading1 = "Name ▲";
+                      }
+             
+                    }
+                    @{string AddressPage = (ViewBag.Addresspagesize == null ? "10" : ViewBag.Addresspagesize);
+                      WebGrid Addressgrid = new WebGrid(rowsPerPage: Convert.ToInt32(AddressPage));}
+                    @{WebGrid grid = Addressgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                      if (grid.TotalRowCount != 0)
+                      {
+                          int count = 0;
+                          string pager = grid.Pager().ToString();
+                          string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                          string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                          string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                          columns: grid.Columns(grid.Column("Full_Name", heading1, style: "fullname", format:@<text>
+                        @Html.ActionLink((string)item.Full_Name, "ContactsInfo", new { rid = (int)item.roleId, lid = (int)item.loginId }, null)
+                        </text>), grid.Column("address", "Address", canSort: false, style: "addressInfo"))).ToString();
+                          gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                        @(new HtmlString(gridhtml))
+                          if (newpager != "")
+                          {
+                        <br />
+                                               
+                        <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                        <br />
+                          }
+                      }
+                      else
+                      {
+                        <table id="tdAddress" runat="server" width="100%">
+                            <tr>
+                                <td align="center" valign="middle" height="25px">
+                                    <span id="lblResponse" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                        No records found.</span>
+                                </td>
+                            </tr>
+                        </table>
+                      }
+                    }
+                </div>
+            </div>
+            <br />
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="background_color">
+                    <td align="right" style="padding: 10px">
+                        <input class="button" type="button" name="btnCancel" id="btnCancel" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+    }
+</body>
+      <script type="text/javascript">
+          $(document).ready(function () {
+              var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        });
+    </script>
+</html>

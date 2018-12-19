@@ -1,0 +1,78 @@
+﻿ 
+
+
+
+   <div class="content-box-content">
+                                                    @{string Dpagesize = "10";
+                                                      WebGrid grid = new WebGrid(Model,rowsPerPage: Convert.ToInt32(Dpagesize));
+                                                      if (grid.TotalRowCount != 0)
+                                                      {
+
+
+                                                         
+                                                          string pager = grid.Pager().ToString();
+                                                          string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                          string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                          string gridhtml = grid.GetHtml(
+                                                          tableStyle: "gridTable",
+                                                          headerStyle: "gridHead",
+                                                          rowStyle: "gridRow",
+                                                          alternatingRowStyle: "gridAltRow",
+                                                          columns: grid.Columns(grid.Column("SlNo", "#", canSort: false),
+                                                          grid.Column("CardType", "Card name", canSort: false,format:@<text>
+                                                     @if (item.WebGrid.Rows.IndexOf(item)+1 == 1 & grid.TotalRowCount>1)
+                                                   {
+                                                      
+                                                   <img src="~/Images/check-icon.png" width="32" height="32" alt="Active"  /> <label style="font:bold;">@item.CardType</label> }
+                                                    else{
+                                                    <label>@item.CardType</label> 
+                                                     }
+                                                  
+                                                    </text>),
+                                                           grid.Column("cardexpiry", "Card expiry", canSort: false),
+                                                             grid.Column("", "Edit", canSort: false,
+                                                                          format:@<text>
+                                                    <a href="#" id="lnkEdit" onclick="return Displaydialog('updateDialog1','@Url.Action("EditPaymentMethod","Admin",new { id = (int)item.CreditCardInfo_ID,customerid=(string)item.customerid })', 450, 950, 'dvLoading', null, null);" class = "EditDialog", title = "Click here to Edit payment method" >
+                                                        <img src="~/Images/edit.gif" />
+                                                    </a>
+                                                   @* @Html.ActionLink(" ", "EditPaymentMethod", new { id = (int)item.CreditCardInfo_ID,customerid=(string)item.customerid,Firstname=(string)item.Firstname,lastname=(string)item.lastname },
+                                   new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditDialog", @title = "Click here to Edit payment method" })*@
+                                                    
+                                                    </text>),
+
+                                                                          grid.Column("", "Delete", canSort: false,
+                                                                          format:@<text>
+                                                     <a href="@Url.Action("DeletePaymentMethod","Admin",new { id = (int)item.CreditCardInfo_ID, Vaultid = (string)item.Vaultid })" class = "confirmDialog", title = "Click here to delete payment method" >
+                                                        <img src="~/Images/cross.png" />
+                                                    </a>
+                                                  @*  @Html.ActionLink(" ", "DeletePaymentMethod", new { id = (int)item.CreditCardInfo_ID, Vaultid = (string)item.Vaultid },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog", @title = "Click here to delete payment method" })*@
+                                                    
+                                                    </text>))).ToString();
+                                                          gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                        @(new HtmlString(gridhtml))
+                                                        <br />
+                                                        <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                        <br />
+
+
+
+                                                      }
+                                                      else
+                                                      {
+                                                        <table id="divoutmsg" width="100%">
+                                                            <tr>
+                                                                <td align="center" valign="middle" height="25px">
+                                                                    <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">No
+                                                                        payment methods found. Your credit card information is not in file.</span>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                      }
+                                                    }
+                                                </div>
+<script>
+    $("#lnkEdit").click(function (event) {
+        event.preventDefault();
+    });
+</script>

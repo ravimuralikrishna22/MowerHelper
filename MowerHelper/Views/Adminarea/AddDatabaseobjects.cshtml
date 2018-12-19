@@ -1,0 +1,198 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+         <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+        function clearalerts() {
+            ValidateAlertClear('tblmain', 'lblerrtype', 'tderrtype', 'tdtype', 'white');
+            ValidateAlertClear('tblmain', 'lblerrobjname', 'tderrobjname', 'tdobjname', 'White');
+            ValidateAlertClear('tblmain', 'lblerrdesc', 'tderrdesc', 'tddes', 'white');
+            ValidateAlertClear('tblmain', 'lblerruser', 'tderruser', 'tduser', 'White');
+
+        }
+        $('.close1').click(function () {
+            $("#AddDbDialog").dialog('close');
+        });
+        function ChkSubmit1() {
+
+            if (document.getElementById('ddltype').selectedIndex == 0) {
+                clearalerts();
+                ValidateAlert('tblmain', 'lblerrtype', 'tderrtype', 'tdtype', 'Please select object type');
+                document.getElementById('ddltype').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblerrtype', 'tderrtype', 'tdtype', 'white');
+            }
+
+            var obj = trim(document.getElementById('txtObject').value);
+            document.getElementById('txtObject').value = obj;
+            if (document.getElementById('txtObject').value == '') {
+                clearalerts();
+                ValidateAlert('tblmain', 'lblerrobjname', 'tderrobjname', 'tdobjname', 'Please enter object name');
+                document.getElementById('txtObject').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblerrobjname', 'tderrobjname', 'tdobjname', 'White');
+            }
+            if (document.getElementById('txtDesc').value != '') {
+                clearalerts();
+                if (document.getElementById('txtDesc').value.length > 2000) {
+                    clearalerts();
+                    //Glb_ShowAlert("Description can be up to 1000 characters");
+                    ValidateAlert('tblmain', 'lblerrdesc', 'tderrdesc', 'tddes', 'Object description can be up to 2000 characters');
+                    document.getElementById('txtDesc').focus();
+                    return false;
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lblerrdesc', 'tderrdesc', 'tddes', 'white');
+                }
+            }
+            if (document.getElementById('ddlusers').selectedIndex == 0) {
+                clearalerts();
+                ValidateAlert('tblmain', 'lblerruser', 'tderruser', 'tduser', 'Please select user');
+                document.getElementById('ddlusers').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblerruser', 'tderruser', 'tduser', 'White');
+            }
+        }
+
+    </script>
+<script type="text/javascript">
+
+    //$(function () {
+    //    $("#txtMod").datepicker({
+    //        dateFormat: 'mm/dd/yy',
+    //        changeMonth: true,
+    //        changeYear: true,
+    //        //                showCurrentAtPos: 1,
+    //        showWeeks: true,
+    //        inline: true,
+    //        numberOfMonths: [1, 1],
+    //        yearRange: "1950:2020",
+    //        showOn: "button",
+    //        buttonImage: "../Images/calender.gif",
+    //        buttonImageOnly: true
+
+    //    });
+       
+    //});
+    </script>
+    <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+            @using (Html.BeginForm("AddDatabaseobjects", "Adminarea", FormMethod.Post, null))
+    {
+                   <input type="hidden" id="Hdnproblemid" name="Hdnproblemid" value="@ViewBag.problemid" />
+        <div class="content-box">
+        <div class="content-box-content">
+            <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                border="0">
+                                    <tr height="10" class="white_color">
+                        <td style="text-align:right;width:30%;">
+                            <font color="red">*</font><strong>Object type :</strong></td>
+                        <td id="tdtype">
+                               @Html.DropDownList("ddltype", new List<SelectListItem>
+                                                                                    {
+                                                               new SelectListItem{ Text="--Select object--", Value = "0" },
+                                                               new SelectListItem{ Text="Stored procedure", Value = "P" },
+                                                                 new SelectListItem{ Text="Function", Value = "FN" },
+                                                               new SelectListItem{ Text="View", Value = "V" },
+                                                               new SelectListItem{ Text="Table", Value = "U" },
+                                                               new SelectListItem{ Text="Script", Value = "SCR" }
+                                                              },
+                                                             new { style = "font-family:arial;font-size:13px;height:20px;width:150px;" })
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color">
+                        <td style="text-align:right;width:30%;">
+                            <font color="red">*</font><strong>Object name :</strong></td>
+                        <td id="tdobjname">
+                              @Html.TextBox("txtObject", null, new { @class = "textfield", MaxLength = "500", style = "width:480px", autocomplete = "off" })
+                        </td>
+                    </tr>
+                      
+                                    <tr class="white_color">
+                        <td style="text-align:right;width:30%;">
+                            <strong>Object description :</strong></td>
+                        <td id="tddes">
+                                                                                       @Html.TextArea("txtDesc", null, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })
+                                                            <br />
+                                                            &nbsp;(Maximum length 2000 characters)
+                        </td>
+                    </tr>
+
+                                    <tr class="nav_blue_color">
+                        <td style="text-align:right;width:30%;">
+                            <font color="red">*</font><strong>User :</strong></td>
+                        <td id="tduser">
+                                                                                                                     @if (Model.StateList != null)
+                                                                                         {
+                                                                            @Html.DropDownList("ddlusers", Model.StateList, "--Select user--", new { @style = "width:270px;height:25px;font:13px;" })
+                                                                                         }
+                        </td>
+                    </tr>
+                                                    <tr class="white_color">
+                        <td style="text-align:right;width:30%;">
+                            <strong>Date :</strong></td>
+                        <td id="tddate">
+                            @Html.TextBox("txtMod", "mm/dd/yyyy", new { @class = "textfield Datefield", MaxLength = "15", style = "width:82px;", onfocus = "return ClearDate('txtMod');" })
+                        </td>
+                    </tr>
+            </table>
+         </div>
+        </div>
+                                <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain" runat="server"
+                                                    style="display: none;">
+                                                                                                 <tr class="white_color" align="center">
+                                                        <td id="tderrtype" height="30px" style="display: none;">
+                                                         <label id="lblerrtype" style="font-weight:bold; color:Black;"></label>
+                                                        </td>
+                                                    </tr>
+                                                                                        <tr class="white_color" align="center">
+                                                        <td id="tderruser" height="30px" style="display: none;">
+                                                         <label id="lblerruser" style="font-weight:bold; color:Black;"></label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" align="center">
+                                                        <td id="tderrobjname" height="30px" style="display: none;">
+                                                         <label id="lblerrobjname" style="font-weight:bold; color:Black;"></label>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" align="center">
+                                                        <td id="tderrdesc" height="30px" style="display: none;">
+                                                           <label id="lblerrdesc" style="font-weight:bold; color:Black;"></label>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+    <table  runat="server" width="100%">
+                                    <tr class="background_color">
+                                        <td align="right" style="padding-top:10px;">
+                                            <input type="submit" id="btnSave1" value="Save" class="button" onclick="return ChkSubmit1();" />
+                                                <input type="button" name="btnCancel" class="close1 button" value="Cancel"  />
+                                           
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+    }
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</body>
+
+</html>

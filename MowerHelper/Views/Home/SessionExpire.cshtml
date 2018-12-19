@@ -1,0 +1,154 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+   @Styles.Render("~/Content/common")
+    <script type="text/javascript">
+        window.history.forward(-1);
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="flttop">
+            <div id="header01">
+                <div id="headermain02">
+                    <div id="logopublic">
+                        <a id="logo_find1" runat="server" title="Home" href="@Url.Action("Index", "Home", null)" style="text-decoration:none;" class="bluemenuPublic">
+                           Mower Helper</a></div>
+                    <div id="mainnavcon">
+                        <div class="mainnav">
+                            <ul>
+                                   
+                                   @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                <li class="current_page_item"> @Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                   }
+                                 <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="flt02">
+            <div id="bodycon">
+                        <div id="contentpannel" class="padding-top">
+                    <div style="height: 450px; margin-top: 110px;">
+                        <p style="font-family: Arial; font-weight: bold; font-size: 15px; text-align: center;">
+                            Your session has been expired,&nbsp;
+                            @Html.ActionLink("Click Here.", "login", "Home",null, new { @target = "_parent" })
+                            &nbsp;to re-login.
+                        </p>
+                    </div>
+                </div>
+                                            <div id="footercon">
+                        <div id="footerpublic" style="text-align: right;">
+                            <div >
+                            @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                            {
+                            <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                         
+                                <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.ShowArticles == "Y")
+                            {
+                                <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.Showforums == "Y")
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                      <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li style="display:none;">
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                    
+                            </ul>
+                            }
+                                </div>
+                            <div class="copy" style="font-size: small;">
+                                Copyright © 2018.Mower Helper, Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

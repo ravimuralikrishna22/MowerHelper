@@ -1,0 +1,1054 @@
+﻿@model MowerHelper.Models.BLL.Billing.RPBilling
+@{
+    Layout = null;
+    string PId = Model.PatientID;
+    int? PLId = Model.PatientLogin_ID;
+    string Fdate = Model.FromDate;
+    string Tdate = Model.ToDate;
+    string VSetdt = Model.Date_range;
+    string frm = null;
+    if (ViewBag.frm == "ph")
+    {
+        frm = "ph1"; ;
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*    <meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Mower Helper-Find an Mower Helper</title>
+    @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    <style type="text/css">
+        .header
+        {
+            margin-left: 2px;
+        }
+
+        .c1
+        {
+            width: 120px;
+        }
+
+        .c2
+        {
+            margin-left: 10px;
+            width: 120px;
+        }
+
+        .c3
+        {
+            margin-left: 10px;
+            width: 50px;
+        }
+
+        .Date
+        {
+            width: 15%;
+        }
+
+        .ChgTo
+        {
+            width: 20%;
+        }
+
+        .chgtype
+        {
+            width: 20%;
+        }
+
+        .chgAmt
+        {
+            width: 12%;
+        }
+
+        .cDel
+        {
+            width: 5%;
+        }
+
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .dvLoading .ui-dialog-titlebar
+        {
+            display: none;
+        }
+
+        .gridTable
+        {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("TransactionsList", "Clients", FormMethod.Get, null))
+    {
+        @Html.Hidden("frm")
+        @Html.Hidden("Pname")
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div>
+        <div id="main-content">
+            @if (Session["RoleID"].ToString() == "1")
+            {
+                @Html.Partial("_NavigationTool")
+            }
+
+            <table width="100%" cellpadding="0" cellspacing="0">
+                @*     @if (Session["roleid"].ToString() == "1")
+            {
+                            <tr id="trtabsadmin" runat="server">
+                                <td width="100%" class="navigation">
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="admincust" href="ClientsHome" ><span>Customers</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="admintask"  href="../Task/TaskList"><span>Tasks </span>
+                                        </a>
+                                    </div>
+                                
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adminnote" href="../Notes/ProfileNotes"><span>Notes</span>
+                                        </a>
+                                    </div>                               
+                                </td>
+                            </tr>
+            }*@
+                <tr class="background_color">
+                    <td id="tdtabsadmin" class="tab-background" width="100%">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr class="background_color">
+                                <td align="left" valign="top" width="100%">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr id="trtabs">
+                                            <td width="100%" class="navigation">
+                                                <div class="admin-tab">
+                                                    <a class="inadmin-link" href="ClientFile" id="aprovider"><span>@Session["Patname"]</span>
+                                                    </a>
+                                                </div>
+                                                <div class="admin-tab">
+                                                    <a class="admin-link" id="admin-linknew" href="TransactionsList"><span>Transactions</span>
+                                                    </a>
+                                                </div>
+
+                                                <div class="admin-tab">
+                                                    <a class="inadmin-link" id="astatistic" href="ClentAppointments"><span>Appointments & General notes</span>
+                                                    </a>
+                                                </div>
+                                                <div class="admin-tab">
+                                                    <a class="inadmin-link" id="asentinvoices" href="SentInvoices"><span>Sent Invoices</span>
+                                                    </a>
+                                                </div>
+                                                <div class="admin-tab" id="auditdiv">
+                                                    @* <a class="inadmin-link" id="astatistic1" href="ProfileCDProgress"><span>Appointments/Progress
+                                        reports</span> </a>*@
+                                                    <a class="inadmin-link" id="aauditlog" href="AuditLoginfo"><span>Audit Log</span></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="background_color">
+                                            <td id="tdtabs" class="tab-background" width="100%">
+                                                <div id="gridcontent1">
+                                                    <img src="../Images/ajax-loader2.gif" alt="Processing" style="margin-left: 45%" />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <div style="height: 100px"></div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        
+        <div>
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+    }
+    <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            Do you want to delete the transaction?
+        </p>
+    </div>
+    <div id="divTran" title="Add transaction"></div>
+    <div id="divEditcharge" title="Edit transaction"></div>
+    <div id="divEditPay" title="Edit transaction"></div>
+    <div id="divEditTransaction" title="Edit transaction"></div>
+    <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+        <img src="../Images/ajax-loader2.gif" alt="Processing" />
+    </div>
+    <div id="divInvoice" title="Email invoice">
+    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (@Session["roleid"].ToString() != "1") {
+             $("#tdtabsadmin").removeClass("tab-background");               
+         }
+         //var frm = "@ViewBag.frm";
+         //if (frm == "ph") {
+         //    document.getElementById('trtabs').style.display = 'none';
+         //    $("#tdtabs").addClass("background_color");
+         //    document.getElementById('tdWidth').style.width = '25%';
+         //    $("#tdPname").show();
+         //    document.getElementById('tdcancel').style.display = '';
+         //}
+         //else {
+         //    document.getElementById('tdWidth').style.width = '45%';
+         //    document.getElementById('trtabs').style.display = '';
+         //    $("#tdPname").hide();
+         //    $("#tdtabs").addClass("tab-background");
+         //}
+         $('#dt_filter').change(function () {
+             if (document.getElementById('dt_filter').value == 'Custom') {
+                 //                    alert("cu");
+                 document.getElementById('tddaterange').style.display = '';
+                 $('#txt_FromDate').val("");
+                 $('#txt_ToDate').val("");
+             }
+             else {
+                 //                    alert("ot");
+                 document.getElementById('tddaterange').style.display = 'none';
+                 $('#txt_FromDate').val("");
+                 $('#txt_ToDate').val("");
+             }
+             return false;
+         });
+
+         $("#txt_FromDate,#txt_ToDate").datepicker({
+             dateFormat: 'mm/dd/yy',
+             changeMonth: true,
+             changeYear: true,
+             //                showCurrentAtPos: 1,
+             showWeeks: true,
+             inline: true,
+             numberOfMonths: [1, 1],
+             yearRange: "1950:2020",
+             showOn: "button",
+             buttonImage: "../Images/calender.gif",
+             buttonImageOnly: true
+
+         });
+             @*if (document.getElementById('dt_filter').value == 'Custom') {
+             document.getElementById('tddaterange').style.display = '';
+             $('#txt_FromDate').val("@Fdate");
+             $('#txt_ToDate').val("@Tdate");
+         }*@
+     });
+    function ValidSearch() {
+
+        if (document.getElementById('dt_filter').selectedIndex == 0) { alert("Please select date"); return false; }
+        if (document.getElementById('dt_filter').value == 'Custom') {
+            var CDate = new Date(); var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear(); var FromDate = document.getElementById('txt_FromDate').value;
+            if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == 'mm/dd/yyyy') {
+                alert('Please select from date'); document.getElementById('txt_FromDate').focus(); return false;
+            }
+            if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+            if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == 'mm/dd/yyyy') {
+                alert('Please select to date'); document.getElementById('txt_ToDate').focus(); return false;
+            }
+            if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) { return false; }
+            var St = document.getElementById('txt_FromDate').value; St = new Date(St); var En = document.getElementById('txt_ToDate').value
+            En = new Date(En);
+            if (St > En) { alert("From date should not be greater than to date"); return false; }
+        }
+    }
+    function ondescriptionover(obj) {
+        document.getElementById(obj).style.position = 'absolute';
+        document.getElementById(obj).style.display = '';
+        return false;
+    }
+    function ondescriptionout(obj) {
+        document.getElementById(obj).style.display = 'none';
+        return false;
+    }
+    function onCancel() {
+        window.location = '../Clients/ClientsHome';
+    }
+</script>
+<script type="text/javascript">
+    function fnValidateData() {
+        if ($('.CustInvoiceEmail').val() == '') {
+            InlineAlert('lblErremail', 'tdemailmain', 'Please enter email');
+            $('.CustInvoiceEmail').focus();
+            return false;
+        }
+        if ($('.CustInvoiceEmail').val() != '') {
+            var stremail = trim($('.CustInvoiceEmail').val());
+            $('.CustInvoiceEmail').val(stremail);
+            if (ValidateEmail($('.CustInvoiceEmail').val()) == 0) {
+                //Glb_ShowAlert("Please enter valid email");
+                InlineAlert('lblErremail', 'tdemailmain', 'Please enter valid email');
+                $('.CustInvoiceEmail').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErremail', 'tdemailmain', '#FFFFFF');
+            }
+        }
+
+        @* var http = new XMLHttpRequest();
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        http.open("POST", "../Clients/CustInvoice", true);
+        http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        var params = "Customer_Email=" + $('.CustInvoiceEmail').val() + "&patientid=" + @PId + '&Provider_ID=' + @Session["Prov_ID"] + '&ProviderLoginID=' + @Session["UserID"] + "&Ind=C&patSInd=T" + '&PatientLogin_ID=' + '@PLId';
+        http.send(params);
+            http.onload = function(data) {
+                var custemail = $('.CustInvoiceEmail').val();
+                $("#hdnclientEmail").val(custemail);
+                $('#gridcontent1').load("../Clients/TransListPartial?Customer_Email=" + $('.CustInvoiceEmail').val() + "&patientid=" + @PId + '&Provider_ID=' + @Session["Prov_ID"] + '&ProviderLoginID=' + @Session["UserID"] + "&Ind=C" + '&PatientLogin_ID=' + '@PLId', function(data){$('#dvLoading').dialog('close');});
+                $('#divInvoice').dialog('close');
+            }
+            return false;*@
+
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        $.ajax({
+            url: "@Url.Action("CustInvoice", "Clients")?Customer_Email=" + $('.CustInvoiceEmail').val()+ "&patientid=" + @PId + '&Provider_ID=' + @Session["Prov_ID"] + '&ProviderLoginID=' + @Session["UserID"] + "&Ind=C&patSInd=T" + '&PatientLogin_ID=' + '@PLId',
+                contentType: false,
+                processData: false,               
+                type: 'POST',
+                success: function (data) {
+                        var custemail = $('.CustInvoiceEmail').val();
+                        $("#hdnclientEmail").val(custemail);
+                    //$('#gridcontent1').load("../Clients/TransListPartial?Customer_Email=" + $('.CustInvoiceEmail').val() + "&patientid=" + @PId + '&Provider_ID=' + @Session["Prov_ID"] + '&ProviderLoginID=' + @Session["UserID"] + "&Ind=C" + '&PatientLogin_ID=' + '@PLId', function(data){$('#dvLoading').dialog('close');});
+                    $('#dvLoading').dialog('close');
+                    $('#divInvoice').dialog('close');    
+            }           
+          });
+
+
+        }
+        function printTranpdf() {
+            var fromdate = document.getElementById('hdnfrmdate').value;
+            var todate = document.getElementById('hdntodate').value;
+            //var palgnid = document.getElementById('hdnplgid').value;
+            var sort = document.getElementById('hdnsort').value;
+            var sortdir = document.getElementById('hdnsortdir').value;
+            var noofrecords = document.getElementById('hdnnoofrecords').value;
+            var hdnPid = document.getElementById('hdnPid').value;
+            //window.location.href = '#/?fromdate=' + fromdate + '&todate=' + todate + '&palgnid=' + palgnid + '&sort=' + sort + '&sortdir=' + sortdir + '&noofrecords=' + noofrecords;
+            window.location.href = 'Transactionpdf/?fromdate=' + fromdate + '&todate=' + todate + '&hdnPid=' + hdnPid + '&sort=' + sort + '&sortdir=' + sortdir + '&noofrecords=' + noofrecords;
+            return false;
+        }
+        function printTranexel() {
+            var fromdate = document.getElementById('hdnfrmdate').value;
+            var todate = document.getElementById('hdntodate').value;
+            //var palgnid = document.getElementById('hdnplgid').value;
+            var sort = document.getElementById('hdnsort').value;
+            var sortdir = document.getElementById('hdnsortdir').value;
+            var noofrecords = document.getElementById('hdnnoofrecords').value;
+            var hdnPid = document.getElementById('hdnPid').value;
+            // window.location.href = 'Transactionexcel/?fromdate=' + fromdate + '&todate=' + todate + '&palgnid=' + palgnid + '&sort=' + sort + '&sortdir=' + sortdir + '&noofrecords=' + noofrecords;
+            window.location.href = 'Transactionexcel/?fromdate=' + fromdate + '&todate=' + todate + '&hdnPid=' + hdnPid + '&sort=' + sort + '&sortdir=' + sortdir + '&noofrecords=' + noofrecords;
+            return false;
+        }
+</script>
+
+<script type="text/javascript">
+    $.ajaxSetup({ cache: false });
+    var linkObj;
+    function AddTransFunc(e)
+    {
+        e.preventDefault();
+        Displaydialog('divTran','../Clients/CustomerTransactions','auto',910,'dvLoading',null,null)
+    }
+    function EditChgfunc(tId,frm,dt_filter,pagetype,PId,PLId,e){
+        e.preventDefault();
+        Displaydialog('divEditcharge','../Clients/EditCharge?tId=' + tId + '&frm=' +frm+'&dt_filter='+dt_filter+'&pagetype='+pagetype+'&PId=' + PId + '&PLId=' + PLId,'auto',900,'dvLoading','Transaction_Amount','txtEditChargeType');
+    }
+    function EditPymnt(tId,frm,dt_filter,pagetype,PId,PLId,e){
+        e.preventDefault();
+        Displaydialog('divEditPay','../Clients/EditPayment?tId=' + tId + '&frm=' +frm+'&dt_filter='+dt_filter+'&pagetype='+pagetype+'&PId=' + PId + '&PLId=' + PLId,'auto',900,'dvLoading','txtPAmount','txtEditPaymentType');
+    }
+    function EditTrans(tId,frm,dt_filter,pagetype,PId,PLId,e){
+        e.preventDefault();
+        Displaydialog('divEditTransaction','../Clients/EditTransaction?tId=' + tId + '&frm=' +frm+'&dt_filter='+dt_filter+'&pagetype='+pagetype+'&PId=' + PId + '&PLId=' + PLId,'auto',900,'dvLoading','txt_PAmount','txt_TransactionType');
+    }
+    $(function () {
+        //$('#divInvoice').dialog({
+        //    autoOpen: false,
+        //    width: 700,
+        //    resizable: false,
+        //    modal: true
+        //});
+            
+        //$('#divTran').dialog({
+        //    autoOpen: false,
+        //    width: 910,
+        //    resizable: false,
+        //    resizable: false,
+        //    modal: true,
+        //    open: function (event, ui) { $('.ui-widget-overlay').css('width', '100%'); }
+
+        //});
+        //$(".clsTran").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#divTran');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+        //$('#divEditcharge').dialog({
+        //    autoOpen: false,
+        //    width:900,
+        //    resizable: false,
+        //    resizable: false,
+        //    modal: true
+        //});
+        //$(".EditChargediv").click(function () {
+        //linkObj = $(this);
+        //var dialogDiv = $('#divEditcharge');
+        //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //var viewUrl = linkObj.attr('href');
+        //$.get(viewUrl, function (data) {
+                  
+        //    dialogDiv.html(data);
+        //    $('#dvLoading').dialog('close');
+        //if ($("#txtEcAmount").val() != "" || $("#txtEcAmount").val() != "undefined")
+        //{
+        //    $("#txtEditChargeType").text("Charge");
+        //}
+        //    dialogDiv.dialog('open');
+        //});
+        //return false;
+        //});
+            
+        //$('#divEditPay').dialog({
+        //    autoOpen: false,
+        //    width: 900,
+        //    resizable: false,
+        //    resizable: false,
+        //    modal: true
+        //});
+        //$(".EditPaydiv").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#divEditPay');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        if ($("#txtPAmount").val() != "" || $("#txtPAmount").val() != "undefined")
+        //        {
+        //            $("#txtEditPaymentType").text("Payment");
+        //        }
+        //        $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+
+
+        //$('#divEditTransaction').dialog({
+        //    autoOpen: false,
+        //    width: 900,
+        //    resizable: false,
+        //    resizable: false,
+        //    modal: true
+        //});
+        //$(".Edittrandiv").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#divEditTransaction');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('close');
+        //        if ($("#txt_PAmount").val() != "" || $("#txt_PAmount").val() != "undefined")
+        //        {
+        //            $("#txt_TransactionType").text("Charge & Payment");
+        //        }
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+        $(".invclose").live("click", function (e) {
+            e.preventDefault();
+            $('#divInvoice').dialog('close');
+        });
+        $(".close").live("click", function (e) {
+            e.preventDefault();
+            $(this).closest(".dialog").dialog("close");
+
+        });
+        $(".chgclose").live("click", function (e) {
+            e.preventDefault();
+            $('#divTran').dialog('close');
+        });
+        $(".Echgclose").live("click", function (e) {
+            e.preventDefault();
+            $('#divEditcharge').dialog('close');
+        });
+        $(".Epmtclose").live("click", function (e) {
+            e.preventDefault();
+            $('#divEditPay').dialog('close');
+        });
+        $(".Epmtclose").live("click", function (e) {
+            e.preventDefault();
+            $('#divEditTransaction').dialog('close');
+        });
+        //$(".confirmDialog").live("click", function (e) {
+
+        //    var url = $(this).attr('href');
+        //    $("#dialog-confirm").dialog({
+        //        autoOpen: false,
+        //        height: 170,
+        //        width: 350,
+        //        show: { effect: 'drop', direction: "up" },
+        //        modal: true,
+        //        buttons: {
+        //            "Yes": function () {
+        //                $(this).dialog("close");
+        //                window.location = url;
+
+        //            },
+        //            "No": function () {
+        //                $(this).dialog("close");
+
+        //            }
+        //        }
+        //    });
+        //    $("#dialog-confirm").dialog('open');
+        //    return false;
+        //});
+    });
+    function DeleteTransaction(trId,trtypeId,frm,Vsetdt,PId,CustEmail,PLId,e)
+    {
+        e.preventDefault();
+        var url = '@Url.Action("DeleteTran", "Clients")?tId='+ trId+ '&trTypeid=' + trtypeId + '&frm=' + frm + '&dt_filter=' + Vsetdt + '&type=' + 'New' + '&patientid=' + PId + '&Customer_Email=' +CustEmail + '&PatientLogin_ID=' + PLId;
+        $("#dialog-confirm").dialog({
+            autoOpen: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            buttons: {
+                "Yes": function () {
+                    $(this).dialog("close");
+                    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                    $('#gridcontent1').load(url, function(data){$('#dvLoading').dialog('close');});
+
+                },
+                "No": function () {
+                    $(this).dialog("close");
+
+                }
+            }
+        });
+        $("#dialog-confirm").dialog('open');
+        return false;
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#gridcontent1").load("@Url.Action("TransListPartial", "Clients")?PatientID=" + @PId + "&PatientLogin_ID=" + @PLId + "&Customer_Email=" + '@Model.Customer_Email');
+        var TopIndex = '@Session["TopIndex"]';
+        var roleid = '@Session["roleid"]';
+        if (roleid == "1") {
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        }
+    });
+</script>
+@* Add tranaction*@
+@* Add transction*@
+<script type="text/javascript">
+    function ValidatecustomertransactionInfo() {
+        ClearInlineAlert('lblErrPamount', 'tdEPamount', '#FFFFFF');
+        ClearInlineAlert('lblAddErrEmail', 'tdAddTEmail', '#FFFFFF')
+        ClearInlineAlert('lblErrMode', 'tdEpMode', '#FFFFFF');
+        ClearInlineAlert('lblEpNotes', 'TdEPnotes', '#FFFFFF');
+        ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF');
+        var stremail = trim($('.AddTCustEmail').val());
+        $('.AddTCustEmail').val(stremail);
+
+
+        if ($('.AddTCustEmail').val() != '') {
+            if (ValidateEmail($('.AddTCustEmail').val()) == 0) {
+                InlineAlert('lblAddErrEmail', 'tdAddTEmail', 'Please enter valid email.')
+                $('.AddTCustEmail').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblAddErrEmail', 'tdAddTEmail', '#FFFFFF')
+            }
+        }
+
+        //if (document.getElementById('ddlPayment').value != 1) {
+        //    if (document.getElementById('ddlPaymentMode').value == '') {
+        //        InlineAlert('lblErrMode', 'tdEpMode', 'Please select payment mode.'); document.getElementById('ddlPaymentMode').focus(); return false;
+        //    }
+        //    else { ClearInlineAlert('lblErrMode', 'tdEpMode', '#FFFFFF'); }
+
+        //}
+        if ($('.AddTransDate').val() == '' || $('.AddTransDate').val() == 'mm/dd/yyyy') { InlineAlert('lblErrPdate', 'tdEPdate', 'Please enter date');$('.AddTransDate').focus(); return false; }
+        else {
+            ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); var strRetAlert = isValidDate($('.AddTransDate').val());
+            if (strRetAlert != "") { InlineAlert('lblErrPdate', 'tdEPdate', strRetAlert); $('.AddTransDate').focus(); return false; }
+            else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+        }
+        if ($('.AddTransDate').val().length > 0) {
+            var date = $('.AddTransDate').val(); var len = $('.AddTransDate').val().length;
+            for (var i = 0; i < len; i++) {
+                var k = date.charAt(i); var digits = "0123456789/";
+                if ((digits.indexOf(k, 0)) == -1) { InlineAlert('lblErrPdate', 'tdEPdate', 'Please enter valid date'); $('.AddTransDate').val() = ''; $('.AddTransDate').focus(); return false; }
+                else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+            }
+        }
+        var dtCur = new Date(); var dtGiven = new Date($('.AddTransDate').val());
+        if (dtCur < dtGiven) { InlineAlert('lblErrPdate', 'tdEPdate', 'Invalid transaction info!!! transaction date exceeding the current date.'); $('.AddTransDate').focus(); return false; }
+        else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+        if (($('.AddTransAmt').val() == '') || (parseFloat($('.AddTransAmt').val()) <= 0) || $('.AddTransAmt').val() == "$0.00" || $('.AddTransAmt').val() == '.') {
+            InlineAlert('lblErrPamount', 'tdEPamount', 'Please enter valid amount'); $('.AddTransAmt').focus(); return false;
+        }
+        else { ClearInlineAlert('lblErrPamount', 'tdEPamount', '#FFFFFF'); }
+        if ($('.AddTransAmt').val().length > 0) {
+            var amount = $('.AddTransAmt').val(); var len = $('.AddTransAmt').val().length;
+            for (var i = 0; i < len; i++) {
+                var k = amount.charAt(i); var digits = "0123456789.";
+                if ((digits.indexOf(k, 0)) == -1) { InlineAlert('lblErrPamount', 'tdEPamount', 'Please enter valid amount'); $('.AddTransAmt').val() = ''; $('.AddTransAmt').focus(); return false; }
+            }
+        }
+
+        var strNotes = $('.AddTNotes').val();
+        if (strNotes.length > 1000) { InlineAlert('lblEpNotes', 'TdEPnotes', 'Notes can be up to 1000 characters'); $('.AddTNotes').focus(); return false; }
+        else { ClearInlineAlert('lblEpNotes', 'TdEPnotes', '#FFFFFF'); }
+
+        var objradNotAgree = document.getElementById('chkemail');
+        if (objradNotAgree.checked == true) {
+            if ($('.AddTCustEmail').val() == "") {
+                InlineAlert('lblAddErrEmail', 'tdAddTEmail', 'Please enter email.')
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblAddErrEmail', 'tdAddTEmail', '#FFFFFF')
+            }
+        }
+    }
+    function isValidDate(strDate) {
+        var dateStr = strDate; var datePat = /^(\d{1,2})(\/|-)(\d{1,2})\2(\d{4})$/; var month, day, year; var monthArray = new Array(); var matchArray = dateStr.match(datePat); var intShowI; var args; var strError = ""; monthArray[0] = "January"; monthArray[1] = "February"; monthArray[2] = "March"; monthArray[3] = "April"; monthArray[4] = "May"; monthArray[5] = "June"; monthArray[6] = "July"; monthArray[7] = "August"; monthArray[8] = "September"; monthArray[9] = "October"; monthArray[10] = "November"; monthArray[11] = "December"; args = IsValidDate.arguments
+        if (dateStr != "") {
+            if (matchArray == null)
+            { strError = "Please enter date in mm/dd/yyyy format."; return strError; }
+            month = matchArray[1]; day = matchArray[3]; year = matchArray[4]; if (year <= 1753)
+            { strError = "Please enter a year greater than 1753."; return strError; }
+            if (month < 1 || month > 12)
+            { strError = "Month must be between 1 and 12."; return strError; }
+            if (day < 1 || day > 31)
+            { strError = "Day must be between 1 and 31."; return strError; }
+            if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+                strError = monthArray[month - 1] + " doesn't have 31 days!"
+                return strError;
+            }
+            if (month == 2) {
+                var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)); if (day > 29 || (day == 29 && !isleap))
+                { strError = "February " + year + " doesn't have " + day + " days!"; return strError; }
+            }
+        }
+        return strError;
+    }
+    //function Clearcheckno() {
+    //    if (document.getElementById('txtCheckNo').value == 'Check number') {
+    //        document.getElementById('txtCheckNo').value = '';
+    //    }
+
+    //}
+    //function Ccno() {
+    //    if (document.getElementById('txtAuthNum').value == 'Last 4 digits of credit card') {
+    //        document.getElementById('txtAuthNum').value = '';
+    //    }
+
+    //}
+</script>
+@*End Transaction*@
+@* End Transaction*@
+<script type="text/javascript">
+    function ValidateChargeInfor() {
+        ClearInlineAlert('lblErrCmail', 'tdcEmail', '#FFFFFF')
+        ClearInlineAlert('lblErrCDate1', 'tdEcDate1', '#FFFFFF')
+        ClearInlineAlert('lblErrCamount1', 'tdECamount1', '#FFFFFF')
+        ClearInlineAlert('lblErrCNote1', 'tdECNote1', '#FFFFFF')
+
+        var stremail = trim($('.EditChgCustEmail').val());
+        $('.EditChgCustEmail').val(stremail);
+
+
+        if ($('.EditChgCustEmail').val() != '') {
+            if (ValidateEmail($('.EditChgCustEmail').val()) == 0) {
+                InlineAlert('lblErrCmail', 'tdcEmail', 'Please enter valid email.')
+                $('.EditChgCustEmail').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCmail', 'tdcEmail', '#FFFFFF')
+            }
+        }
+        if ($('.EditChgDate').val() == "") {
+            //                Glb_ShowAlert("Invalid charge info!!! charge date can not be empty.");
+            InlineAlert('lblErrCDate1', 'tdEcDate1', "Invalid transaction info!!! transaction date can not be empty.")
+            $('.EditChgDate').focus();
+            return false;
+        }
+        else {
+            ClearInlineAlert('lblErrCDate1', 'tdEcDate1', '#FFFFFF')
+            var strRetAlert = isValidDate($('.EditChgDate').val())
+            if (strRetAlert != "") {
+                //                    Glb_ShowAlert(strRetAlert);
+                InlineAlert('lblErrCDate1', 'tdEcDate1', strRetAlert)
+                $('.EditChgDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCDate1', 'tdEcDate1', '#FFFFFF')
+            }
+            var dtCur = new Date();
+            var dtGiven = new Date($('.EditChgDate').val());
+            if (dtCur < dtGiven) {
+                //                    Glb_ShowAlert("Invalid charge info!!! charge date exceeding the current date.");
+                InlineAlert('lblErrCDate1', 'tdEcDate1', "Invalid transaction info!!! transaction date exceeding the current date.")
+                $('.EditChgDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCDate1', 'tdEcDate1', '#FFFFFF')
+            }
+        }
+        if ($('.EditChgAmount').val() == "") {
+
+            InlineAlert('lblErrCamount1', 'tdECamount1', "Invalid transaction info!!! transaction amount can not be empty.")
+            $('.EditChgAmount').focus();
+            return false;
+        }
+        else {
+            ClearInlineAlert('lblErrCamount1', 'tdECamount1', '#FFFFFF')
+        }
+
+        if ($('.EditChgAmount').val() != '') {
+            if (parseFloat($('.EditChgAmount').val()) == '0') {
+
+                InlineAlert('lblErrCamount1', 'tdECamount1', "Invalid transaction info!!! transaction amount can not be zero.")
+                $('.EditChgAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCamount1', 'tdECamount1', '#FFFFFF')
+            }
+        }
+        if ($('.EditChgAmount').val() == ".") {
+
+            InlineAlert('lblErrCamount1', 'tdECamount1', "Invalid charge Amount.")
+            $('.EditChgAmount').focus();
+            return false;
+        }
+        else {
+            ClearInlineAlert('lblErrCamount1', 'tdECamount1', '#FFFFFF')
+        }
+        if ($('.EditChgAmount').val() == "0") {
+
+            InlineAlert('lblErrCamount1', 'tdECamount1', "Invalid transaction info!!! transaction amount can not be zero.")
+            $('.EditChgAmount').focus();
+            return false;
+        }
+        else {
+            ClearInlineAlert('lblErrCamount1', 'tdECamount1', '#FFFFFF')
+        }
+        if ($('.EditChgAmount').val().length > 0) {
+            var amount = $('.EditChgAmount').val();
+            var len = $('.EditChgAmount').val().length;
+            for (var i = 0; i < len; i++) {
+
+                var k = amount.charAt(i);
+                var digits = "0123456789.";
+                if ((digits.indexOf(k, 0)) == -1) {
+
+                    InlineAlert('lblErrCamount1', 'tdECamount1', "Please enter valid amount")
+                    $('.EditChgAmount').val('');
+                    $('.EditChgAmount').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrCamount1', 'tdECamount1', '#FFFFFF')
+                }
+            }
+        }
+        if ($('.EditChgNotes').val() != "") {
+            if ($('.EditChgNotes').val().length > 1000) {
+
+                InlineAlert('lblErrCNote1', 'tdECNote1', "Invalid transaction info!!! transaction notes is exceeding the limit of 1000 characters.")
+                $('.EditChgNotes').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCNote1', 'tdECNote1', '#FFFFFF')
+            }
+        }
+        var objradNotAgree = document.getElementById('ECchkemail');
+        if (objradNotAgree.checked == true) {
+            if ($('.EditChgCustEmail').val() == "") {
+                InlineAlert('lblErrCmail', 'tdcEmail', 'Please enter email.')
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCmail', 'tdcEmail', '#FFFFFF')
+            }
+        }
+    }
+    function ValidatePaymentInfo() {
+        ClearInlineAlert('lblErrEmail', 'tdEmail', '#FFFFFF')
+        ClearInlineAlert('lblErrPdate1', 'tdEPdate1', '#FFFFFF')
+        ClearInlineAlert('lblErrPamount1', 'tdEPamount1', '#FFFFFF')
+        ClearInlineAlert('lblErrNotes1', 'tdEpnotes1', '#FFFFFF')
+
+        var stremail = trim($('.EditPmtEmail').val());
+        $('.EditPmtEmail').val(stremail);
+
+
+        if ($('.EditPmtEmail').val() != '') {
+            if (ValidateEmail($('.EditPmtEmail').val()) == 0) {
+                InlineAlert('lblErrEmail', 'tdEmail', 'Please enter valid email.')
+                $('.EditPmtEmail').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrEmail', 'tdEmail', '#FFFFFF')
+            }
+        }
+        if ($('.EditPayDate').val() == "" || $('.EditPayDate').val() == "mm/dd/yyyy") {
+            //                Glb_ShowAlert("Invalid payment info!!! payment date can not be empty.");
+            InlineAlert('lblErrPdate1', 'tdEPdate1', 'Invalid transaction info!!! transaction date can not be empty.')
+            $('.EditPayDate').focus();
+            return false;
+        }
+        else {
+            ClearInlineAlert('lblErrPdate1', 'tdEPdate1', '#FFFFFF')
+            var strRetAlert = isValidDate($('.EditPayDate').val())
+            if (strRetAlert != "") {
+                //                    Glb_ShowAlert(strRetAlert);
+                InlineAlert('lblErrPdate1', 'tdEPdate1', strRetAlert)
+                $('.EditPayDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrPdate1', 'tdEPdate1', '#FFFFFF')
+            }
+            var dtCur = new Date();
+            var dtGiven = new Date($('.EditPayDate').val());
+            if (dtCur < dtGiven) {
+                //                Glb_ShowAlert("Invalid charge info!!! charge date exceeding the current  date.");
+                InlineAlert('lblErrPdate1', 'tdEPdate1', 'Invalid transaction info!!! transaction date exceeding the current  date.')
+                $('.EditPayDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrPdate1', 'tdEPdate1', '#FFFFFF')
+            }
+            if ($('.EditPayAmount').val() == '' || $('.EditPayAmount').val() == '.' || $('.EditPayAmount').val() == '0') {
+                //                Glb_ShowAlert('Please enter valid amount');
+                InlineAlert('lblErrPamount1', 'tdEPamount1', 'Please enter valid amount')
+                $('.EditPayAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrPamount1', 'tdEPamount1', '#FFFFFF')
+            }
+            if ($('.EditPayAmount').val() == '') {
+                InlineAlert('lblErrPamount1', 'tdEPamount1', 'Invalid transaction info!!! transaction amount can not be empty.')
+                $('.EditPayAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrPamount1', 'tdEPamount1', '#FFFFFF')
+            }
+            if ($('.EditPayAmount').val() != '') {
+                if (parseFloat($('.EditPayAmount').val()) == '0') {
+                    InlineAlert('lblErrPamount1', 'tdEPamount1', 'Invalid transaction info!!!.')
+                    $('.EditPayAmount').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrPamount1', 'tdEPamount1', '#FFFFFF')
+                }
+            }
+            if ($('.EditPayAmount').val().length > 0) {
+                var amount = $('.EditPayAmount').val();
+                var len = $('.EditPayAmount').val().length;
+                for (var i = 0; i < len; i++) {
+                    var k = amount.charAt(i);
+                    var digits = "0123456789.";
+                    if ((digits.indexOf(k, 0)) == -1) {
+                        InlineAlert('lblErrPamount1', 'tdEPamount1', 'Please enter valid amount')
+                        $('.EditPayAmount').val('');
+                        $('.EditPayAmount').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblErrPamount1', 'tdEPamount1', '#FFFFFF')
+                    }
+                }
+            }
+            if ($('.EditPayNotes').val() != "") {
+                if ($('.EditPayNotes').val().length > 1000) {
+                    InlineAlert('lblErrNotes1', 'tdEpnotes1', 'Invalid transaction info!!! notes is exceeding the limit of 1000 characters.')
+                    $('.EditPayNotes').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrNotes1', 'tdEpnotes1', '#FFFFFF')
+                }
+            }
+
+            var objradNotAgree = document.getElementById('EPchkemail');
+            if (objradNotAgree.checked == true) {
+                if ($('.EditPmtEmail').val() == "") {
+                    InlineAlert('lblErrEmail', 'tdEmail', 'Please enter email.')
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrEmail', 'tdEmail', '#FFFFFF')
+                }
+            }
+        }
+    }
+    function Validate_PaymentInfo() {
+        ClearInlineAlert('lbl_ErrEmail', 'td_Email', '#FFFFFF')
+        ClearInlineAlert('lbl_ErrPdate1', 'td_EPdate1', '#FFFFFF')
+        ClearInlineAlert('lbl_ErrPamount1', 'td_EPamount1', '#FFFFFF')
+        ClearInlineAlert('lbl_ErrNotes1', 'tdEpnotes1', '#FFFFFF')
+
+        var stremail = trim($('.EditTransEmail').val());
+        $('.EditTransEmail').val(stremail);
+
+
+        if ($('.EditTransEmail').val() != '') {
+            if (ValidateEmail($('.EditTransEmail').val()) == 0) {
+                InlineAlert('lbl_ErrEmail', 'td_Email', 'Please enter valid email.')
+                $('.EditTransEmail').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lbl_ErrEmail', 'td_Email', '#FFFFFF')
+            }
+        }
+        if ($('.EditTransDate').val() == "" || $('.EditTransDate').val() == "mm/dd/yyyy") {
+            //                Glb_ShowAlert("Invalid payment info!!! payment date can not be empty.");
+            InlineAlert('lbl_ErrPdate1', 'td_EPdate1', 'Invalid transaction info!!! transaction date can not be empty.')
+            $('.EditTransDate').focus();
+            return false;
+        }
+        else {
+            ClearInlineAlert('lbl_ErrPdate1', 'td_EPdate1', '#FFFFFF')
+            var strRetAlert = isValidDate($('.EditTransDate').val())
+            if (strRetAlert != "") {
+                //                    Glb_ShowAlert(strRetAlert);
+                InlineAlert('lbl_ErrPdate1', 'td_EPdate1', strRetAlert)
+                $('.EditTransDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lbl_ErrPdate1', 'td_EPdate1', '#FFFFFF')
+            }
+            var dtCur = new Date();
+            var dtGiven = new Date($('.EditTransDate').val());
+            if (dtCur < dtGiven) {
+                //                Glb_ShowAlert("Invalid charge info!!! charge date exceeding the current  date.");
+                InlineAlert('lbl_ErrPdate1', 'td_EPdate1', 'Invalid transaction info!!! transaction date exceeding the current  date.')
+                $('.EditTransDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lbl_ErrPdate1', 'td_EPdate1', '#FFFFFF')
+            }
+            if ($('.EditTransAmount').val() == '' || $('.EditTransAmount').val() == '.' || $('.EditTransAmount').val() == '0') {
+                //                Glb_ShowAlert('Please enter valid amount');
+                InlineAlert('lbl_ErrPamount1', 'td_EPamount1', 'Please enter valid amount')
+                $('.EditTransAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lbl_ErrPamount1', 'td_EPamount1', '#FFFFFF')
+            }
+            if ($('.EditTransAmount').val() == '') {
+                InlineAlert('lbl_ErrPamount1', 'td_EPamount1', 'Invalid transaction info!!! transaction amount can not be empty.')
+                $('.EditTransAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lbl_ErrPamount1', 'td_EPamount1', '#FFFFFF')
+            }
+            if ($('.EditTransAmount').val() != '') {
+                if (parseFloat($('.EditTransAmount').val()) == '0') {
+                    InlineAlert('lbl_ErrPamount1', 'td_EPamount1', 'Invalid transaction info!!!.')
+                    $('.EditTransAmount').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lbl_ErrPamount1', 'td_EPamount1', '#FFFFFF')
+                }
+            }
+            if ($('.EditTransAmount').val().length > 0) {
+                var amount = $('.EditTransAmount').val();
+                var len = $('.EditTransAmount').val().length;
+                for (var i = 0; i < len; i++) {
+                    var k = amount.charAt(i);
+                    var digits = "0123456789.";
+                    if ((digits.indexOf(k, 0)) == -1) {
+                        InlineAlert('lbl_ErrPamount1', 'td_EPamount1', 'Please enter valid amount')
+                        $('.EditTransAmount').val('');
+                        $('.EditTransAmount').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lbl_ErrPamount1', 'td_EPamount1', '#FFFFFF')
+                    }
+                }
+            }
+            if ($('.EditTransNotes').val() != "") {
+                if ($('.EditTransNotes').val().length > 1000) {
+                    InlineAlert('lbl_ErrNotes1', 'tdEpnotes1', 'Invalid transaction info!!! notes is exceeding the limit of 1000 characters.')
+                    $('.EditTransNotes').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lbl_ErrNotes1', 'tdEpnotes1', '#FFFFFF')
+                }
+            }
+
+
+            var objradNotAgree = document.getElementById('Echkemail');
+            if (objradNotAgree.checked == true) {
+                //document.getElementById('Hdn_check').value = "Y";
+                if ($('.EditTransEmail').val() == "") {
+                    InlineAlert('lbl_ErrEmail', 'td_Email', 'Please enter email.')
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lbl_ErrEmail', 'td_Email', '#FFFFFF')
+                }
+            }
+        }
+    }
+</script>
+
+</html>

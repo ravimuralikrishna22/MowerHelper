@@ -1,0 +1,101 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <title>Mower Helper-Find an Mower Helper</title>
+   @* @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btncancel").live("click", function () {
+                var dialogDiv = $('#RolesDialog');
+                $('.ddlactionclass').val('s');
+                dialogDiv.dialog('close');
+                //window.location = "../Messages/MessageCategories";
+            });
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+              $("#Menu0").removeClass();
+              $("#Menu1").removeClass();
+              $("#Menu2").removeClass();
+              $("#Menu3").addClass("active");
+          });
+    </script>
+</head>
+<body>
+   @using(Html.BeginForm("Msg_CategoriesRoles", "Messages", FormMethod.Post,null))
+   {
+       @Html.Hidden("cid")
+         @*<div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+     
+        <div class="content-box" style="width:50%; margin:0 auto">
+            <div class="content-box-header" id="th_HeaderID">
+                <h3>
+                    Associated roles</h3>
+            </div>
+            <div class="content-box-content">*@
+                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+                    <tr id="trmessage" runat="server" style="display: none;">
+                        <td align="center" colspan="2">
+                           
+                        </td>
+                    </tr>
+                    <tr class="white_color" height="20">
+                        <td style="height: 16px" align="right" width="35%" colspan="2">
+                            <strong>Category&nbsp;:&nbsp;</strong> </td>
+                            <td style="height: 16px" align="left" width="65%" colspan="2">
+                            @Html.DropDownList("CatList", null, new { @class = "textfield", @style = "height:25px;width:200px" })
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color" height="20">
+                        <td style="height: 16px" align="right" width="35%" colspan="2">
+                            <strong>Roles&nbsp;:&nbsp;</strong>
+                        </td>
+                    @*</tr>
+                    <tr class="white_color" id="trFile" height="20" runat="server">*@
+                        <td style="height: 16px" align="left" width="65%" colspan="2">
+                         @for (int i = 0; i <= ViewBag.total - 1; i++)
+                         {
+                             if (@ViewBag.rolenames[i].RoleChk == "1")
+                             {
+                                                   <input type="checkbox" style="height:12px;"  id="chkRoles" name ="chkRoles" title="@ViewBag.rolenames[i].RoleName"  value="@ViewBag.rolenames[i].Roleid"  checked="checked" />  @ViewBag.rolenames[i].RoleName <br />
+                             }
+                             else
+                             {
+                                               <input type="checkbox" style="height:12px;"  id="chkRoles" name ="chkRoles" title="@ViewBag.rolenames[i].RoleName"  value="@ViewBag.rolenames[i].Roleid"  />  @ViewBag.rolenames[i].RoleName <br />
+                             }
+
+                         }
+                      
+                        
+                        </td>
+                    </tr>
+                </table>@*
+            </div>
+        </div>*@
+        <br />
+        <table border="0" cellpadding="0" cellspacing="0" width="50%" style="margin:0 auto;">
+            <tr class="background_color">
+                <td align="right">
+                <input  type="submit" id="btnSave" name="btnSave" class="button" value="Save"/>&nbsp; <input  type="button" class="button" name="btncancel" id="btncancel" value="Cancel"/>
+                </td>
+            </tr>
+        </table>
+       <br />
+    @*</div>
+  
+    <div>
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>*@
+   }
+</body>
+</html>

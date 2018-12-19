@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "ProviderSchedule";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<html>
+<head>
+<title></title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+   <title>Mower Helper-Find an Mower Helper</title>
+ @Styles.Render("~/Content/themes/base/jqueryCSS")
+@Scripts.Render("~/Scripts/Thscriptscript")
+      @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    </head>
+<body>
+   
+    <div>
+          <div id="main-content">   
+              <table border="0" cellpadding="8" cellspacing="1"  class="border_style" width="100%">
+   <tr class="White_color">
+        <td width="19%" style="text-align:center">
+      @* <strong>@Html.RouteLink("Previous", "ProviderSchedule1", new { id = ViewBag.id, Therapistname = ViewBag.businessname,date=ViewBag.prevdate  }, new { @Title = ViewData["Previoustooltip"] })</strong> *@
+                            <a id="anext" href="@Url.Action("ProviderSchedule", "Public", new {id = ViewBag.id, Therapistname = ViewBag.businessname,date=ViewBag.prevdate })"  title="@ViewData["Previoustooltip"]"><span style="font-weight:bold">Previous</span></a>
+        </td>
+                                 <td style="text-align:center"> 
+                      <strong>@ViewBag.practicename</strong>  
+                        </td>
+            <td width="19%" style="text-align:center">
+@*            <strong> @Html.RouteLink("Next", "ProviderSchedule1", new {id = ViewBag.id, Therapistname = ViewBag.businessname,date=ViewBag.nextdate }, new { @id = "Next", @class = "Next",@Title = ViewData["Nexttooltip"]  })</strong> *@
+                <a id="anext" href="@Url.Action("ProviderSchedule", "Public", new {id = ViewBag.id, Therapistname = ViewBag.businessname,date=ViewBag.nextdate })"  title="@ViewData["Nexttooltip"]"><span style="font-weight:bold">Next</span></a>
+            </td>
+        </tr>
+    </table>
+                    <table cellspacing="0" id="tblAppt1" runat="server" cellpadding="0" width="100%" border="0">
+                     <tr style="background: none">
+                         <td valign="top" align="center" width="80%">
+                                                 @Html.Raw(ViewBag.daysch)
+                             </td>
+                         </tr>
+                             </table>   
+              </div>
+    </div>
+    <div id="AddApptDialog" title="Add new appointment" ></div>
+        <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+</body>
+         <script type="text/javascript">
+             var linkObj;
+             $(function () {
+
+                 $('#AddApptDialog').dialog({
+                     autoOpen: false,
+                     width: 850,
+                     //                      height: 400,
+                     resizable: false,
+                     modal: true,
+                     position: ['middle', 100]
+                 });
+
+                 $(".schedulemenu").click(function () {
+                     linkObj = $(this);
+                     var dialogDiv = $('#AddApptDialog');
+                     $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                     var viewUrl = linkObj.attr('href');
+                     $.get(viewUrl, function (data) {
+                         dialogDiv.html(data);
+                         $('#dvLoading').dialog('close');
+                         dialogDiv.dialog('open');
+                     });
+                     return false;
+                 });
+             });
+             $(document).ready(function () {
+                 $(".closeappt").live("click", function (e) {
+                     var dialogDiv = $('#AddApptDialog');
+                     dialogDiv.dialog('close');
+                 });
+                
+             });
+                 </script>
+</html>

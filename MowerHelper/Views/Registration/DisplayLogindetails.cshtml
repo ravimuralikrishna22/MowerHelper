@@ -1,0 +1,309 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+    @Styles.Render("~/Content/styles")
+ @*   @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Scripts.Render("~/ThScripts/ThOtherscripts")*@
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+    </script>
+    <script  type="text/javascript">
+        function ChecValidate() {
+            //if (document.getElementById('ChkEmail').checked == true) {
+            //    document.getElementById('Hdnchk').value = "Y";
+            //}
+            //else {
+            //    document.getElementById('Hdnchk').value = "N";
+            //}
+            var text = "Login";
+            document.getElementById('Hdntype').value = text;
+            return true;
+        }
+        function ChecValidate1() {
+            //if (document.getElementById('ChkEmail').checked == true) {
+            //    document.getElementById('Hdnchk').value = "Y";
+            //}
+            //else {
+            //    document.getElementById('Hdnchk').value = "N";
+            //}
+            var text = "Done";
+            document.getElementById('Hdntype').value = text;
+            return true;
+        }
+    </script>
+
+</head>
+<body>
+    @using (Html.BeginForm("DisplayLogindetails", "Registration", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" id="HdnPractice_ID" name="HdnPractice_ID" value="@ViewBag.Practice_ID" />
+        <input type="hidden" id="HdnProvider_ID" name="HdnProvider_ID" value="@ViewBag.Provider_ID" />
+        <input type="hidden" id="HdnLogin_ID" name="HdnLogin_ID" value="@ViewBag.Login_ID" />
+        <input type="hidden" id="HdnEmail" name="HdnEmail" value="@ViewBag.Username" />
+        <input type="hidden" id="Hdntype" name="Hdntype" value="" />
+        @*<input type="hidden" id="Hdnchk" name="Hdnchk" value="" />*@
+        <div id="wrapper">
+             @Html.Partial("_TopSection")
+         @*   <div id="flttop">
+                <div id="header01">
+                    <div id="headermain02">
+                        <div id="logopublic">
+                            <a id="logo_find1" runat="server" href="@Url.Action("Index", "Home", null)" title="Home" style="text-decoration:none;" class="bluemenuPublic">Mower Helper-Find an Mower Helper</a>
+                        </div>
+                        <div id="mainnavcon">
+                            <div class="mainnav">
+                                <ul>
+                                   
+                                       @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                    <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                       }
+                                     <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div id="flt02">
+                <div id="bodycon">
+                    <div id="contentpannel" class="padding-top">
+
+                        <div id="main-content">
+                            <div id="UpdatePanel7">
+                                <div class="content-box">
+                                    <div class="content-box-content">
+                                        <table style="font-size: 14px; font-weight: bold; font-family: Arial; padding-bottom: 255px;" width="98%"
+                                            border="0" align="center" cellpadding="0" cellspacing="0">
+
+                                            <tr>
+                                                <td style="font-family: Arial; padding-bottom: 15px; padding-top: 10px;">
+                                                    <p>
+                                                        <font face="Arial" size="3"><b>Mower Helper Registration Successful!</b></font>
+                                                    </p>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td align="center" width="75%" bgcolor="#6699ff" style="font-family: Arial; padding: 5px 5px 5px 5px">
+                                                    <table border="0" cellpadding="0" align="center" cellspacing="0" bgcolor="white"
+                                                        width="100%">
+                                                        <tr>
+                                                            <td align="center">
+                                                                <table cellpadding="0" cellspacing="0" border="0" width="80%">
+                                                                    <tr>
+                                                                        <td colspan="2" align="center" style="font-weight: normal; font-family: Arial; padding-top: 20px; padding-bottom: 20px; font-size: 13px;"></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td valign="bottom" align="right" style="font-weight: bold; font-family: Arial; color: Red; font-size: 13px; height: 16px;">Your email :
+                                                                        </td>
+                                                                        <td align="left" style="font-weight: normal; font-family: Arial; padding-left: 5px; font-size: 13px; height: 16px;">
+                                                                            <span id="lblUserName">@ViewBag.Username</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td valign="top" align="right" style="font-weight: bold; padding-top: 3px; font-family: Arial; font-size: 13px; color: Red; height: 16px;">Password :
+                                                                        </td>
+                                                                        <td align="left" style="font-weight: normal; padding-top: 3px; font-family: Arial; padding-left: 5px; font-size: 13px;">
+
+                                                                            <span id="lblPassword">******</span>
+                                                                        </td>
+                                                                    </tr>
+
+@*                                                                    <tr>
+                                                                        <td colspan="2" valign="top" align="center" style="font-family: Arial; text-align: justify; font-size: 13px;">
+                                                                            @Html.CheckBox("ChkEmail", true)
+                                                                            Check here&nbsp; to send the login information to your email-id &nbsp;&nbsp;
+                                                                        </td>
+                                                                    </tr>*@
+                                                                    <tr>
+                                                                        <td colspan="2" valign="top" align="center" style="font-family: Arial; text-align: justify; font-size: 13px; padding-top:15px;line-height:2;">
+                                                                            <span id="lblmessage">@ViewBag.Trialperiodmessage</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                       @* <td style="padding-bottom: 20px; padding-top: 20px; font-family: Arial;display:none;">
+                                                                            <p align="left" style="font-family: Arial; color: #044a7d;">
+                                                                                <font face="Arial" size="2">*@
+                                                                   @* <asp:LinkButton ID="" runat="server" Text="Log in Now" CssClass="bluemenu" Font-Size="Medium" style="text-decoration:none;" ></asp:LinkButton>*@
+                                                                   @* <a href="" runat="server" id="lnkLogIn" style="font-size:15px;">Log in Now</a>*@
+                                                                    @*<input type="submit" value="Log in Now" title="Save" onclick="return ChecValidate();" class="button" />
+                                                                </font>
+                                                                            </p>
+                                                                        </td>*@
+                                                                        <td colspan="2" align="center" style="padding-bottom: 20px; font-family: Arial;">
+                                                                            <p align="center" style="font-family: Arial;">
+                                                                                <a href="#"><font face="Arial" size="2">
+                                                                    @*<asp:LinkButton ID="" runat="server" Text="Done for Now" CssClass="bluemenu" Font-Size="Medium" style="text-decoration:none;"></asp:LinkButton>*@
+                                                                     @* <a href="/Home/Index" runat="server" id="lnkDone" style="font-size:15px;">Done for Now</a>*@
+                                                                      <input type="submit" value="Done for Now" title="Save" onclick="return ChecValidate1();" class="button" />
+                                                                </font></a>
+                                                                            </p>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+
+
+                    </div>
+                     @Html.Partial("_Footer")
+                @*   <div id="footercon">
+            <div id="footerpublic">
+                <div >
+                     @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                            {
+                            <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                         
+                                <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.ShowArticles == "Y")
+                            {
+                                <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.Showforums == "Y")
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                      <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li style="display:none;">
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                    
+                            </ul>
+                            }
+                    
+                </div>
+                            <div class="copy">
+                                Copyright © 2016.Mower Helper-Find an Mower Helper , Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    }
+
+    @*</form>*@
+</body>
+@*<script type="text/javascript">
+
+    function updateSuccess(data) {
+        //        alert("1");
+        //        alert(data.Success);
+
+
+        if (data != '' & data.Success == true) {
+            $('#updateDialog').dialog('close');
+            //            window.location.href = "../ProviderRegistration/CCProcess";
+            var Practice_ID = data.Object.Practice_ID
+            var Provider_ID = data.Object.Provider_ID
+            window.location.href = '../ProviderRegistration/CCProcess?Uid1=' + Practice_ID + '&Uid2=' + Provider_ID;
+        }
+        else {
+            $('#updateDialog').dialog('close');
+            //            alert("Process Failed.");
+            alert(data.ErrorMessage);
+
+            $("#update-message").html(data.ErrorMessage);
+            $("#update-message").show();
+        }
+    }
+    </script>*@
+</html>

@@ -1,0 +1,109 @@
+﻿@{
+    Layout = null;
+    
+}
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+@*<meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+   @Scripts.Render("~/ThScripts/ThJquery")
+ @*   @Styles.Render("~/Content/themes/base/TherpistStyles")*@
+<style type="text/css">
+    .button {
+	font-family: Verdana, Arial, sans-serif;
+	display: inline-block;
+	background: #459300 url('../images/bg-button-green.gif') top left repeat-x !important;
+	border: 1px solid #459300 !important;
+	padding: 4px 7px 4px 7px !important;
+	color: #fff !important;
+	font-size: 11px !important;
+	cursor: pointer;
+}
+    </style>
+<script type="text/javascript">
+         function goback() {
+             var gpage = "@ViewBag.appttype"
+             if (gpage == "Month") {
+                 window.location = "../Schedule/ViewProvMonthlySchedule";
+                 return false;
+             }
+             else if (gpage == "Week") {
+                 window.location = "../Schedule/WeeklyAppts";
+                 return false;
+             }
+             else {
+                 window.location = "../Schedule/Schedulespecs";
+                 return false;
+             }
+         }
+    function Printpage() {
+        document.getElementById('trprint').style.display = "none";
+        window.print();
+        document.getElementById('trprint').style.display = "";
+        return false;
+    }
+        $(document).ready(function () {
+            var apptdates = "@ViewBag.apptdate";
+            if (apptdates != null) {                
+                $("#ApptDate").val(apptdates);
+            }
+            else {
+                var beginDate = "@ViewBag.begindate";
+                var endDate = "@ViewBag.enddate";
+                $("#ApptDate").val(beginDate + " to " + endDate);
+            }
+        });
+</script>
+</head>
+<body>   
+    <table style="border-collapse: collapse" bordercolor="#111111" cellspacing="0" cellpadding="0"
+            width="85%" align="center" border="0">
+            <tr id="trprint">
+                <td class="lbl" width="2%">
+                </td>
+                <td class="lbl" align="right" width="96%" valign="baseline">
+                    <div class='noPrint'>
+                        <input class="button" id="btnPrint" runat="server" type="button" value="Print" name="btnPrint" onclick="return Printpage();" />
+                            <input class="button" id="btnCancel" runat="server" type="button" value="Close" name="Close" onclick="return goback();" />                       
+                    </div> 
+                </td>
+                <td class="lbl" width="2%">
+                </td>
+            </tr>
+        </table>
+    <table style="border-collapse: collapse" style="border-color:#111111" cellspacing="1" cellpadding="8"
+            width="85%" align="center" border="0" id="tblschedulerpt" runat="server">
+            <tr>
+                
+                <td class="ReportHeader" align="center" width="96%" colspan="2">
+                    <strong>Appointments for&nbsp;
+                     @Html.Display("ApptDate")
+                      </strong></td>                
+            </tr>           
+            <tr>               
+                <td class="ReportAlign" align="left" height="30px" width="96%" >
+                    <strong>Mower helper name&nbsp;:&nbsp;</strong>
+                    @ViewBag.fullname                    
+                </td>                
+            </tr>
+            <tr>                
+                <td width="96%" >
+                   
+                </td>                
+            </tr>
+        </table>
+  @*  <br />*@
+    @Html.Raw(ViewBag.prntview)
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr style="height:40px">
+    <td></td>
+    </tr>
+      <tr>
+        <td class="ReportAlign" height="30px" align="center" colspan="10"><strong>***End-of-report***</strong></td>
+      </tr>
+    </table>
+        
+</body>
+</html>

@@ -1,0 +1,21 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+      <title>Mower Helper-Find an Mower Helper</title>
+</head>
+    <body>
+         <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+        <div id="main-content">
+        
+        </div>
+         <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+    </body>
+</html>

@@ -1,0 +1,688 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+<!DOCTYPE html>
+
+<html>
+<head>
+
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</head>
+<body>
+        
+   @* @using (Html.BeginForm("AddExpenseLedger", "OfficeExpenses", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+                 
+        @Html.AntiForgeryToken()
+        *@
+    @Html.AntiForgeryToken()
+        <input type="hidden" id="HdnExp_Ledger_ID" name="HdnExp_Ledger_ID" value="@ViewBag.Exp_Ledger_ID" />
+        <input type="hidden" id="hdnrlid" name="hdnrlid" value="@ViewBag.roleid" />
+
+    <input type ="hidden" id="hdnctgry" name="hdnctgry" value="@ViewBag.txtCategory" />
+    <input type ="hidden" id="hdnfilter" name="hdnfilter" value="@ViewBag.dt_filter" />
+    <input type ="hidden" id="hdnrecords" name="hdnrecords" value="@ViewBag.ddlrecords" />
+    <input type ="hidden" id="hdntxtfromdate" name="hdntxtfromdate" value="@ViewBag.txt_FromDate" />
+    <input type ="hidden" id="hdntxttodate" name="hdntxttodate" value="@ViewBag.txt_ToDate" />
+    <input type ="hidden" id="hdnsortdr" name="hdnsortdr" value="@ViewBag.sortdir" />
+    <input type ="hidden" id="hdpage" name="hdpage" value="@ViewBag.page" />
+    <input type ="hidden" id="hdnsr" name="hdnsr" value="@ViewBag.sort" />
+
+
+        <div class="content-box">
+            <div class="content-box-content">
+                <table class="border_style" cellspacing="1" cellpadding="4" width="100%" align="center"
+                    border="0">
+
+
+                    <tr class="nav_blue_color" id="trpraname">
+                        <td align="right" width="25%">
+                            <font color="red"><b>&nbsp;*</b></font><strong>Select Mower Helper :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdpractice" runat="server">
+                            @Html.Obout(new ComboBox("ComboBox5")
+                                                           {
+                                                               Width = 500,
+                                                               MenuWidth = 500,
+                                                               Height = 200,
+                                                               EnableLoadOnDemand = true,
+                                                               OnLoadingItems = "OfficeExpenses/LoadingItems1",
+                                                               EmptyText = "-- Select Mower Helper --",
+                                                               OpenOnFocus = false,
+
+                                                               HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                                                                   @:<div class="header c1">Mower Helper name</div>
+),
+
+                                                               ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                                            @:<div class="item c1">@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).PracticeName)</div>
+)
+                                                           })
+                            &nbsp;&nbsp;
+                             <span id="lblpractice" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+
+                    <tr class="white_color">
+                        <td align="right" width="25%">
+                            <font color="red"><b>&nbsp;*</b></font><strong>Date :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdDate" runat="server">
+                            @Html.TextBox("txtDate", (string)ViewBag.Exp_Date, new { @class = "textfield Datefield", MaxLength = "10", style = "width:80px", autocomplete = "off" })
+                            &nbsp;&nbsp;
+                             <span id="lblErrDate" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr class="nav_blue_color" height="20">
+                        <td align="right" width="25%">
+                            <font color="red"><b>&nbsp;*</b></font><strong>Category :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdCategory" runat="server">
+
+                            @*@if (Model.StateList != null)
+                            {
+                                @Html.DropDownList("ddlCategory", Model.StateList, "-- Select Category --", new { @style = "width:248px;height:25px;font:13px;" })
+                            }*@
+                            @Html.DropDownList("ddlCategory",new SelectList(ViewBag.catList,"Exp_Category_ID","Exp_Category"),"-- Select Category --", new { @style = "width:248px;height:25px;font:13px;" })
+                            <a class="AddCatClass"  id="lnkmotive" href="#" style="font-weight: normal;">Add new category</a>
+                            &nbsp&nbsp;
+                            <span id="lblErrCat" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="20" id="tritems" runat="server" class="white_color" style="display: none">
+                        <td align="right" width="25%">
+                            <strong>Items :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left">
+                            @Html.TextBox("txtItem", (string)ViewBag.Item, new { @class = "textfield", MaxLength = "50", style = "width:300px", autocomplete = "off" })
+                        </td>
+                    </tr>
+                    <tr height="20" id="trquantity" runat="server" class="nav_blue_color" style="display: none">
+                        <td align="right" width="25%">
+                            <strong>Quantity :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdQuan" runat="server">
+
+                            @Html.TextBox("txtQuantity", (string)ViewBag.Quantity, new { @class = "textfield", MaxLength = "50", style = "width:200px", onkeypress = "return AlphaNumbers(event);", autocomplete = "off" })
+                            &nbsp;&nbsp;
+                                <span id="lblErrQuan" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="20" id="trcost" runat="server" class="white_color">
+                        <td align="right" width="25%" style="height: 22px">
+                            <font color="red"><b>&nbsp;*</b></font><strong>Total cost($) :&nbsp;</strong>
+                        </td>
+                        <td style="height: 22px" width="75%" align="left" id="tdcost" runat="server">
+                            @Html.TextBox("txtCost", (string)ViewBag.TotalCost, new { @class = "textfield", MaxLength = "7", style = "width:200px", @onkeypress = "return checkValidNumeric(txtCost,8,2,event)" , autocomplete = "off" })
+                            <span id="lblErrCost" style="font-weight: bold; color: Black"></span>
+                            &nbsp;&nbsp;
+                        
+                        </td>
+                    </tr>
+                    <tr height="20" id="trcheckno" runat="server" class="nav_blue_color">
+                        <td align="right" width="25%">
+                            <strong>Check number :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdChk" runat="server">
+                            @Html.TextBox("txtCheckNumber", (string)ViewBag.CheckNumber, new { @class = "textfield", MaxLength = "10", style = "width:200px", onkeypress = "return AlphaNumbers(event);", autocomplete = "off" })
+                            <span id="lblErrChk" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="20" id="trvendor" runat="server" class="white_color">
+                        <td align="right" width="25%">
+                            <strong>Vendor :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdVen" runat="server">
+                            @Html.TextBox("txtVendor", (string)ViewBag.Vendor, new { @class = "textfield", MaxLength = "50", style = "width:300px", autocomplete = "off" })
+
+                            &nbsp;&nbsp;
+                            <span id="lblErrVen" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="20" id="trtax" runat="server" class="nav_blue_color">
+                        <td align="right" width="25%">
+                            <strong>Tax deductible :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left">
+
+
+
+
+
+
+
+                            @{
+                            bool str0 = false;
+                            bool str1 = false;
+                            bool str2 = false;
+                            }
+                            @if (ViewBag.Deductible != null)
+                            {
+                                if (ViewBag.Deductible.ToString() == "0")
+                                {
+                                    str0 = true;
+                                    str1 = false;
+                                    str2 = false;
+                                }
+                                else if (ViewBag.Deductible.ToString() == "1")
+                                {
+                                    str0 = false;
+                                    str1 = true;
+                                    str2 = false;
+                                }
+                                else if (ViewBag.Deductible.ToString() == "2")
+                                {
+                                    str0 = false;
+                                    str1 = false;
+                                    str2 = true;
+                                }
+                            }
+                            @Html.RadioButton("rbtnDeductible0", "0", str0, new {@GroupName = "grpoffice", onclick = "return rbtncheck0();" }) Yes&nbsp;
+                                                                            @Html.RadioButton("rbtnDeductible1", "1", str1, new {@GroupName = "grpoffice", onclick = "return rbtncheck1();" }) No&nbsp;
+                                                                            @Html.RadioButton("rbtnDeductible2", "2", str2, new {@GroupName = "grpoffice", onclick = "return rbtncheck2();" }) Not sure
+
+                        </td>
+                    </tr>
+                    <tr height="20" id="trnotes" runat="server" class="white_color">
+                        <td align="right" width="25%">
+                            <strong>Notes :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdNotes" runat="server">
+                            @Html.TextArea("txtNotes", (string)ViewBag.Notes, 3, 3, new { @class = "textfield", style = "width:442px;height:80px;" })
+                            <br />
+                            (Maximum length 1000 characters)&nbsp;&nbsp;
+                            <span id="lblErrNotes" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="20" id="trvendor" runat="server" class="white_color">
+                        <td align="right" width="25%">
+                            <strong>Image :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdimg" runat="server">
+                            <input id="flLogo1" type="file" name="flLogo1" />
+                            @if (ViewBag.fileupload != null)
+                            {
+                                <img src="~/Images/help2.png" id="imglicensemsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.fileupload' ,280);" />
+                            }
+                            <br />
+                            <span id="lblErrimage" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" cellspacing="0" width="78%">
+                    <tr class="background_color">
+                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                            <input type="submit" id="submit" value="Save" title="Save" class="button" onclick="return AddProviders();" />
+
+                            &nbsp;
+                                              <input type="button" class="close button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+      
+    @*}*@
+    @* <script type="text/javascript">
+         $(function () {
+                $("#txtDate").datepicker({
+                 dateFormat: 'mm/dd/yy',
+                 changeMonth: true,
+                 changeYear: true,
+                 //                showCurrentAtPos: 1,
+                 showWeeks: true,
+                 inline: true,
+                 numberOfMonths: [1, 1],
+                 yearRange: "1950:2020",
+                 showOn: "button",
+                 buttonImage: "../Images/calender.gif",
+                 buttonImageOnly: true
+
+             });
+         });
+    </script>*@
+    
+    <script type="text/javascript">
+        function rbtncheck0() {
+            document.getElementById('rbtnDeductible0').checked = true;
+            document.getElementById('rbtnDeductible1').checked = false;
+            document.getElementById('rbtnDeductible2').checked = false;
+
+        }
+        function rbtncheck1() {
+            document.getElementById('rbtnDeductible0').checked = false;
+            document.getElementById('rbtnDeductible1').checked = true;
+            document.getElementById('rbtnDeductible2').checked = false;
+        }
+        function rbtncheck2() {
+            document.getElementById('rbtnDeductible0').checked = false;
+            document.getElementById('rbtnDeductible1').checked = false;
+            document.getElementById('rbtnDeductible2').checked = true;
+        }
+    </script>
+    <script type="text/javascript">
+
+        $(function () {
+            var roleid = $("#hdnrlid").val();
+
+            if (roleid == "1") {
+                document.getElementById('trpraname').style.display = '';
+            }
+            else {
+                document.getElementById('trpraname').style.display = 'none';
+            }
+
+        });
+    </script>
+    @* <script type="text/javascript">
+         var linkObj;
+         $('#NewCatdiv').dialog({
+             autoOpen: false,
+             width: 900,
+             resizable: false,
+             resizable: false,
+             modal: true
+
+         });
+
+         $(".AddCatClass").click(function () {
+             linkObj = $(this);
+             var dialogDiv = $('#NewCatdiv');
+             $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+             var viewUrl = linkObj.attr('href');
+             $.get(viewUrl, function (data) {
+                 dialogDiv.html(data);
+
+                 $('#dvLoading').dialog('close');
+                 dialogDiv.dialog('open');
+             });
+             return false;
+         });
+     </script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".Addcatclose").live("click", function (e) {
+                var dialogDiv = $('#NewCatdiv');
+                dialogDiv.dialog('close');
+            });
+
+            var setcat = "@ViewBag.Exp_Category_ID";
+            $("#ddlCategory").val(setcat);
+        });
+
+    </script>    
+</body>   
+    <script type="text/javascript">
+        function AddmotSuccess(data) {
+            // alert(data);
+            if (data.Success == true) {
+                var newid = data.Object;
+                var newmot = document.getElementById('txtcategory').value;
+                $('#ddlCategory').
+         append($("<option></option>").
+          attr("value", newid).
+         text(newmot));
+
+                $('#NewCatdiv').dialog('close');
+                $('#ddlCategory').val(newid);
+                // alert(newid);
+            }
+            //else if (data.ErrorMessage == 'expire') {
+            //    window.location.href = '../Home/SessionExpire';
+            //}
+            else {
+                if (data != "_Logon_") {
+                    document.getElementById("lblErrMot").style.display = '';
+                    document.getElementById("lblErrMot").innerHTML = data.ErrorMessage;
+                    document.getElementById("tdMot").bgColor = 'orange';
+                    document.getElementById('txtcategory').focus();
+                    //  alert(data.ErrorMessage);
+                    $('#NewCatdiv').dialog('open');
+                    // return;
+                }
+            }
+        }
+</script>
+
+    <script type="text/javascript">
+        function validMot() {
+            var strcatname = trim(document.getElementById('txtcategory').value);
+            document.getElementById('txtcategory').value = strcatname;
+            if (document.getElementById('txtcategory').value == '') {
+                InlineAlert('lblErrMot', 'tdMot', 'Please enter Category');
+                document.getElementById('txtcategory').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrMot', 'tdMot', '#FFFFFF');
+            }
+            //       return false;
+        }
+        function clearalerts() {
+            ClearInlineAlert('lblpractice', 'tdpractice', 'White');
+            ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF');
+            ClearInlineAlert('lblErrCat', 'tdCategory', 'White');
+            ClearInlineAlert('lblErrCost', 'tdcost', '#FFFFFF');
+            ClearInlineAlert('lblErrChk', 'tdChk', 'White');
+            ClearInlineAlert('lblErrVen', 'tdVen', '#FFFFFF');
+            ClearInlineAlert('lblErrNotes', 'tdNotes', '#FFFFFF');
+            ClearInlineAlert('lblErrimage', 'tdimg', '#FFFFFF');
+        }
+        function AddProviders(count, RoleID) {
+            var rlid = document.getElementById('hdnrlid').value;
+            if (rlid == "1") {
+                if (ComboBox5.selectedIndex() != -1) {
+                }
+                else {
+                    InlineAlert('lblpractice', 'tdpractice', 'please select the Mower Helper.');
+                    return false;
+                }
+            }
+            if (document.getElementById('txtDate').value == '' || document.getElementById('txtDate').value == 'mm/dd/yyyy') {
+                clearalerts();
+                InlineAlert('lblErrDate', 'tdDate', 'Please enter date.');
+                document.getElementById('txtDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF');
+            }
+            if (document.getElementById('txtDate').value != '' && document.getElementById('txtDate').value != 'mm/dd/yyyy') {
+                clearalerts();
+                var Dateid = document.getElementById('txtDate').value;
+                var Dat = Dateid.split("/");
+                var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+                var yearid = Dat[2];
+                var Monthid = Dat[0];
+                var MyId = Dat[1];
+                var CurDt = new Date()
+                var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+                var matchArray = Dateid.match(DatePat);
+                if (matchArray == null) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'The date  format!!! should be like mm/dd/yyyy');
+                    document.getElementById('txtDate').focus();
+                    return false;
+                }
+                else {
+
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (yearid < 1900) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid 4 digit year between 1900 and 2060');
+                    document.getElementById('txtDate').focus();
+                    return false
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (Monthid > 12 || Monthid == 0) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid month');
+                    document.getElementById('txtDate').focus();
+                    return false
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (MyId > 31 || MyId == 0) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid day');
+                    document.getElementById('txtDate').focus();
+                    return false
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (myDat > CurDt) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Invalid date !!! should be less than current date');
+                    document.getElementById('txtDate').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid day');
+                    document.getElementById('txtDate').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid day');
+                    document.getElementById('txtDate').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+            }
+
+            if (document.getElementById('ddlCategory').selectedIndex == 0) {
+                clearalerts();
+                InlineAlert('lblErrCat', 'tdCategory', 'Please select category');
+                document.getElementById('ddlCategory').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCat', 'tdCategory', 'White');
+            }
+            //var itemc = trim(document.getElementById('txtItem').value);
+            //document.getElementById('txtItem').value = itemc;
+
+            //if (document.getElementById('txtQuantity').value != "") {
+            //    clearalerts();
+            //    var quan = trim(document.getElementById('txtQuantity').value);
+            //    document.getElementById('txtQuantity').value = quan;
+            //    if (fnStringFieldValidate(document.getElementById('txtQuantity'), "0123456789") == 0) {
+            //        clearalerts();
+            //        InlineAlert('lblErrQuan', 'tdQuan', 'Invalid quantity!!! quantity must be in numeric only.');
+            //        document.getElementById('txtQuantity').focus();
+            //        return false;
+            //    }
+            //    else {
+            //        ClearInlineAlert('lblErrQuan', 'tdQuan', 'White');
+            //    }
+
+            //}
+            if (document.getElementById('txtCost').value == '') {
+                clearalerts();
+                InlineAlert('lblErrCost', 'tdcost', 'Please enter total cost');
+                document.getElementById('txtCost').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCost', 'tdcost', '#FFFFFF');
+            }
+
+            if (document.getElementById('txtCost').value != "") {
+                clearalerts();
+                if (fnStringFieldValidate(document.getElementById('txtCost'), ".0123456789") == 0) {
+                    clearalerts();
+                    InlineAlert('lblErrCost', 'tdcost', 'Invalid total cost!!! total cost must be in numeric only.');
+                    document.getElementById('txtCost').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrCost', 'tdcost', '#FFFFFF')
+                }
+
+            }
+            if (document.getElementById('txtCheckNumber').value != "") {
+                clearalerts();
+                var checkn = trim(document.getElementById('txtCheckNumber').value);
+                document.getElementById('txtCheckNumber').value = checkn;
+                if (fnStringFieldValidate(document.getElementById('txtCheckNumber'), "0123456789") == 0) {
+                    clearalerts();
+                    InlineAlert('lblErrChk', 'tdChk', 'Invalid check number !!! check number must be in numeric only.');
+                    document.getElementById('txtCheckNumber').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrChk', 'tdChk', 'White');
+                }
+
+            }
+            var vendorc = trim(document.getElementById('txtVendor').value);
+            document.getElementById('txtVendor').value = vendorc;
+            if (MyChars(document.getElementById('txtVendor')) == "NumError") {
+                clearalerts();
+                InlineAlert('lblErrVen', 'tdVen', 'Please enter vendor name properly');
+                document.getElementById('txtVendor').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrVen', 'tdVen', '#FFFFFF');
+            }
+            if (fnCheckSpecialChars(document.getElementById('txtVendor')) == 0) {
+                clearalerts();
+                InlineAlert('lblErrVen', 'tdVen', 'Please enter vendor name without special characters');
+                document.getElementById('txtVendor').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrVen', 'tdVen', '#FFFFFF');
+            }
+            var notec = trim(document.getElementById('txtNotes').value);
+            document.getElementById('txtNotes').value = notec;
+            if (document.getElementById('txtNotes').value.length > 1000) {
+                clearalerts();
+                InlineAlert('lblErrNotes', 'tdNotes', 'Please enter at most 1000 characters in the notes field');
+                document.getElementById('txtNotes').focus();
+                return (false);
+            }
+            else {
+                ClearInlineAlert('lblErrNotes', 'tdNotes', '#FFFFFF');
+            }
+
+            //if (document.getElementById('flLogo1').value != "") {
+            //    clearalerts();
+            //    var strFilePath = document.getElementById('flLogo1').value;
+            //    var Files1 = new Array();
+            //    var Files = new Array();
+            //    Files = strFilePath.split('\\');
+            //    var strFileName = Files[parseInt(Files.length) - 1];
+            //    var strreverse = revString(strFileName);
+            //    var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+
+            //    if (strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TIFF" || strExtn.toUpperCase() == "PNG") {
+            //        clearalerts();
+            //    }
+            //    else {
+            //        clearalerts();
+            //        ////Glb_ShowAlert("Please enter license number  without spaces");
+            //        //document.getElementById('tblmain').style.display = '';
+            //        //document.getElementById('lblerrorimage').innerHTML = "Invalid logo!!! the format of the photo selected is not of type image.";
+            //        //document.getElementById('tderrorimage').style.display = '';
+            //        //document.getElementById('tderrorimage').bgColor = "orange";
+            //        //document.getElementById('tdformatmain').bgColor = "orange";
+            //        InlineAlert('lblErrimage', 'tdimg', 'Invalid logo!!! the format of the photo selected is not of type image.');
+            //        document.getElementById('flLogo1').focus();
+            //        return false;
+            //    }
+            //}
+
+            var Adddata = new FormData();
+            var files = $("#flLogo1").get(0).files;
+            // Add the uploaded image content to the form data collection
+            if (files.length > 0) {
+                Adddata.append("flLogo1", files[0]);
+                var strFilePath = document.getElementById('flLogo1').value;
+                var Files1 = new Array();
+                var Files = new Array();
+                Files = strFilePath.split('\\');
+                var strFileName = Files[parseInt(Files.length) - 1];
+                var strreverse = revString(strFileName);
+                var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+                if (strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TIFF" || strExtn.toUpperCase() == "PNG") {
+                    //clearalerts();
+                }
+                else {
+                    $('#dvLoadingnote').dialog('close');
+                    //clearalerts();                
+                    document.getElementById('flLogo1').focus();
+                    alert("LogoError");
+                    return false;
+                }
+            }
+
+            Adddata.append("txtDate", document.getElementById("txtDate").value);
+            Adddata.append("ddlCategory", document.getElementById("ddlCategory").value);
+            Adddata.append("txtCost", document.getElementById("txtCost").value);
+            Adddata.append("txtCheckNumber", document.getElementById("txtCheckNumber").value);
+            Adddata.append("txtVendor", document.getElementById("txtVendor").value);
+            Adddata.append("txtNotes", document.getElementById("txtNotes").value);
+            Adddata.append("txtItem", document.getElementById("txtItem").value);
+            Adddata.append("txtQuantity", document.getElementById("txtQuantity").value);
+            Adddata.append("rbtnDeductible0", document.getElementById("rbtnDeductible0").checked);
+            Adddata.append("rbtnDeductible1", document.getElementById("rbtnDeductible1").checked);
+            Adddata.append("rbtnDeductible2", document.getElementById("rbtnDeductible2").checked);
+            Adddata.append("HdnExp_Ledger_ID", document.getElementById("HdnExp_Ledger_ID").value);
+            Adddata.append("hdnrlid", document.getElementById("hdnrlid").value);            
+            //Adddata.append("Notes", $('.EditExpNotes').val());
+
+            Adddata.append("ComboBox5", document.getElementById("ComboBox5").value);            
+            Adddata.append("hdnctgry", document.getElementById("hdnctgry").value);
+            Adddata.append("hdnfilter", document.getElementById("hdnfilter").value);
+            Adddata.append("hdnrecords", document.getElementById("hdnrecords").value);
+            Adddata.append("hdntxtfromdate", document.getElementById("hdntxtfromdate").value);
+            Adddata.append("hdntxttodate", document.getElementById("hdntxttodate").value);
+            Adddata.append("hdpage", document.getElementById("hdpage").value);
+            Adddata.append("hdnsortdr", document.getElementById("hdnsortdr").value); 
+            Adddata.append("hdnsr", document.getElementById("hdnsr").value);
+
+            var token = $('[name=__RequestVerificationToken]').val();
+            var headers = {};
+            headers['__RequestVerificationToken'] = token;
+
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $.ajax({
+                headers: headers,
+                url: "@Url.Action("AddExpenseLedger", "OfficeExpenses")",
+            contentType: false,
+            processData: false,
+            data: Adddata,
+            type: 'POST',
+            success: function (data) {
+                if (data.Success == true) {                   
+                    var txtCategory = data.Object.txtCategory;
+                    var dt_filter = data.Object.dt_filter;
+                    var txt_FromDate = data.Object.txt_FromDate;
+                    var txt_ToDate = data.Object.txt_ToDate;
+                    var ddlrecords = data.Object.ddlrecords;
+                    var sortdir = data.Object.sortdir;
+                    var sort = data.Object.sort;
+                    var page = data.Object.page == null ? 1 : data.Object.page;   
+                    $("#gridnew").load("../OfficeExpenses/ExpensesPartial?page=" + page + '&txtCategory=' + escape(txtCategory) + '&dt_filter=' + dt_filter + '&txt_FromDate=' + txt_FromDate + '&txt_ToDate=' + txt_ToDate + '&ddlrecords=' + ddlrecords + '&sortdir=' + sortdir + '&sort=' + sort);
+                    $('#Addexpdialog').dialog('close');
+                    $('#dvLoading').dialog('destroy');
+                }
+                else {
+                    alert("Sorry try again after sometime");
+                    window.location = '@Url.Action("SessionExpire", "Home")';
+                }
+            },
+            error: function () {
+                window.location = '@Url.Action("SessionExpire", "Home")';
+            }
+
+        });
+        }
+
+    </script>
+    
+</html>

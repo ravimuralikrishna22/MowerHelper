@@ -1,0 +1,265 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+     @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css">
+    .Date{ width:8%;}
+.ChgTo{ width:8%;}
+.chgtype{ width:20%;}
+.chgAmt{  width:12%;}
+td
+{
+    padding:2px;
+}
+    </style>
+    <script type="text/javascript">
+        function ondescriptionover(obj) {
+            document.getElementById(obj).style.position = 'absolute';
+            document.getElementById(obj).style.display = '';
+            return false;
+        }
+        function ondescriptionout(obj) {
+            document.getElementById(obj).style.display = 'none';
+            return false;
+        }
+        function bValidate() {
+            window.location = '../OfficeExpenses/ExpenseLedger';
+        }
+    </script>
+</head>
+<body>
+@{Html.RenderAction("Topsection", "Tools");}
+    <div id="main-content">
+         <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr id="trtabs" runat="server">
+                                <td width="100%" class="navigation">
+                                    
+                                @*    <div class="admin-tab">
+                                        <a class="inadmin-link" id="acontent2"  href="../Billing/TransactionDisplay"><span>Client Transactions</span>
+                                        </a>
+                                    </div>*@
+                                 @*   <div class="admin-tab">
+                                        <a class="inadmin-link" id="avideo" href="VideoAudioFiles" ><span>Video/Audio Files</span>
+                                        </a>
+                                    </div>*@
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument1" href="../OfficeExpenses/ExpenseLedger" ><span>My Business Expenses</span>
+                                        </a>
+                                    </div>
+                                   @* <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument" href="../Notes/ProfileNotes"><span>Notes</span>
+                                        </a>
+                                    </div>*@
+                                    
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument2" href="../Common/PasswordManagement" ><span>Password Management</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="adocument3" href="FT_servicesTransaction" ><span>Mower Helper Transactions</span>
+                                        </a>
+                                    </div>
+                                                                         @if (ViewBag.Showtask == "Y")
+                                     {
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument4" href="../Task/TaskList" ><span>Tasks</span>
+                                        </a>
+                                    </div>
+                                                                         }
+                                     <div class="admin-tab" style="display:none;">
+                                        <a class="inadmin-link" id="adocument5" href="@Url.Action("Index","Technicians")" ><span>Technicians</span>
+                                        </a>
+                                    </div>
+                                     <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Admin/FTservices_addnewpayment" id="acontent"><span>Payment method</span>
+                                    </a>
+                                </div>
+                                     <div class="admin-tab">                                        
+                                        <a class="inadmin-link" href="../Messages/MessageFromHelp" id="amsgcontent"><span>Messages</span></a>
+                                    </div>
+                                    @*<div class="admin-tab">                                        
+                                        <a class="inadmin-link" href="../Article/ArticleJqGrid" id="aArticles"><span>Articles</span></a>
+                                    </div>*@
+                                     @if(ViewBag.Showforums=="Y"){
+                                      <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Forums/ForumsHome" id="acontent5"><span>Forums</span>
+                                    </a>
+                                </div>
+                                    }
+                                </td>
+                            </tr>
+                        <tr class="background_color">
+                            <td id="tdtabs" class="tab-background" width="100%">
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr>
+                                        <td width="30%" align="right" style="padding-right:5px">
+                                        @Html.ActionLink("Invoice list", "PracticeServicesInvoice", "Admin", null, new { @style = "color:#06C;font-weight:bold;" })
+                                        <br />
+                                        <br />
+	@Html.ActionLink("Receipt list", "ReceiptItemList", "Admin", null, new { @style = "color:#06C;font-weight:bold;" })
+                                        </td>
+                                        <td width="50%" align="center">
+                                            <div class="content-box">
+                                                <div class="content-box-header">
+                                                    <h3>
+                                                        Mower Helper billing summary</h3>
+                                                </div>
+                                                <div class="clear">
+                                                </div>
+                                                <div class="content-box-content">
+                                                    @Html.Raw(ViewBag.FtSummary)
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td width="20%">
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br /><br />
+                                <div class="content-box">
+        <div class="content-box-header"><h3>List of charges</h3>
+       
+        </div>
+         <div class="clear"></div>
+         <div class="content-box-content">
+          @{string heading1;
+            if (Request["sort"] == "Transaction_Date" && Request["sortdir"] == "ASC")
+           {
+               heading1 = "Date ▲";
+           }
+            else if (Request["sort"] == "Transaction_Date" && Request["sortdir"] == "DESC")
+           {
+               heading1 = "Date ▼";
+           }
+           else
+           {
+               heading1 = "Date ▼";
+           }
+                                            }
+                                            @{string Chgpagesize = (ViewBag.chgpagesize == null ? "10" : ViewBag.chgpagesize);
+                                              WebGrid Chggrid = new WebGrid(rowsPerPage: Convert.ToInt32(Chgpagesize));}
+                                            @{WebGrid grid = Chggrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Transaction_Date", heading1, style: "Date"), grid.Column("ServiceName", "Service name", style: "ChgTo"), grid.Column("BilledBy","Charged by", style: "chgtype"), grid.Column("", "Notes",
+                                                  format:@<text>
+                                                         @{string chgNote = (string)item.Notes;
+                                                           if(chgNote!=null)
+                                                           {
+                                                           if (chgNote.Length > 100)
+                                                           {
+                                                               count = count + 1;
+                                                               chgNote = chgNote.Substring(0, 100);
+                                                           
+                                                           <span>@chgNote</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 500px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Notes </h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4" width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:5px; padding-top: 5px;" align="left"> <span>@item.Notes</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@item.Notes</span>
+                                                           }
+                                                           }
+                                                           else
+                                                           {
+                                                                 <span>@item.Notes</span>
+                                                           }
+                                                           }
+                                                
+                                                </text>
+                                                
+),
+
+grid.Column("Transaction_Amount", "Amount($)", style: "chgAmt", canSort: false))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdcharge" runat="server" width="100%">
+                            <tr><td align="center" valign="middle" height="25px"><span id="lblCharges" class="errormsg" style="font-size:13px;font-weight:bold;">No charges found</span></td></tr>
+                        </table>
+                                               
+                                              }
+                                            }
+
+         </div>
+        </div>
+        <br /><br />
+        <div class="content-box">
+        <div class="content-box-header"><h3>List of payments</h3>
+       @* <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+<a id="lnkAddNewPayment" style="color:#06C;font-size:14px;font-weight:bold;" href="javascript:__doPostBack('lnkAddNewPayment','')" onclick="javascript:return ShowAddPaymentModal('','','','','-1',4992);">Add new payment</a>
+@Html.ActionLink("Add new payment", "AddPracticePayment", null, new { @class = "clspay", @style = "color:#0066CC;font-size:14px;font-weight:bold;" })
+</ul>*@
+ </div>
+         <div class="clear"></div>
+         <div class="content-box-content">
+         @{Html.RenderAction("Prpmtlist", "Admin");}
+         </div>
+        </div>
+        <br />
+        <br />
+        <div class="content-box">
+        <div class="content-box-header"><h3>List of adjustments</h3>
+        
+ </div>
+         <div class="clear"></div>
+         <div class="content-box-content">
+         @{Html.RenderAction("Pradjlist", "Admin");}
+ </div>
+        </div>
+        <br /><br />
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr>
+                                        <td width="95%">
+                                        </td>
+                                        <td style ="padding-right:5px">
+                                        <input type="button" class="button" value="Cancel" id="btnCancel" name="btnCancel"  onclick="return bValidate();"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+             </table>
+    </div>
+@{Html.RenderAction("Bottomsections", "Tools");}
+  <script type="text/javascript">
+      $(document).ready(function () {
+          var TopIndex = '@Session["TopIndex"]';
+          $("#Menu0").removeClass();
+          $("#Menu1").removeClass();
+          $("#Menu2").removeClass();
+          $("#Menu3").removeClass();
+          $("#Menu4").addClass("active");
+      });
+    </script>
+</body>
+</html>

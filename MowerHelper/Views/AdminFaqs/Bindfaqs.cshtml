@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+     <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+    <div>
+         @{
+              WebGrid Docgrid = new WebGrid(rowsPerPage: 10);}
+                                            @{WebGrid grid = Docgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totalrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("Sino", "#", style: "width: 700px;", canSort: false),
+                                                  grid.Column("Question", "Question", canSort: false, format: @<text><a  href="#"    id="asid @item.Question_Id" onclick="return selected1('@item.Question','@item.Question_Id');">@item.Question</a></text>),
+                                                   grid.Column("Category_Name", "Category name", canSort: false)                                                   
+                                                  )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>    
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table cellspacing="0" id="tblnorecords" runat="server" cellpadding="0" width="100%" border="0" align="center">
+     <tr class="white_color" runat="server">
+                <td align="center" height="25px" valign="middle" width="100%">
+                  <label id="" style="font-weight:bold; font-size:13px;">No Faqs found.</label>
+                   </td>
+        </tr>
+     </table>
+                                              }
+                                              }  
+    </div>
+</body>
+</html>

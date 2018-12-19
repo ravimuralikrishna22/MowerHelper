@@ -1,0 +1,99 @@
+﻿@*    @{
+           MowerHelper.Models.Classes.clsWebConfigsettings clsweb = new MowerHelper.Models.Classes.clsWebConfigsettings();
+         
+        }*@
+ <div id="footercon">
+                        <div id="footerpublic">
+                            <div >
+                                @if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("ShowArticles").ToUpper() == "YES" && MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("ShowForumsInPublic").ToUpper() == "YES")
+                                {
+                                    <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+
+                                        <li>
+                                            @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                        </li>
+
+                                        <li>
+                                            @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Contact Us", "Contact")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Partner Sites", "MoreHelp")
+                                        </li>
+
+                                        <li>
+                                            @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                        </li>
+                                    </ul>
+                                }
+                                else if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("ShowArticles").ToUpper() == "YES")
+                                {
+                                    <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+
+                                        <li>
+                                            @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                        </li>
+
+                                        <li>
+                                            @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Contact Us", "Contact")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Partner Sites", "MoreHelp")
+                                        </li>
+                                    </ul>
+                                }
+                                else if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("ShowForumsInPublic").ToUpper() == "YES")
+                                {
+                                    <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                        <li>
+                                            @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Contact Us", "Contact")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Partner Sites", "MoreHelp")
+                                        </li>
+                                        <li>
+                                            @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                        <li>
+                                            @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                        </li>
+                                        <li style="display:none;">
+                                            @Html.RouteLink("Contact Us", "Contact")
+                                        </li>
+                                        <li style="display:none;">
+                                            @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                        </li>
+                                        <li style="display:none;">
+                                            @Html.RouteLink("Partner Sites", "MoreHelp")
+                                        </li>
+
+                                    </ul>
+                                }
+                            </div>
+                            <div class="copy">
+                                Copyright © 2018.Mower Helper , Inc. All Rights Reserved.
+                            </div>
+                        </div>
+                    </div>

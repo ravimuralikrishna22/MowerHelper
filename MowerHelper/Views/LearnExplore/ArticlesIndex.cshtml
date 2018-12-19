@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "ArticlesIndex";
+    Layout = "~/Views/Shared/_ArticlesMaster.cshtml";
+}
+
+
+ @Scripts.Render("~/Scripts/Thscriptscript")
+    
+            
+@using (Html.BeginForm("ArticlesIndex", "LearnExplore"))
+{
+     @Html.AntiForgeryToken()
+    <input id="hdnrbomost" type="hidden" value="@ViewBag.rbomost"/>
+     <h1 style="padding-bottom: 15px;   color: #292929; font: italic 20px georgia; margin: 0;">
+        Learn &amp; Explore</h1>
+    <div class="video-library" style="padding-bottom:10px;">
+        <div class="article-search">
+            <table style="width:100%;">
+                <tr style="width:100%;">
+                    <td style="width:45%;"> <span style="color: #044a7d;  float: left; font: bold 19px Arial; margin-top: 16px; padding-right: 30px;">
+                Article &amp; Video Library</span></td>
+                    <td style="width:30%; text-align:left;">
+                        <div class="directory-search">
+                <h3>
+                      @Html.DropDownList("ddlsearch", new List<SelectListItem>
+
+                 {
+                    new SelectListItem{ Text="Topic", Value = "0" },
+                    new SelectListItem{ Text="Description", Value = "1" },
+                    new SelectListItem{ Text="Topic and Description", Value = "2" ,Selected=true}}, new { @style = "height: 25px;  width: 160px;", })
+                 
+                </h3>
+            </div>
+                    </td>
+                    <td style="width:20%;">
+                          
+            <div class="text-field">
+                <input type="text" id="txtsearch" name="txtsearch" class="textfield" />
+            </div>
+                    </td>
+                    <td style="">
+                         <input type="submit" id="go_btn" name="go_btn" value="Search" class="button" />
+                    </td>
+                </tr>
+            </table>
+           
+          
+            
+           
+        </div>
+    </div>
+    <div class="article-library">
+        <ul>
+            <li><a id="imgarticle" runat="server" href="@Url.Action("Articles","LearnExplore")"  >ARTICLE LIBRARY</a></li>
+            <li><a id="A1" name="IMgvideo" href="@Url.Action("ArticlesIndex","LearnExplore")" class="current">ARTICLE INDEX</a>
+            </li>
+            <li><a id="IMgvideo" name="IMgvideo" href="@Url.Action("Videos", "LearnExplore")" >VIDEO LIBRARY</a></li>
+        
+        </ul>
+        <div class="affairs" style="width:100%;">
+                <table cellpadding="0" width="100%" align="center" border="0">
+                      @if (ViewBag.categorycnt > 0)
+                     {
+                  
+              <tr style="width:100%;">
+                  <td style="width:100%;">
+                      
+                                        @foreach (var item1 in ViewBag.category)
+                                        {
+                                            int catid = (int)item1["ArticleCategory_ID"];
+                                            string str = item1["Category_Title"];
+                                            string text = str.ToString();
+                                            //string fileext = System.IO.Path.GetExtension(item1["Publicvideo_ID"]);
+                                          //  string path = item1["ImagepathSuffix"] + "AdminTutorialVideo" + fileext;
+                                            List<MowerHelper.Models.BLL.Admin.Articlevideos> inexlist = new List<MowerHelper.Models.BLL.Admin.Articlevideos>();
+                                            string strSearchCondition = null;
+                                            string strText = null;
+                                            inexlist = MowerHelper.Models.BLL.Admin.Articlevideos.list_CategorieswiseIndexes(catid, strSearchCondition, strText);
+                                            if (inexlist.Count > 0)
+                                            {
+                                                ViewBag.index = null;
+                                                ViewBag.indexcount = null;
+
+                                                ViewBag.index = inexlist;
+                                                ViewBag.indexcount = inexlist.Count;
+                                                int rowcount = inexlist.Count / 2;
+                                                ViewBag.rows = rowcount;
+                                            }
+                                          <table style="width:100%;">
+                                        <tr style="width:100%;">
+                                        <td style="width:100%;">                                                      
+                                   <span style="font: bold 16px arial; line-height: 25px; text-decoration: none;">@str</span><br />
+                                         
+                                        </td>
+                                        </tr> 
+                                              <tr style="width:100%;">
+                                                  <td style="width:100%;">
+                                                                        
+                                            @{
+                int i = 0;
+                int cnt = 0;
+                int j;
+                int k = 0;
+                                            }
+                                            <table style="width:100%;">
+                                                @for (j = 0; j <= ViewBag.rows; j++)
+                                                {
+                                                    <tr style="width:100%;">
+                                                        @for (i = k; i <= ViewBag.indexcount - 1; i++)
+                                                        {
+                                                            if (cnt < 2)
+                                                            {
+                                                                string indenm = ViewBag.index[i].Title.ToString();
+                                                                int inid =Convert.ToInt32(ViewBag.index[i].ArticleIndexId.ToString());
+                                                                <td valign="top" align="left" style="width:50%;">
+                                                               @Html.ActionLink(indenm, "ArticlesIndex1", "LearnExplore", new {inid=inid }, new { @style = "font: bold 12px arial; color: #044a7d; line-height: 25px; text-decoration: none;" })
+                                                            </td>
+                                                                    cnt = cnt + 1;
+
+                                                            }
+                                                            else
+                                                            {
+
+                                                                k = i;
+                                                                cnt = 0;
+                                                                i = ViewBag.indexcount - 1;
+
+                                                            }
+                                                        }
+                                                    </tr>
+                                                }
+                                            </table>
+                                       
+                                      
+                                                  </td>
+                                              </tr>                                                                               
+                                        </table>    
+                                        }
+                  </td>
+              </tr>
+                      }
+                     
+        
+        
+    </table>
+            
+          
+        </div>
+     
+    </div>
+   
+       
+}

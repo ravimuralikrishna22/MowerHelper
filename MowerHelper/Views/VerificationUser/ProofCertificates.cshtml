@@ -1,0 +1,140 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $(".close4").live("click", function (e) {
+                                //                        $('.ddlactionclass').val("0");
+                                var dialogDiv = $('#EditProofDialog');
+                                dialogDiv.dialog('close');
+                            });
+
+
+                        });
+
+    </script>
+
+
+</head>
+<body>
+@*<div id="main-content">*@
+        <div class="content-box">
+     <div class="content-box-content">
+                          @{WebGrid grid = new WebGrid(Model, rowsPerPage: 10);
+                            if (grid.TotalRowCount != 0)
+                            {
+                                int count = 0;
+                                string pager = grid.Pager().ToString();
+                                string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                columns: grid.Columns(
+                                                                                  grid.Column("Title", "Title", canSort: true,
+                                                  format:@<text>@{  count = count + 1;
+                                                      //string obj = "tbldesc " + count;
+                                                                    }
+                                                  @Html.ActionLink((string)item.Title, null, null, new { @onclick = "return false;", onmouseover = "return ondescriptionover('Ptbldesc " + count + "');", onmouseout = "return ondescriptionout('Ptbldesc " + count + "');", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                  @{
+                                                    
+                                                       <div id="Ptbldesc @count" style="width: 600px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Description :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td class="white_color" style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@item.DocDescription</span> </td> </tr>
+                                                             </table> </div>
+                                                      
+                                                      }
+                                                  
+                                                   </text> ),
+                                      grid.Column("", "File name", canSort: false, format:@<text>@Html.ActionLink((string)item.FileName, "CertificateDownload", "VerificationUser", new { @id = (int)item.ProviderDocument_ID, @provid = ViewBag.provid, @practiceid = ViewBag.practiceid }, new { @title = "Click here to download the file", style = "font-weight:bold;" })   </text>),
+                                      grid.Column("CreatedOn", "Date of creation", canSort: false),
+                                                          grid.Column("", "Edit", canSort: false,
+                                                  format:@<text>@*@Html.ActionLink(" ", "EditProofCertificate", new { @id = (int)item.ProviderDocument_ID, @provid = ViewBag.provid, @practiceid = ViewBag.practiceid },
+                              new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditProoflink", @title = "Click here to Edit proof certificate" })*@
+                          <a href="#" style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;" class = "EditProoflink" title = "Click here to Edit proof certificate" 
+                              onclick="Displaydialog('EditProofDialog','@Url.Action("EditProofCertificate", new { @id = (int)item.ProviderDocument_ID, @provid = ViewBag.provid, @practiceid = ViewBag.practiceid })','auto',1200,'dvLoading',null,null);"> </a></text>)
+
+
+                                                  )).ToString();
+
+
+                                gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                            }
+                            else
+                            {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">No
+                                            No providers found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            }
+                        }
+        
+  </div>
+ 
+    
+    </div>
+    <br />
+    <table id="tblbuttons" width="100%">
+                <tr>
+                    <td width="100%" align="right" style="padding-right: 10px; padding-bottom: 5px;">
+                        <input type="button" class="close3 button" name="Cancel" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+   @* </div>*@
+                <div id="EditProofDialog" title="Edit proof certificate">
+      </div>
+    <script type="text/javascript">
+        var linkObj;
+        $(function () {
+            //$('#EditProofDialog').dialog({
+            //    autoOpen: false,
+            //    width: 1200,
+            //    //                    height: 500,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+
+            //$(".EditProoflink").click(function () {
+            //    //change the title of the dialog
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#EditProofDialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+
+
+        });
+    </script>
+</body>
+</html>
+

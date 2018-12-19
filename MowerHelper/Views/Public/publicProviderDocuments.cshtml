@@ -1,0 +1,54 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+    <div>
+   @* @{
+        string practiceid = ViewBag.practiceid;
+        string providerid = ViewBag.providerid;
+    }*@
+      @{string Dpagesize = "10";
+                                      WebGrid Docgrid = new WebGrid(rowsPerPage: Convert.ToInt32(Dpagesize));}
+                                            @{WebGrid grid = Docgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                 string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("Title", "Title", style: "width: 500px;", canSort: false, format:@<text>@Html.ActionLink((string)item.Title, "Download", "Public", new { @id = (int)item.Document_ID, @practiceid = ViewBag.practiceid, @providerid =  ViewBag.providerid }, new { @title = "Click here to download the file", style = "font-weight:bold; color:rgba(43, 74, 209, 1);" })   </text>),
+                                                  grid.Column("DocDescription", "Description", canSort: false))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="padding-left:250px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table id="tblOutMsg" width="98%" horizontalalign="Center">
+                                                    <tr id="troutmsg">
+                                                        <td align="center" height="60px" valign="Middle">
+                                                            <span id="lblOutputMsg" style="font-weight: bold;" class="errormsg">Please upload any
+                                                                No records found.</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                              }  
+    </div>
+</body>
+</html>

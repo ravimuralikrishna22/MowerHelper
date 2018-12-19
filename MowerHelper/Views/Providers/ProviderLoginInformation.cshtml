@@ -1,0 +1,141 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ProviderLoginInformation</title>
+</head>
+<body>
+    <div class="content-box">
+        <div class="content-box-content">
+            <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                border="0">
+                @if (ViewBag.lblusername != null)
+                {
+                    <tr height="10" class="white_color" id="trusername" runat="server">
+                        <td align="right" width="32%">
+                            <strong>Full Name(User Name) :</strong></td>
+                        <td>
+                            <label>@ViewBag.lblusername</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lblipaddress != null)
+                {
+                      
+                    <tr height="10" class="nav_blue_color" id="tripaddress" runat="server">
+                        <td align="right">
+                            <strong>IpAddres :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lblipaddress</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lblzip != null)
+                {
+                    <tr height="10" class="white_color" id="trzipcode" runat="server">
+                        <td align="right">
+                            <strong>Zip code :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lblzip</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lblstate != null)
+                {
+                    <tr height="10" class="white_color" id="trstate" runat="server">
+                        <td align="right">
+                            <strong>State :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lblstate</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lblcity != null)
+                {
+                    <tr height="10" class="nav_blue_color" id="trcity" runat="server">
+                        <td align="right">
+                            <strong>City :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lblcity</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lbllogintime != null)
+                {
+                    <tr height="10" class="white_color" id="trintime" runat="server">
+                        <td align="right">
+                            <strong>Login Time :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lbllogintime</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lbllogouttime != null)
+                {
+                    <tr height="10" class="white_color" id="trouttime" runat="server">
+                        <td align="right">
+                            <strong>Logout Time :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lbllogouttime</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lbluseragent != null)
+                {
+                    <tr height="10" class="nav_blue_color" id="truseragent" runat="server">
+                        <td align="right" width="30%">
+                            <strong>User Agent :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lbluseragent</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lblmobiletype != null)
+                {
+                    <tr height="10" class="nav_blue_color" id="trmobtype" runat="server">
+                        <td align="right" width="30%">
+                            <strong>Mobile Type :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lblmobiletype</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lblDeviceaddress != null)
+                {
+                    <tr height="10" class="nav_blue_color" id="trdeviceaddr" runat="server">
+                        <td align="right" width="30%">
+                            <strong>Device Address :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lblDeviceaddress</label>
+                        </td>
+                    </tr>
+               }
+                @if (ViewBag.lblDevicephonenumber != null)
+                {
+                    <tr height="10" class="nav_blue_color" id="trdevicephnnumber" runat="server">
+                        <td align="right" width="30%">
+                            <strong>Device Phone Number :</strong></td>
+                        <td align="left">
+                            <label>@ViewBag.lblDevicephonenumber</label>
+                        </td>
+                    </tr>
+               }
+            </table>
+         </div>
+        </div>
+    <table  runat="server" width="100%">
+                                    <tr class="background_color">
+                                        <td align="right" style="padding-top:10px;">
+                                                <input type="button" name="btnCancel" class="close button" value="Cancel"  />
+                                           
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+</body>
+</html>

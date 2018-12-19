@@ -1,0 +1,587 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+@*    @Styles.Render("~/Content/themes/base/jqueryCSS")
+    @Scripts.Render("~/Scripts/Thscriptscript")*@
+      @* <script src="@ViewBag.src" type="text/javascript"></script>*@
+   @Styles.Render("~/Content/themes/base/TherpistStyles")  
+     @Scripts.Render("~/ThScripts/ElectricianHelpscripts") 
+     @Scripts.Render("~/ThScripts/ThAjaxscripts") 
+     @*<script  src="~/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script  src="~/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script  src="~/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>*@
+    <script type="text/javascript">
+        var newNotePage;
+        $(function () {
+            if ('@Session["roleid"].ToString()' != "1") {
+                $("#tdtabsadmin").removeClass("tab-background");               
+            }
+            
+            var roleid = $("#hdnrole").val();
+            if (roleid == "1") {
+                //alert(roleid);
+                document.getElementById('auditdiv').style.display = '';
+            }
+            else {
+                //alert(roleid);
+                //alert("2");
+                document.getElementById('auditdiv').style.display = 'none';
+            }
+          
+        });
+    </script>
+    <style type="text/css">
+        .dvLoading1 .ui-dialog-titlebar
+        {
+            display: none;
+
+        }
+        .gridTable
+        {
+            width: 100%;
+        }
+    </style>
+    <style type="text/css">
+           input[type="radio"]
+        {
+            margin-right: 5px;
+        }
+
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .item
+        {
+            position: relative !important;
+            display: -moz-inline-stack;
+            display: inline-block;
+            zoom: 1;
+            *display: inline;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .header
+        {
+            margin-left: 2px;
+        }
+
+        .c1
+        {
+            width: 160px;
+        }
+
+        .c2
+        {
+            margin-left: 10px;
+            width: 90px;
+        }
+          .multcolumn .ob_iCboICBC li
+        {
+            float: left;
+            width: 60px;       
+        }        
+            
+        /* For IE6 */
+        * HTML .multcolumn .ob_iCboICBC li
+        {
+           -width: 55px;
+        }        
+        * HTML  .multcolumn .ob_iCboICBC li b
+        {
+            width: 55px;
+            overflow: hidden;
+        }   
+           .multcolumn2 .ob_iCboICBC li
+        {
+            float: left;
+            width: 165px;       
+        }        
+            
+        /* For IE6 */
+        * HTML .multcolumn2 .ob_iCboICBC li
+        {
+           -width: 164px;
+        }        
+        * HTML  .multcolumn2 .ob_iCboICBC li b
+        {
+            width: 164px;
+            overflow: hidden;
+        }   
+          .confirmDialog1
+        {
+            /*background: url("../images/bg-button-green.gif") repeat-x scroll left top #459300 !important;
+            border: 1px solid #459300 !important;*/
+            background: repeat-x scroll left top #FF0000 !important;
+            border: 1px solid #FF0000 !important;
+            border-radius: 4px;
+            color: #FFFFFF !important;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Verdana,Arial,sans-serif;
+            font-size: 11px !important;
+            padding: 4px 7px !important;
+        } 
+    </style>
+     <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+    <script type="text/javascript">
+        var pageno;
+        function Showalert(transactionid, Generalnoteid, pageno) {
+            //  alert(transactionid);
+            if (transactionid != '') {
+                //alert('You can not archive transaction notes.');
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    buttons: {
+                        "OK": function () {
+                            $(this).dialog("close");
+                          @*  window.location.href = '@Url.Action("ProfileNotes", "Notes")';*@
+
+                        }
+                    }
+                });
+                $("#dialog-confirm").dialog('open');
+                return false;
+            }
+            else {
+                //  $(".confirmDialog3").live("click", function (e) {
+
+                //var url = $(this).attr('href');
+                // var url = "../Notes/ChangeStatus?Generalnoteid=" + Generalnoteid + "&notetype=" + notetype + "&ispatient=" + ispatient;
+                $("#dialog-confirm3").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            //window.location = "../Clients/ChangeStatus?Generalnoteid=" + Generalnoteid + "&pageno=" + pageno;
+                            $("#notesList").load("../Clients/ChangeStatus?Generalnoteid=" + Generalnoteid + "&pageno=" + pageno);
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+
+                        }
+                    }
+                });
+                $("#dialog-confirm3").dialog('open');
+                return false;
+                // });
+            }
+        }
+    </script>
+     <script type="text/javascript">
+         function ondescriptionover(obj) {
+             document.getElementById(obj).style.position = 'absolute';
+             document.getElementById(obj).style.display = '';
+             return false;
+         }
+         function ondescriptionout(obj) {
+             document.getElementById(obj).style.display = 'none';
+             return false;
+         }
+    </script>
+</head>
+<body>
+    @{Html.RenderAction("Topsection", "Tools");}
+    <div id="main-content">
+        @if (Session["RoleID"].ToString() == "1")
+       {
+        @Html.Partial("_NavigationTool")
+       }
+ <input type="hidden" id="hdnrole" name="hdnrole" value="@Session["RoleID"]" />
+         <table width="100%" cellpadding="0" cellspacing="0">
+          @*  @if (Session["roleid"].ToString() == "1")
+            {
+                            <tr id="trtabsadmin" runat="server">
+                                <td width="100%" class="navigation">
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="admincust" href="ClientsHome" ><span>Customers</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="admintask"  href="../Task/TaskList"><span>Tasks </span>
+                                        </a>
+                                    </div>
+                                
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adminnote" href="../Notes/ProfileNotes"><span>Notes</span>
+                                        </a>
+                                    </div>                              
+                                </td>
+                            </tr>
+            }*@
+                            <tr class="background_color">
+                                <td id="tdtabsadmin" class="tab-background"   width="100%">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr class="background_color">
+                <td align="left" valign="top" width="100%">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr id="trtabs">
+                            <td width="100%" class="navigation">
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" href="ClientFile" id="aprovider"><span>@Session["Patname"]</span>
+                                    </a>
+                                </div>
+                                
+                              @*  <div class="admin-tab">
+                                    <a class="inadmin-link" id="avideo" href="TransactionsList"><span>Transactions old</span>
+                                    </a>
+                                </div>*@
+                                 @if(Session["roleid"].ToString()!="8")
+                                { 
+                                                                                                        <div class="admin-tab">
+                                    <a class="inadmin-link" id="admin-linknew" href="TransactionsList"><span>Transactions</span>
+                                    </a>
+                                </div>
+                              
+                                <div class="admin-tab">
+                                    <a class="admin-link" id="astatistic" href="ClentAppointments"><span>Appointments & General notes</span>
+                                    </a>
+                                </div>
+                                     
+                                 }
+                                else{
+                                  
+                                <div class="admin-tab">
+                                    <a class="admin-link" id="astatistic1" href="ClentAppointments"><span>Appointments</span>
+                                    </a>
+                                </div>   
+                                }
+                                  <div class="admin-tab">
+                                    <a class="inadmin-link" id="asentinvoices" href="SentInvoices"><span>Sent Invoices</span>
+                                    </a>
+                                </div>
+                                  <div class="admin-tab" id="auditdiv">                                  
+                                         <a class="inadmin-link" id="aauditlog" href="AuditLoginfo"><span>Audit Log</span></a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="background_color">
+                            <td id="tdtabs" class="tab-background" width="100%">
+                                <table style="width:100%;">
+                                    <tr>
+                                        @if(Session["roleid"].ToString()!="8")
+                                { 
+                                        <td style="width:50%; vertical-align:top;">
+                                            @{Html.RenderAction("ProfileCDProgress", "Clients");}
+                                        </td>
+                                        <td style="width:50%; vertical-align:top;">
+                                            <div class="content-box">
+                                    <div class="content-box-header">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                            <tr>
+                                                <td width="83%" align="left">
+                                                    <h3>
+                                                        <span id="lblcert">General Notes
+                                                        </span>
+                                                    </h3>
+                                                </td>
+                                                <td width="17%" align="center">
+                                                    <ul style="list-style: none!important; padding-right: 5px;" class="content-box-tabs">
+                                                        <li style="padding: 0px; margin: 0px;">
+                                                            <a id="lnkaddnote" href="#" style="color: #0066CC; font-weight: bold; font-size: 14px;" >Add note&nbsp;&nbsp;</a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                          
+                                    <div class="content-box-content">
+                                        @{Html.RenderAction("ClientNotes", "Clients");}
+                                    </div>
+                                </div>
+
+                                        </td>
+                                        }
+                                        else{
+                                             <td style="width:100%; vertical-align:top;">
+                                            @{Html.RenderAction("ProfileCDProgress", "Clients");}
+                                        </td> 
+                                        }
+                                    </tr>
+                                </table>
+                                              
+                                
+                                
+
+
+
+                                <br />
+                                <br />
+
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table> 
+                                    </td></tr></table>
+    </div>
+    <div id="AddNoteDialog" title="Add note"></div>
+    <div id="AddDocDialog" title="Add document"></div>
+    <div id="dvLoading1" style="display: none; text-align: center; vertical-align: middle">
+        <img src="../Images/ajax-loader2.gif" alt="Processing" />
+    </div>
+    @{Html.RenderAction("Bottomsections", "Tools");}
+   @* Edit Appointment*@
+     <script type="text/javascript">
+         function combobox115_Open(sender) {
+             combobox5.OpenOnFocus = true;
+         }
+         function combobox115_Focus(sender) {
+             combobox5.OpenOnFocus = false;
+
+         }
+    </script>
+    
+  @*  End Appointment*@
+   @* Add notes*@
+     <script type="text/javascript">
+
+         function Addclearalerts() {
+             //            ClearInlineAlert('lblErrPat', 'tdPat', '#FFFFFF');
+               
+              
+             //ClearInlineAlert('lblNoteDate', 'tdNDate', '#FFFFFF');
+             ClearInlineAlert('lblErrNote', 'tdNotes', '#FFFFFF');
+         }
+     
+    </script>
+   @* End add*@
+   @* Edit notes*@
+    <script type="text/javascript">
+
+
+        function clearalerts_Edit() {
+            //ClearInlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', '#FFFFFF');
+            ClearInlineAlert('lblErrNote_Edit', 'tdNotes_Edit', '#FFFFFF');
+        }
+        function Validate_Edit() {
+            //if (document.getElementById('trnotedate_Edit').style.display == '') {
+            //    clearalerts_Edit();
+            //    if (document.getElementById('txt_Date_Edit').value == '' || document.getElementById('txt_Date_Edit').value == null)
+            //    {
+            //        clearalerts_Edit();
+            //        document.getElementById('lblNoteDate_Edit').style.display = '';
+            //        //InlineAlert('lblNoteDate', 'txt_Date', 'Please select Date');
+            //        document.getElementById('lblNoteDate_Edit').innerHTML = 'Please Select Note Date';
+            //        document.getElementById('tdNDate_Edit').bgColor = "orange";
+            //        document.getElementById('txt_Date_Edit').focus();
+            //        return false;
+            //    }
+            //    if (document.getElementById('txt_Date_Edit').value != '' && document.getElementById('txt_Date_Edit').value != 'mm/dd/yyyy' && document.getElementById('txt_Date_Edit').value != ' ') {
+            //        clearalerts_Edit();
+            //        //                                    alert("2");
+            //        var Dateid = document.getElementById('txt_Date_Edit').value;
+            //        var Dat = Dateid.split("/");
+            //        var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+            //        var yearid = Dat[2];
+            //        var Monthid = Dat[0];
+            //        var MyId = Dat[1];
+            //        var CurDt = new Date()
+            //        var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+            //        var matchArray = Dateid.match(DatePat);
+            //        if (yearid < 1900) {
+            //            clearalerts_Edit();
+            //            InlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', 'Invalid note date!!! year should be greater than 1900');
+            //            document.getElementById('txt_Date_Edit').focus();
+            //            return false
+            //        }
+            //        else {
+            //            ClearInlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', '#FFFFFF');
+            //        }
+            //        if (Monthid > 12 || Monthid == 0) {
+            //            clearalerts_Edit();
+            //            InlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', 'Invalid note date!!! month should be entered in between 1 to 12');
+            //            document.getElementById('txt_Date_Edit').focus();
+            //            return false
+            //        }
+            //        else {
+            //            ClearInlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', '#FFFFFF');
+            //        }
+            //        if (MyId > 31 || MyId == 0) {
+            //            clearalerts_Edit();
+            //            InlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', 'Invalid note date!!! date should be entered in between 1 to 31');
+            //            document.getElementById('txt_Date_Edit').focus();
+            //            return false
+            //        }
+            //        else {
+            //            ClearInlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', '#FFFFFF');
+            //        }
+            //        if (myDat > CurDt) {
+            //            clearalerts_Edit();
+            //            InlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', 'Invalid note date!!! should be less than current date');
+            //            document.getElementById('txt_Date_Edit').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ClearInlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', '#FFFFFF');
+            //        }
+            //        if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+            //            clearalerts_Edit();
+            //            document.getElementById('lblNoteDate_Edit').style.display = '';
+            //            document.getElementById('lblNoteDate_Edit').innerHTML = 'Invalid note date !!! there is no February 29 in ' + yearid;
+            //            document.getElementById('tdNDate_Edit').bgColor = "orange";
+            //            document.getElementById('txt_Date_Edit').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ClearInlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', '#FFFFFF');
+            //        }
+            //        if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+            //            clearalerts_Edit();
+            //            InlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', 'Invalid note date !!! please enter valid date');
+            //            document.getElementById('txt_Date_Edit').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ClearInlineAlert('lblNoteDate_Edit', 'tdNDate_Edit', '#FFFFFF');
+            //        }
+            //    }
+            //}
+            if (document.getElementById('trnotes_Edit').style.display == '') {
+                clearalerts_Edit();
+                var strnotes = trim($('.EditTxtNotes').val());
+                $('.EditTxtNotes').val(strnotes);
+                if ($('.EditTxtNotes').val() != '') {
+                    clearalerts_Edit();
+                    if ($('.EditTxtNotes').val().length > 1000) {
+                        clearalerts_Edit();
+                        InlineAlert('lblErrNote_Edit', 'tdNotes_Edit', 'Note description can be up to 1000 characters');
+                        $('.EditTxtNotes').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblErrNote_Edit', 'tdNotes_Edit', '#FFFFFF');
+                    }
+                }
+                if ($('.EditTxtNotes').val() == '') {
+                    clearalerts_Edit();
+                    InlineAlert('lblErrNote_Edit', 'tdNotes_Edit', 'Please enter note');
+                    $('.EditTxtNotes').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrNote_Edit', 'tdNotes_Edit', '#FFFFFF');
+                }
+                //if (MyChars(document.getElementById('txtNotes_Edit')) == "SpaceError") {
+                //    clearalerts_Edit();
+                //    InlineAlert('lblErrNote_Edit', 'tdNotes_Edit', 'Please enter note description without spaces');
+                //    document.getElementById('txtNotes_Edit').focus();
+                //    return false;
+                //}
+                //else {
+                //    ClearInlineAlert('lblErrNote_Edit', 'tdNotes_Edit', '#FFFFFF');
+                //}
+            }
+            else {
+                ClearInlineAlert('lblErrNote_Edit', 'tdNotes_Edit', '#FFFFFF');
+            }
+        }
+
+    </script>
+</body>
+<script type="text/javascript">
+    var linkObj;
+    $(function () {
+        //$('#AddNoteDialog').dialog({
+        //    autoOpen: false,
+        //    width: 850,
+        //    //                      height: 400,
+        //    resizable: false,
+        //    modal: true,
+        //    position: ['middle', 100]
+        //});
+        //$("#lnkaddnote").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#AddNoteDialog');
+        //    $('#dvLoading1').dialog({ modal: true, dialogClass: 'dvLoading1', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading1').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+        $('#AddDocDialog').dialog({
+            autoOpen: false,
+            width: 1250,
+            //                      height: 400,
+            resizable: false,
+            modal: true,
+            position: ['middle', 100]
+        });
+        $("#lnkadddoc").click(function () {
+            linkObj = $(this);
+            var dialogDiv = $('#AddDocDialog');
+            $('#dvLoading1').dialog({ modal: true, dialogClass: 'dvLoading1', draggable: false, resizable: false });
+            var viewUrl = linkObj.attr('href');
+            $.get(viewUrl, function (data) {
+                dialogDiv.html(data);
+                $('#dvLoading1').dialog('close');
+                dialogDiv.dialog('open');
+            });
+            return false;
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".Noteclose").live("click", function (e) {
+            var dialogDiv = $('#AddNoteDialog');
+            dialogDiv.dialog('close');
+        });
+
+        $(".Docclose").live("click", function (e) {
+            var dialogDiv = $('#AddDocDialog');
+            dialogDiv.dialog('close');
+        });
+    });
+
+</script>
+
+     <script type="text/javascript">
+         $(document).ready(function () {
+             var TopIndex = '@Session["TopIndex"]';
+             var roleid = '@Session["roleid"]';
+             if (roleid == "1") {
+                 $("#Menu0").removeClass();
+                 $("#Menu1").removeClass();
+                 $("#Menu2").removeClass();
+                 $("#Menu3").addClass("active");
+             }           
+             $("#lnkaddnote").click(function (event) {
+                 event.preventDefault();
+                 Displaydialog('AddNoteDialog', '../Clients/AddNotes?S2P2=' + newNotePage, 'auto', 850, 'dvLoading1', null, null);
+             });
+         });
+    </script>
+
+</html>

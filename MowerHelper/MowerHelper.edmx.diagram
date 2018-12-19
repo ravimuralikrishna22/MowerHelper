@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="204728ad8b554ee6939db98a724d510c" Name="Diagram1" ZoomLevel="54">
+        <EntityTypeShape EntityType="MowerHelperModel.sysdiagram" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.CRM_Agents" Width="1.5" PointX="29" PointY="33.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.CRM_PromoCodes" Width="1.5" PointX="26.75" PointY="34.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_FileExecution" Width="1.5" PointX="15.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_SQLProcedureCall" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_AddressType" Width="1.5" PointX="6.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Application" Width="1.5" PointX="8.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_AppointmentIntervalTypes" Width="1.5" PointX="1.5" PointY="34.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_AppointmentStatus" Width="1.5" PointX="6" PointY="29.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_AppointmentTypes" Width="1.5" PointX="3.75" PointY="25.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Article_Authors" Width="1.5" PointX="24" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Articles" Width="1.5" PointX="21.75" PointY="28.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_ChargeTypes" Width="1.5" PointX="9.75" PointY="60.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_PaymentTypes" Width="1.5" PointX="15" PointY="40.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_Service_Fee_XREF" Width="1.5" PointX="12" PointY="60.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_Services" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_ServiceTypes" Width="1.5" PointX="7.5" PointY="61.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_TransactionTypes" Width="1.5" PointX="20.25" PointY="39.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_BillingComponent_Runninsequence" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_BillingService_ChargeTemplate" Width="1.5" PointX="12" PointY="74.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_City" Width="1.5" PointX="3.75" PointY="61.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Classes" Width="1.5" PointX="29" PointY="28" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_ClientEvent_Category" Width="1.5" PointX="16.75" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CognodeDetails" Width="1.5" PointX="0.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Country" Width="1.5" PointX="0.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CreditCard_Transactions" Width="1.5" PointX="3" PointY="39.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CreditCard_TransactionsResponse" Width="1.5" PointX="5.25" PointY="57" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CreditCardInfo" Width="1.5" PointX="6" PointY="41.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CreditCardType" Width="1.5" PointX="0.75" PointY="49.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_EmailMessage_Categoires" Width="1.5" PointX="29.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_EmailMessage_Options" Width="1.5" PointX="29" PointY="23.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_EmailMessageOption_Types" Width="1.5" PointX="26.75" PointY="23.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_FAQ_Categories" Width="1.5" PointX="19.75" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_FAQ_Question_Rating" Width="1.5" PointX="19" PointY="18.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_FAQ_Questions" Width="1.5" PointX="16.75" PointY="18.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_FAQ_RelatedFaqs" Width="1.5" PointX="19" PointY="22.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_FAQ_RelatedLinks" Width="1.5" PointX="22" PointY="20.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Language" Width="1.5" PointX="11.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Methods" Width="1.5" PointX="31.25" PointY="28" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_Modules" Width="1.5" PointX="29.75" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Parameters" Width="1.5" PointX="13.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Patient_PersonalInfo" Width="1.5" PointX="6" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Patient_Status" Width="1.5" PointX="3.75" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Practice_Provider_Patient_XREF" Width="1.5" PointX="11" PointY="28.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_PrintBillMessages" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_PrintBillOptions" Width="1.5" PointX="0.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Projects" Width="1.5" PointX="26.75" PointY="28.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Provider" Width="1.5" PointX="8.75" PointY="65.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Provider_Documents" Width="1.5" PointX="9" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Provider_Greetings" Width="1.5" PointX="23.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_PublicVideo" Width="1.5" PointX="13.75" PointY="27" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_ReferenceTypes" Width="1.5" PointX="0.75" PointY="41.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_request_urls" Width="1.5" PointX="0.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Role" Width="1.5" PointX="6.75" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Section" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_SectionsInRole" Width="1.5" PointX="12" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_SiteCategories" Width="1.5" PointX="11" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_SitePages" Width="1.5" PointX="13.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_State" Width="1.5" PointX="1.5" PointY="61.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_Technician" Width="1.5" PointX="6.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_technician_Documents" Width="1.5" PointX="30.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_User" Width="1.5" PointX="3.75" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_user_VistingTrack" Width="1.5" PointX="15.75" PointY="31.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_users_notifications_info" Width="1.5" PointX="6" PointY="21" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_UsersInRole" Width="1.5" PointX="9" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_verification_sites" Width="1.5" PointX="2.75" PointY="29.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_verification_users" Width="1.5" PointX="31.75" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_zipcode" Width="1.5" PointX="32.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Addresses" Width="1.5" PointX="9" PointY="40.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_appointment_requests" Width="1.5" PointX="17.75" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Appointment_Tracking" Width="1.5" PointX="8.25" PointY="34.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_AppointmentRecurrence" Width="1.5" PointX="3.75" PointY="34.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_AppointmentReminder_Patients" Width="1.5" PointX="19.75" PointY="33.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Appointments" Width="1.5" PointX="6" PointY="33.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_appointments_address" Width="1.5" PointX="33.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_appointments_messages_history" Width="1.5" PointX="33.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Accounts" Width="1.5" PointX="6" PointY="49.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_AccountsAggregation" Width="1.5" PointX="8.25" PointY="50" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Admin_ChequeTransactions" Width="1.5" PointX="13.5" PointY="53.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Admin_Transactions" Width="1.5" PointX="11.25" PointY="49.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Custom_Fee_XREF" Width="1.5" PointX="12" PointY="40.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Invoice" Width="1.5" PointX="14.25" PointY="44.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_InvoiceLineItems" Width="1.5" PointX="22.5" PointY="43.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_ProviderPatient_ChequeTransactions" Width="1.5" PointX="19.5" PointY="44.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_ProviderPatient_Transactions" Width="1.5" PointX="17.25" PointY="43.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_ProviderPatient_TransactionsDistribution" Width="1.5" PointX="19.5" PointY="48.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_BillingComponent_ProcesstoProvider" Width="1.5" PointX="24.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_class_method_runtime" Width="1.5" PointX="33.75" PointY="33.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Client_BasicInfo_Log" Width="1.5" PointX="21.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ClientEventInfo_Log" Width="1.5" PointX="19" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Component_CCProcess_Failed" Width="1.5" PointX="27" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Component_CreditCard_Expiry" Width="1.5" PointX="27" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Component_SucceddUsers" Width="1.5" PointX="27" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ContactUs" Width="1.5" PointX="34.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_error_values" Width="1.5" PointX="16.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ExpensesCategory" Width="1.5" PointX="34.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ExpensesLedger" Width="1.5" PointX="11" PointY="68.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_FAQ_Question_category_Xref" Width="1.5" PointX="22" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Forum" Width="1.5" PointX="23.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Forum_SHADOW" Width="1.5" PointX="34.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ForumMessage" Width="1.5" PointX="28.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ForumMessage_SHADOW" Width="1.5" PointX="34.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ForumTopic" Width="1.5" PointX="26" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ForumTopic_SHADOW" Width="1.5" PointX="35.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_GeneralNotes" Width="1.5" PointX="35.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_HelpMedia" Width="1.5" PointX="19.75" PointY="26.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Login_History" Width="1.5" PointX="35.75" PointY="31.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Message" Width="1.5" PointX="12" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Message_Reciever_XREF" Width="1.5" PointX="14.25" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Message_RelatedRoles" Width="1.5" PointX="17" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_MessageCategory" Width="1.5" PointX="9.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_MessageCategoryInRole" Width="1.5" PointX="12" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Moderator_Forum_XREF" Width="1.5" PointX="36.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Moderator_Forum_XREF_SHADOW" Width="1.5" PointX="36.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_module_field_Xref" Width="1.5" PointX="32" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_MsgAttachFilename" Width="1.5" PointX="14.25" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Patient_Notesinfo_Log" Width="1.5" PointX="21.25" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Provider_Info_Log" Width="1.5" PointX="21.25" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Provider_ListingStatistic" Width="1.5" PointX="36.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Provider_PublicMessages" Width="1.5" PointX="36.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Provider_Statistics_PIVOT" Width="1.5" PointX="22.75" PointY="36.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_SentEmails_Log" Width="1.5" PointX="32" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Task_Actionitems" Width="1.5" PointX="32" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Tasks" Width="1.5" PointX="29.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_trial_package_users" Width="1.5" PointX="13.75" PointY="36.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.APP_GeneratedURLs" Width="1.5" PointX="37.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.CRM_Agent_Incentive_XREF" Width="1.5" PointX="37.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.CRM_Promocode_Log" Width="1.5" PointX="37.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_DatabaseEvent_Log_SHADOW" Width="1.5" PointX="37.75" PointY="31.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_FileExecution_SHADOW" Width="1.5" PointX="37.75" PointY="36.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_Modified_Script" Width="1.5" PointX="38.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_Modified_Script_SHADOW" Width="1.5" PointX="38.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_ScriptErrorLog" Width="1.5" PointX="18" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_ScriptErrorLog_SHADOW" Width="1.5" PointX="38.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_SQLErrors" Width="1.5" PointX="38.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_VBVUsers" Width="1.5" PointX="33.75" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.DBA_VBVUsers_SHADOW" Width="1.5" PointX="39.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_AddressType_SHADOW" Width="1.5" PointX="39.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Application_SHADOW" Width="1.5" PointX="24.75" PointY="39.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_AppointmentStatus_SHADOW" Width="1.5" PointX="39.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_AppointmentTypes_SHADOW" Width="1.5" PointX="39.75" PointY="30.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Article_Category" Width="1.5" PointX="39.75" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Article_Category_Shadow" Width="1.5" PointX="39.75" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Articles_SHADOW" Width="1.5" PointX="40.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_AdjustmentType" Width="1.5" PointX="40.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_AdjustmentType_Shadow" Width="1.5" PointX="40.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_ChargeTypes_SHADOW" Width="1.5" PointX="26.75" PointY="40.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_PaymentTypes_SHADOW" Width="1.5" PointX="40.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_Service_Fee_XREF_SHADOW" Width="1.5" PointX="28.75" PointY="40.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_ServiceTypes_SHADOW" Width="1.5" PointX="30.75" PointY="40.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Billing_TransactionTypes_SHADOW" Width="1.5" PointX="41.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CDFT" Width="1.5" PointX="41.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CDFT_SHADOW" Width="1.5" PointX="41.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_City_sHADOW" Width="1.5" PointX="41.75" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Classes_SHADOW" Width="1.5" PointX="35.75" PointY="41.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_ClientEvent_Category_SHADOW" Width="1.5" PointX="41.75" PointY="37.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CognodeDetails_SHADOW" Width="1.5" PointX="41.75" PointY="41.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Color_SHADOW" Width="1.5" PointX="42.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Component_Jobstatus" Width="1.5" PointX="42.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Component_Jobstatus_SHADOW" Width="1.5" PointX="42.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Country_SHADOW" Width="1.5" PointX="32.75" PointY="42.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_County" Width="1.5" PointX="43.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_County_Shadow" Width="1.5" PointX="43.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CPT_LIST_SHADOW" Width="1.5" PointX="43.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CreditCard_Transactions_SHADOW" Width="1.5" PointX="43.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CreditCard_TransactionsResponse_SHADOW" Width="1.5" PointX="37.75" PointY="43.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CreditCardInfo_SHADOW" Width="1.5" PointX="43.75" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_CreditCardType_SHADOW" Width="1.5" PointX="44.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_email_receipt_list_transactions" Width="1.5" PointX="44.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_EmailMessage_Categoires_SHADOW" Width="1.5" PointX="45.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_EmailMessageOption_Body" Width="1.5" PointX="31.25" PointY="23" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_EmailMessageOption_Body_SHADOW" Width="1.5" PointX="45.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Errors" Width="1.5" PointX="45.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Language_SHADOW" Width="1.5" PointX="24.75" PointY="45.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Methods_SHADOW" Width="1.5" PointX="45.75" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Parameters_SHADOW" Width="1.5" PointX="45.75" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Patient_PersonalInfo_SHADOW" Width="1.5" PointX="45.75" PointY="43.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Patient_Status_SHADOW" Width="1.5" PointX="46.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_PrintBillMessages_SHADOW" Width="1.5" PointX="46.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_PrintBillOptions_SHADOW" Width="1.5" PointX="46.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Projects_SHADOW" Width="1.5" PointX="26.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Provider_Documents_SHADOW" Width="1.5" PointX="28.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Provider_Greetings_SHADOW" Width="1.5" PointX="30.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Provider_Issue_XREF_SHADOW" Width="1.5" PointX="32.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Provider_Shadow" Width="1.5" PointX="34.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Provider_Technicians_Xref" Width="1.5" PointX="9" PointY="23.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_ProviderPublicList" Width="1.5" PointX="6" PointY="65.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_PublicVideo_SHADOW" Width="1.5" PointX="47.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_ReferenceTypes_SHADOW" Width="1.5" PointX="47.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Role_SHADOW" Width="1.5" PointX="47.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_Section_SHADOW" Width="1.5" PointX="47.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_SectionsInRole_SHADOW" Width="1.5" PointX="47.75" PointY="35.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_SiteCategories_SHADOW" Width="1.5" PointX="47.75" PointY="41.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_SitePages_SHADOW" Width="1.5" PointX="47.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_SiteStatistics" Width="1.5" PointX="48.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_SiteStatistics_SHADOW" Width="1.5" PointX="48.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_State_SHADOW" Width="1.5" PointX="36.75" PointY="48.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_TopCities_Shadow" Width="1.5" PointX="38.75" PointY="48.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Um_user_mobile_token" Width="1.5" PointX="40.75" PointY="48.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_User_SHADOW" Width="1.5" PointX="42.75" PointY="48.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_UsersInRole_SHADOW" Width="1.5" PointX="49.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.um_zipcode1" Width="1.5" PointX="49.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Addresses_SHADOW" Width="1.5" PointX="49.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Appointment_Tracking_SHADOW" Width="1.5" PointX="49.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Appointments_SHADOW" Width="1.5" PointX="49.75" PointY="31.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Article_Category_XREF" Width="1.5" PointX="49.75" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Article_Category_XREF_Shadow" Width="1.5" PointX="49.75" PointY="42.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_Article_RelatedArticles" Width="1.5" PointX="24" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_Article_Relatedvideos" Width="1.5" PointX="24" PointY="32.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Article_Statistic" Width="1.5" PointX="49.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Accounts_SHADOW" Width="1.5" PointX="50.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_AccountsAggregation_SHADOW" Width="1.5" PointX="2.75" PointY="50.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Admin_ChequeTransactions_SHADOW" Width="1.5" PointX="44.75" PointY="50.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Admin_Transactions_SHADOW" Width="1.5" PointX="51.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_Invoice_SHADOW" Width="1.5" PointX="51.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_InvoiceLineItems_SHADOW" Width="1.5" PointX="21.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_ProviderPatient_ChequeTransactions_SHADOW" Width="1.5" PointX="23.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_ProviderPatient_Transactions_SHADOW" Width="1.5" PointX="51.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Billing_ProviderPatient_TransactionsDistribution_SHADOW" Width="1.5" PointX="25.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Client_BasicInfo_Log_SHADOW" Width="1.5" PointX="30.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ClientEventInfo_Log_SHADOW" Width="1.5" PointX="51.75" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Component_JobSettings" Width="1.5" PointX="51.75" PointY="39.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ComponentJob_Error_XREF" Width="1.5" PointX="51.75" PointY="45.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ComponentJob_Error_XREF_SHADOW" Width="1.5" PointX="46.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ContactUs_SHADOW" Width="1.5" PointX="48.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_creditcard_refundservice_transactions" Width="1.5" PointX="50.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_EmailMessage_Transactions" Width="1.5" PointX="38.75" PointY="52.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ExpensesCategory_SHADOW" Width="1.5" PointX="52.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_ExpensesLedger_SHADOW" Width="1.5" PointX="52.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_HelpMedia_SHADOW" Width="1.5" PointX="53.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Message_Reciever_XREF_SHADOW" Width="1.5" PointX="53.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Message_RelatedRoles_SHADOW" Width="1.5" PointX="53.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_MessageCategory_SHADOW" Width="1.5" PointX="53.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_MessageCategoryInRole_SHADOW" Width="1.5" PointX="53.75" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_mobileowner_data" Width="1.5" PointX="27.75" PointY="53.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_MsgAttachFilename_SHADOW" Width="1.5" PointX="53.75" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Patient_Notesinfo_Log_SHADOW" Width="1.5" PointX="53.75" PointY="36.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Practice_ForwardDocs_SHADOW" Width="1.5" PointX="53.75" PointY="41.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Provider_MobileStatistic" Width="1.5" PointX="15.75" PointY="54.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Provider_MobileStatistic_Shadow" Width="1.5" PointX="17.75" PointY="54.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.Ut_PublicVideos_RelatedVideos" Width="1.5" PointX="16" PointY="28" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Task_Actionitems_SHADOW" Width="1.5" PointX="53.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.ut_Tasks_SHADOW" Width="1.5" PointX="54.75" PointY="51.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.vw_Appointments" Width="1.5" PointX="55.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MowerHelperModel.vw_Patient_PatientDetails" Width="1.5" PointX="55.75" PointY="9.75" IsExpanded="true" />
+        <AssociationConnector Association="MowerHelperModel.FK__CRM_Agent__CRM_Promocode_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_DBA_ScriptErrorLog_DBA_FileExecution" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__ut_Addres__Addre__4DFBA05D" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Practice_Provider_Patient_XREF_um_AddressType" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_SiteCategories_um_Application" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_AppointmentRecurrence_um_AppointmentRecurrenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointment_Tracking_um_AppointmentStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointments_um_AppointmentTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.fk_Article_Authors_Article_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__Ut_Articl__Artic__19775BC5" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__Ut_Articl__Paren__178F1353" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Billing_ChargeTypes_um_Billing_ServiceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Billing_Service_Fee_XREF_um_Billing_ChargeTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_BillingService_ChargeTemplate_um_Billing_ChargeTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_um_Billing_ChargeTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Custom_Fee_XREF_um_Billing_ChargeTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_InvoiceLineItems_um_Billing_ChargeTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_Transactions_um_Billing_ChargeTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_um_Billing_PaymentTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_Transactions_um_Billing_PaymentTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_um_Billing_TransactionTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_InvoiceLineItems_um_Billing_TransactionTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_Transactions_um_Billing_TransactionTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__ut_Addres__City___4FE3E8CF" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_City_um_State" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCardInfo_um_City" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Practice_Provider_Patient_XREF_um_City" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_ProviderPublicList_um_City" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Classes_um_Projects" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Methods_um_Classes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.Fk_ut_ClientEventInfo_Log_um_ClientEvent_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCard_Transactions_um_CreditCard_Transactions" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCard_Transactions_um_CreditCardType" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCard_Transactions_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCard_Transactions_um_ReferenceTypes1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCard_TransactionsResponse_um_CreditCard_Transactions" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCardInfo_um_CreditCardType" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCardInfo_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_CreditCardInfo_um_State" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__Ut_SentEm__Email__7E5885DE" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.fk_um_EmailMessage_Options_Email_OptionType_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.fk_um_EmailMessageOption_Body_EmailMessage_Option_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.Fk_FAQ_Question_category_Xref_Category_id" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__Um_FAQ_Qu__Quest__66CB1510" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__Um_FAQ_Re__Quest__68B35D82" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__Ut_FAQ_Qu__Quest__7ECD872A" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.Fk_FAQ_RelatedFaqs_ParentFaq_ID" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.Fk_FAQ_Relatedlinks_Video_id" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_module_field_Xref" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Patient_PersonalInfo_um_Patient_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Patient_PersonalInfo_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Practice_Provider_Patient_XREF_um_Patient_PersonalInfo" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Practice_Provider_Patient_XREF_um_Provider" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Practice_Provider_Patient_XREF_um_State" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Practice_Provider_Patient_XREF_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Practice_Provider_Patient_XREF_um_User1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__um_Provid__Provi__2DDD7BCE" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Provider_Documents_um_Provider" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_ExpensesLedger_um_Provider" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Provider_Documents_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__Ut_Public__Paren__1D47ECA9" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Addresses_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointments_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointments_um_ReferenceTypes1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Accounts_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_AccountsAggregation_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_AccountsAggregation_um_ReferenceTypes1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_um_ReferenceTypes2" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Custom_Fee_XREF_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Invoice_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Invoice_um_ReferenceTypes1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_InvoiceLineItems_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_InvoiceLineItems_um_ReferenceTypes1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_Transactions_um_ReferenceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_Transactions_um_ReferenceTypes1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_SectionsInRole_um_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_UsersInRole_um_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Message_RelatedRoles_um_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Message_RelatedRoles_um_Role1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_MessageCategoryInRole_um_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_Section_um_Section" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_SectionsInRole_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__um_SiteCa__Ref_S__3CBF0154" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_SitePages_um_SiteCategories" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__ut_Addres__State__50D80D08" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_ProviderPublicList_um_State" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__um_Provid__Techn__2FC5C440" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__um_Provid__Provi__2ED1A007" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__ut_Addres__Creat__52C0557A" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_Um_users_notifications_info_um_user" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_um_UsersInRole_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointments_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointments_um_User1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Accounts_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Custom_Fee_XREF_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_Transactions_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Message_Reciever_XREF_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Message_um_User" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointment_Tracking_ut_Appointments" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointments_ut_Appointment_Tracking" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Appointments_ut_AppointmentRecurrence" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_AccountsAggregation_ut_Billing_Accounts" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_AccountsAggregation_ut_Billing_Accounts1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_ut_Billing_Accounts" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_ut_Billing_Accounts1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Invoice_ut_Billing_Accounts" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Invoice_ut_Billing_Accounts1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_Transactions_ut_Billing_Accounts" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_Transactions_ut_Billing_Accounts1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_ChequeTransactions_ut_Billing_Admin_Transactions" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Admin_Transactions_ut_Billing_Admin_Transactions" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_Invoice_ut_Billing_Invoice" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_InvoiceLineItems_ut_Billing_Invoice" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_ChequeTransactions_ut_Billing_ProviderPatient_Transactions" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_TransactionsDistribution_ut_Billing_ProviderPatient_Transactions" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Billing_ProviderPatient_TransactionsDistribution_ut_Billing_ProviderPatient_Transactions1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__ut_Compon__Proce__6537D259" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__ut_Compon__Proce__662BF692" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__ut_Compon__Proce__67201ACB" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.Fk_ut_Client_BasicInfo_Log_ut_ClientEventInfo_Log" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.Fk_ut_Patient_Notesinfo_Log_ut_ClientEventInfo_Log" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.Fk_ut_Provider_Info_Log_ut_ClientEventInfo_Log" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_ForumTopic_ut_Forum" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_ForumTopic_ut_Forum1" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_ForumMessage_ut_ForumMessage" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_ForumMessage_ut_ForumTopic" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Message_Reciever_XREF_ut_Message" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Message_ut_MessageCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_MsgAttachFilename_ut_Message" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_Message_RelatedRoles_ut_MessageCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK_ut_MessageCategoryInRole_ut_MessageCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="MowerHelperModel.FK__Ut_task_A__Task___35F9600D" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

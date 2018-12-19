@@ -1,0 +1,42 @@
+﻿@model MowerHelper.Models.BLL.BLLSchedule.DeleteAppointment
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   @* <script src="~/Scripts/jquery-ui-1.8.11.js" type="text/javascript"></script>*@
+   @* <script type="text/javascript">
+//        $(document).ready(function () {
+
+//            alert( $("#apptDelid").val());
+//        });
+    </script>*@
+</head>
+<body>
+@using (Ajax.BeginForm("ApptDelete", "Schedule", new AjaxOptions
+   {
+       InsertionMode = InsertionMode.Replace,
+       HttpMethod = "POST",
+       OnSuccess = "delSuccess",
+       OnComplete = "SessionExpireFail"
+
+   }, new { @id = "delapptForm" }))
+{
+ 
+    @Html.Hidden("apptDelid")
+    @Html.Hidden("apptdate")
+@Html.Hidden("ToRefId")
+@Html.Hidden("enddate")
+@Html.Hidden("futureInd")
+@*@Html.Hidden("AppointmentRec")*@
+   @Html.Hidden("recId")
+    @Html.Hidden("fromPage")
+       <div>
+        <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>Do you want to delete the appointment?</p>           
+    </div>
+}
+</body>
+</html>

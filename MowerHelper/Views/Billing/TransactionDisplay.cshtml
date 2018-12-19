@@ -1,0 +1,494 @@
+﻿@*@model MowerHelper.Models.BLL.Billing.RPBilling*@
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+    //string Fdate = Model.FromDate;
+    //string Tdate = Model.ToDate;
+    //string Vddlrecords = Model.NoOfRecords;
+    //string VSetdt = Model.Date_range;
+    //string Vpage = Model.PageNo;
+    //string Vpid = Model.PatientID;
+    //int? Vplid = Model.PatientLogin_ID;
+    //string clientphone = Model.clientphone;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   @* <meta http-equiv="X-UA-Compatible" content="IE=Edge" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    @*   @Scripts.Render("~/ThScripts/ElectricianHelpscripts")*@
+     
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+   @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+        @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    <style type="text/css">
+        .item
+        {
+            position: relative !important;
+            display: -moz-inline-stack;
+            display: inline-block;
+            zoom: 1;
+            *display: inline;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .header
+        {
+            margin-left: 2px;
+        }
+
+        .c1
+        {
+            width: 180px;
+        }
+
+        .c2
+        {
+            margin-left: 5px;
+            width: 100px;
+        }
+
+        .c3
+        {
+            margin-left: 10px;
+            width: 100px;
+        }
+
+        .Date
+        {
+            width: 12%;
+        }
+
+        .Aptdate
+        {
+            width: 10%;
+        }
+
+        .cDel
+        {
+            width: 5%;
+        }
+
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .dvLoading .ui-dialog-titlebar
+        {
+            display: none;
+        }
+
+        .tbl
+        {
+            background-color: #000;
+        }
+
+            .tbl td, th, caption
+            {
+                background-color: #fff;
+            }
+        .selected
+        {
+            background-color: #fff !important;
+        }
+    </style>
+    <script type="text/javascript">
+        //$(document).ready(function () {
+        //    $.ajaxPrefilter(function (options, original_Options, jqXHR) {
+        //        options.async = true;
+        //    });
+        //});
+        function lnkTypeSearch(type_id)
+        {
+            if(type_id != 1)
+            {
+                $('#dt_filter').val("Custom");
+                document.getElementById("tddaterange").style.display="";
+                document.getElementById('trduration').style.display = "";
+            }
+            else
+            {
+                $('#dt_filter').val("30");
+                document.getElementById("tddaterange").style.display="none";
+                document.getElementById('trduration').style.display = "none";
+            }
+            $("#comboboxMain_SelectedText").val(comboboxMain.EmptyText);
+            $('#type_id').val(type_id);
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $('#gridcontent1').load('@Url.Action("DisplayTransactions")?type_id=' + type_id, function (data) { $('#dvLoading').dialog('close'); });
+        }
+    </script>
+    <script type="text/ecmascript">
+       
+        function comboboxMain_ItemClick(sender, selectedIndex) {
+         //   $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            var obj = comboboxMain.options[selectedIndex].value;
+            $("#hdnPid").val(obj);
+            var test1 = "All";
+            var testval = "";
+            var ddlUsers = "#dt_filter";
+            if ($(ddlUsers).find(":contains('" + test1 + "')").length > 0) {
+                testval = "1";
+
+            } else {
+                testval = "2";
+            }
+
+            if (testval == "2") {
+                $('#dt_filter').append($('<option > </option>').val("All").html("All"));
+            }
+            $("#dt_filter").val("All");
+            document.getElementById('tddaterange').style.display='none';
+            document.getElementById('trduration').style.display='none';
+            $.ajax({
+                type: "get",
+                contentType: "application/json;charset=utf-8",
+                url: "../Billing/patBlaence",
+                data: { "patientid": obj },
+                dataType: "json",
+                success: ResultSearch,
+            });
+        }
+        function ResultSearch(data) {
+           // alert(data[0].Customer_Email);
+            $("#hdnPlId").val(data[0].PatientLogin_ID);
+            $("#clienttranphone").val(data[0].clientphone);
+            $("#hdnclientEmail").val(data[0].Customer_Email);
+            $("#lnkSearch").click();
+            //                        alert( $("#hdnPlId").val());
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("TransactionDisplay", "Billing", FormMethod.Get, null))
+    {
+        @Html.Hidden("hdnPid")
+        @Html.Hidden("hdnPlId")
+        @Html.Hidden("patselect")
+        @Html.Hidden("clienttranphone")
+        
+        <div>@{Html.RenderAction("Topsection", "Tools");}</div> 
+        <div id="main-content">
+            @*<input type="hidden" id="hdnsort" name="hdnsort" value="@Model.OrderbyItem" />
+            <input type="hidden" id="hdnsortdir" name="hdnsortdir" value="@Model.orderBy" />*@
+            <input type="hidden" id="hdnnoofrecords" name="hdnnoofrecords" value="@ViewBag.totrec" />
+            
+            <div id="gridcontent1">
+                <img src="../Images/ajax-loader2.gif" alt="Processing" style="margin-left:45%"/>
+            </div>
+            <br />
+            <br />
+            @*   </td>
+                                </tr>
+             </table>*@
+        </div>
+@*<br /><br />
+    <table border="0" cellpadding="0" cellspacing="0" width="98%">
+        <tr>
+            <td align="right">
+                <input type="button" class="button" value="Cancel" name="btnCancel" onclick="return bValidate()" />
+            </td>
+        </tr>
+    </table>*@
+        <br />  <br />
+        <br /> <br />
+        <br /> <br />
+        <br />
+        <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+        <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete the transaction?
+            </p>
+        </div>
+        <div id="dialog-confirm1" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete the transaction?
+            </p>
+        </div>
+    }
+    <div id="divtran" title="Add new transaction"></div>
+    <div id="divEditcharge" title="Edit transaction"></div>
+    <div id="divEditPay" title="Edit transaction"></div>
+    <div id="divEditTran" title="Edit transaction"></div>
+    <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+        <img src="../Images/ajax-loader2.gif" alt="Processing" />
+        </div>
+     <div id="divInvoice" title="Email invoice">
+        </div>
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
+       
+        var linkObj;
+        $(function () {
+            
+            $(".invclose").live("click", function (e) {
+                e.preventDefault();
+                $('#divInvoice').dialog('close');
+            });
+            $(".close").live("click", function (e) {
+                e.preventDefault();
+                $(this).closest(".dialog").dialog("close");
+               
+            });
+            $(".chgclose").live("click", function (e) {
+                e.preventDefault();
+                $('#divtran').dialog('close'); 
+            });
+            $(".Epmtclose").live("click", function (e) {
+                e.preventDefault();
+                $('#divEditPay').dialog('close'); 
+            });
+
+            $(".Epmtclose").live("click", function (e) {
+                e.preventDefault();
+                $('#divEditTran').dialog('close');
+            });
+            $(".Echgclose").live("click", function (e) {
+                e.preventDefault();
+                $('#divEditcharge').dialog('close');
+            });
+            $(".confirmDialog").live("click", function (e) {
+                e.preventDefault()
+                var url = $(this).attr('href');
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                            $("#gridcontent1").load(url, function (data) { $('#dvLoading').dialog('close'); });
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                            
+                        }
+                    }
+                });
+                $("#dialog-confirm").dialog('open');
+                return false;
+            });
+
+            $(".confirmDialog1").live("click", function (e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                $("#dialog-confirm1").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                            $("#gridcontent1").load(url, function (data) { $('#dvLoading').dialog('close'); });
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                          
+                        }
+                    }
+                });
+                $("#dialog-confirm1").dialog('open');
+                return false;
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function fnValidateData() {
+            //if (document.getElementById('Customer_Email').value == '') {
+            //    InlineAlert('lblErremail', 'tdemailmain', 'Please enter email');
+            //    document.getElementById('Customer_Email').focus();
+            //    return false;
+            //}
+            //if (document.getElementById('Customer_Email').value != '') {
+            //    var stremail = trim(document.getElementById('ICustomer_Email').value);
+            //    document.getElementById('Customer_Email').value = stremail;
+            //    if (ValidateEmail(document.getElementById('ICustomer_Email')) == 0) {
+            //        //Glb_ShowAlert("Please enter valid email");
+            //        InlineAlert('lblErremail', 'tdemailmain', 'Please enter valid email');
+            //        document.getElementById('Customer_Email').focus();
+            //        return false;
+            //    }
+            //    else {
+            //        ClearInlineAlert('lblErremail', 'tdemailmain', '#FFFFFF');
+            //    }
+            //}
+
+            if ($('.CustInvoiceEmail').val() == '') {
+                InlineAlert('lblErremail', 'tdemailmain', 'Please enter email');
+                $('.CustInvoiceEmail').focus();
+                return false;
+            }
+            if ($('.CustInvoiceEmail').val() != '') {
+                var stremail = trim($('.CustInvoiceEmail').val());
+                $('.CustInvoiceEmail').val(stremail);
+                if (ValidateEmail($('.CustInvoiceEmail').val()) == 0) {
+                    //Glb_ShowAlert("Please enter valid email");
+                    InlineAlert('lblErremail', 'tdemailmain', 'Please enter valid email');
+                    $('.CustInvoiceEmail').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErremail', 'tdemailmain', '#FFFFFF');
+                }
+            }
+
+
+
+
+            //var http = new XMLHttpRequest();
+            //http.open("POST", "../Clients/CustInvoice", true);
+            //http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            //var params = "Customer_Email=" + $('#Customer_Email').val() + "&Ind=Y&Provider_id=" + $('#hdnProv_ID').val() + "&PatientID=" + $('#hdnpatid').val() + "&ProviderLoginID=" + $('#hdnUserID').val() + "&FromDate=" + $('#hdnfrmdate').val() + "&ToDate=" + $('#hdntodate').val() + "&PatientLogin_ID=" + $('#PatientLogin_ID').val() + "&Date_range=" + $('#Date_range').val() + "&NoOfRecords=" + $('#NoOfRecords').val() + "&clientphone=" + $('#clientphone').val();
+            //http.send(params);
+            //http.onload = function(data) {
+            //    var custemail = $('#Customer_Email').val();
+            //    $("#hdnclientEmail").val(custemail);                                          
+            //    $('#divInvoice').dialog('close');
+            //}
+            //return false;
+
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $.ajax({
+                url: "@Url.Action("CustInvoice", "Clients")?Customer_Email=" + $('.CustInvoiceEmail').val() + "&Ind=Y&patSInd=N" + "&Provider_id=" + $('#hdnProv_ID').val() + "&PatientID=" + $('#hdnpatid').val() + "&ProviderLoginID=" + $('#hdnUserID').val() + "&FromDate=" + $('#hdnfrmdate').val() + "&ToDate=" + $('#hdntodate').val() + "&PatientLogin_ID=" + $('#PatientLogin_ID').val() + "&Date_range=" + $('#Date_range').val() + "&NoOfRecords=" + $('#NoOfRecords').val() + "&clientphone=" + $('#clientphone').val(),
+                contentType: "application/json;charset=utf-8",
+                type: 'POST',
+                dataType: "json",
+                success: function (data) {
+                    var custemail = $('.CustInvoiceEmail').val();
+                $("#hdnclientEmail").val(custemail);
+                //$("#gridcontent1").load("../Billing/DisplayTransactions");
+                $('#divInvoice').dialog('close');
+                $('#dvLoading').dialog('close');
+            }
+            });
+
+        }
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+               $("#Menu0").removeClass();
+               $("#Menu1").removeClass();
+               $("#Menu2").removeClass();
+               $("#Menu3").addClass("active");
+           });
+    </script>
+  @*  Add Transaction*@
+    <script type="text/javascript">
+       
+        function combobox2_ItemClick(sender, selectedIndex) {
+            var obj = combobox2.options[selectedIndex].value;
+            $("#hdnMPid").val(obj); 
+            $.ajax({
+                type: "get",
+                contentType: "application/json;charset=utf-8",
+                url: "../Billing/patBlaence",
+                data: { "patientid": obj },
+                dataType: "json",
+                success: Result,
+                error: Eresult
+            });
+        }
+        function Eresult() {
+            alert('Session is expired. You will be redirected to session expired page');
+            window.location = '@Url.Action("SessionExpire", "Home")';
+    }
+
+        function Result(data) {
+        //  alert(data[0].BalanceAmount);
+        document.getElementById('RegOndate').value = data[0].RegOndate;
+        //            if (data[0].BalanceAmount != null) {
+        //                document.getElementById("lblMunPaidamount").innerHTML = data[0].BalanceAmount;
+        //               
+        //            }
+        $("#ToReference_ID").val(data[0].Reference_id);
+        $("#clientphone").val(data[0].clientphone);
+        //            alert($("#hdnMPid").val());
+        $("#PatientLogin_ID").val(data[0].PatientLogin_ID);
+        //if (data[0].patSInd == "Y") {
+        //    $("#trPayFrom").hide();
+        if (data[0].BalanceAmount != null) {
+            document.getElementById("lblMunPaidamount").innerHTML = data[0].BalanceAmount;
+
+        }
+            //}
+        else {
+            //  $("#trPayFrom").show();
+            document.getElementById("lblMunPaidamount").innerHTML = "";
+            //                document.getElementById("lblCharge1To").innerHTML = data[0].patBillName;
+        }
+        //if (data[0].Customer_Email == null || data[0].Customer_Email == "") {
+        //    $("#tbfooter").hide();
+        //}
+        if (data[0].Customer_Email != "") {
+            //alert("1");
+            $(".AddTransEmail").val(data[0].Customer_Email);
+            $("#hdnclientEmail").val(data[0].Customer_Email);
+          
+            $('#togglechkemail').show();         
+          //  $("#tbfooter").show();
+        }
+        else {
+            $(".AddTransEmail").val("");
+            $('#togglechkemail').show();   
+        }
+        if ($(".AddTransEmail").val() != "") {
+            document.getElementById("chkAgree").innerHTML = "Email receipt to  " + data[0].custname + "&nbsp;at&nbsp;" + $(".AddTransEmail").val();
+        }
+        else {
+            document.getElementById("chkAgree").innerHTML = "Email receipt to  " + data[0].custname;
+        }
+        $('.AddTransEmail').keyup(
+              function (event) {
+                  if ($(".AddTransEmail").val() != "") {
+                      document.getElementById("chkAgree").innerHTML = "Email receipt to  " + data[0].custname + "&nbsp;at&nbsp;" + $(".AddTransEmail").val();
+                  }
+                  else {
+                      document.getElementById("chkAgree").innerHTML = "Email receipt to  " + data[0].custname;
+                  }
+              }
+           );
+        ClearInlineAlert('lblAddErrEmail', 'tdAddEmail', '#FFFFFF')
+
+    }
+        function combobox2_Open(sender) {
+            combobox2.OpenOnFocus = true;
+        }
+        function combobox2_Focus(sender) {
+            combobox2.OpenOnFocus = false;
+
+        }
+       
+</script>
+      @*End Transaction*@
+    @*Edit transaction*@
+    
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$(window).on('hashchange', function (e) {
+        //    history.replaceState("", document.title, "../Billing/TransactionDisplay");
+        //});
+        $("#gridcontent1").load("@Url.Action("DisplayTransactions", "Billing")");
+        var TopIndex = '@Session["TopIndex"]';
+        $("#Menu0").removeClass();
+        $("#Menu1").removeClass();
+        $("#Menu2").addClass("active");
+        $("#Menu3").removeClass();
+        $("#Menu4").removeClass();
+
+    });
+</script>
+</html>

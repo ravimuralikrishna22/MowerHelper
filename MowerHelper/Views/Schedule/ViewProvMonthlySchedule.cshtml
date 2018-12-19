@@ -1,0 +1,668 @@
+﻿  @model MowerHelper.Models.Classes.StateCity  
+@{
+    Layout = null;
+}
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+<!DOCTYPE html>
+<html>
+<head>
+@*<meta http-equiv="X-UA-Compatible" content="IE=Edge" />*@
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../../favicon.ico" />
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+         @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Scripts.Render("~/ThScripts/ThOtherscripts")
+   @* @Scripts.Render("~/ThScripts/ThAjaxscripts")*@
+    @* @Scripts.Render("~/ThScripts/ElectricianHelpscripts")  
+    <script type="text/javascript" src="~/Scripts/jquery-1.7.1.js">    </script>
+    <script  src="~/Scripts/jquery-ui-1.8.20.js" type="text/javascript"></script>
+    <script  src="~/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script  src="~/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script  src="~/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>*@
+     <style type="text/css">
+        input[type="radio"]
+        {
+            margin-right: 5px;
+        }
+
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .item
+        {
+            position: relative !important;
+            display: -moz-inline-stack;
+            display: inline-block;
+            zoom: 1;
+            *display: inline;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .header
+        {
+            margin-left: 2px;
+        }
+
+        .c1
+        {
+            width: 160px;
+        }
+
+        .c2
+        {
+            margin-left: 10px;
+            width: 90px;
+        }
+          .multcolumn .ob_iCboICBC li
+        {
+            float: left;
+            width: 60px;       
+        }        
+            
+        /* For IE6 */
+        * HTML .multcolumn .ob_iCboICBC li
+        {
+           -width: 55px;
+        }        
+        * HTML  .multcolumn .ob_iCboICBC li b
+        {
+            width: 55px;
+            overflow: hidden;
+        }   
+           .multcolumn2 .ob_iCboICBC li
+        {
+            float: left;
+            width: 165px;       
+        }        
+            
+        /* For IE6 */
+        * HTML .multcolumn2 .ob_iCboICBC li
+        {
+           -width: 164px;
+        }        
+        * HTML  .multcolumn2 .ob_iCboICBC li b
+        {
+            width: 164px;
+            overflow: hidden;
+        }  
+          .confirmDialog1
+        {
+            /*background: url("../images/bg-button-green.gif") repeat-x scroll left top #459300 !important;
+            border: 1px solid #459300 !important;*/
+            background: repeat-x scroll left top #FF0000 !important;
+            border: 1px solid #FF0000 !important;
+            border-radius: 4px;
+            color: #FFFFFF !important;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Verdana,Arial,sans-serif;
+            font-size: 11px !important;
+            padding: 4px 7px !important;
+        }  
+    </style>
+    <script type="text/javascript">
+        function ComboBoxPr_ItemClick(sender, selectedIndex) {
+            if (ComboBoxPr.selectedIndex() != -1) {
+                var obj = ComboBoxPr.options[selectedIndex].value;
+                document.getElementById("hdnPrid").value = obj;
+                // alert(document.getElementById("hdnPrid").value);
+                document.getElementById("hdnname").value = ComboBoxPr.options[selectedIndex].text;
+                document.forms[0].submit();
+            }
+        }
+    </script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#lnltasks").mouseover(function () {
+                document.getElementById("lblTasktitle").innerHTML = "@ViewBag.tasktitle";
+                            document.getElementById("divTask").style.zIndex = '1005';
+                            document.getElementById("divTask").style.left = '730px';
+                            document.getElementById("divTask").style.top = '160px';
+                            document.getElementById("divTask").style.position = 'absolute';
+                            document.getElementById("divTask").style.display = '';
+                        });
+            $("#lnltasks").mouseout(function () {
+                document.getElementById("divTask").style.display = 'none';
+            });
+
+
+            @*var strtechname = "@ViewBag.techid";
+            if (strtechname != '') {
+                $("#Ddltech").val("@ViewBag.techid");
+            }
+
+            var tech_count = '@ViewBag.tech_count';
+            if (tech_count > 1) {
+                document.getElementById('Ddltech').style.display = '';
+                document.getElementById('spanpname').style.display = 'none';
+                document.getElementById('spancolan').style.display = '';
+
+            }
+            else {
+                document.getElementById('Ddltech').style.display = 'none';
+                document.getElementById('spanpname').style.display = '';
+                document.getElementById('spancolan').style.display = 'none';
+            }
+            $("#Ddltech").change(function () {
+                stechid = document.getElementById("Ddltech").value;
+                var techname = $('#Ddltech option:selected').html();
+                window.location = '../Schedule/ViewProvMonthlySchedule?Ddltech=' + stechid + '&techname=' + techname;
+            });*@
+        });
+        </script>
+     <script type="text/javascript">
+         function getprintview() { 
+             var techid ='';// document.getElementById('Ddltech').value; //alert('@ViewData["PrevMonth"]'); alert('@ViewData["nextMonth"]');
+             //if (techid == "All") {
+             //    techid = null;
+             //}
+             //var parm = document.getElementById("Ddltech");
+             var selected_text = null;// parm.options[parm.selectedIndex].text;;
+             //  alert(selected_text);
+             //  var e = document.getElementById("<%=Ddltech.ClientID%>");
+             // var selectedtext = e.options[e.selectedIndex].text;
+             //if (selected_text == "All") {
+             //    selected_text = null;
+             //}
+             var apptdate = null;
+            // var beginDate = null;
+            // var endDate = null;
+             var beginDate = '@ViewData["PrevMonth"]';
+             var endDate = '@ViewData["nextMonth"]';
+             var ApptType = "Month";
+             window.location.href = "../Schedule/Printableview?beginDate=" + beginDate + "&endDate=" + endDate + "&ApptType=" + ApptType + "&techid=" + techid + "&apptdate=" + apptdate + "&technm=" + selected_text;
+            @*               @Html.ActionLink("Printable view", "Printableview", new { @apptdate = "null", @beginDate = "null", @endDate = "null", @ApptType = "Month" }, new { @class = "button", @style = "text-decoration:none;color:white" })*@
+        }
+    </script>
+    <script type="text/javascript">
+        $("#btnClear").live("click", function () {
+            $.ajax({
+                url: "../Schedule/Schedulespecs",
+                data: { hid: '@TempData["hdnPrid"]' },
+                success: function (data) {
+                    window.location = "../Schedule/Schedulespecs";
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("ViewProvMonthlySchedule", "Schedule", FormMethod.Get, null))
+    {
+    @Html.Hidden("hdnPrid")
+        @Html.Hidden("hdnname")
+   <div>@{Html.RenderAction("Topsection", "Tools");}</div>
+    <div id="main-content">
+          @if (Session["roleid"].ToString() == "1")
+            {
+                <table border="0" cellpadding="8" cellspacing="1" width="100%" id="tblAdmin" class="border_style">
+                    @*<tr class="white_color" id="tblAdminMsg">
+                        <td colspan="2">
+                            <strong>@ViewBag.prvmsg </strong>
+                        </td>
+                    </tr>*@
+                    <tr>
+                        <td width="25%" align="right">
+                            <strong>Mower Helper &nbsp;: &nbsp; &nbsp;</strong>
+                        </td>
+                        <td width="75%" align="left">
+                            @Html.Obout(new ComboBox("ComboBoxPr")
+                   {
+                       Width = 500,
+                       MenuWidth = 500,
+                       Height = 200,
+                       AutoPostBack = true,
+                       EnableLoadOnDemand = true,
+                       OnLoadingItems = "Schedule/LoadingItems1",
+                       EmptyText = "-- Select Mower Helper --",
+                       HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                       @:<div class="header c1">Mower Helper name</div>
+),
+
+                       ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                       @:<div class="item c1">@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).ProviderName)</div>
+),
+                       ClientSideEvents = new ComboBoxClientSideEvents()
+                       {
+                            OnItemClick= "ComboBoxPr_ItemClick"
+                       }
+                   })
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a id="btnClear" href="#" @*onclick="return btnclear();"*@ title="Clear"><img alt="" id="" src="~/Images/refreshimages.png" style="width:30px;" /></a>
+                        </td>
+                    </tr>
+                </table>
+            }
+        @if (Session["roleid"].ToString() != "1" || @ViewBag.Prselect == "Y")
+             { 
+        <table width="100%" cellpadding="0" cellspacing="0">
+          
+                            <tr id="trtabsadmin" runat="server">
+                                <td width="100%" class="navigation">
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="admincust" href="Schedulespecs" ><span>Day</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="admintask"  href="WeeklyAppts"><span>Week</span>
+                                        </a>
+                                    </div>
+                                
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="adminnote" href="ViewProvMonthlySchedule"><span>Month</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adminContact" href="ViewYearlySchedule"><span>Year</span>
+                                        </a>
+                                    </div>                                 
+                                </td>
+                            </tr>
+           
+                            <tr class="background_color">
+                                <td id="tdtabsadmin" class="tab-background"   width="100%">     
+           <table border="0" cellpadding="8" cellspacing="1" width="100%" class="border_style">
+            <tr>
+            <td width="10%" style="text-align:center;background-color:#1d70ab;">
+             <strong>@Html.ActionLink((string)@ViewBag.PMtext, "ViewProvMonthlySchedule", new { @PrevMonth = @ViewData["PrevMonth"] }, new {@style = "color:white" })</strong> 
+            </td>
+            <td width="80%"  style="text-align:center;background-color:#1d70ab;"><strong style="color:white;">Schedule for</strong> 
+               @* <span id="spancolan"><strong style="color:white;">&nbsp;:&nbsp;</strong></span>                                     
+                      @Html.DropDownList("Ddltech", Model.Techlist, "All", new { @style = "width:200px;height:25px;font:13px;" })*@
+                                     <span id="spanpname">&nbsp;<strong style="color:white;">@ViewBag.practicename</strong></span>&nbsp;
+                                      <strong style="color:white;">@ViewBag.practicerangedates</strong> 
+                                                                               @if (Session["roleid"].ToString() != "1" && ViewBag.Showtask == "Y")
+                                                       {
+                                                           <a href="#" id="lnltasks" style="font-weight: bold; font-size: 12px; padding-left:200px; padding-right:50px; color: white" >
+                                                               Today tasks list</a>
+                                                       } 
+                                                        <a onclick="return getprintview();" class="button" style="text-decoration:none;">Printable view</a>
+@*               @Html.ActionLink("Printable view", "Printableview", new { @apptdate = "null", @beginDate = "null", @endDate = "null", @ApptType = "Month" }, new { @class = "button", @style = "text-decoration:none;color:white" })*@
+            </td>
+            <td width="10%" style="text-align:center;background-color:#1d70ab;">
+             <strong>@Html.ActionLink((string)@ViewBag.NMtext, "ViewProvMonthlySchedule", new { @nextMonth = @ViewData["nextMonth"] }, new { @id = "Next", @class = "Next",@style = "color:white" })</strong> 
+            </td>
+            </tr>
+        </table>
+       @Html.Raw(ViewBag.monthtab)
+       <div id="AddApptlDialog" title="Add Appointment"></div>
+       <div id="dialog-confirm" title="Mower Helper" style="display: none"></div>
+       <div id="EditlDialog" title="Edit Appointment"></div>
+       <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+            <img src="../Images/ajax-loader2.gif" alt="Processing" />
+       </div>
+     @*  <div id="ViewlDialog" title="View Appointment">
+       </div>*@
+                                    <div id="divTask" style="width: 350px; display: none">
+            <div class="content-box">
+                <div class="content-box-header">
+                    <h3>
+                        <span id="lblTasktitle" runat="server"></span>
+                    </h3>
+                </div>
+                <div class="clear">
+                </div>
+                <div class="content-box-content">
+                    @Html.Raw(ViewBag.todaysTask)
+                </div>
+            </div>
+        </div>
+                                    </td></tr></table>
+        }
+             </div>
+    <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+    }
+        <script type="text/javascript">
+            var linkObj;
+            function AddAppt(apptdate)
+            {
+                $('#EditlDialog').html('');
+                var viewUrl = '../Schedule/AddNewAppointment/07-00AM?apptdate=' + apptdate + '' + '&frompage=month';
+                Displaydialog('AddApptlDialog', viewUrl, 'auto', 930, 'dvLoading', null, null);
+                return false;
+            }
+            function EditAppt(Apptid, cphone) {
+                $('#AddApptlDialog').html('');
+                var viewUrl = '../Schedule/EditAppointment?apptEid=' + Apptid + "" + "&frompage=month" + "&cphone=" + cphone;
+                Displaydialog('EditlDialog', viewUrl, 'auto', 930, 'dvLoading', null, null);
+                return false;
+            }
+            //$('#AddApptlDialog').dialog({
+            //    autoOpen: false,
+            //    width: 930,
+            //    resizable: false,
+            //    resizable: false,               
+            //    modal: true
+            //});
+            //$(".schedulemenu").click(function () {
+            //    $('#EditlDialog').html('');
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#AddApptlDialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('destroy');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            $(".AddApptclose").live("click", function (e) {
+                e.preventDefault();
+                $('#AddApptlDialog').dialog('close');
+            });
+            //$('#EditlDialog').dialog({
+            //    autoOpen: false,
+            //    width: 930,
+            //    resizable: false,
+            //    resizable: false,              
+            //    modal: true
+            //});
+
+            //$(".EditApptclass").click(function () {
+            //    $('#AddApptlDialog').html('');
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#EditlDialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('destroy');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            $(".EditApptclose").live("click", function (e) {
+                e.preventDefault();
+                $('#EditlDialog').dialog('close');
+            });
+            //$('#ViewlDialog').dialog({
+            //    autoOpen: false,
+            //    width: 1200,
+            //    height: 460,
+            //    resizable: false,
+            //    modal: true
+            //});
+            //$(".ViewDialog").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#ViewlDialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('destroy');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            //$(".ViewApptclose").live("click", function (e) {
+            //    e.preventDefault();
+            //    $('#ViewlDialog').dialog('close');
+            //});
+            $('#dialog-confirm').dialog({
+                autoOpen: false,
+                height: 170,
+                resizable: false,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $("#delapptForm").submit();
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".DelApptDialog").click(function () {
+               linkObj = $(this);
+                var dialogDiv = $('#dialog-confirm');
+                var viewUrl = linkObj.attr('href');
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            });
+            //});
+            function updateSuccess(data) {
+                document.body.style.cursor = 'default';
+                if (data.Success == true) {
+                    var apptdates = data.Object.monthname;
+                    window.location = '../Schedule/ViewProvMonthlySchedule?nextMonth='+ apptdates;
+                    $('#AddApptlDialog').dialog('close');
+                }
+                else {
+                    if (data.ErrorMessage == "1") {
+                        //                 alert(data.ErrorMessage);
+                        //                 alert("1");
+                        alert('Appointment already exists for the given time to the client');
+                        $('#AddApptlDialog').dialog('open');
+                    }
+                    else if (data.ErrorMessage == "2") {
+                        //                 alert(data.ErrorMessage);
+                        //             alert("2");
+                        alert('Appointment already exists for the given time.');
+                        $('#AddApptlDialog').dialog('open');
+                    }
+                    else if (data.ErrorMessage == "Please select valid cpt code") {
+                        //                 alert(data.ErrorMessage);
+                        //             alert("2");
+                        alert('Please select valid cpt code.');
+                        $('#AddApptlDialog').dialog('open');
+                        document.getElementById('txtcptcode').focus();
+                    }
+                    @*else if (data.ErrorMessage == 'false') {
+                        alert('Session is expired. You will be redirected to session expired page');
+                        window.location = '@Url.Action("SessionExpire", "Home")';
+                    }*@
+                    else if (data.ErrorMessage == 'Client has already appointment for the same time') {
+                        alert(data.ErrorMessage);
+                    }
+                    else {
+                        if (data != "_Logon_") {
+                            var obj = confirm(data.ErrorMessage);
+                            if (obj == true) {
+                                document.getElementById("hdnValidInd").value = "Y";
+                                $("#updateCarForm").submit();
+                                $('#AddApptlDialog').dialog('close');
+                            }
+                            else {
+                                $('#AddApptlDialog').dialog('open');
+                            }
+                        }
+                }
+                }
+            }
+            function EditApptSuccess(data) {
+                document.body.style.cursor = 'default';
+                if (data.Success == true) {
+                    var apptdates = data.Object.StartDate;
+                    window.location = '../Schedule/ViewProvMonthlySchedule?nextMonth=' + apptdates;
+                    $('#EditlDialog').dialog('close');
+                }
+
+                else {
+                    if (data.ErrorMessage == "1") {
+                        //                 alert(data.ErrorMessage);
+                        //                 alert("1");
+                        alert('Appointment already exists for the given time to the client');
+                        $('#EditlDialog').dialog('open');
+                    }
+                    else if (data.ErrorMessage == "2") {
+                        //                 alert(data.ErrorMessage);
+                        //                 alert("2");
+                        alert('Appointment already exists for the given time.');
+                        $('#EditlDialog').dialog('open');
+                    }
+                    else if (data.ErrorMessage == "Please select valid cpt code") {
+                        //                 alert(data.ErrorMessage);
+                        //             alert("2");
+                        alert('Please select valid cpt code.');
+                        $('#EditlDialog').dialog('open');
+                        document.getElementById('txtCptcode').focus();
+                    }
+                   @* else if (data.ErrorMessage == 'false') {
+                        alert('Session is expired. You will be redirected to session expired page');
+                        window.location = '@Url.Action("SessionExpire", "Home")';
+                    }*@
+                    else if (data.ErrorMessage == "\r\nThere is a conflict on selected date time.\r\n Do you still want to create appointment?") {
+                        //                    alert("1");
+                        var obj = confirm(data.ErrorMessage);
+                        if (obj == true) {
+                            document.getElementById("Editfutreapnt_Ind").value = "Y";
+                            $("#EditapptForm").submit();
+                            $('#EditlDialog').dialog('close');
+                        }
+                        else {
+                            $('#EditlDialog').dialog('close');
+                        }
+                    }
+                    else if (data.ErrorMessage == "Do you want to update future appointments?") {
+                        //                                     alert("1");
+                        var obj = confirm(data.ErrorMessage);
+                        if (obj == true) {
+                            document.getElementById("Editfutreapnt_Ind").value = "Y";
+                            $("#EditapptForm").submit();
+                            $('#EditlDialog').dialog('close');
+                        }
+                        else {
+                            document.getElementById("Editfutreapnt_Ind").value = "N";
+                            $("#EditapptForm").submit();
+                            $('#EditlDialog').dialog('close');
+
+                        }
+                    }
+                    else if (data.ErrorMessage == "Appointment already exists for the Same client.")
+                    { alert(data.ErrorMessage); }
+                    else {
+                        if (data != "_Logon_") {
+                            var obj = confirm(data.ErrorMessage);
+                            if (obj == true) {
+                                //                            document.getElementById("EditFuInd").value = "Y";
+                                document.getElementById("Editfutreapnt_Ind").value = "Null";
+                                $("#EditapptForm").submit();
+                                $('#EditlDialog').dialog('close');
+                            }
+                            else {
+                                //                        document.getElementById("EditFuInd").value = "N";
+                                //                        $('#EditlDialog').dialog('open');
+                                //                            document.getElementById("EditFuInd").value = "N";
+                                //                            $("#EditapptForm").submit();
+                                $('#EditlDialog').dialog('close');
+                            }
+                        }
+                    }
+                }
+            }
+            function delSuccess(data) {
+                if (data.Success == true) {
+                    var apptdates = data.Object.getMMdate;
+                    window.location = '../Schedule/ViewProvMonthlySchedule?nextMonth=' + apptdates;
+                    $('#dialog-confirm').dialog('close');
+                }
+                //else if (data.ErrorMessage == 'expire') {
+                //    window.location.href = '../Home/SessionExpire';
+                //}
+                else {
+                    if (data != "_Logon_") {
+                        $('#dialog-confirm').dialog('close');
+                        var obj = confirm(data.ErrorMessage);
+                        if (obj == true) {
+                            document.getElementById("futureInd").value = "Y";
+                            $("#delapptForm").submit();
+
+                        }
+                        else {
+                            $('#dialog-confirm').dialog('close');
+                            if (confirm('Do you want to Delete this Appointment?')) {
+                                document.getElementById("futureInd").value = "C";
+                                $("#delapptForm").submit();
+                            }
+                            else {
+                                $('#dialog-confirm').dialog('close');
+                            }
+
+                        }
+                    }
+                }
+            }
+        </script>
+         <script type="text/javascript">
+             $(document).ready(function () {
+                 var TopIndex = '@Session["TopIndex"]';
+                 $("#Menu0").removeClass();
+                 $("#Menu1").addClass("active");
+                 $("#Menu2").removeClass();
+                 $("#Menu3").removeClass();
+             });
+    </script>
+    @* Add Appointment*@
+     <script type="text/javascript">
+         function combobox1_ItemClick(sender, selectedIndex) {
+             var obj = combobox1.options[selectedIndex].value;
+             //           alert(obj); 
+
+             $.ajax({
+                 type: "get",
+                 contentType: "application/json;charset=utf-8",
+                 url: "../Schedule/GetPatientInfo",
+                 data: { "patientid": obj },
+                 dataType: "json",
+                 success: Result
+             });
+         }
+         function Result(data) {
+             if (data.ErrorMessage == 'false') {
+                 alert('Session is expired. You will be redirected to session expired page');
+                 window.location = '@Url.Action("SessionExpire", "Home")';
+             }
+             //  $("#txtcptcode").val(data[0].CPTCode);
+             $("#hdnPatLoginid").val(data[0].PatientLogin_ID);
+             $("#Patname").val(data[0].PatientName);
+             $("#Bussinessname").val(data[0].Bussinessname);
+             $("#Provider_cellphoneno").val(data[0].Provider_cellphoneno);
+             $("#cellphone").val(data[0].cellphone);
+             //alert(data[0].PatientEmail);
+             if (data[0].PatientEmail != "") {
+                 //alert("1");
+                 $("#hdnEmailID").val(data[0].PatientEmail);
+             }
+             document.getElementById('txtNotes').focus();
+             if (document.getElementById('hdnplaceind').value == "Y") {
+                 //document.getElementById("lblPatPlace").innerHTML = data[0].PatientName + "'s place";
+                 document.getElementById('trPlaceofAppointment').style.display = '';
+                // $('#OtherAddressItemList').val($('#OtherAddressItemList').text('My Location'));
+                 $('#OtherAddressItemList option').filter(function () { return $.trim($(this).text()) == 'My Location'; }).attr('selected', true);
+                 $('#OtherAddressItemList').change();
+                 //$('select[id^="OtherAddressItemList"] option[text="My Location"]').attr("selected", "selected");
+             } else {
+                 document.getElementById('trPlaceofAppointment').style.display = "none";
+             }
+         }
+    </script>
+   @* End Appointment*@
+   @* Edit Appointment*@
+     <script type="text/javascript">
+         function combobox115_Open(sender) {
+             combobox5.OpenOnFocus = true;
+         }
+         function combobox115_Focus(sender) {
+             combobox5.OpenOnFocus = false;
+
+         }
+    </script>
+   @* End Edit App*@
+</body>
+</html>

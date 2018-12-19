@@ -1,0 +1,148 @@
+﻿@{
+    Layout = null;
+    string PLId = Convert.ToString(ViewBag.plId);
+    string frm = ViewBag.frm;
+    string VSetdt = ViewBag.dt_filter;
+}
+
+@*<!DOCTYPE html>
+
+<html>
+<head>*@
+  @*  <meta name="viewport" content="width=device-width" />
+    <title>AdjList</title>*@
+     <script type="text/javascript">
+         $(".confirmAdjDialog").live("click", function (e) {
+
+             var url = $(this).attr('href');
+             $("#dialogAdj-confirm").dialog({
+                 autoOpen: false,
+                 height: 170,
+                 width: 350,
+                 show: { effect: 'drop', direction: "up" },
+                 modal: true,
+                 buttons: {
+                     "Yes": function () {
+                         $(this).dialog("close");
+                         window.location = url;
+
+                     },
+                     "No": function () {
+                         $(this).dialog("close");
+
+                     }
+                 }
+             });
+             $("#dialogAdj-confirm").dialog('open');
+             return false;
+         });
+             </script>
+               <script type="text/javascript">
+                   $(document).ready(function () {
+                       var totalrecors = "@ViewBag.Adjtotrec";
+                       document.getElementById('hdnadjtotrec').value = totalrecors;
+                       if (totalrecors > 0) {
+                           document.getElementById('uladjustments').style.display = "";
+                           document.getElementById('uladjustments1').style.display = "";
+                       } else {
+                           document.getElementById('uladjustments').style.display = "none";
+                           document.getElementById('uladjustments1').style.display = "none";
+                       }
+                   });
+    </script>
+@*</head>
+<body>*@
+     @{string heading1;
+        if (Request["sort"] == "Transaction_Date" && Request["sortdir"] == "ASC")
+           {
+               heading1 = "Date ▲";
+           }
+        else if (Request["sort"] == "Transaction_Date" && Request["sortdir"] == "DESC")
+           {
+               heading1 = "Date ▼";
+           }
+           else
+           {
+               heading1 = "Date ▼";
+           }
+                                            }
+                                            @{string Adjpagesize = (ViewBag.Adjpagesize ?? "5");
+                                              WebGrid Adjgrid = new WebGrid(rowsPerPage: Convert.ToInt32(Adjpagesize), fieldNamePrefix: "g3", pageFieldName: "p3");}
+                                            @{WebGrid grid = Adjgrid.Bind(rowCount: Convert.ToInt32(ViewBag.Adjtotrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["g3p3"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Transaction_Date", heading1, style: "Date"),grid.Column("ChargeType", "Adjustment type", style: "ModeOf"), grid.Column("", "Notes",
+                                                  format:@<text>
+                                                         @{var chgNote = (string)item.Notes;
+                                                           if( chgNote != null)
+                                                           {
+                                                           if (chgNote.Length > 100)
+                                                           {
+                                                               count = count + 1;
+                                                               chgNote = chgNote.Substring(0, 100);
+                                                           
+                                                           <span>@chgNote</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tblAdjdesc @count');" onmouseout="return ondescriptionout('tblAdjdesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tblAdjdesc @count" style="width: 500px; height: 100px; display: none; left:835px;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Notes </h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4" width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:5px; padding-top: 5px;" align="left"> <span>@item.Notes</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@item.Notes</span>
+                                                           }
+                                                           }
+                                                          @* else{
+                                                                <span>@item.Notes</span>
+                                                           }*@
+                                                           }
+                                                
+                                                </text>
+                                                
+),
+grid.Column("Transaction_Amount", "Amount($)", style: "chgAmt", canSort: false, format:@<text>@Html.ActionLink((string)item.Transaction_Amount, "EditAdjustment", new { tId = (int)item.Transaction_ID, plid = @PLId, trTypeid = item.TransactionType_ID, @frm = @frm, @dt_filter = @VSetdt },
+new { @class = "EditAdjdiv" }) </text>), grid.Column("", "Delete", style: "cDel", canSort: false,
+                                                    format:@<text>@Html.ActionLink(" ", "DeleteTran", new { tId = (int)item.Transaction_ID, trTypeid = item.TransactionType_ID, @frm = @frm, @dt_filter = @VSetdt },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;width:8%;", @class = "confirmAdjDialog" })</text>))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tblAdjustmenterror" width="100%" style="display: ;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td valign="middle" align="center" height="25px">
+                                                                <span id="lblAdjustment" class="errormsg" style="font-weight: bold;">No adjustments
+                                                                    found</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                }
+                                            }
+    <div id="dialogAdj-confirm" title="Mower Helper" style="display: none;">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            Do you want to delete the adjustment?
+        </p>
+    </div>
+@*</body>
+</html>
+*@

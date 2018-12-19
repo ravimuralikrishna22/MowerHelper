@@ -1,0 +1,134 @@
+﻿@{
+    Layout = null;
+}
+@*<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>*@
+
+@if (ViewBag.listcount > 0)
+{
+    if (ViewBag.zipcount > 0)
+    {
+<div id="content-links">
+    <div id="tblspecializations" runat="server" style="background-image: url(@ViewBag.img);
+        background-repeat: repeat-x; background-position: left top;" class="contentlinksbox">
+        <div style="width: 692px; float: left; padding: 8px 0px 8px 10px; font: 20px georgia;
+            font-size: 16px; color: #03467e; font-style: italic;">
+           @if (ViewBag.id1 == 1)
+           {
+             <label id="" style="font-weight:bold">@ViewBag.Text</label>   
+           }
+           else
+           {
+               
+            <label id="" style="font-weight:bold">Find a Mower Helper with Zip Codes :</label>
+           }
+                              </div>
+        <div style="width: 702px; float: left;">
+            <div class="gadget">
+            
+                <ul class="sb_menu">
+                                            @{
+           int i = 0;
+           int cnt = 0;
+           int j;
+           int k = 0;
+           string id = null;
+          // string city = null;
+           //id = ViewBag.zip;
+          // city = ViewBag.citynm;
+         //  string city1 = null;
+                                            }
+                                            <table>
+                                                @for (j = 0; j <= ViewBag.rows; j++)
+                                                {
+                                                    <tr>
+                                                        @for (i = k; i <= ViewBag.zipcount - 1; i++)
+                                                        {
+                                                            if (cnt < 4)
+                                                            {
+                                                                string title = null;
+                                                                string zipid = null;
+                                                                string distance = null;
+                                                                distance = ViewBag.distance;
+                                                                id = Convert.ToString(ViewBag.Zipcodes[i].Zipcode);
+
+                                                                if (ViewBag.cty23 != null)
+                                                                {
+                                                                    if (ViewBag.cty23.ToString().Contains("/"))
+                                                                    {
+                                                                        ViewBag.cty23 = ViewBag.cty23.ToString().Replace("/", "-");
+                                                                    }
+                                                                    if (ViewBag.cty23.ToString().Contains("'"))
+                                                                    {
+                                                                        ViewBag.cty23 = ViewBag.cty23.ToString().Replace("'", " ");
+                                                                    }
+                                                                    if (ViewBag.cty23.ToString().Contains("."))
+                                                                    {
+                                                                        ViewBag.cty23 = ViewBag.cty23.ToString().Replace(".", " ");
+                                                                    }
+                                                                    zipid = "Electricians in " + ViewBag.cty23 + ", " + ViewBag.stab12 + " " + Convert.ToString(ViewBag.Zipcodes[i].Zipcode);
+                                                                    title = "Find a Electricians in " + ViewBag.cty23 + ", " + ViewBag.stab12 + " " + Convert.ToString(ViewBag.Zipcodes[i].Zipcode);
+                                                                   // city1 = ViewBag.cty23 + " (" + ViewBag.stab12 + ")";
+
+                                                                }
+                                                                else if(ViewBag.StateNm != null)
+                                                                {
+                                                                    zipid = "Electricians in " + ViewBag.StateNm + ", " + " " + Convert.ToString(ViewBag.Zipcodes[i].Zipcode);
+                                                                    title = "Find a Electricians in " + ViewBag.StateNm + ", " + " " + Convert.ToString(ViewBag.Zipcodes[i].Zipcode);
+                                                                }
+                                                                else
+                                                                {
+                                                                    zipid = "Electricians in " + Convert.ToString(ViewBag.Zipcodes[i].Zipcode);
+                                                                    title = "Find a Electricians in " + Convert.ToString(ViewBag.Zipcodes[i].Zipcode);
+                                                                }
+                                                            <td>
+                                                            
+                                                             <li>
+                                                             @if (ViewBag.StateNm != null & distance == "0" & ViewBag.cty23!=null)
+                                                                {
+                                                                  @Html.RouteLink(zipid.ToString(), "Zipstatecity", new { id = id, city = @ViewBag.cty23.ToString().Replace(" ", "-"), StateNm = @ViewBag.StateNm.ToString().Replace(" ", "-") }, new { @title = title })
+                                                                }
+                                                               else if(ViewBag.StateNm != null)
+                                                               {
+                                                                   @Html.RouteLink(zipid.ToString(), "ZipcodeSearch", new { id = id }, new { @title = title })
+                                                               }
+                                                             else
+                                                             {
+                                                             @Html.RouteLink(zipid.ToString(), "ZipcodeTherapists", new { id = id, distance = distance }, new { @title = title })
+                                                             }
+                                                             </li>
+                                                            </td>
+                                                             cnt = cnt + 1;
+
+                                                            }
+                                                            else
+                                                            {
+
+                                                                k = i;
+                                                                cnt = 0;
+                                                                i = ViewBag.zipcount - 1;
+
+                                                            }
+                                                        }
+                                                    </tr>
+                                                }
+                                            </table>
+
+                                        </ul>
+                
+                                        
+            </div>
+            
+        </div>
+    </div>
+</div>
+    }
+}
+
+@*</body>
+
+</html>
+*@

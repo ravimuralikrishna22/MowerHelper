@@ -1,0 +1,345 @@
+﻿@{
+    ViewBag.Title = "Directory";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+@using (Html.BeginForm("Directory", "Search"))
+{
+   
+    @Scripts.Render("~/Scripts/Thscripts")
+    @Styles.Render("~/Content/themes/base/autocomplete")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#txtzip').val($('#hdntextvalue').val());
+            JqAutocomplete1('@Url.Action("Zipcodes", "Search")', "txtzip");
+        
+        });
+    </script>    
+    <script type="text/javascript">
+        //        function getfocus(e) {
+        //            //alert('4');
+        //            if (navigator.appName == 'Microsoft Internet Explorer') {
+        //                if (event.keyCode == 13)
+        //                    document.getElementById('ctl00_CPID_btnSearch').click();
+        //            } //IE Navigator
+        //            else {
+        //                if (e.which == 13)
+        //                    document.getElementById('ctl00_CPID_btnSearch').click();
+        //            }
+        //        }
+
+        function RemovesText() {
+
+            if (document.getElementById('txtzip').value == "US City or ZIP Code")
+                document.getElementById('txtzip').value = "";
+            return false;
+        }
+
+        function AddText() {
+            if (document.getElementById('txtzip').value == "")
+                document.getElementById('txtzip').value = "US City or ZIP Code";
+            return false;
+        }
+    </script>
+    @Html.AntiForgeryToken()
+    @*<input type="hidden" runat="server" style="width: 1px;" id="hdnDirectoryID" />
+    <input type="hidden" runat="server" style="width: 1px;" id="hdnDirectoryNm" />
+    <input type="hidden" runat="server" style="width: 1px;" id="hdnZIP" />
+    <input type="hidden" runat="server" style="width: 1px;" id="hdnRadius" />
+    <input type="hidden" runat="server" style="width: 1px;" id="hdnflg" />*@
+    <input type="hidden" name="hdntextvalue" id=hdntextvalue value="@ViewBag.textvalue" />
+    <div class="content" style="padding: 15px 0px 15px 15px;">
+        <h1>
+            Mower Helper Directory : &nbsp;</h1>
+    </div>
+    <div class="content2" id="trourmsg">
+        @if (ViewBag.ind == "N")
+        {
+@*  <asp:Label Font-Size="12pt" ID="lbloutmsg" runat="server" ForeColor="Red"></asp:Label>*@
+            <label style="color: Red; font-size: 12pt;">
+                Sorry: we have no Mower Helper listed in this area. It's possible that the city or
+                zip code was typed incorrectly. Please try your search again or select a state(or)city
+                below to browse.</label>
+        }
+        else
+        {
+            <label style="color: Red; font-size: 12pt;">
+            </label>
+        }
+    </div>
+    
+    <div id="directory-search1">
+        <div id="divdirectorysearch" runat="server"  style="width: 692px; float: left; 
+            background-repeat: no-repeat; background-position: left top; padding-left: 10px; padding-right: 50px; background-image: url(@ViewBag.lefttdbg);">
+            <div id="divdirectorysearch1" runat="server" style="width: 682px; float: left; background-image: url(@ViewBag.righttdbg);
+                background-repeat: no-repeat; background-position: right top; padding-right: 10px;">
+                <div class="adv-search">
+                    <table style="width: 682px;">
+                        <tr>
+                            <td>
+                                <div class="text-field" style="width: 140px; height: 2px;">
+                                    <input type="text" name="txtzip" id="txtzip" value="US City or ZIP Code" onfocus="return RemovesText();"
+                                        onblur="return AddText();" style="height: 13px; border: 1px inset;" class="searchinput" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="directory-search">
+                                    @Html.DropDownList("ddlRadius", new List<SelectListItem>
+
+                 {
+                    new SelectListItem{ Text="- Search Radius -", Value = "0" },
+                    new SelectListItem{ Text="5 Miles", Value = "5" },
+                    new SelectListItem{ Text="10 Miles", Value = "10" },
+                    new SelectListItem{ Text="20 Miles", Value = "20" },
+                    new SelectListItem{ Text="50 Miles", Value = "50" },
+                    new SelectListItem{ Text="100 Miles", Value = "100" },
+                    new SelectListItem{ Text="250 Miles", Value = "250" }}, new { @style = "height: 25px;" })
+                                    &nbsp; &nbsp; &nbsp;
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <input type="submit" value="Search" id="btnSearch" class="adv-search-bt" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="adv-search-link">
+                                    <a href="@Url.Action("ProviderSearch", "AdvancedSearch", null)" style="font-weight:bold; font-size:15px">
+                                        <span class="rtsTxt">Advanced Search</span> </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        if (ViewBag.Statescount > 0)
+        {
+    <div id="content-links">
+        <div id="divstates" runat="server" style="background-image: url(@ViewBag.uslistingtdbag); background-repeat: repeat-x;
+            background-position: left top;" class="contentlinksbox">
+            <div style="width: 692px; float: left; padding: 8px 0px 8px 10px; font: 20px georgia;
+                font-size: 16px; color: #03467e; font-style: italic;">
+                US Listings</div>
+            <div style="width: 702px; float: left;">
+                <div class="gadget">
+                    <ul class="sb_menu">
+                        @{
+            int i = 0;
+            int cnt = 0;
+            int j;
+            int k = 0;
+                        }
+                        <table>
+                            @for (j = 0; j <= ViewBag.rows; j++)
+                            {
+                                <tr>
+                                    @for (i = k; i <= ViewBag.Statescount - 1; i++)
+                                    {
+                                        if (cnt < 4)
+                                        {
+                                            // string title50 = "Therapists in " + Convert.ToString(ViewBag.States[i].State_Name);
+                                            //string state = ViewBag.States[i].State_Name; 
+                                        <td>
+                                            <li>
+                                                @Html.RouteLink((string)ViewBag.States[i].State_Name, "ListOfProviders", new { StateNm = ViewBag.States[i].State_Name.ToString().Replace(" ", "-") }, new { @title = "Electricians in " + Convert.ToString(ViewBag.States[i].State_Name) })
+                                                @* @Html.ActionLink((string)ViewBag.States[i].State_Name, "ListOfProviders", "Search", new { StateNm = ViewBag.States[i].State_Name }, new { @title = title50 })*@
+                                            </li>
+                                        </td>
+                                            cnt = cnt + 1;
+
+                                        }
+                                        else
+                                        {
+
+                                            k = i;
+                                            cnt = 0;
+                                            i = ViewBag.Statescount - 1;
+
+                                        }
+                                    }
+                                </tr>
+                            }
+                        </table>
+                    </ul>
+                </div>
+                @*<div id="trerrormsg" runat="server">
+                    <asp:Label ForeColor="Red" Visible="false" ID="lblErrMsg2" runat="server"></asp:Label>
+                </div>*@
+            </div>
+        </div>
+    </div>
+        }
+    <div id="content-links">
+        <div id="divtop" runat="server" style="background-image: url(@ViewBag.citytdbg); background-repeat: repeat-x;
+            background-position: left top;" class="contentlinksbox">
+            <div style="width: 692px; float: left; padding: 8px 0px 8px 10px; font: 20px georgia;
+                font-size: 16px; color: #03467e; font-style: italic;">
+                Top cities for Electricians</div>
+            <div style="width: 638px; float: left; padding: 32px 32px 20px 32px;">
+                <div style="width: 140px; float: left; padding-right: 25px;">
+                    <div style="width: 140px; float: left;">
+                        <a id="aimgchicago" runat="server" title="Chicago Electricians" href="@Url.Action("ListOfProviders", "Search", new { city = "Chicago", StateNm = "Illinois" })">
+                            <img id="imgchicago" alt="Chicago Electricians" src="~/Images/Chicago.jpg" />
+                        </a>
+                        <br />
+                    </div>
+                    <div class="cities" style="width: 140px; float: left;">
+                        @Html.ActionLink("Chicago, IL", "ListOfProviders", "Search", new { city = "Chicago", StateNm = "Illinois" }, new { @title = "Chicago Electricians", @style = "font-family: Arial; font-size: 9pt; font-weight: bold;" })</div>
+                </div>
+                <div style="width: 140px; float: left; padding-right: 25px;">
+                    <div style="width: 140px; float: left;">
+                        <a id="aimghouston" runat="server" title="Houston Electricians" href="@Url.Action("ListOfProviders", "Search", new { city = "Houston", StateNm = "Texas" })">
+                            <img id="imghouston" alt="Houston Electricians" src="~/Images/Houston.jpg" />
+                        </a>
+                    </div>
+                    <div class="cities" style="width: 140px; float: left;">
+                        @Html.ActionLink("Houston, TX", "ListOfProviders", "Search", new { city = "Houston", StateNm = "Texas" }, new { @title = "Houston Electricians", @style = "font-family: Arial; font-size: 9pt; font-weight: bold;" })
+                    </div>
+                </div>
+                <div style="width: 140px; float: left; padding-right: 25px;">
+                    <div style="width: 140px; float: left;">
+                        <a id="aimglosangeles" runat="server" title="Los Angeles Electricians" href="@Url.Action("ListOfProviders", "Search", new { city = "Los-Angeles", StateNm = "California" })">
+                            <img id="imglosangeles" alt="Los Angeles Electricians" src="~/Images/losangeles.jpg" />
+                        </a>
+                    </div>
+                    <div class="cities" style="width: 140px; float: left;">
+                        @Html.ActionLink("Los Angeles, CA", "ListOfProviders", "Search", new { city = "Los-Angeles", StateNm = "California" }, new { @title = "Los Angeles Electricians", @style = "font-family: Arial; font-size: 9pt; font-weight: bold;" })
+                    </div>
+                </div>
+                <div style="width: 140px; float: left;">
+                    <div style="width: 140px; float: left;">
+                        <a id="aimgnewyork" runat="server" title="New York Electricians" href="@Url.Action("ListOfProviders", "Search", new { city = "New-York", StateNm = "New-York" })">
+                            <img id="imgnewyork" alt="" src="~/Images/newyork.jpg" /></a></div>
+                    <div class="cities" style="width: 140px; float: left;">
+                        @Html.ActionLink("New York, NY", "ListOfProviders", "Search", new { city = "New-York", StateNm = "New-York" }, new { @title = "New York Electricians", @style = "font-family: Arial; font-size: 9pt; font-weight: bold;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    if (Convert.ToInt32(ViewBag.citiescount) > 0)
+    {
+    <div id="content-links">
+        <div id="divother" runat="server" style="background-image: url(@ViewBag.othcitytdbg); background-repeat: repeat-x;
+            background-position: left top;" class="contentlinksbox">
+            <div style="width: 692px; float: left; padding: 8px 0px 8px 10px; font: 20px georgia;
+                font-size: 16px; color: #03467e; font-style: italic;">
+                Other Cities with Electricians (Professional Listings)</div>
+            <div style="width: 702px; float: left;">
+                <div class="gadget">
+                    <ul class="sb_menu">
+                        @{
+        int l = 0;
+        int cnt1 = 0;
+        int m;
+        int n = 0;
+                        }
+                        <table>
+                            @for (m = 0; m <= ViewBag.rows1; m++)
+                            {
+                                <tr>
+                                    @for (l = n; l <= ViewBag.citiescount - 1; l++)
+                                    {
+                                        if (cnt1 < 4)
+                                        {
+                                            string text = ViewBag.cities[l].CityNm + ", " + ViewBag.cities[l].State;
+                                            if (ViewBag.cities[l].CityNm.ToString().Contains("/"))
+                                            {
+                                                ViewBag.cities[l].CityNm = ViewBag.cities[l].CityNm.ToString().Replace("/", "-");
+                                            }
+                                            if (ViewBag.cities[l].CityNm.ToString().Contains("'"))
+                                            {
+                                                ViewBag.cities[l].CityNm = ViewBag.cities[l].CityNm.ToString().Replace("'", " ");
+                                            }
+                                            if (ViewBag.cities[l].CityNm.ToString().Contains("."))
+                                            {
+                                                ViewBag.cities[l].CityNm = ViewBag.cities[l].CityNm.ToString().Replace(".", " ");
+                                            }
+                                        <td>
+                                            <li>@Html.ActionLink(text, "ListOfProviders", "Search", new { city = ViewBag.cities[l].CityNm.ToString().Replace(" ", "-"), StateNm = ViewBag.cities[l].State_Name.ToString().Replace(" ", "-") }, new { @title = "Electricians in " + ViewBag.cities[l].CityNm + ", " + ViewBag.cities[l].State })</li>
+                                        </td>
+                                            cnt1 = cnt1 + 1;
+
+                                        }
+                                        else
+                                        {
+
+                                            n = l;
+                                            cnt1 = 0;
+                                            l = ViewBag.citiescount - 1;
+
+                                        }
+                                    }
+                                </tr>
+                            }
+                        </table>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    <div id="content-links">
+        <div id="divcountry" runat="server" style="background-image: url(@ViewBag.inttdbg); background-repeat: repeat-x;
+            background-position: left top;" class="contentlinksbox">
+            <div style="width: 692px; float: left; padding: 8px 0px 8px 10px; font: 20px georgia;
+                font-size: 16px; color: #03467e; font-style: italic;">
+                International Listings</div>
+            <div style="width: 702px; float: left;">
+                <div class="gadget">
+                    <ul class="sb_menu">
+                        @{
+                            int cnt2 = 0;
+                            int b;
+                            int c = 0;
+                        }
+                        <table>
+                            @for (b = 0; b <= ViewBag.rows2; b++)
+                            {
+                                <tr>
+                                    
+                                    @{
+                                        int a;
+                                    }
+                                    @for (a = c; a <= ViewBag.internationalcnt - 1; a++)
+                                    {
+                                        if (cnt2 < 4)
+                                        {
+                                           // string title53 = "Therapists in " + Convert.ToString(ViewBag.international[a].Country);
+                                            string country = ViewBag.international[a].Country;
+                                        <td>
+                                            <li>
+                                                @Html.RouteLink(country, "International", new { countryname = ViewBag.international[a].Country.ToString().Replace(" ", "-") }, new { @title = "Electricians in " + Convert.ToString(ViewBag.international[a].Country) })
+                                                @* @Html.ActionLink((string)ViewBag.international[a].Country, "ListOfProviders","Search", new {  countryname = country.Replace(" ","-") }, new { @title=title53})*@
+                                            </li>
+                                        </td>
+                                            cnt2 = cnt2 + 1;
+
+                                        }
+                                        else
+                                        {
+
+                                            c = a;
+                                            cnt2 = 0;
+                                            a = ViewBag.internationalcnt - 1;
+
+                                        }
+                                    }
+                                </tr>
+                            }
+                        </table>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table style="display: none">
+        <tr>
+            <td id="tdSiteMeter" runat="server" style="width: 3px">
+            </td>
+        </tr>
+    </table>
+}
+

@@ -1,0 +1,279 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+              @Styles.Render("~/Content/themes/base/jqueryCSS")
+      @Scripts.Render("~/Scripts/Thscriptscript")
+
+@*      <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 100px; }
+          tr.gridHead th:nth-child(2) { width: 100px; }
+          tr.gridHead th:nth-child(3) { width: 300px; }
+          tr.gridHead th:nth-child(4) { width: 70px; }
+          tr.gridHead th:nth-child(5) { width: 60px; }
+              .dvLoading .ui-dialog-titlebar{display:none;}
+        
+    </style>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var psize = $('#hdnpagesize').val();
+            if (psize != '') {
+                $('#ddlrecords').val(psize);
+            }
+            else {
+                $('#ddlrecords').val("10");
+
+            }
+
+        });
+    </script>
+                <script type="text/javascript">
+
+                             function cancel() {
+            window.location.href = "@Url.Action("Tools", "AdminHome", new { sectionid = "333" })"; 
+        }
+
+    </script>
+    <script type="text/javascript">
+        $(".confirmDialog").live("click", function (e) {
+
+            var url = $(this).attr('href');
+            $("#dialog-confirm").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.location = url;
+
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog('open');
+            return false;
+        });
+
+        var linkObj;
+        $(function () {
+
+            //$('#Addpageno').dialog({
+            //    autoOpen: false,
+            //    width: 1250,
+            //    //                      height: 400,
+            //    resizable: false,
+            //    modal: true
+            //});
+
+            //$("#lnkadd").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#Addpageno');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+
+
+
+
+            //$(".Editclick").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#Editpageno');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+
+            //$('#Editpageno').dialog({
+            //    autoOpen: false,
+            //    width: 1200,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            var pno = $('#hdnpno').val();
+            if (pno != '') {
+                $('#txtpagenumber').val(pno);
+            }
+
+        });
+    </script>
+
+
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("Pagenos", "Technicalarea", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+        <input id="hdnpagesize" name="hdnpagesize" type="hidden" value="@ViewBag.pagesize"/>
+        <input id="hdnpno" name="hdnpno" type="hidden" value="@ViewBag.pno"/>
+        
+    <div id="main-content">
+    <table class="border_style" cellspacing="1" cellpadding="4" width="100%" align="center"
+                    border="0">
+                    <tr class="white_color">
+                                            <td height="30px" align="center">
+                       <strong> Page number&nbsp;:&nbsp;</strong> 
+                            @Html.TextBox("txtpagenumber", null, new { @class = "textfield", style = "width:100px", autocomplete = "off", onkeypress = "return AlphaNumbers(event);" }) &nbsp;&nbsp;
+                        <input type="submit" name="btnSearch" value="Search" id="btnSearch" class="button" />&nbsp;
+                       <input value="Cancel" type="button" class="button" style="width: 60px;" id="btnclose1" onclick="return cancel();"/>
+                    </td>
+                    </tr>
+                </table>
+                <br />
+        <div class="content-box">
+            <div class="content-box-header">
+
+            
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="70%" align="left">
+                    <h3>
+                        Page numbers</h3>
+                </td>
+                                <td width="15%" align="right">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li>
+                                    <a id="lnkadd" href="#" style="color: #0066CC;font-weight:bold;font-size:14px;" onclick="return Displaydialog('Addpageno','Addpageno','auto',1250,'dvLoading',null,null);">Add new page number&nbsp;&nbsp;</a>
+                                    </li>
+                                </ul>
+                            </td>
+                               @if (Convert.ToInt32(ViewBag.totrec) > 0)
+                               {
+                <td width="15%" align="center">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                     @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}
+                                    </li>
+                                </ul>
+                            </td>
+                               }
+               
+            </tr>
+        </table>
+     </div>
+     <div class="content-box-content">
+                                                                       @{ WebGrid provgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.pagesize ?? "10"));}
+                                            @{WebGrid grid = provgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                                  columns: grid.Columns(
+
+                                                  grid.Column("SlNo", "#", canSort: false),
+                                                   grid.Column("PageNo", "Page no", canSort: false),
+                                                    grid.Column("SectionName", "Section name", canSort: false),
+                                                                grid.Column("PagePath", "Page path", canSort: false),
+                                                   grid.Column("Notes", "pagenotes", canSort: false),
+                                                                                                                                                         grid.Column("", "Edit", canSort: false,
+                                                  format:@<text>@*@Html.ActionLink(" ", "Editpageno", new { Page_ID = (int)item.Page_ID },
+               new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "Editclick", @title = "Click here to Edit" })*@
+                                            <a href="#" class = "Editclick" title = "Click here to Edit" style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;" onclick="return Displaydialog('Editpageno','@Url.Action("Editpageno", new { Page_ID = (int)item.Page_ID })','auto',1200,'dvLoading',null,null);"> </a> </text>),
+                                                  grid.Column("", "Delete", canSort: false, style: "date",
+                                                  format:@<text>@Html.ActionLink(" ", "Deletepageno", new { Page_ID = (int)item.Page_ID },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog", @title = "Click here to delete expenses" })</text>)
+
+
+
+                                                                    )).ToString();
+
+
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                                              }
+                                              else
+                                              {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">
+                                            No page numbers found </span>
+                                    </td>
+                                </tr>
+                            </table>
+                                              }
+                        }
+  </div>
+ 
+    
+    </div>
+
+    </div>
+        <div id="Addpageno" title="Insert page number"></div>
+        <div id="Editpageno" title="Edit page number"></div>
+                       <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+    <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete item?
+            </p>
+        </div>
+                                              if (grid.Rows.Count <= 9)
+                                              {
+                                                  if (grid.Rows.Count <= 4)
+                                                  {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+                                                  }
+                                                  else
+                                                  {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                                                  }
+                                              }
+
+
+
+    }
+               
+
+</body>
+</html>

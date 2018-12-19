@@ -1,0 +1,316 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+     <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css" ></style>
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" media="all" />
+           @Styles.Render("~/Content/themes/base/TherpistStyles")
+         @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+      <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 50px; }
+          tr.gridHead th:nth-child(2) { width: 200px; }
+          tr.gridHead th:nth-child(3) { width: 200px; }
+          tr.gridHead th:nth-child(4) { width: 200px; }
+          tr.gridHead th:nth-child(5) { width: 200px; }
+          tr.gridHead th:nth-child(6) { width: 80px; }
+              .dvLoading .ui-dialog-titlebar{display:none;}
+       
+.electrilic{  width:35%;}
+          .actiondrop
+          {
+              width: 25%;
+          }
+    </style>
+             <script type="text/javascript">
+                 function ondescriptionover(obj) {
+                     //alert(obj);
+                     document.getElementById(obj).style.position = 'absolute';
+                     document.getElementById(obj).style.display = '';
+                     return false;
+                 }
+                 function ondescriptionout(obj) {
+                     document.getElementById(obj).style.display = 'none';
+                     return false;
+                 }
+    </script>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $(".close").live("click", function (e) {
+                        var dialogDiv = $('#VerifyLinkDialog');
+                        dialogDiv.dialog('close');
+                    });
+                    $(".close1").live("click", function (e) {
+                        var dialogDiv = $('#UpdcertDialog');
+                        dialogDiv.dialog('close');
+                    });
+
+                });
+
+    </script>
+    
+  <script type="text/javascript">
+      $(function () {
+          $(".ddlactionclass").change(function () {
+            var data=  $(this).find("option:selected").val();
+            if (data != "" && data!="0") {
+                  var win = window.open(data, '_blank');
+              }
+              
+          });
+      });
+      
+
+  </script>
+
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("ProviderProfile", "VerificationUser", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+        <br />
+
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+        <div class="content-box">
+            <div class="content-box-header">
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="100%" align="left">
+                    <h3>
+                        Unverified Users</h3>
+                </td>
+               
+            </tr>
+        </table>
+     </div>
+     <div class="content-box-content">
+                                                                       @{ WebGrid provgrid = new WebGrid(rowsPerPage:10);}
+                                            @{WebGrid grid = provgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                            if (grid.TotalRowCount != 0)
+                            {
+                                int count = 0;
+                                string pager = grid.Pager().ToString();
+                                string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                columns: grid.Columns(
+
+                                grid.Column("SlNo", "#", canSort: false),
+
+                                      grid.Column("ProviderName", "Mower helper name", canSort: false),
+                                          grid.Column("", "Mower helper license", canSort: false,
+                                      format:@<text>
+                                             @{
+                                                 string ElectricianFillename = (string)item.ElectricianFillename;
+                                                 if (!string.IsNullOrEmpty(ElectricianFillename))
+                                                 {
+                                            @Html.ActionLink(ElectricianFillename, "electricianslicDownload", new { certname = ((string)item.ElctricianCustmiseImage), certname1 = ElectricianFillename }, new { @class = "electrilic", @style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                 }
+                                                 else
+                                                 {
+                                  <span>-</span>
+                                                 }
+                                            }
+         </text>),
+                                          grid.Column("", "Driver license", canSort: false,
+                                      format:@<text>
+                                             @{
+                                                 string DriverFilename = (string)item.DriverFilename;
+                                                 if (!string.IsNullOrEmpty(DriverFilename))
+                                                 {
+                                            @Html.ActionLink(DriverFilename, "electricianslicDownload", new { certname = ((string)item.DriverCustomiseImage), certname1 = DriverFilename }, new { @class = "electrilic", @style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                 }
+                                                 else
+                                                 {
+                                  <span>-</span>
+                                                 }
+                                            }         
+                                            </text>),
+                                      grid.Column("", "Verify Mower Helper", canSort: false,
+                                      format:@<text>@*@Html.ActionLink("Click here to verify", "Verifyprovider", new { ProviderId = (int)item.Provider_ID, licenseno = (string)item.LicenseNo }, new { @class = "VerifyLink", @style = "font-weight:bold;color:#0066CC;cursor:pointer;" })*@
+                                            <a href="#" class = "VerifyLink" style = "font-weight:bold;color:#0066CC;cursor:pointer;" onclick="return Displaydialog('VerifyLinkDialog','@Url.Action("Verifyprovider", new { ProviderId = (int)item.Provider_ID, licenseno = (string)item.LicenseNo })','auto',1200,'dvLoading',null,null);">Click here to verify</a></text>),
+ grid.Column("Action", canSort: false, style: "action", format: @<text>
+
+ @{
+    
+     string stateid = item.state_id;
+     MowerHelper.Models.Classes.clsCommonFunctions objcommn = new MowerHelper.Models.Classes.clsCommonFunctions();
+     System.Data.SqlClient.SqlDataReader objReader = default(System.Data.SqlClient.SqlDataReader);
+     System.Data.IDataParameter[] paramlist = { new System.Data.SqlClient.SqlParameter("@in_state_id", stateid) };
+     objcommn.AddInParameters(paramlist);
+     objReader = objcommn.GetDataReader("Help_dbo.St_get_verification_urls");
+     IList<SelectListItem> _result1 = new List<SelectListItem>();
+     while (objReader.Read())
+     {
+         _result1.Add(new SelectListItem
+         {
+             Text = objReader["sitename"].ToString(),
+             Value = objReader["siteurl"].ToString(),
+         });
+         ViewBag.result = _result1;
+     }
+     objReader.Close();
+     MowerHelper.Models.Classes.StateCity obj = new MowerHelper.Models.Classes.StateCity();
+     if (ViewBag.result == null)
+     {
+         _result1.Add(new SelectListItem
+         {
+             Text = "-- Select --",
+             Value = "0",
+         });
+         ViewBag.result = _result1;
+     }
+     }
+     
+                                                                                              @Html.DropDownList("ddlaction", new SelectList(ViewBag.result, "Value", "Text"), "-- Select --",
+                                                                                  new { @class = "ddlactionclass", style = "font-family:arial;font-size:13px;height:20px;width:500px;" })</text>)
+
+
+                                                  )).ToString();
+
+
+                                gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                            }
+                            else
+                            {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">
+                                            No users found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            }
+                        }
+  </div>
+ 
+    
+    </div>
+
+    </div>
+            <div id="UpdcertDialog" title="Provider certificates">
+      </div>
+                    <div id="VerifyLinkDialog" title="Verify provider">
+      </div>
+                <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+
+        <script type="text/javascript">
+            var linkObj;
+            $(function () {
+                $('#UpdcertDialog').dialog({
+                    autoOpen: false,
+                    width: 1200,
+//                    height: 500,
+                    resizable: false,
+                    modal: true
+
+                });
+//                $('#VerifyLinkDialog').dialog({
+//                    autoOpen: false,
+//                    width: 1200,
+//                    resizable: false,
+//                    modal: true
+
+//                });
+                $('#ProofLinkDialog').dialog({
+                    autoOpen: false,
+                    width: 1200,
+                    resizable: false,
+                    modal: true
+
+                });
+
+                $(".Updcert").click(function () {
+                    //change the title of the dialog
+                    linkObj = $(this);
+                    var dialogDiv = $('#UpdcertDialog');
+                    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                    var viewUrl = linkObj.attr('href');
+                    $.get(viewUrl, function (data) {
+                        dialogDiv.html(data);
+                        $('#dvLoading').dialog('close');
+                        dialogDiv.dialog('open');
+                    });
+                    return false;
+                });
+
+//                $(".VerifyLink").click(function () {
+//                    linkObj = $(this);
+//                    var dialogDiv = $('#VerifyLinkDialog');
+//                    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+//                    var viewUrl = linkObj.attr('href');
+//                    $.get(viewUrl, function (data) {
+//                        dialogDiv.html(data);
+//                        $('#dvLoading').dialog('close');
+//                        dialogDiv.dialog('open');
+//                    });
+//                    return false;
+//                });
+
+            });
+    </script>
+                            if (grid.Rows.Count <= 9)
+                            {
+                                if (grid.Rows.Count <= 4)
+                                {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+                                }
+                                else
+                                {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                                }
+                            }
+                            Html.RenderAction("Bottomsections", "Tools");
+
+
+    }
+               
+
+</body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            var roleid = '@Session["roleid"]';
+            if (roleid != 1) {
+                $("#Menu0").removeClass();
+                $("#Menu1").addClass("active");
+                $("#Menu2").removeClass();
+                $("#Menu3").removeClass();
+            }
+            else {
+                $("#Menu0").removeClass();
+                $("#Menu1").removeClass();
+                $("#Menu2").removeClass();
+                $("#Menu3").addClass("active");
+            }
+             
+           });
+    </script>
+</html>

@@ -1,0 +1,877 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+
+@*  <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+@*    <link href="~/Content/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="~/SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/themes/base/jquery.ui.dialog.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+ <script src="~/Scripts/jquery-ui-1.8.11.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <link href="~/Content/themes/base/jquery.ui.autocomplete.css" rel="stylesheet"
+        type="text/css" />*@
+                               @Styles.Render("~/Content/themes/base/jqueryCSS")
+                       @Styles.Render("~/Content/themes/base/autocomplete")
+            @Scripts.Render("~/Scripts/Thscriptscript")
+
+
+
+      <style type="text/css">
+          
+    
+          
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+          
+        }
+        
+    </style>   
+      <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 150px; }
+          tr.gridHead th:nth-child(2) { width: 300px; }
+          tr.gridHead th:nth-child(3) { width: 80px; }
+          tr.gridHead th:nth-child(4) { width: 70px; }
+          tr.gridHead th:nth-child(5) { width: 60px; }
+          tr.gridHead th:nth-child(6) { width: 80px; }
+          tr.gridHead th:nth-child(7) { width: 40px; }
+          tr.gridRow td:nth-child(1) { width: 150px;text-align:left; }
+          tr.gridAltRow td:nth-child(1) { width: 150px;text-align:left; }
+          tr.gridRow td:nth-child(2) { width: 300px;text-align:left; }
+          tr.gridAltRow td:nth-child(2) { width: 300px;text-align:left; }
+             .dvLoading .ui-dialog-titlebar{display:none;}  
+        
+    </style>
+             <script type="text/javascript">
+                 function ondescriptionover(obj) {
+                     document.getElementById(obj).style.position = 'absolute';
+                     document.getElementById(obj).style.display = '';
+                     return false;
+                 }
+                 function ondescriptionout(obj) {
+                     document.getElementById(obj).style.display = 'none';
+                     return false;
+                 }
+    </script>
+      <script type="text/javascript">
+
+            $(document).ready(function ()
+             {
+
+                if (document.getElementById("hdnsearch").value != '')
+                 {
+                    $("#txtTitle").val(document.getElementById("hdnsearch").value);
+                }
+                $("#txtTitle").autocomplete
+                ({
+
+                    source: 'TaskTitle',
+                    minLength: 2,
+                    select: function (event, ui) 
+                    {
+                        $("#txtTitle").val(ui.item.value);
+//                         $("form").submit();
+
+                    }
+                });
+            });
+    </script>
+      <script type="text/javascript">
+           $(document).ready
+                (
+                function () {
+
+                    var fromdate = $('#hdnFromdate').val();
+                    if (fromdate != '') {
+                        $('#txt_FromDate').val(fromdate);
+                        document.getElementById('tddaterange').style.display = '';
+                    }
+                    else {
+                        $('#txt_FromDate').val("");
+                        document.getElementById('tddaterange').style.display = 'none';
+
+                    }
+
+                    var todate = $('#hdnTodate').val();
+                    if (todate != '') {
+                        $('#txt_ToDate').val(todate);
+                        document.getElementById('tddaterange').style.display = '';
+                    }
+                    else {
+                        $('#txt_ToDate').val("");
+                        document.getElementById('tddaterange').style.display = 'none';
+
+                    }
+
+                    var drange = $('#hdnDaterange').val();
+                    if (drange == 5) {
+                        document.getElementById('tddaterange').style.display = '';
+                        $('#dt_filter').val(drange);
+                    }
+                    else if (drange != '') {
+                        $('#dt_filter').val(drange);
+
+                    }
+
+                    var status = $('#hdnStatus').val();
+                    if (status != '') {
+                        $('#ddlStatus').val(status);
+                    }
+                    else {
+                        $('#ddlStatus').val("All");
+                    }
+
+
+                    var title = $('#hdnTitle').val();
+                    if (title != '') {
+                        $('#txtTitle').val(title);
+                    }
+                    else {
+                        $('#txtTitle').val("");
+                    }
+
+
+                    //$("#txt_FromDate").on('change keyup paste mouseup', function () {
+                    //    //  alert("1");
+                    //    if ($(this).val().length == 10) {
+                    //        //alert("2");
+                    //        if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+                    //        var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+                    //        // alert(St);
+                    //        var targetDate = new Date(St);
+                    //        targetDate.setDate(targetDate.getDate() + 365);
+                    //        //   alert(targetDate);
+                    //        var todaydate = new Date();
+                    //        todaydate.setDate(todaydate.getDate());
+                    //        var dd = todaydate.getDate();
+                    //        var mm = todaydate.getMonth() + 1; //January is 0!
+                    //        var yyyy = todaydate.getFullYear();
+                    //        var today = mm + '/' + dd + '/' + yyyy;
+                    //        var dd1 = targetDate.getDate();
+                    //        var mm1 = targetDate.getMonth() + 1;
+                    //        var yyyy1 = targetDate.getFullYear();
+                    //        var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+                    //        //  alert(target1);
+                    //        if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+                    //        else { document.getElementById('txt_ToDate').value = target1; return false; }
+                    //    }
+                    //});
+                });
+    </script>
+      <script type="text/javascript">
+
+        $(document).ready(function () {
+              var frm = $("#formname");
+            $('#dt_filter').change(function () {
+//            alert("2")
+                                if(document.getElementById('dt_filter').value =='5') {
+                                    document.getElementById('tddaterange').style.display = '';
+                                    $('#txt_FromDate').val("");
+                                    $('#txt_ToDate').val("");
+               
+                }
+                else {
+                    document.getElementById('tddaterange').style.display = 'none';
+                                        document.getElementById('tddaterange').style.display = 'none';
+                                        $('#txt_FromDate').val("");
+                                        $('#txt_ToDate').val("");
+                }
+                return false;
+            });
+        });
+</script>
+   @*   <script type="text/javascript">
+
+          $(function () {
+              $("#txt_FromDate,#txtEndDateforDaily,#txtEndDateforWeek,#txt_ToDate").datepicker({
+                  dateFormat: 'mm/dd/yy',
+                  changeMonth: true,
+                  changeYear: true,
+                  //                showCurrentAtPos: 1,
+                  showWeeks: true,
+                  inline: true,
+                  numberOfMonths: [1, 1],
+                  yearRange: "1950:2020",
+                  showOn: "button",
+                  buttonImage: "../Images/calender.gif",
+                  buttonImageOnly: true
+
+              });
+       
+    });
+
+
+        
+       </script>*@
+      <script language="javascript" type="text/javascript">
+    function ValidSearch() {
+
+        if (document.getElementById('dt_filter').selectedIndex == 0) {
+            alert("Select date");
+            return false;
+        }
+        if (document.getElementById('dt_filter').value == '5') {
+
+            if (document.getElementById('txt_FromDate').value != '' && document.getElementById('txt_FromDate').value != " ") {
+                if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) {
+                    return false;
+                }
+            }
+            if (document.getElementById('txt_ToDate').value != '' && document.getElementById('txt_ToDate').value != " ") {
+                if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) {
+                    return false;
+                }
+            }
+            var CDate = new Date()
+            var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear();
+            var FromDate = document.getElementById('txt_FromDate').value;
+            if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == " ") {
+                alert('Select from date');
+                document.getElementById('txt_FromDate').focus();
+                return false;
+            }
+            if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == " ") {
+                alert('Select to date');
+                document.getElementById('txt_ToDate').focus();
+                return false;
+            }
+            var St = document.getElementById('txt_FromDate').value;
+            St = new Date(St);
+            var En = document.getElementById('txt_ToDate').value
+            En = new Date(En);
+            if (St > En) {
+                alert("From date should not be greater than to date")
+                return false;
+            }
+
+        }
+        //document.forms.item(0).submit();
+        //localhost:49219/Task/TaskList?hdnSearchType=&hdnsearch=&hdndatesearch=30&hdnDaterange=30&hdnStatus=All&hdnTitle=&txtTitle=&ddlStatus=A&dt_filter=5&txt_FromDate=06%2F01%2F2001&txt_ToDate=6%2F1%2F2016
+        if ($("#dt_filter").val() == "5") {
+
+            window.location.href = "../Task/TaskList?txtTitle=" + $("#txtTitle").val() + "&dt_filter=" + $('#dt_filter').val() + "&ddlStatus=" + $("#ddlStatus").val() + "&txt_FromDate=" + $('#txt_FromDate').val() + "&txt_ToDate=" + $("#txt_ToDate").val() ;
+        }
+            //  if ($("#dt_filter").val() != "Custom") {
+        else {
+
+            window.location.href = "../Task/TaskList?txtTitle=" + $("#txtTitle").val() + "&dt_filter=" + $('#dt_filter').val() + "&ddlStatus=" + $("#ddlStatus").val() ;
+        }
+    }
+						
+    </script>
+      <script type="text/javascript">
+
+    $(document).ready(function () {
+//       alert("3")
+        var Type = $('#hdnSearchType').val();
+        if (Type != '') 
+        {
+            $('#GlbSearch_Status').val(Type);
+        }
+        else 
+        {
+            $('#GlbSearch_Status').val("All");
+        }
+    });
+      </script>
+
+  
+
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("TaskList", "Task", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+   
+            <input type="hidden" id="hdnSearchType" name="hdnSearchType" value="@ViewBag.SearchType" />
+       <input type="hidden" id="hdnsearch" name="hdnsearch" value="@ViewBag.search" />
+        <input type="hidden" id="hdndatesearch" name="hdndatesearch" value="@ViewBag.daterange" />
+          <input type="hidden" id="hdnFromdate"  value="@ViewBag.Fromdate"/>
+        <input id="hdnTodate" type="hidden" value="@ViewBag.Todate"/>
+        <input id="hdnDaterange" name="hdnDaterange" type="hidden" value="@ViewBag.Daterange"/>        
+         <input id="hdnStatus" name="hdnStatus" type="hidden" value="@ViewBag.Status"/>
+        <input id="hdnTitle" name="hdnTitle" type="hidden" value="@ViewBag.Title"/>      
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+         <table width="100%" cellpadding="0" cellspacing="0">
+              @if (Session["roleid"].ToString() != "1")
+                     {
+                            <tr id="trtabs" runat="server">
+                                <td width="100%" class="navigation">
+                                   
+                                  @*  <div class="admin-tab">
+                                        <a class="inadmin-link" id="acontent"  href="../Billing/TransactionDisplay"><span>Customer Transactions</span>
+                                        </a>
+                                    </div>*@
+                                 @*   <div class="admin-tab">
+                                        <a class="inadmin-link" id="avideo" href="VideoAudioFiles" ><span>Video/Audio Files</span>
+                                        </a>
+                                    </div>*@
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument1" href="../OfficeExpenses/ExpenseLedger" ><span>My Business Expenses</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument" href="../Notes/ProfileNotes"><span>Notes</span>
+                                        </a>
+                                    </div>
+                                    
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument2" href="../Common/PasswordManagement" ><span>Password Management</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument3" href="../Admin/FT_servicesTransaction" ><span>Mower Helper Transactions</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="adocument4" href="TaskList" ><span>Tasks</span>
+                                        </a>
+                                    </div>
+                                     <div class="admin-tab" style="display:none;">
+                                        <a class="inadmin-link" id="adocument5" href="@Url.Action("Index","Technicians")" ><span>Technicians</span>
+                                        </a>
+                                    </div>
+                                     <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Admin/FTservices_addnewpayment" id="acontent"><span>Payment method</span>
+                                    </a>
+                                </div>
+                                     @if(ViewBag.Showforums=="Y"){
+                                      <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Forums/ForumsHome" id="acontent5"><span>Forums</span>
+                                    </a>
+                                </div>
+                                    }
+                                </td>
+                            </tr>
+              }
+            @*  @if (Session["roleid"].ToString() == "1")
+            {
+                            <tr id="trtabs" runat="server">
+                                <td width="100%" class="navigation">
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="admincust" href="../Clients/ClientsHome" ><span>Customers</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="admintask"  href="TaskList"><span>Tasks </span>
+                                        </a>
+                                    </div>
+                                
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adminnote" href="../Notes/ProfileNotes"><span>Notes</span>
+                                        </a>
+                                    </div>
+                                                                  
+                                </td>
+                            </tr>
+            }*@
+                            <tr class="background_color">
+                                <td id="tdtabs" width="100%">
+    <table width="98%" cellpadding="0" cellspacing="0">
+           <tr class="background_color">
+                <td width="25%" align="right" style="padding-left:30px">
+            
+                        <strong>Title: </strong>&nbsp;
+                         
+                        
+      
+                           
+
+  <input type="text" name="txtTitle"  id="txtTitle" class="textfield" onkeypress="return fnsetfocus(event,'btnsearch')"/>
+                </td>
+                <td width="20%" align="left" style="padding-left:10px;">
+               
+                        <strong>Status : </strong>&nbsp;
+                            @Html.DropDownList("ddlStatus", new List<SelectListItem>
+
+                                                              {
+                                                              
+                                                               new SelectListItem{ Text="Active", Value = "A" },
+                                                               new SelectListItem{ Text="Archive", Value = "E" },
+                                                               new SelectListItem{ Text="All", Value="All"}
+                                                               
+                                                              },
+                                                            new { style = "font-family:arial;font-size:13px;height:20px;width:125px;" })
+                        
+
+                </td> 
+
+             <td>
+                        <strong>Date range : </strong>&nbsp;
+                            @Html.DropDownList("dt_filter", new List<SelectListItem>
+                       
+                                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                                  new SelectListItem{ Text="All", Value = "1" },
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                                new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                                new SelectListItem{ Text="Last 30 days", Value = "30" },
+   
+                                                                new SelectListItem{ Text="Custom", Value = "5" },
+                                                                
+                                                               
+                                                              },
+                                                            new { style = "font-family:arial;font-size:13px;height:20px;width:125px;" })
+                </td>
+               @*@Html.Partial("_CustomDate",null,new ViewDataDictionary { { "id", "#txt_FromDate,#txtEndDateforDaily,#txtEndDateforWeek,#txt_ToDate" } })*@
+               @Html.Partial("_CustomDate")
+                    @*  <td width="28%" id="tddaterange" runat="server"  style= " padding-right:5px; padding-top: 0px; display:none">
+                       
+                    <strong> &nbsp;&nbsp;&nbsp;&nbsp; From : </strong> 
+                
+                
+                     @Html.TextBox("txt_FromDate", null, new { @class = "textfield", @style = "width:82px" })&nbsp;&nbsp;   &nbsp;&nbsp;
+                    
+                      &nbsp;&nbsp; <strong> To : </strong> 
+                        @Html.TextBox("txt_ToDate", null, new { @class = "textfield", @style = "width:82px" })&nbsp;&nbsp;   &nbsp;&nbsp;
+                
+                        </td>*@
+                
+            <td align="left" style=" padding-top: 0px; padding-right:30px; width:7%;">
+           @*  <input type="submit" class="button" id="btnsearch" value="Search" onclick="return ValidSearch();" />*@
+                
+<a id="btnsearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+
+            </td>
+            </tr>
+        </table>
+            <br />
+    <br />
+        <div class="content-box">
+            <div class="content-box-header">
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="60%" align="left">
+                    <h3>
+                        Task list</h3>
+                </td>
+
+                <td width="12%" align="center">
+                        <a id="lnkAddnewTask" style="color: #0066CC; font-weight: bold; font-size: 15px; cursor: pointer;"
+                            title="To add a Task" href="#" onclick="return Displaydialog('AddNewtaskDialog','Addnewtask','auto',800,'dvLoading',null,null);">Add new task </a>
+                    </td>
+               
+            </tr>
+        </table>
+     </div>
+     <div class="content-box-content">
+                          @{WebGrid grid = new WebGrid(Model, rowsPerPage: 10);
+                            if (grid.TotalRowCount != 0)
+                            {
+                                int count = 0;
+                                string pager = grid.Pager().ToString();
+                                string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                columns: grid.Columns(
+
+                                grid.Column("TaskTitle", "Title", canSort: false),
+                                                                                                grid.Column("", "Comments", canSort: false,
+                                                    format:@<text>
+                                                         @{string description = (string)item.Notes;
+                                                           if (description.Length > 100)
+                                                           {
+                                                               count = count + 1;
+                                                               description = description.Substring(0, 100);
+                                                           
+                                                           <span>@description</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 400px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Comments :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@item.Notes</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@item.Notes</span>
+                                                           }
+                                                           }
+                                                
+                                                </text>),
+                                      grid.Column("DueDate", "Due Date", canSort: false),
+                                              grid.Column("IsDone", "Completed", canSort: false, format: @<text>@(@item.IsDone == "Y" ? "Yes" : "No")</text>),
+                                                 grid.Column("Status_ind", "Status", canSort: false, format: @<text>@(@item.Status_ind == "A" ? "Active" : "Archive")</text>),
+                                                   grid.Column("LastAction", "Last Action", canSort: false, format: @<text>@(@item.LastAction.ToString("MM/dd/yyyy") == "01/01/0001" ? String.Empty : @item.LastAction.ToString("MM/dd/yyyy"))</text>),
+                                                   grid.Column("Action", canSort: false, format: @<text>
+                                                                                                                       @{
+                                                                                                                           string status = (string)item.Status_ind;
+                                                                                                                           string done = (string)item.IsDone;
+                                                                                                                           if (status == "A" & done == "Y")
+                                                                                                                           {
+                                                                                                                               string[] DDList1 = { "Select", "Add Action", "View Actions", "Archive this Task", "Edit" };
+                                                                            @Html.DropDownList("ddlaction", new SelectList(DDList1, (string)ViewBag.Prefix), new { @class = "ddlactionclass", onchange = "DDlchange(this.value, '" + item.Task_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:130px;" })
+                                                                                                                           }
+                                                                                                                           else if (status == "A" & done != "Y")
+                                                                                                                           {
+                                                                                                                               string[] DDList2 = { "Select", "Add Action", "View Actions", "Mark Completed", "Archive this Task", "Edit" };
+                                                                            @Html.DropDownList("ddlaction", new SelectList(DDList2, (string)ViewBag.Prefix), new { @class = "ddlactionclass", onchange = "DDlchange(this.value, '" + item.Task_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:130px;" })
+                                                                                                                           }
+                                                                                                                           else if (status != "A" & done == "Y")
+                                                                                                                           {
+                                                                                                                               string[] DDList3 = { "Select", "Add Action", "View Actions", "Archive this Task", "Edit", "Activate this task", "Delete" };
+                                                                            @Html.DropDownList("ddlaction", new SelectList(DDList3, (string)ViewBag.Prefix), new { @class = "ddlactionclass", onchange = "DDlchange(this.value, '" + item.Task_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:130px;" })
+                                                                                                                           }
+                                                                                                                           else if (status != "A" & done != "Y")
+                                                                                                                           {
+                                                                                                                               string[] DDList4 = { "Select", "Add Action", "View Actions", "Mark Completed", "Archive this Task", "Edit", "Activate this task", "Delete" };
+                                                                            @Html.DropDownList("ddlaction", new SelectList(DDList4, (string)ViewBag.Prefix), new { @class = "ddlactionclass", onchange = "DDlchange(this.value, '" + item.Task_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:130px;" })
+                                                                                                                           }
+                                                                          }
+                            </text>)
+                                                  )).ToString();
+
+
+                                gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                            }
+                            else
+                            {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">No
+                                            Tasks found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            }
+                        }
+                   @* </td>
+                </tr>
+            
+        </table>*@
+        <div style="float: right; padding-top: 10px; padding-right: 5px;">
+
+        </div>
+  </div>
+    <div id="AddNewtaskDialog" title="Add new task">
+    </div>
+     <div id="viewactionDialog" title="View action">
+    </div>
+     <div id="addactionDialog" title="Add action">
+    </div>
+      <div id="EdittaskDialog" title="Edit task">
+    </div>
+    <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+    
+    </div>
+</td>
+                                </tr>
+             </table>
+    </div>
+         <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to change the task status to archive ?
+            </p>
+        </div>
+          <div id="dialog-confirm1" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to change the task status to active ?
+            </p>
+        </div>
+         <div id="dialog-confirm2" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+               Do you want to delete the task ?
+            </p>
+        </div>
+ <br /><br />
+        <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+    <script type="text/javascript">
+
+        $.ajaxSetup({ cache: false });
+
+        $(document).ready(function () {
+
+
+            $(".close").live("click", function (e) {
+                e.preventDefault();
+                $(this).closest(".dialog").dialog("close");
+            });
+            $(".btnTask").live("click", function (e)
+              {
+                $('#AddNewtaskDialog').dialog("close");
+            });
+
+            $(".close1").live("click", function (e) {
+                $('#EdittaskDialog').dialog("close");
+            });
+            $(".actionclose").live("click", function (e) {
+                $('#addactionDialog').dialog("close");
+            });
+
+            $(".actionclose1").live("click", function (e) {
+                $('#viewactionDialog').dialog("close");
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        function DDlchange(id, taskid) {
+            if (id == "Add Action") {
+              //  var dialogDiv = $('#addactionDialog');
+              //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Task/Addaction?taskid=" + taskid;
+                Displaydialog('addactionDialog', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                $('.ddlactionclass').val("Select");
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+
+            }
+            if (id == "View Actions") {
+                //var dialogDiv = $('#viewactionDialog');
+
+                //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Task/Viewaction?taskid=" + taskid;
+                Displaydialog('viewactionDialog', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                $('.ddlactionclass').val("Select");
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            }
+
+            if (id == "Edit") {
+                //var dialogDiv = $('#EdittaskDialog');
+                //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Task/Edittask?taskid=" + taskid;
+                Displaydialog('EdittaskDialog', viewUrl, 'auto', 850, 'dvLoading', null, null);
+                $('.ddlactionclass').val("Select");
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            }
+
+             if (id == "Mark Completed") {
+                if (confirm("Do youn want Mark Completed?")) {
+                    window.location = '../Task/MarkCompleted?taskid=' + taskid;
+             }
+
+                else {
+
+                    $('.ddlactionclass').val("Select");
+                }
+            }
+
+             if (id == "Activate this task") {
+                 $("#dialog-confirm1").dialog({
+                     autoOpen: false,
+                     height: 170,
+                     width: 350,
+                     close: function () { $('.ddlactionclass').val("Select"); },
+                     show: { effect: 'drop', direction: "up" },
+                     modal: true,
+                     buttons: {
+                         "Yes": function () {
+                             $(this).dialog("close");
+                             window.location = '../Task/Activethistask?taskid=' + taskid;
+
+                         },
+                         "No": function () {
+                             $(this).dialog("close");
+                             $('.ddlactionclass').val("Select");
+                         }
+                     }
+                 });
+                 $("#dialog-confirm1").dialog('open');
+                 return false;
+                //if (confirm("Do you want to change the task status to active")) {
+                //    window.location = '../Task/Activethistask?taskid=' + taskid;
+                //}
+                //else {
+                //    $('.ddlactionclass').val("Select");
+                //}
+            }
+             if (id == "Delete") {
+                 $("#dialog-confirm2").dialog({
+                     autoOpen: false,
+                     height: 170,
+                     width: 350,
+                     show: { effect: 'drop', direction: "up" },
+                     modal: true,
+                     close: function () { $('.ddlactionclass').val("Select"); },
+                     buttons: {
+                         "Yes": function () {
+                             $(this).dialog("close");
+                             window.location = '../Task/Deletetask?taskid=' + taskid;
+
+                         },
+                         "No": function () {
+                             $(this).dialog("close");
+                             $('.ddlactionclass').val("Select");
+                         }
+                     }
+                 });
+                 $("#dialog-confirm2").dialog('open');
+                 return false;
+                //if (confirm("Do you want to delete the task")) {
+                //    window.location = '../Task/Deletetask?taskid=' + taskid;
+                //}
+                //else {
+                //    $('.ddlactionclass').val("Select");
+                //}
+            }
+
+
+            if (id == "Archive this Task") {
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    close: function () { $('.ddlactionclass').val("Select"); },
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            window.location = '../Task/Archivethistask?taskid=' + taskid;
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                            $('.ddlactionclass').val("Select");
+                        }
+                    }
+                });
+                $("#dialog-confirm").dialog('open');
+                return false;
+                //if (confirm("Do you want to change the task status to archive")) {
+                //    window.location = '../Task/Archivethistask?taskid=' + taskid;
+                //}
+                //else {
+                //    $('.ddlactionclass').val("Select");
+                //}
+            }
+
+        }
+
+</script>
+
+ <script type="text/javascript">
+        var linkObj;
+        $(function () {
+            var roleid = '@Session["RoleID"]';
+            var td1 = document.getElementById("tdtabs");
+            if (roleid !== "1") {
+                td1.setAttribute("class", "tab-background");
+            }
+//            $('#viewactionDialog').dialog({
+//                autoOpen: false,
+//                width: 900,
+//                resizable: false,
+////                height:500,
+//                modal: true,
+//                close: function () { $('.ddlactionclass').val("Select");}
+
+//            });
+
+//            $('#addactionDialog').dialog({
+//                autoOpen: false,
+//                width: 900,
+//                resizable: false,
+////                height: 500,
+//                modal: true,
+//                close: function () { $('.ddlactionclass').val("Select"); }
+
+//            });
+
+
+//             $('#EdittaskDialog').dialog({
+//                autoOpen: false,
+//                width: 850,
+//                resizable: false,
+////                height: 500,
+//                modal: true,
+//                close: function () { $('.ddlactionclass').val("Select"); }
+
+//            });
+
+            //$('#AddNewtaskDialog').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+            //$("#lnkAddnewTask").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#AddNewtaskDialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+
+
+        });
+                                   
+      </script>
+        
+        
+        
+    }
+      <script type="text/javascript">
+          $(document).ready(function () {
+              var TopIndex = '@Session["TopIndex"]';
+              var roleid = '@Session["roleid"]';
+              if (roleid == "1") {
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").removeClass();
+                  $("#Menu3").addClass("active");
+              }
+              else {
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").removeClass();
+                  $("#Menu3").removeClass();
+                  $("#Menu4").addClass("active");
+              }
+          });
+    </script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</body>
+</html>

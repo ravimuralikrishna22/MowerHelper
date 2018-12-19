@@ -1,0 +1,254 @@
+﻿@{
+    Layout = null;
+    // string P1name = Convert.ToString(ViewBag.pat1BillName);
+    // string ind = ViewBag.ind;
+    string Name = ViewBag.patname;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+</head>
+<body>
+            @using (Html.BeginForm("AddPayment", "Clients", FormMethod.Post, null))
+{
+        @Html.Hidden("patselect")
+        @Html.Hidden("hdnMPid")
+        @Html.Hidden("hdnMPlId")
+        @Html.Hidden("hdnpid")
+        @Html.Hidden("frm")
+        @Html.Hidden("dt_filter")
+        <input type="hidden" id="hdnregdate" name="hdnregdate" value="@ViewBag.RegOndate" />
+        <table border="0" cellpadding="6" cellspacing="1" class="border_style" width="100%">
+
+            <tr class="white_color" id="tr1patname" style="display: none">
+                <td width="20%" align="right"><strong>Client name :&nbsp;</strong></td>
+                <td align="left">
+                    <span id="lbl1Patname"></span>
+                </td>
+            </tr>
+
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <font color="red">*</font><strong>Mode of payment : &nbsp;</strong>
+                </td>
+                <td align="left" id="tdEpMode">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td width="15%">
+                                @Html.DropDownList("ddlPaymentMode", null, "--Select Payment Mode--", new { @class = "textfield", @style = "height:30px;width:220px" })
+                            </td>
+                            <td id="tdcheckNo" width="20%" style="display: none; text-align: center;padding-left:10px;">
+                                @*@Html.TextBox("txtCheckNo", null, new { @class = "textfield", @style = "width:150px; " })*@
+                                 <input type="text" id="txtCheckNo" name="txtCheckNo" value="Check number" autocomplete="off" onfocus="return Clearcheckno();" class="textfield" maxlength="50" style="width: 150px;" />
+                            </td>
+                                                            <td id="tdAuth"  style="display:none; padding-left:10px;">
+                                    <input type="text" id="txtAuthNum" name="txtAuthNum" value="Last 4 digits of credit card" autocomplete="off" onfocus="return Ccno();" class="textfield" maxlength="4" style="width: 130px;" />
+                                </td>
+                            <td>&nbsp;&nbsp;<span id="lblErrMode" style="color: Black; font-weight: bold;"></span>
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+    @*        <tr class="white_color" id="tdAuth" style="display: none">
+                <td width="20%" align="right">
+                    <strong>Authorization number :&nbsp;</strong>
+                </td>
+                <td align="left">
+                    @Html.TextBox("txtAuthNum", null, new { @class = "textfield", @maxLength = 10, @style = "width:90px;" })&nbsp;&nbsp;(Please do not enter Credit card number)
+                </td>
+            </tr>*@
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <font color="red">*</font><strong>Date of payment :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdEPdate">
+                    @Html.TextBox("txtPayApptDate", DateTime.Now.ToString("MM/dd/yyyy"), new { @class = "textfield", @style = "width:90px" }) &nbsp;&nbsp;<span id="lblErrPdate" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <font color="red">*</font><strong>Payment amount :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdEPamount">
+                    @Html.TextBox("txtpAmount", null, new { @class = "textfield", @maxLength = 10, @style = "width:90px", @onkeypress = "return checkValidNumeric(txtpAmount,8,2,event)" }) &nbsp;&nbsp;<span id="lblMunPaidamount" style="font-weight: bold; display: ;"></span><span id="lblErrPamount" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <strong>Notes :&nbsp;</strong>
+                </td>
+                <td align="left" id="TdEPnotes">
+                    @Html.TextArea("txtNotes", null, 3, 3, new { @class = "textfield", @style = "width:350px;height:78px;" })&nbsp;&nbsp;<img src="~/Images/help2.png" id="Img3" onmouseover="ddrivetip('@ViewBag.pmtNote',300)" onmouseout="hideddrivetip()" style="vertical-align:middle" />&nbsp;&nbsp;(Maximum length 1000 characters)
+                    <br />
+                    <span id="lblEpNotes" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>
+
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tr style="height: 50px">
+                <td align="right">
+                    <input type="submit" name="btnSave" class="button" value="Save" onclick="return ValidatePaymentInfo();" />
+                    <input type="button" name="btnCancel" class="Pclose button" value="Cancel" />
+                </td>
+            </tr>
+        </table>
+    }
+</body>
+<script type="text/javascript">
+    function isValidDate(strDate) {
+        var dateStr = strDate; var datePat = /^(\d{1,2})(\/|-)(\d{1,2})\2(\d{4})$/; var month, day, year; var monthArray = new Array(); var matchArray = dateStr.match(datePat); var intShowI; var args; var strError = ""; monthArray[0] = "January"; monthArray[1] = "February"; monthArray[2] = "March"; monthArray[3] = "April"; monthArray[4] = "May"; monthArray[5] = "June"; monthArray[6] = "July"; monthArray[7] = "August"; monthArray[8] = "September"; monthArray[9] = "October"; monthArray[10] = "November"; monthArray[11] = "December"; args = IsValidDate.arguments
+        if (dateStr != "") {
+            if (matchArray == null)
+            { strError = "Please enter date in mm/dd/yyyy format."; return strError; }
+            month = matchArray[1]; day = matchArray[3]; year = matchArray[4]; if (year <= 1753)
+            { strError = "Please enter a year greater than 1753."; return strError; }
+            if (month < 1 || month > 12)
+            { strError = "Month must be between 1 and 12."; return strError; }
+            if (day < 1 || day > 31)
+            { strError = "Day must be between 1 and 31."; return strError; }
+            if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+                strError = monthArray[month - 1] + " doesn't have 31 days!"
+                return strError;
+            }
+            if (month == 2) {
+                var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)); if (day > 29 || (day == 29 && !isleap))
+                { strError = "February " + year + " doesn't have " + day + " days!"; return strError; }
+            }
+        }
+        return strError;
+    }
+    $(function () {
+
+        var Name = "@Name";
+        if (Name != null && Name != "") {
+            document.getElementById("tr1patname").style.display = "";
+            //            document.getElementById("trcombo1Pat").style.display = "none";
+            document.getElementById("lbl1Patname").innerHTML = Name;
+        }
+        else {
+        }
+        var patpaybalc = "@ViewBag.patPaybal";
+        if (patpaybalc != null) {
+            document.getElementById("lblMunPaidamount").innerHTML = patpaybalc;
+        }
+
+        $("#ddlPaymentMode").change(function () {
+            if (document.getElementById('ddlPaymentMode').value == 3) {
+                document.getElementById('tdcheckNo').style.display = '';
+                document.getElementById('tdAuth').style.display = 'none';
+                $('#txtCheckNo').val("Check number");
+            }
+            else if (document.getElementById('ddlPaymentMode').value == 2) {
+                document.getElementById('tdAuth').style.display = '';
+                document.getElementById('tdcheckNo').style.display = 'none';
+                $('#txtAuthNum').val("Last 4 digits of credit card");
+            }
+            else {
+                document.getElementById('tdcheckNo').style.display = 'none';
+                document.getElementById('tdAuth').style.display = 'none';
+            }
+        });
+        $("#txtPayApptDate").datepicker({
+            dateFormat: 'mm/dd/yy',
+            changeMonth: true,
+            changeYear: true,
+            //                showCurrentAtPos: 1,
+            showWeeks: true,
+            inline: true,
+            numberOfMonths: [1, 1],
+            yearRange: "1950:2020",
+            showOn: "button",
+            buttonImage: "../Images/calender.gif",
+            buttonImageOnly: true
+
+        });
+       
+        //$("#ddlpayPat").change(function () {
+        //    $.ajax({
+        //        type: "get",
+        //        contentType: "application/json;charset=utf-8",
+        //        url: "../Patients/ddlpatBlaence",
+        //        data: { "patientid": $("#ddlpayPat option:selected").val() },
+        //        dataType: "json",
+        //        success: patResult
+        //    });
+        //});
+        //function patResult(data) {
+
+        //    if (data[0].BalanceAmount != null) {
+        //        document.getElementById("lblMunPaidamount").innerHTML = data[0].BalanceAmount;
+        //        $("#hdnMPid").val($("#ddlpayPat option:selected").val());
+        //    }           
+        //}
+    });
+    function ValidatePaymentInfo() {
+        ClearInlineAlert('lblErrPamount', 'tdEPamount', '#FFFFFF');
+        ClearInlineAlert('lblEpNotes', 'TdEPnotes', '#FFFFFF');
+        //if (document.getElementById('trPayFrom').style.display == '') {
+        //    if (document.getElementById('ddlpayPat').value == "--Select Billable Party--" || document.getElementById('ddlpayPat').value == '') {
+        //        //            alert("please select billable party");
+        //        InlineAlert('lblErrPayChg', 'tdPayChg', 'Please select billable party.');
+        //        document.getElementById('ddlpayPat').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ClearInlineAlert('lblErrPayChg', 'tdPayChg', '#FFFFFF');
+        //    }
+        //}
+        if (document.getElementById('ddlPaymentMode').value == '--Select Payment Mode--' || document.getElementById('ddlPaymentMode').value == '') {
+            InlineAlert('lblErrMode', 'tdEpMode', 'Please select payment mode.'); document.getElementById('ddlPaymentMode').focus(); return false;
+        }
+        else { ClearInlineAlert('lblErrMode', 'tdEpMode', '#FFFFFF'); }
+        if (document.getElementById('txtPayApptDate').value == '' || document.getElementById('txtPayApptDate').value == 'mm/dd/yyyy') { InlineAlert('lblErrPdate', 'tdEPdate', 'Please enter date'); document.getElementById('txtPayApptDate').focus(); return false; }
+        else {
+            ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); var strRetAlert = isValidDate(document.getElementById('txtPayApptDate').value);
+            if (strRetAlert != "") { InlineAlert('lblErrPdate', 'tdEPdate', strRetAlert); document.getElementById('txtPayApptDate').focus(); return false; }
+            else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+        }
+        if (document.getElementById('txtPayApptDate').value.length > 0) {
+            var date = document.getElementById('txtPayApptDate').value; var len = document.getElementById('txtPayApptDate').value.length;
+            for (var i = 0; i < len; i++) {
+                var k = date.charAt(i); var digits = "0123456789/";
+                if ((digits.indexOf(k, 0)) == -1) { InlineAlert('lblErrPdate', 'tdEPdate', 'Please enter valid date'); document.getElementById('txtPayApptDate').value = ''; document.getElementById('txtPayApptDate').focus(); return false; }
+                else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+            }
+        }
+        var dtCur = new Date(); var dtGiven = new Date(document.getElementById('txtPayApptDate').value);
+        if (dtCur < dtGiven) { InlineAlert('lblErrPdate', 'tdEPdate', 'Invalid payment info!!! charge date exceeding the current date.'); document.getElementById('txtPayApptDate').focus(); return false; }
+        else { ClearInlineAlert('lblErrPdate', 'tdEPdate', '#FFFFFF'); }
+        if ((document.getElementById('txtpAmount').value == '') || (parseFloat(document.getElementById('txtpAmount').value) <= 0) || document.getElementById('txtpAmount').value == "$0.00" || document.getElementById('txtpAmount').value == '.') {
+            InlineAlert('lblErrPamount', 'tdEPamount', 'Please enter valid amount'); document.getElementById('txtpAmount').focus(); return false;
+        }
+        else { ClearInlineAlert('lblErrPamount', 'tdEPamount', '#FFFFFF'); }
+        if (document.getElementById('txtpAmount').value.length > 0) {
+            var amount = document.getElementById('txtpAmount').value; var len = document.getElementById('txtpAmount').value.length;
+            for (var i = 0; i < len; i++) {
+                var k = amount.charAt(i); var digits = "0123456789.";
+                if ((digits.indexOf(k, 0)) == -1) { InlineAlert('lblErrPamount', 'tdEPamount', 'Please enter valid amount'); document.getElementById('txtpAmount').value = ''; document.getElementById('txtpAmount').focus(); return false; }
+            }
+        }
+        var strNotes = document.getElementById('txtNotes').value;
+        if (strNotes.length > 1000) { InlineAlert('lblEpNotes', 'TdEPnotes', 'Notes can be up to 1000 characters'); document.getElementById('txtNotes').focus(); return false; }
+        else { ClearInlineAlert('lblEpNotes', 'TdEPnotes', '#FFFFFF'); }
+    }
+    function Clearcheckno() {
+        if (document.getElementById('txtCheckNo').value == 'Check number') {
+            document.getElementById('txtCheckNo').value = '';
+        }
+
+    }
+    function Ccno() {
+        if (document.getElementById('txtAuthNum').value == 'Last 4 digits of credit card') {
+            document.getElementById('txtAuthNum').value = '';
+        }
+
+    }
+
+</script>
+</html>

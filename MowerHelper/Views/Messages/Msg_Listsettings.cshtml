@@ -1,0 +1,370 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <title>Mower Helper-Find an Mower Helper</title>
+        @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <script type="text/javascript">
+        function gotoTools() {
+            window.location = "../AdminHome/AdminArea";
+        }
+        $(document).ready(function () {
+            var setddl = "@ViewBag.Summarypagesize";
+            if (setddl != null && setddl != "") {
+                $("#ddlrecords").val(setddl);
+            }
+            else {
+                $("#ddlrecords").val("10");
+            }
+            var frmRId = "@ViewBag.FrmrId";
+            if (frmRId != null && frmRId != "") {
+                $("#rolesDdl").val(frmRId);
+            }
+            var ToRId = "@ViewBag.TorId";
+            if (ToRId != null && ToRId != "") {
+                $("#TorolesDdl").val(ToRId);
+            }
+            var CatId = "@ViewBag.CatId";
+            if (CatId != null && CatId != "") {
+                $("#ddlCategories").val(CatId);
+            }
+            $("#btnClear").live("click", function () {
+                $("#rolesDdl").val("");
+                $("#TorolesDdl").val("");
+                $("#ddlCategories").val("");
+                window.location.href = "../Messages/MessageStationSettings";
+                
+            });
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+              $("#Menu0").removeClass();
+              $("#Menu1").removeClass();
+              $("#Menu2").removeClass();
+              $("#Menu3").addClass("active");
+        });
+        function ValidSearch() {
+            //document.forms.item(0).submit();
+            if (document.getElementById('ddlCategories').value != '' && document.getElementById('rolesDdl').value != '' && document.getElementById('TorolesDdl').value != '') {
+                window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&TorolesDdl=' + document.getElementById('TorolesDdl').value + '&rolesDdl=' + document.getElementById('rolesDdl').value + '&ddlCategories=' + document.getElementById('ddlCategories').value;
+            }
+            else if (document.getElementById('ddlCategories').value != '' && document.getElementById('rolesDdl').value != '') {
+                window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&rolesDdl=' + document.getElementById('rolesDdl').value + '&ddlCategories=' + document.getElementById('ddlCategories').value;
+                    }
+                    else if (document.getElementById('rolesDdl').value != '' && document.getElementById('TorolesDdl').value != '') {
+                        window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&TorolesDdl=' + document.getElementById('TorolesDdl').value + '&rolesDdl=' + document.getElementById('rolesDdl').value;
+             }
+             else if (document.getElementById('ddlCategories').value != '' && document.getElementById('TorolesDdl').value != '') {
+                 window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&TorolesDdl=' + document.getElementById('TorolesDdl').value + '&ddlCategories=' + document.getElementById('ddlCategories').value;
+            }
+            else if (document.getElementById('ddlCategories').value != '') {
+                window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ddlCategories=' + document.getElementById('ddlCategories').value;
+            }
+            else if (document.getElementById('rolesDdl').value != '') {
+                window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&rolesDdl=' + document.getElementById('rolesDdl').value;
+            }
+            else if ((document.getElementById('TorolesDdl').value != '')) {
+                window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&TorolesDdl=' + document.getElementById('TorolesDdl').value;
+            }
+            else { window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value; }
+        }
+
+    </script>
+@*    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#rolesDdl option[value='@ViewBag.rolesDdl']").attr("selected", true);
+        });
+    </script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#AddMsgSetDialog').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+            //});
+            //$('#EditMsgSetDialog').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+            //});
+        });
+        //function lnknewSetting() {
+        //    var dialogDiv = $('#AddMsgSetDialog');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = "../Messages/Msg_SettingAction";
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //}
+    </script>
+    <!----Add new Settings ------>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnCancel").live("click", function () {
+                var dialogDiv = $('#AddMsgSetDialog');
+                dialogDiv.dialog('close');
+                //window.location = '../Messages/MessageStationSettings';
+            });
+            $("#btnSave").live("click", function () {
+                if ($("#fromrolesDdl").val() == "") {
+                    alert("Please select from role");
+                    $("#fromrolesDdl").focus();
+                    return false;
+                }
+                if ($("#toRolesDdl").val() == "") {
+                    alert("Please select to role");
+                    $("#toRolesDdl").focus();
+                    return false;
+                }
+                if ($("#txtGroupName").val() == "") {
+                    alert(" Please enter name");
+                    $("#txtGroupName").focus();
+                    return false;
+                }
+                if ($("#CatDdl").val() == "") {
+                    alert("Please select category");
+                    $("#CatDdl").focus();
+                    return false;
+                }
+
+            });
+        });
+    </script>
+    <!----Edit Settings ------>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnECancel").live("click", function () {
+                var dialogDiv = $('#EditMsgSetDialog');
+                dialogDiv.dialog('close');
+                $(".ddlactionclass").val("s")
+                //window.location = '../Messages/MessageStationSettings';
+            });
+            $("#btnESave").live("click", function () {
+                //                if ($("#fromrolesDdl").val() == "") {
+                //                    alert("Please select from role");
+                //                    $("#fromrolesDdl").focus();
+                //                    return false;
+                //                }
+                //                if ($("#toRolesDdl").val() == "") {
+                //                    alert("Please select to role");
+                //                    $("#toRolesDdl").focus();
+                //                    return false;
+                //                }
+                if ($("#txtEGroupName").val() == "") {
+                    alert(" Please enter name");
+                    $("#txtEGroupName").focus();
+                    return false;
+                }
+                if ($("#EditCatDdl").val() == "") {
+                    alert("Please select category");
+                    $("#EditCatDdl").focus();
+                    return false;
+                }
+
+            });
+        });
+    </script>
+</head>
+<body>
+ <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+         @using (Html.BeginForm("MessageStationSettings", "Messages", FormMethod.Get, null))
+         {
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+    <table cellpadding="1" cellspacing="1" align="center" border="0" width="98%">
+                    
+                        <tr class="background_color" style="height: 40px">
+                            <td width="85%">
+                                <strong>From role&nbsp;:</strong>
+                                &nbsp;@Html.DropDownList("rolesDdl", null, "--All--", new { @style = "height:28px;width:300px;" })
+                                <strong>To role&nbsp;:</strong>&nbsp;
+                                @Html.DropDownList("TorolesDdl", null, "--All--", new { @style = "height:28px;width:300px;" })
+                                <strong>Category&nbsp;:</strong>&nbsp;
+                                @Html.DropDownList("ddlCategories", null, "--All--", new { @style = "height:28px;width:300px;" })
+                            </td>
+                            <td >
+                               @* <input  class="button" type="submit" value="Search" id="btnSearch" name="btnSearch"  />
+                                <input  class="button" type="button" value="Clear" id="btnClear" name="btnClear"  />*@
+                                <a id="btnSearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                                 <a id="btnClear" href="#"  title="Clear"><img alt="" id="" src="~/Images/refreshimages.png" style="width:30px;" /></a>
+                                <input  class="button" type="button" value="Cancel" id="btnCancel" name="btnCancel" style="vertical-align:top"  onclick="return gotoTools();"/>
+                            </td>
+
+                        </tr>
+                
+                </table>
+                <br />
+                <div class="content-box">
+                 <div class="content-box-header">
+        <h3>Existing Settings</h3>
+         <ul id="ulchg" class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+                                          <a id="lnkmsgSetting" href="#" style = "color:#0066CC;font-size:14px;font-weight:bold;" onclick="return Displaydialog('AddMsgSetDialog', '../Messages/Msg_SettingAction', 'auto', 800, 'dvLoading', null, null);">Add new settings</a>
+                                                @*@Html.ActionLink("Add new settings", "Msg_SettingAction", null, new { @style = "color:#0066CC;font-size:14px;font-weight:bold;" })*@
+                                            </ul>
+                                            <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                <li><strong>Rows per page :&nbsp;</strong>
+                                                    @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                                </li>
+                                            </ul>
+                          <script>$("#ddlrecords").change(function () {
+    if (document.getElementById('ddlCategories').value != '' && document.getElementById('rolesDdl').value != '' && document.getElementById('TorolesDdl').value != '') {
+        window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&TorolesDdl=' + document.getElementById('TorolesDdl').value + '&rolesDdl=' + document.getElementById('rolesDdl').value + '&ddlCategories=' + document.getElementById('ddlCategories').value;
+     }
+     else if (document.getElementById('ddlCategories').value != '' && document.getElementById('rolesDdl').value != '') {
+         window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&rolesDdl=' + document.getElementById('rolesDdl').value + '&ddlCategories=' + document.getElementById('ddlCategories').value;
+            }
+            else if (document.getElementById('rolesDdl').value != '' && document.getElementById('TorolesDdl').value != '') {
+                window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&TorolesDdl=' + document.getElementById('TorolesDdl').value + '&rolesDdl=' + document.getElementById('rolesDdl').value;
+                    }
+                    else if (document.getElementById('ddlCategories').value != '' && document.getElementById('TorolesDdl').value != '') {
+                        window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&TorolesDdl=' + document.getElementById('TorolesDdl').value + '&ddlCategories=' + document.getElementById('ddlCategories').value;
+             }
+             else if (document.getElementById('ddlCategories').value != '') {
+                 window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ddlCategories=' + document.getElementById('ddlCategories').value;
+            }
+            else if (document.getElementById('rolesDdl').value != '') {
+                window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&rolesDdl=' + document.getElementById('rolesDdl').value;
+            }
+            else if ((document.getElementById('TorolesDdl').value != '')) {
+                window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&TorolesDdl=' + document.getElementById('TorolesDdl').value;
+            }
+            else { window.location.href = '@Url.Action("MessageStationSettings", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value; }
+});
+    </script>
+        </div> 
+        <div class="clear"></div>
+                                        <div class="content-box-content">
+                                           @{string heading1;
+                                             if (Request["sort"] == "RoleName" && Request["sortdir"] == "ASC")
+                                             {
+                                                 heading1 = "From role   ▲";
+                                             }
+                                             else if (Request["sort"] == "RoleName" && Request["sortdir"] == "DESC")
+                                             {
+                                                 heading1 = "From role   ▼";
+                                             }
+                                             else
+                                             {
+                                                 heading1 = "From role   ▲";
+                                             }
+             
+                                            }
+                                            @{string Summarypagesize = (ViewBag.Summarypagesize == null ? "10" : ViewBag.Summarypagesize);
+                                              WebGrid Summarygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Summarypagesize));}
+                                            @{WebGrid grid = Summarygrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("RoleName", heading1, style: "width:35%"), 
+                                                  grid.Column("Sender", "Torole", canSort: false, style: "width:10%"), 
+                                                  grid.Column("groupName", "Group name", canSort: false, style: "width:5%"), 
+                                                  grid.Column("Category", "Category", canSort: false, style: "width:40%"), 
+                                                  grid.Column("userInd", "User level", canSort: false), 
+                                                  grid.Column("groupInd", "Group level", canSort: false), 
+                                                  grid.Column("Action", canSort: false, style: "width: 10%;", format: @<text> 
+                                                 
+                                                      
+                                                            @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                                  new SelectListItem{Text="Select",Value="s",Selected=true},
+                                                                  new SelectListItem{Text="Edit", Value="E"},
+                                                                  new SelectListItem{ Text="Delete", Value = "I" },
+                                                                 
+                                                              },
+               new { @class = "ddlactionclass", onchange = "return ddlSetting(this.value,'" + item.MrId + "');", style = "font-family:arial;font-size:13px;height:20px;width:100px;" })
+                                                    
+                                                     
+                                                      
+                                                     
+                                                  </text>))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdResponse" runat="server" width="100%">
+                                                    <tr>
+                                                        <td align="center" valign="middle" height="25px">
+                                                            <span id="lblResponse" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                                No records found.</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                            }
+                                            </div>
+                                         
+                </div>
+        <div id="AddMsgSetDialog" title="New Settings"></div>
+             <div id="EditMsgSetDialog" title="Edit settings"></div>
+        <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+    </div>
+         }
+    <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+</body>
+<script type="text/javascript">
+    function ddlSetting(ddlid, mId) {
+        if (ddlid == "E") {
+            //var dialogDiv = $('#EditMsgSetDialog');
+            //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            var viewUrl = "../Messages/Msg_SettingEdit?MrId=" + mId;
+            Displaydialog('EditMsgSetDialog', viewUrl, 'auto', 800, 'dvLoading', null, null);
+            //$.get(viewUrl, function (data) {
+            //    dialogDiv.html(data);
+            //    $('#dvLoading').dialog('close');
+            //    dialogDiv.dialog('open');
+            //});
+            //return false;
+            //window.location = "../Messages/Msg_SettingEdit?MrId=" + mId;
+        }
+        if (ddlid == "I") {
+            if (confirm("Do you want to delete Existing Setting ?")) {
+                window.location = "../Messages/DeleteSettings?mrid=" + mId;
+            }
+        }
+    }
+</script>
+</html>

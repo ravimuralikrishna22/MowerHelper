@@ -1,0 +1,8 @@
+﻿ @using (Html.BeginForm("Playvideo", "Admin",FormMethod.Post))
+  {
+    <div style="padding-left:130px;padding-top:50px;">
+   @* <iframe width="560" height="315" src="//www.youtube.com/embed/g7B3n9jobus" frameborder="0" allowfullscreen></iframe>*@
+    @Html.Raw(ViewBag.youtube)
+   @* <span>@ViewBag.youtube</span>    *@
+    </div>
+  }

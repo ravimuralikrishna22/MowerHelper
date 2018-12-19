@@ -1,0 +1,446 @@
+﻿@{
+    ViewBag.Title = "ProviderGreetings";
+    Layout = "~/Views/Shared/_ProviderProfileMaster.cshtml";
+}
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <title>Mower Helper-Find an Mower Helper</title>
+@Styles.Render("~/content/ProviderProfile/css")
+@Scripts.Render("~/Scripts/Thscriptscript")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var comment = document.getElementById('hdncomments').value;
+            var fburl = document.getElementById('hdnfburl').value;
+            var ul = document.getElementById('ultabs');
+            var shosch1 = '@ViewBag.showschedule';
+            var shoschcog = '@ViewBag.Showschedulecog';
+            var ul = document.getElementById('ultabs');
+            if (comment == 'Y' && shosch1 == 'Y' && shoschcog == 'Y') {
+                if (fburl != "" && fburl != null) {
+                    document.getElementById('licomment').style.display = '';
+                    document.getElementById('lischedule').style.display = '';
+                    ul.setAttribute("style", "width:628px;");
+                }
+                else {
+                    document.getElementById('licomment').style.display = 'none';
+                    document.getElementById('lischedule').style.display = '';
+                    ul.setAttribute("style", "width:498px;");
+                }
+            }
+            else if (comment == 'Y') {
+                if (fburl != "" && fburl != null) {
+                    document.getElementById('licomment').style.display = '';
+                    document.getElementById('lischedule').style.display = 'none';
+                    ul.setAttribute("style", "width:498px;");
+                }
+                else {
+                    document.getElementById('licomment').style.display = 'none';
+                    document.getElementById('lischedule').style.display = 'none';
+                    ul.setAttribute("style", "width:364px;");
+                }
+            }
+            else if (shosch1 == 'Y' && shoschcog == 'Y') {
+                document.getElementById('lischedule').style.display = '';
+                document.getElementById('licomment').style.display = 'none';
+                ul.setAttribute("style", "width:498px;");
+            }
+
+            else {
+                document.getElementById('licomment').style.display = 'none';
+                document.getElementById('lischedule').style.display = 'none';
+                ul.setAttribute("style", "width:364px;");
+            }
+        });
+    </script>
+</head>
+<body>
+<div id="main">
+        <input type="hidden" id="hdncomments" name="hdncomments" value="@ViewBag.fbcomments" />
+       <input type="hidden" id="hdnfburl" name="hdnfburl" value="@ViewBag.facebookurl" />
+    
+    
+    <div id="content">
+        <div class="profile_yellow_bg">
+        
+        <div class="right_partbg">
+            <div class="right_text_part">
+            	<div class="profile_img">
+                
+              @if (ViewBag.providerimage != null)
+              {
+                
+                       <img src="@ViewBag.providerimage" width="120" height="150" alt="img">
+                 
+              }
+             <h4 class="text-center">@Html.Raw(ViewBag.ProviderName)</h4>
+                <h4 class="text-center">@Html.Raw(ViewBag.address)</h4>
+                <p class="text-center" style="font-size:13px;">
+                       @if (ViewBag.Vmoffice != "" && ViewBag.Vmoffice!=null)
+                    {
+                    <strong style="color:hsl(0, 0%, 20%);">Phone :</strong> @ViewBag.Vmoffice 
+                       }
+               @*  @if (ViewBag.cellphone != null)
+                   {
+                 <br><strong style="color:hsl(0, 0%, 20%);">Cell Phone :</strong> @ViewBag.cellphone
+                   }*@
+                   @if (ViewBag.fax != null)
+                   {
+                 <br><strong style="color:hsl(0, 0%, 20%);">Fax :</strong> @ViewBag.fax
+                   }
+                 </p>
+              @*    @if (ViewBag.Address2 != null)
+                  {
+                     <p class="text-center" style="font-size:13px;"><strong style="color:hsl(0, 0%, 20%);">Additional Office :</strong> @Html.Raw(ViewBag.Address2)  </p>
+                  }*@
+                <div class="iner_bg">
+                <ul class="content_ul1">
+                	@*<li>
+                     @Html.RouteLink("Print this profile", "PrintProviderProfile", new { id = ViewBag.id, Therapistname = ViewBag.businessnm1 })
+                    </li>*@
+                    <li>
+                     @Html.RouteLink("Send this link to a friend", "Sendmailtofriend", new {  randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })
+                    </li>                       
+               @if (ViewBag.Personalwebsite == "1" & ViewBag.Webaddress != null)
+               {
+                   string title1 = "Visit the website of " + ViewBag.ProviderName;
+                   //string id9 = ViewBag.id;
+                   //string url = ViewBag.lnkPersonalNavigateUrl;
+                   
+                	<li> <a id="lnkPersonalwebsite" title="@title1" target="_blank" href="@Url.Action("visitmywebsite", "Public", new { id = ViewBag.ProviderID, url = ViewBag.lnkPersonalNavigateUrl })">Visit My Website</a></li>
+               }
+               @*  @if (ViewBag.NavigateUrl != null)
+                 {
+                     string title2 = "Get directions to office of " + ViewBag.ProviderName;
+                   <li>  <a id="directtofs" target="_blank" title="@title2" href="@ViewBag.NavigateUrl">Directions To Office</a></li>
+                 }*@
+                                      
+                                        @if (ViewBag.videocnt > 0)
+                                        {
+                                      
+                    <li>  @Html.RouteLink("Video/Audio Greeting", "ProviderGreetings", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1, state=ViewBag.estatenm,city=ViewBag.ecity, zip = ViewBag.zipvalue }, new { @title = "video greetings of " + ViewBag.ProviderName })</li>
+                                        }
+                                         @* @if (Convert.ToString(ViewBag.showschedule) == "Y" && ViewBag.Showschedulecog == "Y")
+                                          {
+                    <li>  @Html.RouteLink("Schedule", "ElectricianSchedule", new { id = ViewBag.id, Therapistname = ViewBag.businessnm1 }, new { @title = "schedule of " + ViewBag.ProviderName })</li>
+                                          }*@
+                  @*   @if (ViewBag.doccount > 0)
+                     {
+                        // string id = ViewBag.id;
+                        // string title4 = "view documents of " + ViewBag.ProviderName;
+                       //  string praid = Convert.ToString(ViewBag.practiceid);
+                         <li>   @Html.RouteLink("Documents", "ProviderDocuments", new { id = ViewBag.id, Therapistname = ViewBag.businessnm1 }, new { @title = "view documents of " + ViewBag.ProviderName })</li>
+                     }*@
+                </ul>
+              </div>
+              
+              </div> 
+            </div>
+            <br />
+            <div class="world_mp" style="height:auto">
+               @* <div class="follow_us iner_bg" style="text-align:center;">
+                 @if (ViewBag.lnkregclss != "graymenu")
+                 {
+                    <a href="@Url.Action("PatientRegistration", "Public", null)" class="@ViewBag.lnkregclss" runat="server"  onmouseover = "this.style.textDecoration='underline';" onmouseout = "this.style.textDecoration='none';" style="text-decoration: none; font-family:Arial; color:hsl(0, 0%, 20%); font-weight:bold; font-size:14px;" target="_parent" id="lnkRegisterwiththistherapistpractice">
+                        Register with this therapist/practice</a>
+                 }
+                 else
+                 {
+                    <a  class="@ViewBag.lnkregclss" runat="server" style="text-decoration: none; font-family:Arial; font-weight:bold; font-size:14px; color:hsl(0, 0%, 20%);" target="_parent" id="lnkRegisterwiththistherapistpractice1">
+                        Register with this therapist/practice</a>
+                 }
+                        @if (ViewBag.noservice != null)
+                        {
+                        <label id="lblNoService" style="color:Red;">@ViewBag.noservice</label>
+                        }
+            
+                <div class="clear"></div>    
+                </div>
+                <br />*@
+                <div class="social-media" style="padding-left:60px;">
+                  @if (ViewBag.twitterurl != null)
+                  {
+                     
+                <a id="atwitter" target="_blank"  style="height:25px; width:25px;" href="@ViewBag.twitterurl">
+                 <img alt="" id="imgtwitter" src="~/Images/icon-twitter.jpg" style="height:25px; width:25px;" />&nbsp;
+                </a>
+                  }
+                  else
+                  {
+                      <a id="atwitter" target="_blank"  style="height:25px; width:25px;">
+                 <img alt="" id="imgtwitter" src="~/Images/icon-twitter.jpg" style="height:25px; width:25px;" />&nbsp;
+                </a>
+                  }
+                          @if (ViewBag.facebookurl != null)
+                          {
+                    
+                                <a id="afacebook" target="_blank"  style="height:25px; width:25px;" href="@ViewBag.facebookurl">
+                <img alt="" id="imgfacebook" src="~/Images/icon-fb.jpg" style="height:25px; width:25px;" />&nbsp;&nbsp;
+                </a>
+                          }
+                          else
+                          {
+                              
+                                <a id="afacebook" target="_blank"  style="height:25px; width:25px;">
+                <img alt="" id="imgfacebook" src="~/Images/icon-fb.jpg" style="height:25px; width:25px;" />&nbsp;&nbsp;
+                </a>
+                          }
+                          </div>
+                <div class="right_text_part">
+                	<h3>Easy Access :</h3>
+                    <p style="font-size:13px;"><strong style="color:hsl(0, 0%, 20%);">Nearby Towns : </strong></p>
+                      @if (ViewBag.Dtlistcitescount > 0)
+                      {
+
+                          int i = 0;
+                          int cnt = 0;
+                          int j;
+                          int k = 0;          
+                    <ul class="content_ul4">
+                     @for (i = k; i <= ViewBag.Dtlistcitescount - 1; i++)
+                     {
+                         if (cnt < 2)
+                         {
+                             string city = ViewBag.DtlistCities[i].CityName + " ";
+                             string title5 = "Electricians in " + ViewBag.DtlistCities[i].CityName + ", " + ViewBag.DtlistCities[i].StateName;
+                             string ctynme = ViewBag.DtlistCities[i].CityName;
+                             string ctynme3 = ctynme.Trim().Replace(" ", "-");
+                               <li>@Html.RouteLink(ctynme, "Cities", new { city = city.Trim().ToString() }, new { @style = "font-family:Arial; font-size:9pt; color:hsl(0, 0%, 20%);", @title = title5.ToString() })
+                                 <label id="lblState" style="font-family:Arial; font-size:9pt;">@ViewBag.DtlistCities[i].StateName</label></li>
+                             cnt = cnt + 1;
+
+                         }
+                         else
+                         {
+
+                             k = i;
+                             cnt = 0;
+                             i = ViewBag.Dtlistcitescount - 1;
+
+                         }
+                     }
+                    
+                    </ul>
+                      }
+                    <div class="clear"></div>
+                      @if (ViewBag.DtlistZIPCodescount > 0)
+                      {
+                          int l = 0;
+                          int cnt1 = 0;
+                          int m;
+                          int n = 0;
+                    <p style="font-size:13px;"><strong style="color:hsl(0, 0%, 20%);">Nearby ZIP Codes : </strong></p>
+                    
+                    <ul class="content_ul2">
+                     @for (m = 0; m <= ViewBag.rows2; m++)
+                     {
+
+
+                         for (l = m; l <= ViewBag.DtlistZIPCodescount - 1; l++)
+                         {
+                             if (cnt1 < 2)
+                             {
+                                 string id2 = ViewBag.DtlistZIPCodes[l].ZIPCode;
+                                 string title6 = "Electricians in " + ViewBag.DtlistZIPCodes[l].ZIPCode;
+                                                           
+                                                          <li> @Html.RouteLink(id2, "ZipcodeSearch", new { id = id2.Trim().ToString() }, new { @title = title6, @style = "font-family:Arial; font-size:9pt; color:hsl(0, 0%, 20%);" })</li>
+                                                                
+
+                                 cnt1 = cnt1 + 1;
+
+                             }
+                             else
+                             {
+
+                                 n = l;
+                                 cnt1 = 0;
+                                 l = ViewBag.DtlistZIPCodescount - 1;
+
+                             }
+                         }
+
+                     }
+                    
+                    </ul>
+                    <div class="clear"></div>
+                      }
+                </div>
+        	</div>
+            <br><br><br>
+            
+        </div>
+        
+        <div class="center_part" style="width:700px;">
+        	
+            @{
+                // string countrytitle = "Therapists in " + ViewBag.country;
+                // string statetitle = "Therapists in " + ViewBag.statenm;
+                // string citytitle = "Therapists in " + ViewBag.citynm;
+                string countrynm1 = ViewBag.country;
+                string country = countrynm1.Trim().Replace(" ", "-");
+                string statename = "» " + ViewBag.StateNm;
+                string cityname = "» " + ViewBag.citynm;
+                                       // string cty = ViewBag.citynm;
+                    }
+                    <table width="100%" >
+                    <tr>
+                    <td style="text-align:left;">
+                      @if (ViewBag.previousrecord != null)
+                      {
+                          string prepronm = ViewBag.preproname;
+                            @Html.RouteLink("« Previous Profile", "ProviderProfile", new { randomnumber = ViewBag.previousrecord, Therapistname = ViewBag.preproname, state=ViewBag.estatenm,city=ViewBag.ecity, zip = ViewBag.nextprezip }, new { @class = "previes", @title = prepronm })
+                      }
+                    </td>
+                     <td style="text-align:center;">
+                     <div class="directory_right">
+ 
+             
+              @Html.RouteLink(countrynm1, "International", new { countryname = country }, new { @title = "Electricians in " + ViewBag.country, @style = "float:left; padding:0 6px; color:#02559B; font:bold 13px Arial,Helvetica,sans-serif;" })
+              
+              
+            
+               @Html.RouteLink(statename, "ListOfProviders", new { StateNm = ViewBag.StateNm }, new { @title = "Electricians in " + ViewBag.statenm, @style = "float:left; padding:0 6px; color:#02559B; font:bold 13px Arial,Helvetica,sans-serif; " })
+               
+                 @Html.RouteLink(cityname, "TopCityTherapists", new { StateNm = ViewBag.StateNm, city = ViewBag.citynm }, new { @title = "Electricians in " + ViewBag.citynm, @style = "float:left; padding:0 6px; color:#02559B; font:bold 13px Arial,Helvetica,sans-serif;" })
+               
+            
+            </div>
+                    </td>
+                     <td style="text-align:right;">
+                     
+                      
+                 @if (ViewBag.nextrecord != null)
+                 {
+                    @Html.RouteLink("Next Profile »", "ProviderProfile", new { randomnumber = ViewBag.nextrecord, Therapistname = ViewBag.nextprovnme, state=ViewBag.estatenm,city=ViewBag.ecity, zip = ViewBag.nextprezip }, new { @class = "previes", @title = ViewBag.nextprovnme })
+                   
+                 }
+                    </td>
+                    </tr>
+                    </table>
+      		
+            <div class="clear"></div>
+                  <div style="width:671px;border-bottom:1px solid #cfdede;border-right:1px solid #cfdede; float:left;padding:2px 0 4px 0;">
+           
+            <div class="clear"></div> 
+              <div class="statement-nav">
+           <ul id="ultabs" >
+          
+                        <li>
+                         @Html.RouteLink("Profile", "ProviderProfile", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue }, new { @class = "current" })</li>
+                          <li> @Html.RouteLink("Services", "Providerservices", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })</li>
+                          <li>  @Html.RouteLink("Contact", "ProviderContact", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })</li>
+               <li id="lischedule">  @Html.RouteLink("Schedule", "ElectricianSchedule", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })</li>
+               <li id="licomment">  @Html.RouteLink("Comments", "ProviderComments", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })</li>
+                         @*  <li>  @Html.RouteLink("Directions", "ProviderDirections", new { id = ViewBag.id, Therapistname = ViewBag.businessnm1 })</li>*@
+            </ul>
+            </div>
+            <br /><br />  
+          
+            @{
+                string providernm = ViewBag.ProviderName;
+                string businessnm = ViewBag.BusinessName;
+                ViewBag.nm = providernm.Contains(businessnm) ? null : "1";
+                }
+              
+                     <h2 style="margin:0;"><span>@ViewBag.ProviderName</span> </h2>
+             <div style="width:671px;border-bottom:1px solid #cfdede;border-right:1px solid #cfdede; float:left;padding:2px 0 4px 0;">
+              @if (ViewBag.nm != null)
+              {
+                <h4 style="color:#333"><strong>@ViewBag.BusinessName</strong></h4>
+              }
+                                                                                <div class="content-box" id="tblVideoList" runat="server">
+                                    <div class="content-box-header">
+                                        <h3>
+                                            <label id="lblheading" class="controltext" style="color:Black;">
+                                                List Of Video/Audio Greetings</label>
+                                            <asp:label id="lblHeading" cssclass="controltext" runat="server"></asp:label>
+                                        </h3>
+                                    </div>
+                                    <div class="content-box-content">
+                                        <table bgcolor="White" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                            <tr>
+                                                <td align="center" colspan="4" style="font-family: Arial; font-size: 9pt;">
+                                                    <asp:label visible="false" id="lblErrMsgVideo" cssclass="errormsg" runat="server"></asp:label>
+                                                    <input type="hidden" runat="server" id="hdnPageGenarateYN" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4" style="font-family: Arial; font-size: 9pt;">
+                                                    <table align="center" cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr>
+                                                            <td valign="top" width="100%">
+                                                                @{string vpagesize = "10";
+                                                                  WebGrid videogrid = new WebGrid(rowsPerPage: Convert.ToInt32(vpagesize));}
+                                                                @{WebGrid grid = videogrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                                                  if (grid.TotalRowCount != 0)
+                                                                  {
+                                                                      //int count = 0;
+
+                                                                      string pager = grid.Pager().ToString();
+                                                                      string pageno = (Request["page"] ?? "1");
+                                                                      string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                                      string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", displayHeader: false, alternatingRowStyle: "gridAltRow",
+                                                                      columns: grid.Columns(
+                                                                      grid.Column("", "", canSort: false, style: "Vtitle",
+                                                                      format:@<text>
+                                                                                  @{
+                                                                                     
+                                                                                      string src1 = "http://img.youtube.com/vi/" + item.ImagePathSuffix + "/1.jpg";
+                                                                                      //string desc = ViewBag.desc;
+                                                                                      //string title = ViewBag.title12;
+                                                                                      string videonm = item.Title;
+                                                                        @Html.RouteLink(videonm, "VideoPlay", new {randomnumber = ViewBag.rnum, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue, greetingid = item.GreetingID }, new { @class = "Playvideofile", @style = "font-weight:bold;color:rgba(43, 74, 209, 1);", @title = "Click here to play video" })
+                                                                        <br /><br />
+                                                                        <a><img src="@src1" alt="" id="imgvideo" /></a> 
+                                                                        <font face="Arial, Helvetica" size="2"> <span style="text-align: justify; line-height:
+                                                                        20px;" >@item.DocDescription</span> </font>                                    }
+                                                                    </text> )
+
+                                                                     )).ToString();
+                                                                      gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                                    @(new HtmlString(gridhtml))
+                                                                    <br />
+                                                                    <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                                    <br />
+
+
+
+                                                                  }
+                                                                  else
+                                                                  {
+                                                                    <table id="Table28" width="98%" align="center">
+                                                                        <tr id="trerror">
+                                                                            <td align="center" height="60px" valign="middle">
+                                                                                <span class="errormsg" id="lblerrormsg" style="font-weight: bold;">No video/audio files
+                                                                                    found.</span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                  }
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+        </div>
+        </div>
+        <div class="clear"></div>    
+        </div>
+        <div class="clear"></div>
+    </div>
+    
+</div>
+
+
+
+
+
+
+
+</body>
+</html>

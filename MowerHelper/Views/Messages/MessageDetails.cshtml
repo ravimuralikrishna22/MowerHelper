@@ -1,0 +1,118 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+</head>
+<body>
+    <div>
+        <div id="divmsgpractice" class="ModalPopup" style="width: 100%" runat="server">
+                                     
+                        <div class="contentmsg">
+                        <asp:Button ID="msgtopicclose" CssClass="ximg"   ToolTip="Close"
+                                runat="server"></asp:Button>
+                            <div class="content-box">
+                                        <div class="content-box-content">
+                                            <table class="border_style" cellspacing="1" align="center" cellpadding="5" width="100%"
+                                                border="0">
+         @*                                       <tr id="Tr1" runat="server" visible="false">
+                                                    <td align="center" colspan="2">
+                                                        <asp:Label ID="lbl_ErrorMessage" runat="server" CssClass="errormsg" Font-Bold="true"></asp:Label>
+                                                    </td>
+                                                </tr>*@
+                         @*                       <tr class="white_color" id="tr_MessageHistory" runat="server">
+                                                    <td align="right" colspan="2">
+                                                        <asp:LinkButton ID="lnk_History" runat="server" CssClass="bluetext">Message history</asp:LinkButton>
+                                                    </td>
+                                                </tr>*@
+                          @*                      <tr class="nav_blue_color" id="tr_openedby" style="height: 20" runat="server" visible="false">
+                                                    <th align="right">
+                                                        &nbsp;&nbsp;&nbsp;Opened:
+                                                    </th>
+                                                    <td align="left">
+                                                        <font color="red">By<asp:Label ID="lblopenedby" runat="server"></asp:Label></font>
+                                                    </td>
+                                                </tr>*@
+@*                                                <tr class="white_color" id="tr_ArchivedByName" style="height: 20" runat="server"
+                                                    visible="false">
+                                                    <th align="right">
+                                                        &nbsp;&nbsp;&nbsp;Archived:
+                                                    </th>
+                                                    <td align="left">
+                                                        By<asp:Label ID="lblArchivedByName" runat="server"></asp:Label>
+                                                    </td>
+                                                </tr>*@
+                                                <tr class="nav_blue_color" style="height: 25">
+                                                    <th align="right" style="width: 15%">
+                                                        <strong>Date :</strong>
+                                                    </th>
+                                                    <td align="left" style="width: 85%">
+                                                        <span id="lbl_DateDisplay">@ViewBag.MsgDate</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" style="height: 25">
+                                                    <th align="right" style="width: 15%">
+                                                        <strong>Sender :</strong>
+                                                    </th>
+                                                    <td align="left" style="width: 85%">
+                                                          <span id="lbl_SenderDisplay">@ViewBag.Sender</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="nav_blue_color" style="height: 25">
+                                                    <th align="right" style="width: 15%; height: 25px;">
+                                                        <strong>Category :</strong>
+                                                    </th>
+                                                    <td align="left" style="width: 85%; height: 25px;">
+                                                         <span id="lbl_CategoryDisplay">@ViewBag.Category</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" style="height: 25">
+                                                    <th align="right" style="width: 15%">
+                                                        <strong>Topic :</strong>
+                                                    </th>
+                                                    <td align="left" style="height: 16px; width: 85%">
+                                                             <span id="lbl_TopicDisplay">@ViewBag.Subject</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="nav_blue_color" style="height: 25">
+                                                    <th align="right" style="width: 15%">
+                                                         <strong>Message :</strong>
+                                                    </th>
+                                                    <td align="left" style="width: 85%">
+                                                        <span id="lbl_MessageDiaplay">@ViewBag.Messagebody</span>
+                                                    </td>
+                                                </tr>
+                                                                                @if (ViewBag.FileName !=null)
+                                                                                {
+                                                <tr class="white_color" id="Tr_Attachment" style="height: 25" runat="server">
+                                                    <th align="right" style="width: 15%">
+                                                        <strong>Attachment :</strong>
+                                                    </th>
+                                                    <td align="left" style="width: 85%">
+                                                       @* <asp:LinkButton ID="" runat="server" CssClass="bluetext"></asp:LinkButton>*@
+                                                      @*  <span id="hyp_Attachment">@ViewBag.ProviderPhoneNumber</span>*@
+                                                      <a id="FileName" href="@Url.Action("Download", new { Imgpath = ViewBag.FileName })" style="text-align:justify;">@ViewBag.FileName</a>
+                                                    </td>
+                                                </tr>
+                                                                                }
+                                            </table>
+                                            <table cellspacing="0" cellpadding="0" width="100%" style="text-align: center" border="0">
+                                                <tr class="background_color">
+                                                    <td style="padding-right: 10px; padding-top: 5px; padding-bottom: 5px;" align="right">
+                                                     <input type="button" class="close button" name="Cancel" value="Cancel" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+    </div>
+</body>
+</html>

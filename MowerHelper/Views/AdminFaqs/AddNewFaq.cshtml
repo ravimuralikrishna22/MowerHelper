@@ -1,0 +1,866 @@
+﻿@using Obout.Mvc.HTMLEditor;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+         <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css">
+       .multcolumn .ob_iCboICBC li
+        {
+            float: left;
+            width: 60px;
+          
+        }
+        
+        .longbg .ob_iCboICBC li
+        {
+            float: left;
+            width: 135px;
+        }
+        
+        /* For IE6 */
+        * HTML .multcolumn .ob_iCboICBC li
+        {
+            -width: 55px;
+        }
+        
+        * HTML  .multcolumn .ob_iCboICBC li b
+        {
+            width: 55px;
+            overflow: hidden;
+        }
+      
+    </style>
+     @Styles.Render("~/Content/styles")
+        @Styles.Render("~/Content/themes/base/jqueryCSS")
+             @Styles.Render("~/Content/themes/base/TherpistStyles")
+                 @Scripts.Render("~/Scripts/Thscriptscript")
+             @Scripts.Render("~/ThScripts/Thjquerycripts")
+             <script type="text/javascript">
+                 function endsWith(str, suffix) {
+                     return str.indexOf(suffix, str.length - suffix.length) !== -1;
+                 }
+             </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#divaddcategory').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+            //$('#divaddvideo').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+
+            //$('#divaddFAQ').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+
+            $('#rbtnStatus1').change(function () {
+                if (document.getElementById('rbtnStatus1').checked == true) {
+                    document.getElementById('rbtnStatus2').checked = false;
+                }
+            });
+            $('#rbtnStatus2').change(function () {
+                if (document.getElementById('rbtnStatus2').checked == true) {
+                    document.getElementById('rbtnStatus1').checked = false;
+                }
+            });
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+              $("#Menu0").removeClass();
+              $("#Menu1").removeClass();
+              $("#Menu2").removeClass();
+              $("#Menu3").addClass("active");
+          });
+    </script>
+     <script type="text/javascript">
+         $(function () {
+             //$("#Addcategory").click(function () {
+             //    linkObj = $(this);
+             //    var dialogDiv = $('#divaddcategory');
+             //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+             //    var viewUrl = linkObj.attr('href');
+             //    $.get(viewUrl, function (data) {
+             //        dialogDiv.html(data);
+             //        $('#dvLoading').dialog('close');
+             //        dialogDiv.dialog('open');
+             //    });
+             //    return false;
+             //});
+
+             $("#adots").click(function () {
+                 //linkObj = $(this);
+                 //var dialogDiv = $('#divaddvideo');
+                 //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                 var media = document.getElementById('hndmediaid').value;
+
+                 var delmeid = document.getElementById('hdndelmeid').value;
+                 var viewUrl = "../AdminFaqs/Videolist?media=" + media + "&delmeid=" + delmeid;
+                 Displaydialog('divaddvideo', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                 //$.get(viewUrl, function (data) {
+                 //    dialogDiv.html(data);
+                 //    $('#dvLoading').dialog('close');
+                 //    dialogDiv.dialog('open');
+                 //});
+                 //return false;
+             });
+
+
+             $("#arelfaq").click(function () {
+                 //                alert("1");
+                 //linkObj = $(this);
+                 //var dialogDiv = $('#divaddFAQ');
+                 //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                 var checklist1 = document.getElementById('hdnchecklist1').value;
+                 var checklist2 = document.getElementById('hdnchecklist2').value;
+                 var checklist4 = document.getElementById('hdnchecklist4').value;
+                 var faq = document.getElementById('hdnfaqid').value;
+
+                 var delfaqid = document.getElementById('hdndelfaqid').value;
+                 var viewUrl = "../AdminFaqs/Faqslist?checklist1=" + checklist1 + "&checklist2=" + checklist2 + "&checklist4=" + checklist4 + "&faq=" + faq + "&delfaqid=" + delfaqid;
+                 Displaydialog('divaddFAQ', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                 //$.get(viewUrl, function (data) {
+                 //    dialogDiv.html(data);
+                 //    $('#dvLoading').dialog('close');
+                 //    dialogDiv.dialog('open');
+                 //});
+                 //return false;
+             });
+         });
+</script>
+
+<script type="text/javascript">
+    function AddcategoryeSuccess(data) {
+        if (data.Success == true) {
+            var newcatid = data.Object;
+            var newcattext = document.getElementById('txtCategoryName').value;
+            ComboCategorylist.options.add(newcattext, newcatid);
+
+            $('#divaddcategory').dialog('close');
+            ComboCategorylist.value(newcatid);
+        }
+        //else if (data.ErrorMessage == 'expire') {
+        //    window.location.href = '../Home/SessionExpire';
+        //}
+        else {
+
+            if (data != '_Logon_') {
+                alert(data.ErrorMessage);
+            }
+            $('#divaddcategory').dialog('open');
+        }
+    }
+</script>
+<script type="text/javascript">
+    function selected(obj, meid) {
+        document.getElementById('DataList1').style.display = '';
+        var delvideoid = document.getElementById('hdndelmeid').value;
+
+        if (delvideoid != "" && delvideoid != null) {
+            var str = delvideoid;
+            var suffix=",";
+            var con = endsWith(str, suffix);
+         
+            if (con!=true)
+            {
+                str = str + ",";
+            }
+           
+        var term = meid + ","; // for the term "World",
+            var index = str.indexOf(term); // and get its index.
+             if (index != -1) {
+               
+                document.getElementById('hdndelmeid').value = str.replace(term, '');
+               
+            }
+            else {
+               
+            }
+          
+        }
+        var table = document.getElementById("DataList1");
+        var row = document.createElement("tr");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        td4.setAttribute("style", "display:none;");
+        if (document.getElementById('hdncnt').value != '' && document.getElementById('hdncnt').value != null) {
+
+            var cnt1 = document.getElementById('hdncnt').value;
+           
+            var cnt3 = 1;
+     
+            var cnt2 = cnt1 ++;
+            document.getElementById('hdncnt').value = +cnt2;
+            if (document.getElementById('hndmediaid').value != "" && document.getElementById('hndmediaid').value != null) {
+                var str1 = document.getElementById('hndmediaid').value;
+                var suffix1 = ",";
+                var con1 = endsWith(str1, suffix1);
+                if (con1 != true) {
+                    document.getElementById('hndmediaid').value = document.getElementById('hndmediaid').value + ',' + meid;
+                }
+                else {
+                    document.getElementById('hndmediaid').value = document.getElementById('hndmediaid').value + meid;
+                }
+            }
+            else {
+                document.getElementById('hndmediaid').value = meid;
+            }
+        }
+        else {
+            var cnt = 1;
+            document.getElementById('hdncnt').value = cnt;
+            document.getElementById('hndmediaid').value = meid;
+        }
+        var obj2 = document.createElement("span");
+        obj2.setAttribute("id", "lbl2");
+        obj2.innerHTML = obj;
+        td2.appendChild(obj2);
+  
+        var obj3 = document.createElement("img");
+        obj3.setAttribute("src", "../Images/cross.png");
+        obj3.setAttribute("id",meid);
+        obj3.setAttribute("onclick", "deleteRow(this,id)");
+        td3.appendChild(obj3);
+       var obj4 = document.createElement("input");
+        obj4.setAttribute("type", "hidden");
+        var hdnid = "hdn" + meid;
+        obj4.setAttribute("id", hdnid);
+        obj4.setAttribute("name", hdnid);
+        obj4.setAttribute("value", obj);
+        td4.appendChild(obj4)
+        row.appendChild(td2);
+        row.appendChild(td3);
+        row.appendChild(td4);
+        table.appendChild(row);
+        $('#divaddvideo').dialog('close');
+    }
+
+    function selected1(obj, faqid) {
+        document.getElementById('dlFaqs').style.display = '';
+        var delfaqid = document.getElementById('hdndelfaqid').value;
+        if (delfaqid != "" && delfaqid != null) {
+            var str = delfaqid;
+            var suffix = ",";
+            var con = endsWith(str, suffix);
+            if (con != true) {
+                str = str + ",";
+            }
+
+            var term = faqid + ","; // for the term "World",
+            var index = str.indexOf(term); // and get its index.
+            if (index != -1) {
+
+                document.getElementById('hdndelfaqid').value = str.replace(term, '');
+
+            }
+            else {
+
+            }
+
+        }
+        var table = document.getElementById("dlFaqs");
+        var row = document.createElement("tr");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        if (document.getElementById('hdncnt').value != '' && document.getElementById('hdncnt').value != null) {
+
+            var cnt1 = document.getElementById('hdncnt').value;
+
+            var cnt3 = 1;
+
+            var cnt2 = cnt1++;
+            document.getElementById('hdncnt').value = +cnt2;
+            var str1 = document.getElementById('hdnfaqid').value;
+            var suffix1 = ",";
+            var con1 = endsWith(str1, suffix1);
+            if (con1 != true) {
+                document.getElementById('hdnfaqid').value = document.getElementById('hdnfaqid').value + ',' + faqid;
+            }
+            else {
+                document.getElementById('hdnfaqid').value = document.getElementById('hdnfaqid').value + faqid;
+            }
+        }
+        else {
+            var cnt = 1;
+            document.getElementById('hdncnt').value = cnt;
+            document.getElementById('hdnfaqid').value = faqid;
+        }
+
+
+        var obj2 = document.createElement("span");
+        obj2.setAttribute("id", "lbl4");
+        obj2.innerHTML = obj;
+
+        td2.appendChild(obj2);
+
+        var obj3 = document.createElement("img");
+        obj3.setAttribute("src", "../Images/cross.png");
+        obj3.setAttribute("id", faqid);
+        obj3.setAttribute("onclick", "deleteRow1(this,id)");
+        td3.appendChild(obj3);
+        var obj4 = document.createElement("input");
+        obj4.setAttribute("type", "hidden");
+        var hdnid = "hdnfaq" + faqid;
+        obj4.setAttribute("id", hdnid);
+        obj4.setAttribute("name", hdnid);
+        obj4.setAttribute("value", obj);
+        td4.appendChild(obj4)
+        row.appendChild(td2);
+        row.appendChild(td3);
+        row.appendChild(td4);
+        table.appendChild(row);
+        $('#divaddFAQ').dialog('close');
+    }
+    function cancelclick() {
+
+        window.location.href = "../AdminFaqs/AdminFaQuestionsList";
+    }
+</script>
+<script type="text/javascript">
+    function deleteRow(btn, id) {
+        document.getElementById('DataList1').style.display = 'none';
+        if (document.getElementById('hdndelmeid').value != "" && document.getElementById('hdndelmeid').value != null) {
+            var meid12 = document.getElementById('hdndelmeid').value;
+            var suffix = ",";
+            var condition = endsWith(meid12, suffix);
+            if (condition != true) {
+                document.getElementById('hdndelmeid').value = document.getElementById('hdndelmeid').value + "," + id;
+            }
+            else {
+                document.getElementById('hdndelmeid').value = document.getElementById('hdndelmeid').value + id;
+            }
+        }
+        else {
+            document.getElementById('hdndelmeid').value = id;
+        }
+        var dellist = document.getElementById('hdndelmeid').value;
+    
+        if (dellist != "" && dellist != null) {
+            var medi3 = dellist.split(",");
+        
+            for (var i = 0, len = medi3.length; i < len; i++) {
+                var media = document.getElementById('hndmediaid').value;
+               
+                var suffix = ",";
+                var condition = endsWith(media, suffix);
+                
+                if (condition != true) {
+                    media = media + ",";
+                
+                }
+              
+                    if (medi3[i] != "" && medi3[i] != null) {
+                        if (media.indexOf(medi3[i]) > -1) {
+                            var text = medi3[i] + ",";
+                            media = media.replace(text, '');
+                            document.getElementById('hndmediaid').value=media;
+                        }
+                    }
+            
+            }
+        }
+ var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+    function deleteRow1(btn, id) {
+        document.getElementById('dlFaqs').style.display = 'none';
+        if (document.getElementById('hdndelfaqid').value != "" && document.getElementById('hdndelfaqid').value != null) {
+            var faq12 = document.getElementById('hdndelfaqid').value;
+            var suffix = ",";
+            var condition = endsWith(faq12, suffix);
+            if (condition != true) {
+                document.getElementById('hdndelfaqid').value = document.getElementById('hdndelfaqid').value + "," + id;
+            }
+            else {
+                document.getElementById('hdndelfaqid').value = document.getElementById('hdndelfaqid').value + id;
+            }
+        }
+        else {
+            document.getElementById('hdndelfaqid').value = id;
+        }
+
+
+
+        var dellist = document.getElementById('hdndelfaqid').value;
+       
+        if (dellist != "" && dellist != null) {
+            var faq3 = dellist.split(",");
+        
+            for (var i = 0, len = faq3.length; i < len; i++) {
+                var faq = document.getElementById('hdnfaqid').value;
+  
+                var suffix = ",";
+                var condition = endsWith(faq, suffix);
+           
+                if (condition != true) {
+                    faq = faq + ",";
+                
+                }
+             
+                if (faq3[i] != "" && faq3[i] != null) {
+                    if (faq.indexOf(faq3[i]) > -1) {
+                        var text = faq3[i] + ",";
+                        faq = faq.replace(text, '');
+                        document.getElementById('hdnfaqid').value = faq;
+                    }
+                }
+
+            }
+        }
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+</script>
+  <script type="text/javascript">
+      $(function () {
+            document.getElementById('hdnchecklist1').value = "False";
+          document.getElementById('hdnchecklist2').value = "False";
+          document.getElementById('hdnchecklist4').value = "False";
+      });
+      function changechecklist1() {
+          if (document.getElementById('chklist1').checked == true) {
+              document.getElementById('hdnchecklist1').value = "True";
+              document.getElementById('chklist2').checked = false;
+              document.getElementById('chklist4').checked = false;
+              document.getElementById("chklist2").disabled = true;
+              document.getElementById("chklist4").disabled = true;
+          }
+          else {
+              document.getElementById('hdnchecklist1').value = "False";
+              document.getElementById("chklist2").disabled = false;
+              document.getElementById("chklist4").disabled = false;
+          }
+      }
+      function changechecklist2() {
+          if (document.getElementById('chklist2').checked == true) {
+              document.getElementById('hdnchecklist2').value = "True";
+          }
+          else {
+              document.getElementById('hdnchecklist2').value = "False";
+          }
+      }
+      function changechecklist4() {
+          if (document.getElementById('chklist4').checked == true) {
+              document.getElementById('hdnchecklist4').value = "True";
+          }
+          else {
+              document.getElementById('hdnchecklist4').value = "False";
+          }
+      }
+</script>
+<script language="javascript" type="text/javascript">
+    function clearalerts() {
+        document.getElementById('tdquestion').bgColor = 'White';
+        document.getElementById('tblmain').style.display = 'none';
+        document.getElementById('tdlblquestion').style.display = 'none';
+        document.getElementById('lblquestion').style.display = 'none';
+        document.getElementById('tdanswer').bgColor = 'White';
+        document.getElementById('tdlblanswer').style.display = 'none';
+        document.getElementById('lblanswer').style.display = 'none';
+        document.getElementById('tdcategory').bgColor = 'White';
+        document.getElementById('tdlblcategory').style.display = 'none';
+        document.getElementById('lblcategory').style.display = 'none';
+        document.getElementById('tdkeywords').bgColor = 'White';
+        document.getElementById('tdlblkeywords').style.display = 'none';
+        document.getElementById('lblkeywords').style.display = 'none';
+        document.getElementById('tdrole').bgColor = 'White';
+        document.getElementById('tdlblrole').style.display = 'none';
+        document.getElementById('lblrole').style.display = 'none';
+        document.getElementById('tdstatus').bgColor = 'White';
+        document.getElementById('tdlblstatus').style.display = 'none';
+        document.getElementById('lblstatus').style.display = 'none';
+       
+    }
+    function ValidateQuestion() {
+        clearalerts();
+        var question = trim(document.getElementById('txtQuestion').value);
+        document.getElementById('txtQuestion').value = question;
+        if (document.getElementById('txtQuestion').value == '') {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblquestion').style.display = '';
+            document.getElementById('tdlblquestion').bgColor = 'Orange';
+            document.getElementById('lblquestion').style.display = '';
+            document.getElementById('lblquestion').innerHTML = 'Enter the Question';
+            document.getElementById('tdquestion').bgColor = 'Orange';
+            document.getElementById('txtQuestion').focus();
+            return false;
+        }
+        if (document.getElementById('txtQuestion').value != '') {
+            clearalerts();
+            if (document.getElementById('txtQuestion').value.length > 1000) {
+                clearalerts();
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblquestion').style.display = '';
+                document.getElementById('tdlblquestion').bgColor = 'Orange';
+                document.getElementById('lblquestion').style.display = '';
+                document.getElementById('lblquestion').innerHTML = 'Question must be be less than 1000 characters.';
+                document.getElementById('tdquestion').bgColor = 'Orange';
+                document.getElementById('txtQuestion').focus();
+                return false;
+            }
+        }
+        if (document.getElementById('txtAnswer').value == '') {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblanswer').style.display = '';
+            document.getElementById('tdlblanswer').bgColor = 'Orange';
+            document.getElementById('lblanswer').style.display = '';
+            document.getElementById('lblanswer').innerHTML = 'Enter the Answer';
+            document.getElementById('tdanswer').bgColor = 'Orange';
+            return false;
+        }
+
+        if (document.getElementById('ComboCategorylist').value == '') {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblcategory').style.display = '';
+            document.getElementById('tdlblcategory').bgColor = 'Orange';
+            document.getElementById('lblcategory').style.display = '';
+            document.getElementById('lblcategory').innerHTML = 'Select atleast one category.';
+            document.getElementById('tdcategory').bgColor = 'Orange';
+            return false;
+        }
+        var keywords = trim(document.getElementById('txtKeywords').value);
+        document.getElementById('txtKeywords').value = keywords;
+        if (document.getElementById('txtKeywords').value == '') {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblkeywords').style.display = '';
+            document.getElementById('tdlblkeywords').bgColor = 'Orange';
+            document.getElementById('lblkeywords').style.display = '';
+            document.getElementById('lblkeywords').innerHTML = 'Enter Keywords';
+            document.getElementById('tdkeywords').bgColor = 'Orange';
+            document.getElementById('txtKeywords').focus();
+            return false;
+        }
+        if (document.getElementById('txtKeywords').value != '') {
+            clearalerts();
+            if (document.getElementById('txtKeywords').value.length > 100) {
+                clearalerts();
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblkeywords').style.display = '';
+                document.getElementById('tdlblkeywords').bgColor = 'Orange';
+                document.getElementById('lblkeywords').style.display = '';
+                document.getElementById('lblkeywords').innerHTML = 'Keywords must be be less than 100 characters.';
+                document.getElementById('tdkeywords').bgColor = 'Orange';
+                document.getElementById('txtKeywords').focus();
+                return false;
+            }
+        }
+        if (document.getElementById('chklist1').checked == false && document.getElementById('chklist2').checked == false && document.getElementById('chklist4').checked == false) {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblrole').style.display = '';
+            document.getElementById('tdlblrole').bgColor = 'Orange';
+            document.getElementById('lblrole').style.display = '';
+            document.getElementById('lblrole').innerHTML = 'Select atleast one role.';
+            document.getElementById('tdrole').bgColor = 'Orange';
+            return false;
+        }
+
+        if (document.getElementById('rbtnStatus1').checked == false && document.getElementById('rbtnStatus2').checked == false) {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblstatus').style.display = '';
+            document.getElementById('tdlblstatus').bgColor = 'Orange';
+            document.getElementById('lblstatus').style.display = '';
+            document.getElementById('lblstatus').innerHTML = 'Please select One Status';
+            document.getElementById('tdstatus').bgColor = 'Orange';
+            return false;
+        }
+    }
+</script>
+  <script type="text/javascript">
+      $(document).ready(function () {
+          $(".mediaclose").live("click", function (e) {
+              var dialogDiv = $('#divaddvideo');
+              dialogDiv.dialog('close');
+              return false;
+          });
+          $(".faqclose").live("click", function (e) {
+              var dialogDiv = $('#divaddFAQ');
+              dialogDiv.dialog('close');
+              return false;
+          });
+
+      });
+
+    </script>
+</head>
+<body>
+@using (Html.BeginForm("AddNewFaq", "AdminFaqs", FormMethod.Post, null))
+{
+
+ <div>
+
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+
+
+   <div id="main-content"> 
+        @Html.Partial("_NavigationTool")
+   <input type="hidden" id="hdnfaqid" name="hdnfaqid" />
+                                         <input type="hidden" id="hdndelfaqid" name="hdndelfaqid" />
+                                  <input type="hidden" id="hdncnt" name="hdncnt" />             
+                                     <input type="hidden" id="hndmediaid" name="hndmediaid"/>  
+                                     <input type="hidden" id="hdndelmeid" name="hdndelmeid"/>  
+                                     <input type="hidden" id="hdnchecklist1" name="hdnchecklist1"/> 
+                                     <input type="hidden" id="hdnchecklist2" name="hdnchecklist2"/> 
+                                     <input type="hidden" id="hdnchecklist4" name="hdnchecklist4"/> 
+                                  
+                                                <div class="content-box">
+                                                <div class="content-box-header"><h3>Add question</h3>
+                                          
+                                                </div>
+                                                <div class="content-box-content">
+                                                <table class="border_style" cellpadding="1" cellspacing="1" width="100%" align="center">
+                                                    <tr class="white_color">
+                                                        <th align="right" style="height: 36px; width:20%;">
+                                                            <font color="red">*</font> <strong>Question :&nbsp;</strong></th>
+                                                        <td align="left" style="height: 36px; width:80%;">
+                                                            <table>
+                                                                <tr>
+                                                                    <td id="tdquestion">
+                                                                    <textarea name="txtQuestion" rows="2" cols="20" id="txtQuestion"  style="width:400px;"></textarea>
+                                                                       
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        (Maximum length 1000 characters)
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="nav_blue_color">
+                                                        <th align="right">
+                                                            <font color="red">*</font><strong>Answer :&nbsp;</strong> </th>
+                                                        <td style="padding-left:4px" id="tdanswer">
+                                                            <textarea id="txtAnswer" name="txtAnswer" class="text" rows="2" cols="2" maxlength="5000" style="width:500px; height: 120px;"></textarea>
+                                                  </td>
+                                                    </tr>
+                                                    <tr class="white_color">
+                                                        <th align="right">
+                                                            <font color="red">*</font><strong>Category name :&nbsp;</strong> </th>
+                                                        <td>
+                                                            <table>
+                                                                <tr valign="middle">
+                                                                    <td id="tdcategory">
+                                                                     @Html.Obout(new ComboBox("ComboCategorylist") { Width = 500, MenuWidth = 500, AllowEdit = false, SelectionMode = ComboBoxSelectionMode.Multiple, AutoPostBack = false, CssSettings = new ComboBoxCssSettings() { ItemsContainer = "ob_iCboIC longbg" } })
+                                                                    
+                                                                    </td>
+                                                                    <td>
+                                                                    <a id="Addcategory" href="#" onclick="return Displaydialog('divaddcategory','@Url.Action("AddNewCategory", "AdminFaqs", null)','auto',900,'dvLoading',null,null);">New category</a>
+                                                                        <table align="left">
+                                                                            <tr>
+                                                                                <td>
+                                                                                  
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                   
+                                                    <tr class="nav_blue_color">
+                                                        <th align="right" >
+                                                            <font color="red">*</font><strong>Key words(tags) :&nbsp;</strong> </th>
+                                                        <td align="left" id="tdkeywords">
+                                                            <table>
+                                                                <tr class="nav_blue_color">
+                                                                    <td>
+                                                                    <input type="text" id="txtKeywords" name="txtKeywords" class="textfield" style="width:400px;" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color">
+                                                                    <td>
+                                                                        (Maximum length 100 characters)(keywords seperated by comma)
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" style="height: 36px;">
+                                                        <th align="right">
+                                                            <font color="red">*</font><strong>Options :&nbsp;</strong> </th>
+                                                        <td id="tdrole">
+                                                        @Html.CheckBox("chklist1", false, new { onchange = "return changechecklist1();" })&nbsp; Available to public
+                                                      @Html.CheckBox("chklist2", false, new { onchange = "return changechecklist2();" })&nbsp; Available to provider
+                                                        @Html.CheckBox("chklist4", false, new { onchange = "return changechecklist4();" })&nbsp; Available to verification user
+                                                        </td>
+                                                    </tr>
+                                                
+                                                    <tr class="nav_blue_color">
+                                                        <th align="right">
+                                                            <strong>Media links :&nbsp;</strong></th>
+                                                        <td>
+                                                            <table cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                <tr class="nav_blue_color">
+                                                                    <th align="right" width="20%">
+                                                                        <font color="red">*</font><strong>Add link :&nbsp;</strong> </th>
+                                                                    <td width="50%" align="left">
+                                                                    <input type="text" id="TxtLinks" name="TxtLinks" readonly="true" class="textfield" style="width:300px;" />
+                                                                    </td>
+                                                                    <td align="left" width="10%">
+                                                                    <a id="adots" href="#">
+                                                                    <img id="ImgDots" src="~/Images/dots.jpg" /></a>
+                                                                    </td>
+                                                                    <td width="20%" style="display: none;">
+                                                                     <img id="ImgAdd" src="~/Images/dots.jpg" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr width="80%" class="white_color">
+                                                                    <td colspan="4">
+                                                                     
+                                                                                <table id="DataList1" style="display:none;" cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                                    <tr class="white_color">
+                                                                                       
+                                                                                        <td align="left" width="80%">
+                                                                                            <strong>Title</strong> </td>
+                                                                                        <td align="center" width="10%">
+                                                                                           <strong> Delete</strong> </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                           
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color">
+                                                        <th align="right">
+                                                            <strong>Related Faq's :&nbsp;</strong></th>
+                                                        <td>
+                                                            <table cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                <tr class="white_color">
+                                                                    <th align="right" width="20%">
+                                                                        <font color="red">*</font><strong>Add faq :</strong> &nbsp;</th>
+                                                                    <td width="50%" align="left">
+                                                                     <input type="text" id="txtrelquestion" name="txtrelquestion" readonly="true" class="textfield" style="width:300px;" />
+                                                                    </td>
+                                                                    <td align="left" width="10%" >
+                                                                      <a id="arelfaq" href="#">
+                                                                    <img id="btnrelfaq" src="~/Images/dots.jpg" /></a>
+                                                                    </td>
+                                                                    <td width="20%" style="display: none;">
+                                                                   @*     <asp:ImageButton ID="btnAddFAQ" runat="server" ImageUrl="../../Images/add.jpg" />*@
+                                                                    </td>
+                                                                </tr>
+                                                                <tr width="80%" class="white_color">
+                                                                    <td colspan="4">
+                                                                      
+                                                                                <table id="dlFaqs" style="display:none;" class="border_style" cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                                    <tr class="white_color">
+                                                                                       
+                                                                                        <td align="left" width="80%">
+                                                                                           <strong> Question</strong> </td>
+                                                                                        <td align="center" width="10%">
+                                                                                            <strong>Delete</strong> </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                   
+                                                                                                                                                          
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="nav_blue_color" style="height: 36px;">
+                                                        <th align="right">
+                                                            <font color="red">*</font><strong>Status :&nbsp;</strong> </th>
+                                                        <td id="tdstatus">
+                                                        @Html.RadioButton("rbtnStatus1", "Yes", false)&nbsp;Active
+                                                         @Html.RadioButton("rbtnStatus2", "No", false)&nbsp;Inactive
+                                                        </td>
+                                                          </tr>
+                                                                </table>
+
+                                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain" runat="server"
+                    style="display: none;">
+                    <tr class="white_color" align="center">
+                        <td id="tdlblquestion" height="30px" style="display: none;">
+                        <label id="lblquestion" style="font-weight:bold; color:Black; display:none;"></label>
+                            
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblanswer" height="30px" style="display: none;">
+                          <label id="lblanswer" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblcategory" height="30px" style="display: none;">
+                         <label id="lblcategory" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblkeywords" height="30px" style="display: none;">
+                         <label id="lblkeywords" style="font-weight:bold; color:Black; display:none;"></label>
+                         
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblrole" height="30px" style="display: none;">
+                          <label id="lblrole" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblstatus" height="30px" style="display: none;">
+                            <label id="lblstatus" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                </table>
+                                                </div></div>
+                                                                   <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                           
+                                                    <tr class="white_color">
+                                                        <th style="height: 28px">
+                                                        </th>
+                                                        <td align="right" style="height: 28px; padding:5px 5px 5px 5px;">
+                                                    <input type="submit" id="btnAdd" name="btnAdd" value="Save" onclick="return ValidateQuestion();" class="button" />
+                                                    <input id="btnClose" name="btnClose" value="Cancel" class="button" onclick="return cancelclick();" style="width:40px;" />
+                                                        </td>
+                                                    </tr>
+                                                </table></div>
+    <div>
+     @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+     <div id="divaddcategory" title="Add Category" ></div>
+     <div id="divaddvideo" title="Media list"></div>
+     <div id="divaddFAQ" title="Faq's list"></div>
+           <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div> 
+}  
+</body>
+</html>

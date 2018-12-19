@@ -1,0 +1,69 @@
+﻿@model Publicfaq
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+           
+    <script type="text/javascript">
+        function submitclick() {
+            if (document.getElementById('Category1').selectedIndex == "0") {
+                alert("Select category");
+                document.getElementById('Category1').focus();
+                return false;
+            }
+            var question = trim(document.getElementById('txtQuestion12').value);
+            document.getElementById('txtQuestion12').value = question;
+            if (document.getElementById('txtQuestion12').value == '') {
+                alert("Please Enter  question");
+                document.getElementById('txtQuestion12').focus();
+                return false;
+            }
+            
+        }
+
+    </script>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+</head>
+<body>
+@using (Html.BeginForm("SubmitFAQ", "FAQs", FormMethod.Post))
+{
+     @Html.AntiForgeryToken()
+    <div>
+      <table cellpadding="4" cellspacing="1" border="0" width="100%" align="center" class="border_style">
+                          <tr height="30px" class="white_color">
+                        <td align="right">
+                            <font color="red" size="2pt">* </font>
+                            <span id="lblTopic"><b>Topic :</b>&nbsp; </span>
+                        </td>
+                        <td align="left">
+                             @Html.DropDownListFor(x => Model.Category1, Model.CategoryList, "--Select Category--") 
+                        </td>
+                    </tr>
+                    <tr height="30px" class="white_color">
+                        <td align="right">
+                            <font color="red" size="2pt">* </font>
+                            <span><b>Your question :</b>&nbsp; </span>
+                        </td>
+                        <td align="left">
+                        <textarea name="txtQuestion12" rows="2" cols="20" id="txtQuestion12" style="font-family:arial;font-size:9pt;height:100px;width:450px;"></textarea>
+                      
+                            (Max length 1000 characters)
+                        </td>
+                    </tr>
+                     <tr class="white_color">
+                        <td colspan="2" align="right" style="padding: 5px 10px 5px 10px">
+                        <input type="submit" style="font-size:9pt; font-family:Arial;" id="btnSend" value="Submit Question" class="button" onclick="return submitclick();" />
+                         <input type="button" class="close button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+      </table>  
+    </div>
+}
+</body>
+</html>

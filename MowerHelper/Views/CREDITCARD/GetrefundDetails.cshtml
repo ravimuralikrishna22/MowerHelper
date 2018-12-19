@@ -1,0 +1,265 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>GetrefundDetails</title>
+        <script type="text/javascript">
+            function CCProcess() {
+                this.paypalsaleid = "";
+                this.ToReference_ID = "";
+                this.Transactionno = "";
+                this.Refund_amount = "";
+                this.tomailid = "";
+                this.proname = "";
+            }
+    </script>
+            <style type="text/css">
+.updateDialog .ui-dialog-titlebar{display:none;}
+</style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //            alert("1");
+            $('#btnProcess2').click(function () {
+
+                if (document.getElementById('lblAmount').value == '') {
+                    alert('Enter valid Amount');
+                    document.getElementById('lblAmount').focus();
+                    return false;
+                }
+                if (document.getElementById('lblAmount').value == 0) {
+                    alert('Enter valid amount');
+                    document.getElementById('lblAmount').focus();
+                    return false;
+                }
+                if (document.getElementById('lblAmount').value == '.') {
+                    alert('Enter valid amount');
+                    document.getElementById('lblAmount').focus();
+                    return false;
+                }
+
+                if (document.getElementById('lblAmount').value.length > 0) {
+                    var amount = document.getElementById('lblAmount').value;
+                    var len = document.getElementById('lblAmount').value.length;
+                    for (var i = 0; i < len; i++) {
+
+                        var k = amount.charAt(i);
+                        var digits = "0123456789.";
+                        if ((digits.indexOf(k, 0)) == -1) {
+                            alert('Enter valid amount');
+                            document.getElementById('lblAmount').value = '';
+                            document.getElementById('lblAmount').focus();
+                            return false;
+                        }
+                    }
+
+                }
+
+                document.getElementById('hdnamount1').value = document.getElementById('lblAmount').value;
+                var totamt = document.getElementById('hdnamount').value;
+                // alert(document.getElementById('hdnamount').value);
+                var amt = document.getElementById('lblAmount').value;
+                var my_str = document.getElementById('lblAmount').value;
+                var str = "$";
+                if (my_str.indexOf(str) == -1) {
+                    amt = document.getElementById('lblAmount').value;
+                }
+                else {
+                    amt = amt.split("$")[1];
+                }
+                //totamt=parseFloat(totamt);
+                amt = parseFloat(amt);
+                 //alert(amt);
+                 //alert(totamt);
+                if (amt > totamt) {
+                    alert('Entered amount is greater than transaction amount');
+                    return false;
+                }
+
+
+
+                var _blnInd = true;
+                if (_blnInd = true) {
+                    var cnt = new CCProcess();
+                    cnt.paypalsaleid = $("#Hdnpaypalsaleid").val();
+                    cnt.ToReference_ID = $("#HdnToReference_ID").val();
+                    cnt.Transactionno = $("#HdnTransactionno").val();
+                    cnt.Refund_amount = $("#lblAmount").val();
+                    cnt.paypaltransactionid = $("#paypaltransactionid").val();
+                    cnt.paypalsaletransactionid = $("#paypalsaletransactionid").val();
+                    cnt.PaymentTransID = $("#hdnPaymentTransID").val();
+                    cnt.tomailid = "@ViewBag.Tomailid";
+                    cnt.proname = "@ViewBag.name";
+                    var postData = JSON.stringify(cnt);
+                    $('#updateDialog').dialog({ modal: true, dialogClass: 'updateDialog', width: 500, draggable: false, resizable: false });
+                    $.ajax({
+                        url: '@Url.Action("GetrefundDetails12", "CREDITCARD")',
+                        type: 'Get',
+                        data: { 'paypalsaleid': cnt.paypalsaleid, 'Refund_amount': cnt.Refund_amount, 'ToReference_ID': cnt.ToReference_ID, 'Transactionno': cnt.Transactionno, 'paypaltransactionid': cnt.paypaltransactionid, 'paypalsaletransactionid': cnt.paypalsaletransactionid, 'PaymentTransID': cnt.PaymentTransID, 'tomailid': cnt.tomailid, 'proname': cnt.proname}, //you can serialize a form here as well OR simply put in the name value pairs of your data, ex. myTextBox='something'
+                        //data: { 'paypalsaleid': cnt.paypalsaleid, 'Refund_amount': cnt.Refund_amount, 'ToReference_ID': cnt.ToReference_ID, 'Transactionno': cnt.Transactionno, 'tomailid': cnt.tomailid, 'proname': cnt.proname }, //you can serialize a form here as well OR simply put in the name value pairs of your data, ex. myTextBox='something'
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function Result(data) {
+                            $('#updateDialog').dialog('close');
+                            
+                            if (data == '1') {
+                                //alert("1");
+                                @*                                alert('Your mail has been sent successfully.');
+                                window.location.href = '@Url.RouteUrl("ProviderProfile", new { id = ViewBag.id, Therapistname =ViewBag.businessnm1})';*@
+                                window.location.href = '@Url.Action("CCTransactionsLedger")';
+
+                            }
+                            else if (data == '2') {
+                                @*                                alert("Please Configure Mail.");
+                                window.location.href = '@Url.RouteUrl("ProviderProfile", new { id = ViewBag.id, Therapistname =ViewBag.businessnm1})';*@
+                                alert("Process Failed");
+                                document.getElementById("tblProcess").style.display = '';
+
+                            }
+                            else if (data.ErrorMessage == 'false') {
+                                alert('Session is expired. You will be redirected to session expired page');
+                                window.location = '@Url.Action("SessionExpire", "Home")';
+                            }
+                        }
+                        // error: function () { alert("You need to enter valid Security Code to register..."); window.location.href = "contact"; }
+                    });
+                    // $.post('Submitcontact', postData, recipeSuccess);
+                    // document.body.style.cursor = 'wait';
+
+            }
+            });
+        });
+        //function Result(data) {
+
+        //}
+
+    </script>
+</head>
+<body>
+        
+       <input type="hidden" id="Hdnpaypalsaleid" name="Hdnpaypalsaleid" value="@ViewBag.paypalsaleid" />
+            <input type="hidden" id="HdnToReference_ID" name="HdnToReference_ID" value="@ViewBag.ToReference_ID" />
+            <input type="hidden" id="HdnTransactionno" name="HdnTransactionno" value="@ViewBag.Transactionno" />
+      <input type="hidden" id="hdnamount" name="hdnamount" value="@ViewBag.lblAmount" />
+    <input type="hidden" id="hdnPaymentTransID" name="hdnPaymentTransID" value="@ViewBag.PaymentTransID" />
+    <input type="hidden" id="hdnamount1" name="hdnamount1" />
+    <input type="hidden" id="paypaltransactionid" name="paypaltransactionid" value="@ViewBag.paypaltransactionid" />
+     <input type="hidden" id="paypalsaletransactionid" name="paypalsaletransactionid" value="@ViewBag.paypalsaletransactionid" />
+    <div>
+        <table class="border_style" id="tblView" cellspacing="1" cellpadding="8" width="100%"
+            align="center" border="0" runat="server">
+@*            <tr id="trname" runat="server" class="nav_blue_color" height="20">
+                <td align="right" width="45%">
+                 <strong>    Patient name :&nbsp;</strong> </td>
+                <td width="55%">
+                    <span id="lblPatientName">@ViewBag.lblPatientName</span>
+                </td>
+            </tr>*@
+@*            <tr class="white_color" height="20">
+                <td align="right" width="45%">
+                   <strong>  CreditCard Number :&nbsp;</strong> </td>
+                <td width="55%">
+                    <asp:Label ID="lblCCNo" runat="server"></asp:Label>
+                </td>
+            </tr>*@
+            <tr class="nav_blue_color" height="20">
+                <td align="right" width="45%">
+                      <strong> Credit Card Type :&nbsp;   </strong></td>
+                <td width="55%">
+                    <span id="lblCardType">@ViewBag.lblCardType</span>
+                </td>
+            </tr>
+            <tr class="white_color" height="20">
+                <td align="right" width="45%">
+                 <strong>    Expired Date :&nbsp;</strong> </td>
+                <td width="55%">
+                     <span id="lblExpiredDate">@ViewBag.lblExpiredDate</span>
+                </td>
+            </tr>
+@*            <tr class="nav_blue_color" height="20">
+                <td align="right" width="45%">
+                  <strong>   Card Holder Name :&nbsp;</strong> </td>
+                <td width="55%">
+                    <span>@ViewBag.name</span>
+                </td>
+            </tr>*@
+            @*<tr class="white_color" id="trPayMode" height="10" runat="server">
+                <td align="right" width="45%">
+                  <strong>   &nbsp;<font color="red">*</font>Transaction type&nbsp;:&nbsp;</strong> </td>
+                <td width="55%">
+                    <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+                        <tr>
+                            <td width="40%">
+                                <asp:RadioButtonList ID="rbotype" runat="server" RepeatDirection="Horizontal" Visible ="false" >
+                                    <asp:ListItem  Value="1" >Future Credit</asp:ListItem>
+                                    <asp:ListItem Value="2" Selected="True">Refund(Write-off)</asp:ListItem>
+                                </asp:RadioButtonList>
+                                Refund(Write-off)
+                                </td>
+                            <td width="60%" id="tr1" style="display: none;" runat="server">
+                                <asp:DropDownList ID="ddlrefund" runat="server" Width="215px">
+                                    <asp:ListItem Value="1">Write-off</asp:ListItem>
+                                    <asp:ListItem Value="2">Regular</asp:ListItem>
+                                </asp:DropDownList>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>*@
+            <tr class="white_color" height="20">
+                <td align="right" width="45%">
+                   <strong>  <font color="red">*</font>Amount($) :&nbsp;</strong> </td>
+                <td width="55%">
+
+                     @Html.TextBox("lblAmount", String.Format("{0:0.00}", (decimal)(ViewBag.lblAmount)), new { @class = "textfield", @maxLength = 10, @style = "width:50px", @onkeypress = "return checkValidNumeric(lblAmount,8,2,event)" })
+                    
+                </td>
+            </tr>
+@*            <tr class="white_color" height="20">
+                <td align="right" width="45%">
+                  <strong>   Transaction No :&nbsp;</strong> </td>
+                <td width="55%">
+                    <asp:Label ID="lblTransNo" runat="server"></asp:Label>
+                </td>
+            </tr>*@
+            <tr class="nav_blue_color" height="20">
+                <td align="right" width="45%">
+            <strong>       Transaction Date :&nbsp;</strong> </td>
+                <td width="55%">
+                    <span id="lblTransDate">@ViewBag.lblTransDate</span>
+                </td>
+            </tr>
+        </table>
+                                    <table width="100%" id="tblProcess">
+                                <tr>
+                                    <td style="width:100%; text-align:right; padding-top:20px;">
+
+                                        <input type="submit" name="btnProcess2" id="btnProcess2" value="Process"
+                                            class="button" />
+                                        &nbsp;
+                                        <input type="button" id="btnview" class="refundclose button" value="cancel" name="btnview"/>
+                                    </td>
+                                </tr>
+                            </table>
+    </div>
+            <div id="updateDialog" style="display: none;">
+        <table id="tblBusyMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+            <tr>
+                <th align="center">
+                    <img id="imgp" src="~/Images/loading.gif" /><br />
+                    <font size="2"><strong>Credit card transaction is under process, it will take few minutes.&nbsp;<br />
+                                                                Kindly bear.&nbsp;</strong></font>
+                    <br />
+                    <font color="#a52a2a" size="2">Do not click either <i><b>Back</b></i> or any other button
+                                                                till the process is complete.</font>
+                </th>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

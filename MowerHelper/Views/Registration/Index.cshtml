@@ -1,0 +1,1371 @@
+﻿@*@model MowerHelper.Models.Classes.StateCity*@
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@using MowerHelper.Models.Classes
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Mower Helper-Find an Mower Helper</title>
+    @*    <meta name="viewport" content="width=device-width" />*@
+    @Styles.Render("~/Content/common")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <style type="text/css">
+        /*.ob_iCboICBC li
+        {
+            float: left;
+            width: 60px;
+        }*/
+
+        .confirmDialog, .confirmDialog1
+        {
+            background: url("../images/bg-button-green.gif") repeat-x scroll left top #459300 !important;
+            border: 1px solid #459300 !important;
+            border-radius: 4px;
+            color: #FFFFFF !important;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Verdana,Arial,sans-serif;
+            font-size: 11px !important;
+            padding: 4px 7px !important;
+        }
+    </style>
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Scripts.Render("~/ThScripts/ThOtherscripts")
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#TermsDialog');
+                dialogDiv.dialog('close');
+            });
+        });
+
+    </script>
+    <script type="text/javascript">
+
+        var linkObj;
+        $(function () {
+
+            //$('#TermsDialog').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    height: 4000,
+            //    resizable: false,
+            //    modal: true
+            //});
+
+            //$("#lnkterms").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#TermsDialog');
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            $('#txtZip').keypress(
+         function (event) {
+             if (ValidZip(event) == false) { return false; }
+
+         }
+    );
+        });
+    </script>
+
+    @* <script type="text/javascript">
+        function cbo2_Close(sender) {
+            var selected;
+            selected = document.getElementById('cbo2').value;
+            var result = new Array();
+            result = selected.split(",");
+            if (result.length > 3) {
+                alert("Please select only 3 credentials.");
+            }
+        }
+    </script>*@
+    
+    <script type="text/javascript">
+       
+        $(document).ready(function () {
+
+            if ('@ViewBag.Show_license' == "Y") {
+                $("#HideLicense").show();
+            }
+            else {
+                $("#HideLicense").hide();
+            }
+         @*   $('#DDState').change(function () {
+                var recordId = $('#DDState').val();
+                var recordId1 = $("#txtZip").val();
+                if (recordId != '' && recordId1 == '') {
+                    $.getJSON('@Url.Action("GetCitiesByStates", "Registration")', { id: recordId },
+                    function (data) {
+                        $("#DDCity").empty();
+                        $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                        for (i = 0; i < data.length; i++) {
+                            if (data[i].Text != '--Select City--') {
+                                $('#DDCity').append($('<option > </option>').val(data[i].Value).html(data[i].Text));
+                            }
+                        }
+                    });
+                }
+                else if (recordId != '' && recordId1 != '') {
+                    $.getJSON('@Url.Action("GetCitiesByZip", "Registration")', { id: recordId, zipcode: recordId1 },
+                    function (data) {
+                        $("#DDCity").empty();
+                        $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                        for (i = 0; i < data.length; i++) {
+                            if (data[i].Text != '--Select City--') {
+                                $('#DDCity').append($('<option > </option>').val(data[i].Value).html(data[i].Text));
+                            }
+                        }
+                    });
+                    }
+                    else {
+                        $("#DDCity").empty();
+                        $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                    }
+            });*@
+          //  $('#txtZip').change(function () {
+              
+              //  });
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $("#txtWorkPhone1").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtWorkPhone2").focus();
+                }
+            });
+            $("#txtWorkPhone2").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtWorkPhone3").focus();
+                }
+            });
+            $("#txtCellPhone1").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtCellPhone2").focus();
+                }
+            });
+            $("#txtCellPhone2").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtCellPhone3").focus();
+                }
+            });
+            //$("#txtWorkPhone3").keyup(function () {
+            //    if ($(this).val().length == 4) {
+            //        $("#txtWorkPhoneExt").focus();
+            //    }
+            //});
+        
+
+            //    $('#txtWorkPhoneExt').keypress(
+            //    function (event) {
+            //        if (checkNumeric(event) == false) { return false; }
+            //    }
+            //);
+            $('#txtWorkPhone1').keypress(
+            function (event) {
+                if (checkNumeric(event) == false) { return false; }
+               
+            }
+        );
+            $('#txtWorkPhone2').keypress(
+            function (event) {
+                if (checkNumeric(event) == false) { return false; }
+            }
+        );
+            $('#txtWorkPhone3').keypress(
+            function (event) {
+                if (checkNumeric(event) == false) { return false; }
+            }
+        );
+            $('#txtCellPhone1').keypress(
+            function (event) {
+                if (checkNumeric(event) == false) { return false; }
+
+            }
+        );
+            $('#txtCellPhone2').keypress(
+            function (event) {
+                if (checkNumeric(event) == false) { return false; }
+            }
+        );
+            $('#txtCellPhone3').keypress(
+            function (event) {
+                if (checkNumeric(event) == false) { return false; }
+            }
+        );
+        });
+    </script>
+
+    <script type="text/javascript">
+        function clearalerts() {
+            document.getElementById('tdname').bgColor = "White";
+            document.getElementById('lblfirstname').style.display = 'none';
+            if ('@ViewBag.Show_license' == "Y") {
+                document.getElementById('tdlicense').bgColor = "White";
+                document.getElementById('lbllicense').style.display = 'none';
+            }
+            //   document.getElementById('tdcredentials').bgColor = "White";
+            //  document.getElementById('tdcred').bgColor = "White";
+            //  document.getElementById('lblcreden').style.display = 'none';
+            document.getElementById('tdphone').bgColor = "White";
+            document.getElementById('tdwphone').bgColor = "White";
+            document.getElementById('lblphone').style.display = 'none';
+            document.getElementById('lblwphone').style.display = 'none';
+            // document.getElementById('tdgender').bgColor = "White";
+            //document.getElementById('lblgender').style.display = 'none';
+            document.getElementById('tdaddr1').bgColor = "White";
+            document.getElementById('lbladdr1').style.display = 'none';
+            document.getElementById('tdzip').bgColor = "White";
+            document.getElementById('lblzip').style.display = 'none';
+            document.getElementById('tdcountry').bgColor = "White";
+            document.getElementById('lblcountry').style.display = 'none';
+            document.getElementById('tdstate').bgColor = "White";
+            document.getElementById('lblstate').style.display = 'none';
+            document.getElementById('tdcity').bgColor = "White";
+            document.getElementById('lblcity').style.display = 'none';
+            document.getElementById('tdemail').bgColor = "White";
+            document.getElementById('lblmail').style.display = 'none';
+            document.getElementById('tdcmail').bgColor = "White";
+            document.getElementById('lblcmail').style.display = 'none';
+            document.getElementById('tdpwd').bgColor = "White";
+            document.getElementById('lblpwd').style.display = 'none';
+            document.getElementById('tdcpwd').bgColor = "White";
+            document.getElementById('lblcpwd').style.display = 'none';
+            document.getElementById('tdveri').bgColor = "White";
+            document.getElementById('tdveri1').bgColor = "White";
+            document.getElementById('tdveri2').bgColor = "White";
+            document.getElementById('tdveri3').bgColor = "White";
+            document.getElementById('lblveri').style.display = 'none';
+            document.getElementById('tdcondition').bgColor = "White";
+            document.getElementById('tdcondition1').bgColor = "White";
+            document.getElementById('lblcondition').style.display = 'none';
+
+        }
+       
+        function ValidatePassword() {
+            //debugger
+           
+            var strfirstname = trim(document.getElementById('txtFirstName').value);
+            document.getElementById('txtFirstName').value = strfirstname;
+            if (document.getElementById('txtFirstName').value == '' || document.getElementById('txtFirstName').value == 'First Name') {
+                clearalerts();
+                document.getElementById('lblfirstname').style.display = '';
+                document.getElementById('lblfirstname').innerHTML = 'Please enter the first name.';
+
+                document.getElementById('tdname').bgColor = "orange";
+                document.getElementById('txtFirstName').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdname').bgColor = "White";
+                document.getElementById('lblfirstname').style.display = 'none';
+
+            }
+            //var strmiddlename = trim(document.getElementById('txtFirstName').value);
+            //document.getElementById('txtFirstName').value = strmiddlename;
+          
+            if (document.getElementById('txtMiddle').value != 0) {
+             
+                clearalerts();
+                //if (MyChars(document.getElementById('txtMiddle')) == 'InvalidCharAtFirstError') {
+                if (MyChars(document.getElementById('txtMiddle')) == "InvalidCharAtFirstError") {
+                  
+                    clearalerts();
+                
+                    document.getElementById('lblfirstname').style.display = '';
+                    document.getElementById('lblfirstname').innerHTML = 'Please enter middle initial with characters at first.';
+                    document.getElementById('tdname').bgColor = "orange";
+                    document.getElementById('txtMiddle').focus();
+
+                    return false;
+                }
+
+            }
+            else {
+                document.getElementById('tdname').bgColor = "White";
+                document.getElementById('lblfirstname').style.display = 'none';
+
+
+            }
+            if (document.getElementById('txtFirstName').value != 0) {
+                clearalerts();
+                if (document.getElementById('txtFirstName').value == 'MI') {
+                    clearalerts();
+                    document.getElementById('txtFirstName').value = '';
+
+                }
+
+            }
+            var strlastname = trim(document.getElementById('txtLastName').value);
+            document.getElementById('txtLastName').value = strlastname;
+            if (document.getElementById('txtLastName').value == '' || document.getElementById('txtLastName').value == 'Last Name') {
+                clearalerts();
+                document.getElementById('lblfirstname').style.display = '';
+                document.getElementById('lblfirstname').innerHTML = 'Please enter the last name.';
+                document.getElementById('tdname').bgColor = "orange";
+                document.getElementById('txtLastName').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdname').bgColor = "White";
+                document.getElementById('lblfirstname').style.display = 'none';
+
+
+            }
+
+            //var selected;
+            //selected = document.getElementById('cbo2').value;
+            //var result = new Array();
+            //result = selected.split(",");
+            //if (result.length > 3) {
+            //    clearalerts();
+            //    document.getElementById('lblcreden').style.display = '';
+            //    document.getElementById('lblcreden').innerHTML = 'Please select maximum 3 credentials.';
+            //    document.getElementById('tdcredentials').bgColor = "orange";
+            //    document.getElementById('tdcred').bgColor = "orange";
+            //    return false;
+
+            //}
+            //else {
+            //    document.getElementById('lblcreden').style.display = 'none';
+            //}
+
+            if ('@ViewBag.Show_license' == "Y")
+            {
+                var strlicense = trim(document.getElementById('txtlicence').value);
+                document.getElementById('txtlicence').value = strlicense;
+                if (document.getElementById('txtlicence').value == '')
+                {
+                    clearalerts();
+                    document.getElementById('lbllicense').style.display = '';
+                    document.getElementById('lbllicense').innerHTML = 'Please enter the license number.';
+
+                    document.getElementById('tdlicense').bgColor = "orange";
+                    document.getElementById('txtlicence').focus();
+
+                    return false;
+                }
+                else
+                {
+                    document.getElementById('tdlicense').bgColor = "White";
+                    document.getElementById('lbllicense').style.display = 'none';
+                }
+            }
+           
+      
+            if (document.getElementById('txtWorkPhone1').value != '' || document.getElementById('txtWorkPhone2').value != '' || document.getElementById('txtWorkPhone3').value != '') {
+                clearalerts();
+                if (IsValidPhone(document.getElementById('txtWorkPhone1').value + document.getElementById('txtWorkPhone2').value + document.getElementById('txtWorkPhone3').value) == 'false') {
+                    clearalerts();
+                    document.getElementById('lblwphone').style.display = '';
+                    document.getElementById('lblwphone').innerHTML = 'Please enter valid work phone number.';
+                    document.getElementById('tdwphone').bgColor = "orange";
+                    document.getElementById('txtWorkPhone1').focus();
+
+                    return false;
+                }
+                else {
+                    document.getElementById('tdwphone').bgColor = "White";
+                    document.getElementById('lblwphone').style.display = 'none';
+
+
+                }
+            }
+            if (document.getElementById('txtCellPhone1').value == '' && document.getElementById('txtCellPhone2').value == '' && document.getElementById('txtCellPhone3').value == '') {
+                clearalerts();
+                if (IsValidPhone(document.getElementById('txtCellPhone1').value + document.getElementById('txtCellPhone2').value + document.getElementById('txtCellPhone3').value) == 'false') {
+                    clearalerts();
+                    document.getElementById('lblphone').style.display = '';
+                    document.getElementById('lblphone').innerHTML = 'Please enter cell phone number.';
+                    document.getElementById('tdphone').bgColor = "orange";
+                    document.getElementById('txtCellPhone1').focus();
+
+                    return false;
+                }
+                else {
+                    document.getElementById('tdphone').bgColor = "White";
+                    document.getElementById('lblphone').style.display = 'none';
+
+                }
+
+            }
+            else {
+                if (document.getElementById('txtCellPhone1').value != '' || document.getElementById('txtCellPhone2').value != '' || document.getElementById('txtCellPhone3').value != '') {
+                    clearalerts();
+                    if (IsValidPhone(document.getElementById('txtCellPhone1').value + document.getElementById('txtCellPhone2').value + document.getElementById('txtCellPhone3').value) == 'false') {
+                        clearalerts();
+                        document.getElementById('lblphone').style.display = '';
+                        document.getElementById('lblphone').innerHTML = 'Please enter valid cell phone number.';
+                        document.getElementById('tdphone').bgColor = "orange";
+                        document.getElementById('txtCellPhone1').focus();
+
+                        return false;
+                    }
+                    else {
+                        document.getElementById('tdphone').bgColor = "White";
+                        document.getElementById('lblphone').style.display = 'none';
+
+
+                    }
+                }
+
+            }
+            //if (document.getElementById('ddlgender').selectedIndex == 0) {
+            //    clearalerts();
+            //    document.getElementById('lblgender').style.display = '';
+            //    document.getElementById('lblgender').innerHTML = 'Please select gender';
+            //    document.getElementById('tdgender').bgColor = "orange";
+            //    document.getElementById('ddlgender').focus();
+
+            //    return false;
+            //}
+            //else {
+            //    document.getElementById('tdgender').bgColor = "White";
+            //    document.getElementById('lblgender').style.display = 'none';
+
+
+            //}
+
+
+            //if (document.getElementById('ddlgender').selectedIndex == 1) {
+            //    clearalerts();
+            //    if (document.getElementById('DDUserPrefix').selectedIndex == 4 || document.getElementById('DDUserPrefix').selectedIndex == 5 || document.getElementById('DDUserPrefix').selectedIndex == 2) {
+            //        clearalerts();
+            //        document.getElementById('lblgender').style.display = '';
+            //        document.getElementById('lblgender').innerHTML = 'Please select proper gender';
+            //        document.getElementById('tdgender').bgColor = "orange";
+            //        document.getElementById('ddlgender').focus();
+
+            //        return false;
+            //    }
+            //    else {
+
+            //        document.getElementById('tdgender').bgColor = "White";
+            //        document.getElementById('lblgender').style.display = 'none';
+            //    }
+
+            //}
+
+            //else if (document.getElementById('ddlgender').selectedIndex == 2) {
+
+            //    clearalerts();
+            //    if (document.getElementById('DDUserPrefix').selectedIndex == 3) {
+            //        clearalerts();
+            //        document.getElementById('lblgender').style.display = '';
+            //        document.getElementById('lblgender').innerHTML = 'Please select proper gender';
+            //        document.getElementById('tdgender').bgColor = "orange";
+            //        document.getElementById('ddlgender').focus();
+
+            //        return false;
+            //    }
+            //    else {
+            //        document.getElementById('tdgender').bgColor = "White";
+            //        document.getElementById('lblgender').style.display = 'none';
+            //    }
+            //}
+
+
+
+
+
+            //var Controls, ContactFlag
+            //Controls = '';
+            //ContactFlag = 0;
+
+            var str_Address1;
+            str_Address1 = trim(document.getElementById('txtAdr1').value);
+            document.getElementById('txtAdr1').value = str_Address1;
+            if (str_Address1 == '') {
+                clearalerts();
+                document.getElementById('lbladdr1').style.display = '';
+                document.getElementById('lbladdr1').innerHTML = 'Please enter address 1';
+                document.getElementById('tdaddr1').bgColor = "orange";
+                document.getElementById('txtAdr1').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdaddr1').bgColor = "White";
+                document.getElementById('lbladdr1').style.display = 'none';
+
+
+            }
+
+            if (document.getElementById('txtZip').value == '') {
+                clearalerts();
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Please enter zip';
+                document.getElementById('tdzip').bgColor = "orange";
+                document.getElementById('txtZip').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = "White";
+                document.getElementById('lblzip').style.display = 'none';
+
+
+            }
+
+            if (document.getElementById('txtZip').value != '') {
+                clearalerts();
+                if (document.getElementById('txtZip').value.length != 5) {
+                    clearalerts();
+                    document.getElementById('lblzip').style.display = '';
+                    document.getElementById('lblzip').innerHTML = 'Please enter valid zip';
+                    document.getElementById('tdzip').bgColor = "orange";
+                    document.getElementById('txtZip').focus();
+
+                    return false;
+                }
+                else {
+                    document.getElementById('tdzip').bgColor = "White";
+                    document.getElementById('lblzip').style.display = 'none';
+
+
+                }
+                if (fnStringFieldValidate(document.getElementById('txtZip'), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 0) {
+                    clearalerts();
+                    document.getElementById('lblzip').style.display = '';
+                    document.getElementById('lblzip').innerHTML = 'Invalid zip code!!! zip code must be in alphanumeric only.';
+                    document.getElementById('tdzip').bgColor = "orange";
+                    document.getElementById('txtZip').focus();
+
+                    return false;
+                }
+                else {
+                    document.getElementById('tdzip').bgColor = "White";
+                    document.getElementById('lblzip').style.display = 'none';
+
+
+
+                }
+
+            }
+
+            if (document.getElementById('DDLcountry').selectedIndex == 0) {
+                clearalerts();
+                document.getElementById('lblcountry').style.display = '';
+                document.getElementById('lblcountry').innerHTML = 'Please select country';
+                document.getElementById('tdcountry').bgColor = "orange";
+                document.getElementById('DDLcountry').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdcountry').bgColor = "White";
+                document.getElementById('lblcountry').style.display = 'none';
+
+
+            }
+
+            if (document.getElementById('DDState').selectedIndex == 0) {
+                clearalerts();
+                document.getElementById('lblstate').style.display = '';
+                document.getElementById('lblstate').innerHTML = 'Please select state';
+                document.getElementById('tdstate').bgColor = "orange";
+                document.getElementById('DDState').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdstate').bgColor = "White";
+                document.getElementById('lblstate').style.display = 'none';
+
+
+            }
+            if (document.getElementById('DDCity').selectedIndex == 0) {
+                clearalerts();
+                document.getElementById('lblcity').style.display = '';
+                document.getElementById('lblcity').innerHTML = 'Please select city';
+                document.getElementById('tdcity').bgColor = "orange";
+                document.getElementById('DDCity').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdcity').bgColor = "White";
+                document.getElementById('lblcity').style.display = 'none';
+
+
+            }
+
+            //if (Controls != "") {
+            //    clearalerts();
+            //    var RetAlertValue = Global_Alert(Controls);
+            //    if (RetAlertValue != "False")
+            //        return false;
+            //}
+            var stremail = trim(document.getElementById('txtEmail').value);
+            document.getElementById('txtEmail').value = stremail;
+            if (document.getElementById('txtEmail').value == "") {
+                clearalerts();
+                document.getElementById('lblmail').style.display = '';
+                document.getElementById('lblmail').innerHTML = 'Please enter email';
+                document.getElementById('tdemail').bgColor = "orange";
+                document.getElementById('txtEmail').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdemail').bgColor = "White";
+                document.getElementById('lblmail').style.display = 'none';
+
+
+            }
+            if (document.getElementById('txtEmail').value != "") {
+                clearalerts();
+                if (ValidateEmail(document.getElementById('txtEmail')) == 0) {
+                    clearalerts();
+                    document.getElementById('lblmail').style.display = '';
+                    document.getElementById('lblmail').innerHTML = 'Please enter valid email';
+                    document.getElementById('tdemail').bgColor = "orange";
+                    document.getElementById('txtEmail').focus();
+
+                    return false;
+                }
+                else {
+                    //alert("1");
+                    //  ContactFlag = 1;
+                    document.getElementById('tdemail').bgColor = "White";
+                    document.getElementById('lblmail').style.display = 'none';
+
+                }
+            }
+            var strconfirmemail = trim(document.getElementById('txtConfirmEmail').value);
+            document.getElementById('txtConfirmEmail').value = strconfirmemail;
+            if (document.getElementById('txtConfirmEmail').value == "") {
+                clearalerts();
+                document.getElementById('lblcmail').style.display = '';
+                document.getElementById('lblcmail').innerHTML = 'Please enter confirm email';
+                document.getElementById('tdcmail').bgColor = "orange";
+                document.getElementById('txtConfirmEmail').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdcmail').bgColor = "White";
+                document.getElementById('lblcmail').style.display = 'none';
+
+
+            }
+
+            if (document.getElementById('txtConfirmEmail').value != document.getElementById('txtEmail').value) {
+                clearalerts();
+                document.getElementById('lblcmail').style.display = '';
+                document.getElementById('lblcmail').innerHTML = 'Please enter valid confirm email';
+                document.getElementById('tdcmail').bgColor = "orange";
+                document.getElementById('txtConfirmEmail').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdcmail').bgColor = "White";
+                document.getElementById('lblcmail').style.display = 'none';
+
+
+            }
+            if (document.getElementById('txtPassword').value == 0) {
+                clearalerts();
+                document.getElementById('lblpwd').style.display = '';
+                document.getElementById('lblpwd').innerHTML = 'Please enter password';
+                //   document.getElementById('tdcred').bgcolor = 'white';
+
+                document.getElementById('tdpwd').bgColor = "orange";
+                document.getElementById('txtPassword').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdpwd').bgColor = "White";
+                document.getElementById('lblpwd').style.display = 'none';
+
+
+            }
+            if (MyChars(document.getElementById('txtPassword')) == "SpaceError") {
+                clearalerts();
+                document.getElementById('lblpwd').style.display = '';
+                document.getElementById('lblpwd').innerHTML = 'Please enter password without spaces first';
+                document.getElementById('tdpwd').bgColor = "orange";
+                document.getElementById('txtPassword').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdpwd').bgColor = "White";
+                document.getElementById('lblpwd').style.display = 'none';
+
+
+            }
+            if (document.getElementById('txtConfirm').value == 0) {
+                clearalerts();
+                document.getElementById('lblcpwd').style.display = '';
+                document.getElementById('lblcpwd').innerHTML = 'Please enter confirm password';
+                document.getElementById('tdcpwd').bgColor = "orange";
+                document.getElementById('txtConfirm').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdcpwd').bgColor = "White";
+                document.getElementById('lblcpwd').style.display = 'none';
+
+
+            }
+
+            if (MyChars(document.getElementById('txtConfirm')) == "SpaceError") {
+                clearalerts();
+                document.getElementById('lblcpwd').style.display = '';
+                document.getElementById('lblcpwd').innerHTML = 'Please enter confirm password without spaces first';
+                document.getElementById('tdcpwd').bgColor = "orange";
+                document.getElementById('txtConfirm').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdcpwd').bgColor = "White";
+                document.getElementById('lblcpwd').style.display = 'none';
+
+
+            }
+            if (document.getElementById('txtPassword').value != document.getElementById('txtConfirm').value) {
+                clearalerts();
+                document.getElementById('lblcpwd').style.display = '';
+                document.getElementById('lblcpwd').innerHTML = 'Confirm password should be same as password';
+                document.getElementById('tdcpwd').bgColor = "orange";
+                document.getElementById('txtConfirm').focus();
+
+                return false;
+            }
+            else {
+                document.getElementById('tdcpwd').bgColor = "White";
+                document.getElementById('lblcpwd').style.display = 'none';
+
+
+            }
+            if (document.getElementById('txtimgKey').value == "") {
+                clearalerts();
+                document.getElementById('lblveri').style.display = '';
+                document.getElementById('lblveri').innerHTML = 'Please enter type verification code';
+                document.getElementById('tdveri').bgColor = "orange";
+                document.getElementById('tdveri1').bgColor = "orange";
+                document.getElementById('tdveri2').bgColor = "orange";
+                document.getElementById('tdveri3').bgColor = "orange";
+                document.getElementById('txtimgKey').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdveri').bgColor = "White";
+                document.getElementById('tdveri1').bgColor = "White";
+                document.getElementById('tdveri2').bgColor = "White";
+                document.getElementById('tdveri3').bgColor = "White";
+                document.getElementById('lblveri').style.display = 'none';
+
+            }
+            var objradNotAgree = document.getElementById('chkAgree');
+            if (objradNotAgree.checked == false) {
+                clearalerts();
+                document.getElementById('lblcondition').style.display = '';
+                document.getElementById('lblcondition').innerHTML = 'We cannot register you without agreeing to the terms.';
+                document.getElementById('tdcondition').bgColor = "orange";
+                document.getElementById('tdcondition1').bgColor = "orange";
+
+                return false;
+            }
+            else {
+                document.getElementById('tdcondition').bgColor = "White";
+                document.getElementById('tdcondition1').bgColor = "White";
+                document.getElementById('lblcondition').style.display = 'none';
+
+
+            }
+            //  return true;
+            document.body.style.cursor = 'wait';
+            // document.forms[0].submit();
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
+        $(".confirmDialog").live("click", function (e) {
+
+            //                                            var url = $(this).attr('href');
+            $("#dialog-confirm").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.location = '../Registration/Conformation';
+
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog('open');
+            return false;
+        });
+
+
+
+    </script>
+
+    @*   @if (ViewBag.Show_license == "Y" && ViewBag.Show_license == "Y")
+    { 
+    <script>
+        $("#_license").hide();
+        document.getElementById("table23").deleteRow(3);
+    </script>
+    }*@
+</head>
+<body>
+    @using (Ajax.BeginForm("Index", "Registration", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "updateSuccess"
+
+    }))
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" id="hdnpractceid" name="hdnpractceid" />
+        <input type="hidden" id="hdnproviderid" name="hdnproviderid" />
+@*<input type="hidden" id="hdnkey" name="hdnkey" value="@ViewBag.captcha" />*@
+        <div id="wrapper">
+              @Html.Partial("_TopSection")
+       @*     <div id="flttop">
+                <div id="header01">
+                    <div id="headermain02">
+                        <div id="logopublic">
+                            <a id="logo_find1" runat="server" title="Home" href="@Url.Action("Index", "Home", null)" style="text-decoration:none;" class="bluemenuPublic">Mower Helper-Find an Mower Helper</a>
+                        </div>
+                        <div id="mainnavcon">
+                            <div class="mainnav">
+                                <ul>
+                                    
+                                    @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                        <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                    }
+                                    <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div id="flt02">
+                <div id="bodycon">
+                    <div id="contentpannel" class="padding-top">
+
+                        <div id="main-content">
+                            <div class="content-box">
+                                <div class="content-box-header" style="height: 40px;">
+                                    <h3 style="height: 0px">Mower Helper Contact Info</h3>
+                                    <div class="clear">
+                                    </div>
+                                </div>
+                                <div class="content-box-content">
+                                    <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0"
+                                        id="table23">
+                                        <tr class="white_color">
+                                            <th align="right" width="25%">&nbsp;<font color="red"><b>*</b></font><strong>Name :</strong>
+                                            </th>
+                                            <td id="tdname" width="75%" align="left" colspan="6">
+                                                @*@{string[] PreArray = { " ", "Dr", "Miss", "Mr", "Mrs", "Ms" };}
+                                                @Html.DropDownList("DDUserPrefix", new SelectList(PreArray, null), new { @style = "width:62px;height:22px;font-size:13px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })*@
+                                                @Html.TextBox("txtFirstName", null, new { @class = "textfield", MaxLength = "30", style = "width:150px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" ,placeholder="First Name"})
+                                                @Html.TextBox("txtMiddle", null, new { @class = "textfield", MaxLength = "1", style = "width:25px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" ,placeholder="MI"})
+                                                @Html.TextBox("txtLastName", null, new { @class = "textfield", MaxLength = "30", style = "width:150px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off",placeholder="Last Name" })
+                                                @* <input type="text" id="txtFirstName" name="txtFirstName" autocomplete="off"  onkeypress="return fnsetfocus(event,'btnNext');" class="textfield" maxlength="30" style="width: 120px;" />
+                                            <input type="text" id="txtMiddle" name="txtMiddle"  autocomplete="off"  onkeypress="return fnsetfocus(event,'btnNext');"  class="textfield" maxlength="1" style="width: 25px;" />
+                                            <input type="text" id="txtLastName" name="txtLastName"  autocomplete="off"  onkeypress="return fnsetfocus(event,'btnNext');" class="textfield" maxlength="50" style="width: 120px;" />*@
+                                                &nbsp;&nbsp;&nbsp;<span id="lblfirstname" style="display: none;"></span>
+                                                <br />
+                                            </td>
+                                        </tr>
+                                        @* <tr>
+                                            <th align="right" width="20%" class="white_color">
+                                                <strong>&nbsp;Credentials :</strong>
+                                            </th>
+                                            <td id="tdcredentials" width="80%" colspan="6" align="left">
+                                                <table>
+                                                    <tr>
+                                                        <td>
+
+                                                            @Html.Obout(new Obout.Mvc.ComboBox.ComboBox("cbo2")
+                                                                          {
+                                                                              Width = 300,
+                                                                              Height = 200,
+                                                                              MenuWidth = 300,
+                                                                              EmptyText = "Select Credentials...",
+                                                                              SelectionMode = ComboBoxSelectionMode.Multiple,
+
+                                                                              ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+                                                                     @:<span class=" c1">@(((DietitianHelp.Models.BLL.Common.TDirectory)item.DataItem).Credential)</span>
+),
+                                                                              ClientSideEvents = new ComboBoxClientSideEvents() { @OnClose = "cbo2_Close" }
+
+                                                                          })
+                                                        </td>
+                                                        <td id="tdcred" runat="server">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;<span id="lblcreden" style="display: none;"></span> </td>
+                                                    </tr>
+                                                </table>
+                                                <font color="blue">To select multiple items use Ctrl key on PC or Shift key on Mac</font>
+                                            </td>
+                                        </tr>*@
+                                        <tr class="white_color">
+                                            <th width="25%" align="right">
+                                                <strong>&nbsp;&nbsp;&nbsp;Mower Helper business name :&nbsp;</strong>
+                                            </th>
+                                            <td id="tdpracticename" width="75%" align="left" colspan="6">
+                                                @Html.TextBox("txtBusinessName", null, new { @class = "textfield", MaxLength = "60", style = "width:244px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" , placeholder="Business Name"})
+                                                &nbsp;&nbsp;&nbsp;<span id="lblpractice" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                       <tr class="white_color" id="HideLicense">
+                                            <th align="right" width="20%" style="height: 18px">&nbsp;<font color="red"><b>*</b></font><strong>License number :</strong>
+                                            </th>
+                                            <td width="80%" align="left" colspan="6" id="tdlicense">
+                                                @Html.TextBox("txtlicence", null, new { @class = "textfield", MaxLength = "50", style = "width:244px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" ,placeholder="License number"})
+                                                &nbsp;  @if (ViewBag.licensemsg != null)
+                                                        {
+                                                    <img src="~/Images/help2.png" id="imglicensemsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.licensemsg' ,280);" />
+                                                        }
+                                                &nbsp;&nbsp;&nbsp;<span id="lbllicense" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                         
+             
+                                            
+                                        <tr class="white_color">
+                                            <th align="right" width="20%">&nbsp;<strong> Work phone :</strong>
+                                            </th>
+                                            <td id="tdwphone" width="80%" style="height: 22px" align="left" colspan="6">
+                                                @Html.TextBox("txtWorkPhone1", null, new { @class = "textfield", MaxLength = "3", style = "width:30px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off", type = "tel" })
+                                                -
+                                                 @Html.TextBox("txtWorkPhone2", null, new
+                                            {
+                                                @class = "textfield",
+                                                MaxLength = "3",
+                                                style = "width:32px;",
+                                                onkeypress = "return fnsetfocus(event,'btnNext')",
+                                                autocomplete = "off",
+                                                type = "tel"
+                                            })
+                                                -
+                                                 @Html.TextBox("txtWorkPhone3", null, new
+                                            {
+                                                @class = "textfield",
+                                                MaxLength = "4",
+                                                style = "width:36px;",
+                                                onkeypress = "return fnsetfocus(event,'btnNext')",
+                                                autocomplete = "off",
+                                                type = "tel"
+                                            })
+                                                @*<strong>Extension :</strong>
+                                                @Html.TextBox("txtWorkPhoneExt", null, new
+                                            {
+                                                @class = "textfield",
+                                                MaxLength = "5",
+                                                style = "width:42px;",
+                                                onkeypress = "return fnsetfocus(event,'btnNext')",
+                                                autocomplete = "off"
+                                            })
+                                                <strong>Ok to leave message</strong>
+                                                @Html.CheckBox("ChkWPLeaveMsg_Ind", false, new { onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })*@
+                                                &nbsp;&nbsp;&nbsp;<span id="lblwphone" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color">
+                                            <th align="right" width="20%" style="height: 18px">&nbsp;<font color="red"><b>*</b><strong>Cell phone :</strong>
+                                            </th>
+                                            <td id="tdphone" width="80%" style="height: 22px" align="left" colspan="6">
+                                                @Html.TextBox("txtCellPhone1", null, new { @class = "textfield", MaxLength = "3", style = "width:30px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off", type = "tel" })
+                                                -
+                                                 @Html.TextBox("txtCellPhone2", null, new
+                                            {
+                                                @class = "textfield",
+                                                MaxLength = "3",
+                                                style = "width:32px;",
+                                                onkeypress = "return fnsetfocus(event,'btnNext')",
+                                                autocomplete = "off",
+                                                type = "tel"
+                                            })
+                                                -
+                                                 @Html.TextBox("txtCellPhone3", null, new
+                                            {
+                                                @class = "textfield",
+                                                MaxLength = "4",
+                                                style = "width:36px;",
+                                                onkeypress = "return fnsetfocus(event,'btnNext')",
+                                                autocomplete = "off",
+                                                type = "tel"
+                                            })
+                                                @*<strong>Extension :</strong>
+                                                @Html.TextBox("txtWorkPhoneExt", null, new
+                                            {
+                                                @class = "textfield",
+                                                MaxLength = "5",
+                                                style = "width:42px;",
+                                                onkeypress = "return fnsetfocus(event,'btnNext')",
+                                                autocomplete = "off"
+                                            })
+                                                <strong>Ok to leave message</strong>
+                                                @Html.CheckBox("ChkWPLeaveMsg_Ind", false, new { onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })*@
+                                                &nbsp;&nbsp;&nbsp;<span id="lblphone" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                        @* <tr class="white_color">
+                                            <th width="20%" align="right">&nbsp;<font color="red"><b>*</b></font><strong>Gender :</strong>
+                                            </th>
+                                            <td id="tdgender" align="left" width="80%" colspan="6">
+                                                @{string[] Gender = { "--Select Gender-- ", "Male", "Female" };}
+                                                @Html.DropDownList("ddlgender", new SelectList(Gender, null), new { @style = "width:145px;height:22px;font-size:13px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+                                                &nbsp;&nbsp;&nbsp;<span id="lblgender" style="display: none;"></span>
+                                            </td>
+                                        </tr>*@
+                                        <tr class="white_color">
+                                            <th align="right" width="20%" style="height: 18px">&nbsp;<font color="red"><b>*</b></font><strong>Address 1 :</strong>
+                                            </th>
+                                            <td id="tdaddr1" width="80%" align="left" colspan="6">
+                                                @Html.TextBox("txtAdr1", null, new { @class = "textfield", MaxLength = "50", style = "width:244px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" ,placeholder="Address1" })
+                                                &nbsp;&nbsp;&nbsp;<span id="lbladdr1" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color">
+                                            <th align="right" width="20%">
+                                                <strong>&nbsp;&nbsp;&nbsp;Address 2 :</strong>
+                                            </th>
+                                            <td width="80%" align="left" colspan="6">
+                                                @Html.TextBox("txtAdr2", null, new { @class = "textfield", MaxLength = "50", style = "width:244px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" ,placeholder="Address2" })
+                                            </td>
+                                        </tr>
+                                         @Html.Partial("_CitiesStates", null)
+                                  @*      <tr class="white_color">
+                                            <th align="right" width="20%">&nbsp;<font color="red"><b>*</b></font><strong>Zip :</strong>
+                                            </th>
+                                            <td id="tdzip" align="left" width="80%" colspan="3">
+                                                @Html.TextBox("txtZip", null, new { @class = "textfield", MaxLength = "5", style = "width:45px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" })
+                                                &nbsp;&nbsp;&nbsp;<span id="lblzip" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color">
+                                            <th align="right" width="20%">&nbsp;<font color="red"><b>*</b></font><strong>Country :</strong>
+                                            </th>
+                                            <td id="tdcountry" align="left" width="80%" colspan="6">
+                                                @Html.DropDownList("DDLcountry", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select Country-- ", Value = "0" },
+                                                               new SelectListItem{ Text="United States", Value = "1", Selected =true }
+                                                              },
+new { style = "font-family:arial;font-size:13px;height:22px;width:248px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+                                                &nbsp;&nbsp;&nbsp;<span id="lblcountry" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="white_color">
+                                            <th align="right" width="20%">&nbsp;<font color="red"><b>*</b></font><strong>State :</strong>
+                                            </th>
+                                            <td id="tdstate" align="left" width="80%" colspan="6">
+                                                @if (Model.StateList != null)
+                                                {
+                                                    @Html.DropDownList("DDState", Model.StateList, "--Select State--", new { @style = "width:248px;height:25px;font:13px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+                                                }
+                                                &nbsp;&nbsp;&nbsp;<span id="lblstate" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color">
+                                            <th align="right" width="20%">&nbsp;<font color="red"><b>*</b></font><strong>City :</strong>
+                                            </th>
+                                            <td id="tdcity" align="left" width="80%" colspan="6">
+                                                @Html.DropDownList("DDCity", Model.CityList, new { @style = "width:248px;height:25px;font:13px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+                                                &nbsp;&nbsp;&nbsp;<span id="lblcity" style="display: none;"></span>
+                                            </td>
+                                        </tr>*@
+                                    </table>
+                                </div>
+                                <div class="content-box-header" style="height: 40px">
+                                    <h3 style="height: 0px">Mower Helper Log-in Info</h3>
+                                    <div class="clear">
+                                    </div>
+                                </div>
+                                <div class="content-box-content">
+                                    <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0"
+                                        id="table27">
+                                        <tr id="trcolor" class="white_color">
+                                            <th align="right" width="25%">&nbsp;<font color="red"><b>*</b></font><strong>Email :</strong>
+                                            </th>
+                                            <td id="tdemail" width="75%" align="left">
+                                                @Html.TextBox("txtEmail", null, new { @class = "textfield", MaxLength = "100", style = "width:244px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" ,placeholder="Email"}) &nbsp; <span style="font-weight: bold;">( This will be used as your login id )</span>
+                                                &nbsp;&nbsp;&nbsp;<span id="lblmail" style="display: none;"></span><br />
+
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color">
+                                            <th align="right" width="25%">&nbsp;<font color="red"><b>*</b></font><strong>Confirm email :</strong>
+                                            </th>
+                                            <td id="tdcmail" width="75%" align="left">
+                                                @Html.TextBox("txtConfirmEmail", null, new { @class = "textfield", MaxLength = "100", style = "width:244px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" ,placeholder="Confirm email"})
+
+                                                &nbsp;&nbsp;&nbsp;<span id="lblcmail" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color">
+                                            <th align="right" width="25%">&nbsp;<font color="red"><b>*</b></font><strong>Password :&nbsp;</strong>
+                                            </th>
+                                            <td id="tdpwd" width="75%" align="left">
+                                                @Html.Password("txtPassword", null, new { @class = "textfield", MaxLength = "100", style = "width:244px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" ,placeholder="Password"})
+                                                &nbsp;&nbsp;&nbsp;<span id="lblpwd" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color">
+                                            <th align="right" width="25%">&nbsp;<font color="red"><b>*</b></font><strong>Confirm password :</strong>
+                                            </th>
+                                            <td id="tdcpwd" width="75%" align="left">
+                                                @Html.Password("txtConfirm", null, new { @class = "textfield", MaxLength = "100", style = "width:244px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" ,placeholder="Confirm Password"})
+                                                &nbsp;&nbsp;&nbsp;<span id="lblcpwd" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color" style="height: 10px;">
+                                            <th width="25%" align="right">
+                                                <font color="red">*</font><strong><span id="Label2" class="lbltext">Type verification
+                                                     code :</span></strong>
+                                            </th>
+                                            <td id="tdveri" width="%" align="left">
+                                                <table class="border_style" cellspacing="0" cellpadding="0" width="100%" border="0">
+                                                    <tr class="white_color">
+                                                        <td width="10%" id="tdveri1">
+                                                            @Html.TextBox("txtimgKey", null, new { @class = "textfield", MaxLength = "6", style = "width:140px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" ,placeholder="Type verification code"})
+                                                        </td>
+                                                        <td width="5%" style="padding-left: 10px;" id="tdveri2">
+                                                            <img src="~/Images/ArrowLeft.gif" id="imgdirection" alt="direction" />
+
+                                                        </td>
+                                                        <td id="tdveri3">
+                                                            <img style="padding-left:20px;width: 110px;" src="@Url.Action("ShowCaptchaImage", "Home")" />
+                                                            &nbsp;&nbsp;&nbsp;<span id="lblveri" style="display: none;"></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr class="white_color">
+                                            <th align="right" width="20%">
+                                                <strong>&nbsp;&nbsp;&nbsp;Referral code :</strong>
+                                            </th>
+                                            <td width="80%" align="left" colspan="6">
+                                                @Html.TextBox("txtreferral", (string)ViewBag.Promocode, new { @class = "textfield", MaxLength = "50", style = "width:140px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')" })&nbsp;&nbsp; @if (ViewBag.referralmsg != null)
+                                                                                                                                                                                                                                                                    {
+                                                                        <img src="~/Images/help2.png" id="imglicensemsg1"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.referralmsg' ,280);" />
+                                                                                                                                                                                                                                                                    }
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="content-box-header" style="height: 40px">
+                                    <h3 style="height: 0px">Terms and conditions</h3>
+                                    <div class="clear">
+                                    </div>
+                                </div>
+                                <div id="Div1" class="content-box-content">
+                                    <table class="border_style" cellpadding="6" cellspacing="0" width="100%" border="0"
+                                        valign="top">
+                                        <tr class="white_color">
+                                            <td id="tdcondition" width="60%" align="right">
+                                                <span style="font-weight: bold;">
+                                                    @Html.CheckBox("chkAgree", false, new { onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+
+                                                    <label for="chkAgree">
+                                                        I have read and fully accept the</label></span> &nbsp; 
+                                                                    <a id="lnkterms" href="#" onclick="return Displaydialog('TermsDialog','../Registration/Termsandconditions',4000,800,'dvLoading',null,null);" style="color: #0066CC; font-weight: bold; font-size: 14px;">Terms and conditions&nbsp;&nbsp;</a>
+                                            </td>
+                                            <td id="tdcondition1" width="40%" align="left">&nbsp;&nbsp;<span id="lblcondition" style="display: none;"></span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                            <table id="table11" border="0" style="padding-top: 10px;" cellspacing="0" width="100%" cellpadding="0">
+                                <tr height="35px" class="bg_none">
+                                    <td align="right" width="30%" style="font-family: Arial; font-size: 9pt; padding-right: 5px;">&nbsp;
+                                        <input type="submit" name="btnNext" value="Next" onclick="return ValidatePassword();" id="btnNext" class="confirmDialog1" />&nbsp;
+                                                  <input type="button" name="btncancel" value="Cancel" id="btncancel" class="confirmDialog" />
+
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="TermsDialog" title="View terms and conditions"></div>
+                        <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+                            <p>
+                                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                                Do you want to stop registration?
+                            </p>
+                        </div>
+
+                    </div>
+                      @Html.Partial("_Footer")
+                   @* <div id="footercon">
+                        <div id="footerpublic">
+                            <div >
+                                @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                                {
+                                    <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+
+                                        <li>
+                                            @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                        </li>
+
+                                        <li>
+                                            @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Contact Us", "Contact")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Partner Sites", "MoreHelp")
+                                        </li>
+
+                                        <li>
+                                            @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                        </li>
+                                    </ul>
+                                }
+                                else if (ViewBag.ShowArticles == "Y")
+                                {
+                                    <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+
+                                        <li>
+                                            @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                        </li>
+
+                                        <li>
+                                            @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Contact Us", "Contact")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Partner Sites", "MoreHelp")
+                                        </li>
+                                    </ul>
+                                }
+                                else if (ViewBag.Showforums == "Y")
+                                {
+                                    <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                        <li>
+                                            @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Contact Us", "Contact")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                        </li>
+                                        <li>
+                                            @Html.RouteLink("Partner Sites", "MoreHelp")
+                                        </li>
+                                        <li>
+                                            @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                        <li>
+                                            @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                        </li>
+                                        <li style="display:none;">
+                                            @Html.RouteLink("Contact Us", "Contact")
+                                        </li>
+                                        <li style="display:none;">
+                                            @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                        </li>
+                                        <li style="display:none;">
+                                            @Html.RouteLink("Partner Sites", "MoreHelp")
+                                        </li>
+
+                                    </ul>
+                                }
+                            </div>
+                            <div class="copy">
+                                Copyright © 2016.Mower Helper-Find an Mower Helper , Inc. All Rights Reserved.
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    }
+</body>
+<script type="text/javascript">
+
+    function updateSuccess(data) {
+        // aklert(data);
+        //  alert(data.Success);
+        if (data != '' & data.Success == true) {
+            // $('#updateDialog').dialog('close');
+            var Practice_ID = data.Object.Practice_ID
+            var Provider_ID = data.Object.Provider_ID
+            window.location.href = "../Registration/" + Practice_ID + "/RegCreditCardProcess/" + Provider_ID + "/Process";
+        }
+        else {
+            // $('#updateDialog').dialog('close');
+            alert(data.ErrorMessage);
+            document.body.style.cursor = "default";
+            //document.getElementById('txtimgKey').focus();
+            //  $("#update-message").html(data.ErrorMessage);
+            //$("#update-message").show();
+        }
+    }
+</script>
+</html>
+

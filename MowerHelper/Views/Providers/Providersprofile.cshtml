@@ -1,0 +1,238 @@
+﻿@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css" ></style>
+   @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+
+      <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 50px; }
+          tr.gridHead th:nth-child(2) { width: 200px; }
+          tr.gridHead th:nth-child(3) { width: 200px; }
+          tr.gridHead th:nth-child(4) { width: 200px; }
+          tr.gridHead th:nth-child(5) { width: 200px; }
+          tr.gridHead th:nth-child(6) { width: 80px; }
+              .dvLoading .ui-dialog-titlebar{display:none;}
+        
+    </style>
+
+  <script type="text/javascript">
+      $(document).ready(function () {
+          var email = $('#hdnemail').val();
+          if (email != '') {
+              $('#txtEmail').val(email);
+          }
+          var ProvID = $('#hdnProvID').val();
+          if (ProvID != '') {
+              ComboBox1.value($('#hdnProvID').val());
+          }
+
+          var psize = $('#hdnpagesize').val();
+          if (psize != '') {
+              $('#ddlrecords').val(psize);
+          }
+          else {
+              $('#ddlrecords').val("10");
+
+          }
+
+      });
+    </script>
+@*        <style type="text/css">
+ .item
+    {
+        position: relative !important;
+        display:-moz-inline-stack;
+        display:inline-block;
+        zoom:1;
+        *display:inline;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+        
+    .header
+    {
+        margin-left: 2px;
+    }
+   
+    .c1
+    {
+        width: 160px;
+    }
+        
+    .c2
+    {
+        margin-left: 10px;
+        width: 90px;
+    }
+  </style>*@
+
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("Providersprofile", "Providers", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+        <br />
+        <input id="hdnpagesize" name="hdnpagesize" type="hidden" value="@ViewBag.pagesize"/>
+        <input id="hdnemail" name="hdnemail" type="hidden" value="@ViewBag.email"/>
+        <input id="hdnProvID" name="hdnProvID" type="hidden" value="@ViewBag.ProvID"/>
+
+    <div id="main-content">
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding-bottom:15px;">
+    <tr class="background_color">
+    <td style="padding-left:20px;">
+                                                                @Html.Obout(new ComboBox("ComboBox1")
+                                                           {
+                                                               Width = 500,
+                                                               MenuWidth = 500,
+                                                               Height = 200,
+                                                               EnableLoadOnDemand = true,
+                                                               OnLoadingItems = "Providers/LoadingItems1",
+                                                               EmptyText = "-- Select Mower Helper --",
+                                                               HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                                                                   @:<div class="header c1" >Mower Helper name</div>
+),
+
+                                                               ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                                            @:<div class="item c1" >@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).PracticeName)</div>
+)
+                                                           })
+    </td>
+    <td width="25%">
+    <strong>Email: </strong>&nbsp;
+    <input type="text" name="txtEmail"  id="txtEmail" class="textfield" style="width:200px;"/>
+    </td>
+    <td width="20%">
+    <input type="submit" class="button" id="btnsearch" value="Search" />
+    </td>
+    </tr>
+    </table>
+        <div class="content-box">
+            <div class="content-box-header">
+
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="80%" align="left">
+                    <h3>
+                        Mower Helpers</h3>
+                </td>
+                <td width="20%" align="center">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                     @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}
+                                    </li>
+                                </ul>
+                            </td>
+               
+            </tr>
+        </table>
+     </div>
+     <div class="content-box-content">
+                                                                       @{ WebGrid provgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.pagesize ?? "10"));}
+                                            @{WebGrid grid = provgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                                  columns: grid.Columns(
+
+                                                  grid.Column("SlNo", "#", canSort: false),
+
+                                                  grid.Column("ProviderName", "Mower helper name", canSort: false, format:@<text>@Html.ActionLink((string)item.Providername, "ViewIdentifyingInfo", "Directory", new { Prov_ID = item.Provider_ID, Practice_ID = item.Practice_ID }, new { style = "font-weight:bold;color:#0066CC;cursor:pointer;" })</text>),
+                                                        grid.Column("UpdatedOn", "Last updated", canSort: false, format:@<text>@{string UpdatedOn = (string)item.UpdatedOn; if (UpdatedOn != null & UpdatedOn != "")
+                                                                                                                                 {
+                                                                                                                                     string[] lastupd = UpdatedOn.Split(' ');@Html.Label(lastupd[0])}}</text>),
+                                                                                                                       grid.Column("Status_Ind", "Status", canSort: false, format:@<text>@{string ind = (string)item.Status_Ind; if (ind != null & ind == "A")
+                                                                                                                                                                                           {
+                                                                                                                                                                            @Html.Label("Active")}
+                                                                                                                                                                                           else
+                                                                                                                                                                                           {@Html.Label("Inactive")}}</text>)
+
+
+                                                                    )).ToString();
+
+
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                                              }
+                                              else
+                                              {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">
+                                            No Mower Helpers found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                                              }
+                        }
+  </div>
+ 
+    
+    </div>
+
+    </div>
+                <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+        if (grid.Rows.Count <= 9)
+        {
+            if (grid.Rows.Count <= 4)
+            {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+            }
+            else
+            {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                                                  }
+                                              }
+                                              Html.RenderAction("Bottomsections", "Tools");
+
+
+    }
+               
+
+</body>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             var TopIndex = '@Session["TopIndex"]';
+             var roleid = '@Session["roleid"]';
+             if (roleid == "1") {
+                 $("#Menu0").addClass("active");
+                 $("#Menu1").removeClass();
+                 $("#Menu2").removeClass();
+                 $("#Menu3").removeClass();
+             }
+         });
+    </script>
+</html>

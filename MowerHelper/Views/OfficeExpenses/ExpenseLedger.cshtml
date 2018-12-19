@@ -1,0 +1,1260 @@
+﻿@{
+    Layout = null;
+}
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    @*  @Styles.Render("~/Content/themes/base/jqueryCSS")*@
+    @Styles.Render("~/Content/themes/base/autocomplete")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Scripts.Render("~/ThScripts/ThOtherscripts")
+    @*      @Scripts.Render("~/Scripts/Thscriptscript")*@
+    @* @Scripts.Render("~/bundles/jqueryval")*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            if ('@Session["roleid"].ToString()' == "1") {
+                $("#tdtabs").removeClass("tab-background");
+            }
+            //var psize = $('#hdnpagesize').val();
+
+            //if (psize != '') {
+            //    $('#ddlrecords').val(psize);
+            //}
+            //else {
+            //    $('#ddlrecords').val("10");
+
+            //}
+
+            var cat = $('#hdncat').val();
+            if (cat != '') {
+                $('#txtCategory').val(cat);
+            }
+            else {
+                $('#txtCategory').val("");
+
+            }
+
+
+            var fromdate = $('#hdnFromdate').val();
+            if (fromdate != '') {
+                $('#txt_FromDate').val(fromdate);
+                document.getElementById('tddaterange').style.display = '';
+            }
+            else {
+                $('#txt_FromDate').val("");
+                document.getElementById('tddaterange').style.display = 'none';
+
+            }
+
+            var todate = $('#hdnTodate').val();
+            if (todate != '') {
+                $('#txt_ToDate').val(todate);
+                document.getElementById('tddaterange').style.display = '';
+            }
+            else {
+                $('#txt_ToDate').val("");
+                document.getElementById('tddaterange').style.display = 'none';
+
+            }
+
+            var drange = $('#hdndaterange').val();
+            if (drange != '') {
+                $('#dt_filter').val(drange);
+                if (drange == "Custom") {
+                    document.getElementById('tdmax').style.display = '';
+                    document.getElementById('tdmax1').style.display = 'none';
+                }
+            }
+            else {
+                $('#dt_filter').val("30");
+
+
+            }
+            //$("#txt_FromDate").on('change keyup paste mouseup', function() {
+            //    //  alert("1");
+            //    if ($(this).val().length == 10) {
+            //        //alert("2");
+            //        if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+            //        var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+            //        // alert(St);
+            //        var targetDate = new Date(St);
+            //        targetDate.setDate(targetDate.getDate() + 365);
+            //        //   alert(targetDate);
+            //        var todaydate = new Date();
+            //        todaydate.setDate(todaydate.getDate());
+            //        var dd = todaydate.getDate();
+            //        var mm = todaydate.getMonth() + 1; //January is 0!
+            //        var yyyy = todaydate.getFullYear();
+            //        var today = mm + '/' + dd + '/' + yyyy;
+            //        var dd1 = targetDate.getDate();
+            //        var mm1 = targetDate.getMonth()+1;
+            //        var yyyy1 = targetDate.getFullYear();
+            //        var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+            //        //  alert(target1);
+            //        if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+            //        else { document.getElementById('txt_ToDate').value = target1; return false; }
+            //    }
+            //});
+        });
+    </script>
+    <style type="text/css">
+        tr.gridHead th:nth-child(1)
+        {
+            width: 10px;
+        }
+
+        tr.gridHead th:nth-child(2)
+        {
+            width: 50px;
+        }
+
+        tr.gridHead th:nth-child(3)
+        {
+            width: 80px;
+        }
+
+        tr.gridHead th:nth-child(4)
+        {
+            width: 100px;
+        }
+
+        tr.gridHead th:nth-child(5)
+        {
+            width: 60px;
+        }
+
+        tr.gridHead th:nth-child(6)
+        {
+            width: 100px;
+        }
+
+        tr.gridHead th:nth-child(7)
+        {
+            width: 150px;
+        }
+
+        tr.gridHead th:nth-child(8)
+        {
+            width: 100px;
+        }
+
+        tr.gridHead th:nth-child(9)
+        {
+            width: 50px;
+        }
+
+        tr.gridHead th:nth-child(10)
+        {
+            width: 50px;
+        }
+
+        tr.gridHead th:nth-child(11)
+        {
+            width: 30px;
+        }
+
+        tr.gridHead th:nth-child(12)
+        {
+            width: 30px;
+        }
+
+        tr.gridRow td:nth-child(8)
+        {
+            width: 350px;
+            text-align: left;
+        }
+
+        tr.gridAltRow td:nth-child(8)
+        {
+            width: 350px;
+            text-align: left;
+        }
+
+        .dvLoading .ui-dialog-titlebar
+        {
+            display: none;
+        }
+
+        .ui-autocomplete
+        {
+            font-family: Verdana, Helvetica, sans-serif;
+            font-size: 11px;
+            font-weight: normal;
+            border: solid 1px #006699;
+            line-height: 20px;
+            padding: 5px;
+            background-color: #414E67;
+            cursor: default;
+            text-align: left;
+            width: 1000px;
+        }
+
+        html
+        {
+            overflow-y: scroll;
+        }
+    </style>
+    <script type="text/javascript">
+        function cancel() {
+            window.location.href = "@Url.Action("ViewProviderProfessionalInfo", "ProfileMaintenance")";
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#Addexpdialog');
+                dialogDiv.dialog('close');
+            });
+        });
+        $(document).ready(function () {
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#Editexpdialog');
+                dialogDiv.dialog('close');
+            });
+        });
+        $(document).ready(function () {
+            $(".close1").live("click", function (e) {
+                var dialogDiv = $('#ViewImagedialog');
+                dialogDiv.dialog('close');
+            });
+            $("#lnkmotive").live("click", function (e) {
+                Displaydialog('NewCatdiv', '../OfficeExpenses/NewCategory', 'auto', 900, 'dvLoading', null, null);
+                return false;
+            });
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(".confirmDialog").live("click", function (e) {
+            var url = $(this).attr('href');
+            $("#dialog-confirm").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                        $(this).dialog("close");
+                        //window.location = url;
+                        $("#gridnew").load(url, function (data) { $('#dvLoading').dialog('destroy') });
+                        //$('#dvLoading').dialog('destroy');
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog('open');
+            return false;
+        });
+
+        //var linkObj;
+        //$(function () {
+        //$.ajaxSetup({ cache: false });
+        //$('#Addexpdialog').dialog({
+        //    autoOpen: false,
+        //    width: 900,
+        //    //                      height: 400,
+        //    resizable: false,
+        //    modal: true
+        //});
+
+        //$("#lnkaddexp").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#Addexpdialog');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('destroy');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+
+
+
+        //$(".EditDialog").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#Editexpdialog');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+
+        //$('#Editexpdialog').dialog({
+        //    autoOpen: false,
+        //    width: 900,
+        //    resizable: false,
+        //    modal: true
+
+        //});
+
+
+
+        //$(".ViewImageClass").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#ViewImagedialog');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+
+        //$('#ViewImagedialog').dialog({
+        //    autoOpen: false,
+        //    width: 900,
+        //    resizable: false,
+        //    modal: true
+
+        //});
+        //});
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            JqAutocomplete1('ExpensesCategory', 'txtCategory');
+
+        });
+    </script>
+    <script type="text/javascript">
+        function ondescriptionover(obj) {
+            document.getElementById(obj).style.position = 'absolute';
+            document.getElementById(obj).style.display = '';
+            return false;
+        }
+        function ondescriptionout(obj) {
+            document.getElementById(obj).style.display = 'none';
+            return false;
+        }
+    </script>
+
+    <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var frm = $("#formname");
+            $('#dt_filter').change(function () {
+                if (document.getElementById('dt_filter').value == 'Custom') {
+                    document.getElementById('tddaterange').style.display = '';
+                    document.getElementById('tdmax').style.display = '';
+                    document.getElementById('tdmax1').style.display = 'none';
+                    $('#txt_FromDate').val("");
+                    $('#txt_ToDate').val("");
+                }
+                else {
+                    document.getElementById('tddaterange').style.display = 'none';
+                    document.getElementById('tdmax').style.display = 'none';
+                    document.getElementById('tdmax1').style.display = '';
+                    $('#txt_FromDate').val("");
+                    $('#txt_ToDate').val("");
+                }
+                return false;
+            });
+        });
+    </script>
+    <script type="text/javascript">
+
+        //$(function () {
+        //    $("#txt_FromDate,#txtEndDateforDaily,#txtEndDateforWeek").datepicker({
+        //        showOn: "button",
+        //        buttonImage: "../Images/calender.gif",
+        //        buttonImageOnly: true
+        //    });
+        //});
+
+
+        $(function () {
+            //     $("#txt_ToDate,#txt_FromDate").datepicker({
+            //    dateFormat: 'mm/dd/yy',
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    //                showCurrentAtPos: 1,
+            //    showWeeks: true,
+            //    inline: true,
+            //    numberOfMonths: [1, 1],
+            //    yearRange: "1950:2020",
+            //    showOn: "button",
+            //    buttonImage: "../Images/calender.gif",
+            //    buttonImageOnly: true
+
+            //});
+            var role = $("#hdnroleid").val();
+            if (role == "1") {
+                document.getElementById('trsearch123').style.display = '';
+                var combo = document.getElementById('hdncombo').value;
+                if (combo != "" && combo != null) {
+                    ComboBox6.value($('#hdncombo').val());
+                }
+            }
+            else {
+                document.getElementById('trsearch123').style.display = 'none';
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        Date.prototype.days = function (to) {
+            return Math.abs(Math.floor(to.getTime() / (3600 * 24 * 1000)) - Math.floor(this.getTime() / (3600 * 24 * 1000)))
+
+        }
+        function ValidSearch(event) {
+            event.preventDefault();
+
+            if (document.getElementById('dt_filter').selectedIndex == 0) {
+                alert("Select date");
+                return false;
+            }
+            if (document.getElementById('dt_filter').value == 'Custom') {
+
+                if (document.getElementById('txt_FromDate').value != '' && document.getElementById('txt_FromDate').value != "mm/dd/yyyy") {
+                    if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) {
+                        return false;
+                    }
+                }
+                if (document.getElementById('txt_ToDate').value != '' && document.getElementById('txt_ToDate').value != "mm/dd/yyyy") {
+                    if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) {
+                        return false;
+                    }
+                }
+                var CDate = new Date()
+                var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear();
+                var FromDate = document.getElementById('txt_FromDate').value;
+                if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == "mm/dd/yyyy") {
+                    alert('Select from date');
+                    document.getElementById('txt_FromDate').focus();
+                    return false;
+                }
+                if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == "mm/dd/yyyy") {
+                    alert('Select to date');
+                    document.getElementById('txt_ToDate').focus();
+                    return false;
+                }
+                var St = document.getElementById('txt_FromDate').value;
+                St = new Date(St);
+                var En = document.getElementById('txt_ToDate').value
+                En = new Date(En);
+                if (St > En) {
+                    alert("From date should not be greater than to date")
+                    return false;
+                }
+                var frmdt1 = new Date(document.getElementById('txt_FromDate').value);
+                var tdt1 = new Date(document.getElementById('txt_ToDate').value);
+                var diffdate = new Date(frmdt1).days(new Date(tdt1));
+                if (diffdate > 365) {
+                    alert("maximum 12 months is allowed");
+                    return false;
+                }
+            }
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            if ($("#txtCategory").val() != "" || $("#dt_filter option:selected").text() == "Custom") {
+
+                // +'&hdncombo=' + document.getElementById('hdncombo').value
+                //+ '&ComboBox6_SelectedText=' + document.getElementById('ComboBox6_SelectedText').value
+                //  + '&ComboBox6_SelectedIndex=' + document.getElementById('ComboBox6_SelectedIndex').value
+                //  + '&ComboBox6=' + document.getElementById('ComboBox6').value
+              @*  if ('@Session["RoleID"]' == 1) {*@
+
+                if ('@Session["RoleID"]' == 1 && document.getElementById('ComboBox6_SelectedIndex').value != '-1') {
+                    $("#gridnew").load("../OfficeExpenses/ExpensesPartial?txtCategory=" + escape($("#txtCategory").val()) + "&hdnsortdirection=" + $("#hdnsortdirection").val() + "&dt_filter=" + $("#dt_filter").val() + "&txt_FromDate=" + $("#txt_FromDate").val() + "&txt_ToDate=" + $("#txt_ToDate").val() + "&ddlrecords=" + $("#ddlrecords").val()
+                        + '&ComboBox6_SelectedText=' + escape(document.getElementById('ComboBox6_SelectedText').value)
+                     + '&ComboBox6_SelectedIndex=' + escape(document.getElementById('ComboBox6_SelectedIndex').value)
+                     + '&ComboBox6=' + escape(document.getElementById('ComboBox6').value), function (data) { $('#dvLoading').dialog('destroy') });
+                    // window.location.href = "../OfficeExpenses/ExpenseLedger?txtCategory=" + $("#txtCategory").val() + "&hdnsortdirection=" + $("#hdnsortdirection").val() + "&dt_filter=" + $("#dt_filter").val() + "&txt_FromDate=" + $("#txt_FromDate").val() + "&txt_ToDate=" + $("#txt_ToDate").val() + "&ddlrecords=" + $("#ddlrecords").val() //+ "&hdncat=" + $("#hdncat").val()
+                    //+ '&ComboBox6_SelectedText=' + document.getElementById('ComboBox6_SelectedText').value
+                    //  + '&ComboBox6_SelectedIndex=' + document.getElementById('ComboBox6_SelectedIndex').value
+                    //  + '&ComboBox6=' + document.getElementById('ComboBox6').value;
+                }
+
+                else {
+                    $("#gridnew").load("../OfficeExpenses/ExpensesPartial?txtCategory=" + escape($("#txtCategory").val()) + "&hdnsortdirection=" + $("#hdnsortdirection").val() + "&dt_filter=" + $("#dt_filter").val() + "&txt_FromDate=" + $("#txt_FromDate").val() + "&txt_ToDate=" + $("#txt_ToDate").val() + "&ddlrecords=" + $("#ddlrecords").val(), function (data) { $('#dvLoading').dialog('destroy') });
+                    //window.location.href = "../OfficeExpenses/ExpenseLedger?txtCategory=" + $("#txtCategory").val() + "&hdnsortdirection=" + $("#hdnsortdirection").val() + "&dt_filter=" + $("#dt_filter").val() + "&txt_FromDate=" + $("#txt_FromDate").val() + "&txt_ToDate=" + $("#txt_ToDate").val() + "&ddlrecords=" + $("#ddlrecords").val() //+ "&hdncat=" + $("#hdncat").val();
+                    return;
+                }
+                //}
+            }
+            else if ('@Session["RoleID"]' == 1 && document.getElementById('ComboBox6_SelectedIndex').value != '-1') {
+
+                if (document.getElementById('ComboBox6_SelectedIndex').value != '-1') {
+                    $("#gridnew").load("../OfficeExpenses/ExpensesPartial?txtCategory=" + escape($("#txtCategory").val()) + "&hdnsortdirection=" + $("#hdnsortdirection").val() + "&dt_filter=" + $("#dt_filter").val() + "&ddlrecords=" + $("#ddlrecords").val() + '&ComboBox6_SelectedText=' + escape(document.getElementById('ComboBox6_SelectedText').value)
+                   + '&ComboBox6_SelectedIndex=' + escape(document.getElementById('ComboBox6_SelectedIndex').value)
+                   + '&ComboBox6=' + escape(document.getElementById('ComboBox6').value), function (data) { $('#dvLoading').dialog('destroy') });
+                    //   window.location.href = "../OfficeExpenses/ExpenseLedger?txtCategory=" + $("#txtCategory").val() + "&hdnsortdirection=" + $("#hdnsortdirection").val() + "&dt_filter=" + $("#dt_filter").val() + "&ddlrecords=" + $("#ddlrecords").val()//+ "&txt_FromDate=" + $("#txt_FromDate").val() + "&txt_ToDate=" + $("#txt_ToDate").val()  + "&hdncat=" + $("#hdncat").val()
+                    //+ '&ComboBox6_SelectedText=' + document.getElementById('ComboBox6_SelectedText').value
+                    //  + '&ComboBox6_SelectedIndex=' + document.getElementById('ComboBox6_SelectedIndex').value
+                    //  + '&ComboBox6=' + document.getElementById('ComboBox6').value;
+                }
+            }
+            else  //if($("#txtCategory").val()!="")
+            {
+                $("#gridnew").load("../OfficeExpenses/ExpensesPartial?txtCategory=" + escape($("#txtCategory").val()) + "&hdnsortdirection=" + $("#hdnsortdirection").val() + "&dt_filter=" + $("#dt_filter").val() + "&txt_FromDate=" + $("#txt_FromDate").val() + "&txt_ToDate=" + $("#txt_ToDate").val() + "&ddlrecords=" + $("#ddlrecords").val(), function (data) { $('#dvLoading').dialog('destroy') });
+                //window.location.href = "../OfficeExpenses/ExpenseLedger?txtCategory=" + $("#txtCategory").val() + "&hdnsortdirection=" + $("#hdnsortdirection").val() + "&dt_filter=" + $("#dt_filter").val() + "&txt_FromDate=" + $("#txt_FromDate").val() + "&txt_ToDate=" + $("#txt_ToDate").val() + "&ddlrecords=" + $("#ddlrecords").val()// + "&hdncat=" + $("#hdncat").val();
+                //window.location.href = "../OfficeExpenses/ExpenseLedger?txtCategory=" + $("#txtCategory").val()+"&hdnsortdirection=" + $("#hdnsortdirection").val()+ "&dt_filter=" + $("#dt_filter").val()+  "&ddlrecords=" + $("#ddlrecords").val()+"&hdncat=" + $("#hdncat").val()  ;
+            }
+
+            // document.forms.item(0).submit();
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        function printpdf() {
+            var fromdate = document.getElementById('hdnfrmdt1').value;
+            var todate = document.getElementById('hdntodt1').value;
+            var category = document.getElementById('hdncat').value;
+            var noofrecords = document.getElementById('hdnnoofrecords').value;
+            var daterange = document.getElementById('hdndaterange').value;
+            var sortdir = document.getElementById('hdnsortdirection').value;
+            window.location.href = 'Expenseledgerpdf/?fromdate=' + fromdate + '&todate=' + todate + '&category=' + category + '&daterange=' + daterange + '&noofrecords=' + noofrecords + '&sortdir=' + sortdir;
+            return false;
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("ExpenseLedger", "OfficeExpenses", FormMethod.Get, null))
+    {
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div>
+        
+        <div id="main-content">
+            @if (Convert.ToInt32(Session["RoleID"]) == 1)
+            { 
+                @Html.Partial("_NavigationTool")
+            }
+            <input id="hdnFromdate" name="hdnFromdate" type="hidden" value="@ViewBag.Fromdate"/>
+            <input id="hdnTodate" name="hdnTodate" type="hidden" value="@ViewBag.Todate"/>
+            <input id="hdndaterange" name="hdndaterange" type="hidden" value="@ViewBag.Daterange"/>
+            <input type="hidden" name="hdnnoofrecords" id="hdnnoofrecords" value="@ViewBag.totrec" />
+            <input type="hidden" name="hdnsortdirection" id="hdnsortdirection" value="@ViewBag.sortdirection" />
+            <input type="hidden" id="hdnroleid" name="hdnroleid" value="@ViewBag.roleid" />
+            <input type="hidden" id="hdncombo" name="hdncombo" value="@ViewBag.combo" />
+            <input type="hidden" id="hdnfrmdt1" name="hdnfrmdt1" value="@ViewBag.Fromdate1" />
+            <input type="hidden" id="hdntodt1" name="hdntodt1" value="@ViewBag.Todate1" />
+            <input  type="hidden" id="hdnCategory" name="hdnCategory" value="@ViewBag.cat"/>
+            <input  type="hidden" id="hdnDtfilter" name="hdnDtfilter" value="@ViewBag.Daterange"/>
+            <input  type="hidden" id="hdnDdlrecords" name="hdnDdlrecords" value="@ViewBag.pgesize"/>
+
+
+            <table width="100%" cellpadding="0" cellspacing="0">
+                @if (Session["roleid"].ToString() == "4" || Session["roleid"].ToString() == "39")
+                {
+                    <tr id="trtabs" runat="server">
+                        <td width="100%" class="navigation">
+
+                            @*  <div class="admin-tab">
+                                        <a class="inadmin-link" id="acontent"  href="../Billing/TransactionDisplay"><span>Customer Transactions</span>
+                                        </a>
+                                    </div>*@
+                            @*   <div class="admin-tab">
+                                        <a class="inadmin-link" id="avideo" href="VideoAudioFiles" ><span>Video/Audio Files</span>
+                                        </a>
+                                    </div>*@
+                            <div class="admin-tab">
+                                <a class="admin-link" id="adocument1" href="ExpenseLedger"><span>My Business Expenses</span>
+                                </a>
+                            </div>
+                            @*<div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument" href="../Notes/ProfileNotes"><span>Notes</span>
+                                        </a>
+                                    </div>*@
+                            <div class="admin-tab">
+                                <a class="inadmin-link" id="adocument2" href="../Common/PasswordManagement"><span>Password Management</span>
+                                </a>
+                            </div>
+                            <div class="admin-tab">
+                                <a class="inadmin-link" id="adocument3" href="../Admin/FT_servicesTransaction"><span>Mower Helper Transactions</span>
+                                </a>
+                            </div>
+                            @if (ViewBag.Showtask == "Y")
+                            {
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" id="adocument4" href="../Task/TaskList"><span>Tasks</span>
+                                    </a>
+                                </div>
+                            }
+                            <div class="admin-tab" style="display: none;">
+                                <a class="inadmin-link" id="adocument5" href="@Url.Action("Index", "Technicians")" ><span>Technicians</span>
+                                </a>
+                            </div>
+                            <div class="admin-tab">
+                                <a class="inadmin-link" href="../Admin/FTservices_addnewpayment" id="acontent"><span>Payment method</span>
+                                </a>
+                            </div>
+                            <div class="admin-tab">
+                                <a class="inadmin-link" href="../Messages/MessageFromHelp" id="amsgcontent"><span>Messages</span></a>
+                            </div>
+                            @*<div class="admin-tab">                                        
+                                        <a class="inadmin-link" href="../Article/ArticleJqGrid" id="aArticles"><span>Articles</span></a>
+                                    </div>*@
+                            @if (ViewBag.Showforums == "Y")
+                            {
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Forums/ForumsHome" id="acontent5"><span>Forums</span>
+                                    </a>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr class="background_color">
+                    <td id="tdtabs" class="tab-background" width="100%">
+                        <table id="tblsearch" runat="server" width="100%" align="center">
+                            <tr class="background_color" id="trsearch123">
+
+                                <td id="tdmultiprovider" style="text-align: right" style="padding-left: 2px;">
+                                    <b>Mower Helper Name:</b>&nbsp;
+                                </td>
+                                @{
+                if (Convert.ToInt32(Session["RoleID"]) == 1)
+                {
+                                    <td id="tdcombo" style="text-align: left">
+                                        @Html.Obout(new ComboBox("ComboBox6")
+                                                           {
+                                                               Width = 500,
+                                                               MenuWidth = 500,
+                                                               Height = 200,
+                                                               EnableLoadOnDemand = true,
+                                                               OnLoadingItems = "OfficeExpenses/LoadingItems2",
+                                                               EmptyText = "-- Select Mower Helper --",
+
+
+                                                               HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                                                                   @:<div class="header c1">Mower Helper name</div>
+),
+
+                                                               ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                                            @:<div class="item c1">@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).PracticeName)</div>
+)
+                                                           })
+                                    </td>
+                }
+                                }
+
+                            </tr>
+                            <tr class="background_color">
+                                <td width="35%" align="left">
+                                    <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                        <li><strong>Category/vendor/notes/Total cost : </strong>&nbsp;
+                                        <input type="text" name="txtCategory" id="txtCategory" class="textfield" onkeypress="return fnsetfocus(event,'btnSearch')" style="width: 200px;" />
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td width="65%" align="left">
+                                    <table width="100%" align="center">
+                                        <tr class="background_color">
+                                            <td width="35%" align="left">
+                                                <strong>Date range&nbsp;:&nbsp; </strong>
+                                                @Html.DropDownList("dt_filter", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                                            </td>
+                                            @Html.Partial("_CustomDate")
+                                            @*   <td width="40%" id="tddaterange" runat="server" style="display:none" align="left">
+                    <strong> From : </strong> &nbsp;&nbsp;&nbsp;  
+                                                              <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield" maxlength="10" style="width: 75px;" />
+                                                             &nbsp;&nbsp; <strong> To : </strong> &nbsp;&nbsp;&nbsp; 
+                                                             <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield" maxlength="10" style="width: 75px;" />
+                        </td>*@
+                                            <td id="tdmax" width="20%" style="display: none;">
+                                                <span>(Maximum 12 months)</span>
+                                            </td>
+                                            <td id="tdmax1" width="20%"></td>
+                                            <td width="5%" align="right">
+                                                @*<input type="submit" name="btnSearch" value="Search" id="btnSearch" onclick="return ValidSearch();" class="button" />*@
+                                                <a id="lnkSearch" href="#" onclick="return ValidSearch(event);" title="Search">
+                                                    <img alt="" id="" src="~/Images/search_button_green.png" style="width: 30px;" /></a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+
+                            </tr>
+                        </table>
+
+                        <div class="content-box">
+
+                            <div class="content-box-content">
+                                <div id="gridnew">
+                                    <img src="../Images/ajax-loader2.gif" alt="Processing" style="margin-left: 45%" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                          <div id="NewCatdiv" title="Add new category"></div>
+                        <div id="Addexpdialog" title="Add expense"></div>
+                        <div id="Editexpdialog" title="Edit expense">
+                        </div>
+                        <div id="ViewImagedialog" title="Expense image">
+                        </div>
+                        <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+                            <p>
+                                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                                Do you want to delete item?
+                            </p>
+                        </div>
+
+                        <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+                            <img src="../Images/ajax-loader2.gif" alt="Processing" />
+                        </div>
+
+                        <input id="hdncat" name="hdncat" type="hidden" value="@ViewBag.cat"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div>
+
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#gridnew').load('@Url.Action("ExpensesPartial")');
+            var TopIndex = '@Session["TopIndex"]';
+            var roleid = '@Session["roleid"]';
+            if (roleid != 1) {
+                $("#Menu0").removeClass();
+                $("#Menu1").removeClass();
+                $("#Menu2").removeClass();
+                $("#Menu3").removeClass();
+                $("#Menu4").addClass("active");
+            }
+            else {
+                $("#Menu0").removeClass();
+                $("#Menu1").removeClass();
+                $("#Menu2").removeClass();
+                $("#Menu3").addClass("active");
+            }
+        });
+    </script>
+    @*  Edit Expense*@
+
+    @*    <script type="text/javascript">
+        //function InlineAlert(lblErrId, tdErrid, txtErrMsg) {
+        //    document.getElementById(lblErrId).style.display = '';
+        //    document.getElementById(lblErrId).innerHTML = txtErrMsg;
+        //    document.getElementById(tdErrid).bgColor = 'orange';
+        //}
+        //function ClearInlineAlert(lblErrId, tdErrid, tdbgcolor) {
+        //    document.getElementById(lblErrId).style.display = 'none';
+        //    document.getElementById(tdErrid).bgColor = tdbgcolor;
+        //}
+        function validMot() {
+            var strcatname = trim(document.getElementById('txtcategory').value);
+            document.getElementById('txtcategory').value = strcatname;
+            if (document.getElementById('txtcategory').value == '') {
+                InlineAlert('lblErrMot', 'tdMot', 'Please enter Category');
+                document.getElementById('txtcategory').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrMot', 'tdMot', '#FFFFFF');
+            }
+            //       return false;
+        }
+    </script>*@
+
+    <script type="text/javascript">
+        //function Editclearalerts() {
+        //    ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF');
+        //    ClearInlineAlert('Edit_lblErrCat', 'Edit_tdCategory', 'White');
+        //    // ClearInlineAlert('Edit_lblErrQuan', 'Edit_tdQuan', 'White');
+        //    ClearInlineAlert('Edit_lblErrCost', 'Edit_tdcost', '#FFFFFF');
+        //    ClearInlineAlert('Edit_lblErrChk', 'Edit_tdChk', 'White');
+        //    ClearInlineAlert('Edit_lblErrVen', 'Edit_tdVen', '#FFFFFF');
+        //    ClearInlineAlert('Edit_lblErrNotes', 'Edit_tdNotes', '#FFFFFF');
+        //    ClearInlineAlert('lblErr_image', 'tdformatmain', '#FFFFFF');
+        //}
+        //function EditExpenses(count, RoleID) {
+        //    //alert(document.getElementById('Edit_txtDate').value);
+        //    if (document.getElementById('Edit_txtDate').value == '' || document.getElementById('Edit_txtDate').value == 'mm/dd/yyyy') {
+        //        // alert("22");
+        //        Editclearalerts();
+        //        InlineAlert('Edit_lblErrDate', 'Edit_tdDate', 'Please enter date.');
+        //        document.getElementById('Edit_txtDate').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        //  alert("2");
+        //        ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF');
+        //    }
+        //    if (document.getElementById('Edit_txtDate').value != '' && document.getElementById('Edit_txtDate').value != 'mm/dd/yyyy') {
+        //        Editclearalerts();
+        //        var Dateid = document.getElementById('Edit_txtDate').value;
+        //        var Dat = Dateid.split("/");
+        //        var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+        //        var yearid = Dat[2];
+        //        var Monthid = Dat[0];
+        //        var MyId = Dat[1];
+        //        var CurDt = new Date()
+        //        var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+        //        var matchArray = Dateid.match(DatePat);
+        //        if (matchArray == null) {
+        //            clearalerts();
+        //            InlineAlert('Edit_lblErrDate', 'Edit_tdDate', 'The date  format!!! should be like mm/dd/yyyy');
+        //            document.getElementById('Edit_txtDate').focus();
+        //            return false;
+        //        }
+        //        else {
+
+        //            ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF')
+        //        }
+        //        if (yearid < 1900) {
+        //            Editclearalerts();
+        //            InlineAlert('Edit_lblErrDate', 'Edit_tdDate', 'Please enter a valid 4 digit year between 1900 and 2060');
+        //            document.getElementById('Edit_txtDate').focus();
+        //            return false
+        //        }
+        //        else {
+        //            ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF')
+        //        }
+        //        if (Monthid > 12 || Monthid == 0) {
+        //            Editclearalerts();
+        //            InlineAlert('Edit_lblErrDate', 'Edit_tdDate', 'Please enter a valid month');
+        //            document.getElementById('Edit_txtDate').focus();
+        //            return false
+        //        }
+        //        else {
+        //            ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF')
+        //        }
+        //        if (MyId > 31 || MyId == 0) {
+        //            Editclearalerts();
+        //            InlineAlert('Edit_lblErrDate', 'Edit_tdDate', 'Please enter a valid day');
+        //            document.getElementById('Edit_txtDate').focus();
+        //            return false
+        //        }
+        //        else {
+        //            ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF')
+        //        }
+        //        if (myDat > CurDt) {
+        //            Editclearalerts();
+        //            InlineAlert('Edit_lblErrDate', 'Edit_tdDate', 'Invalid date !!! should be less than current date');
+        //            document.getElementById('Edit_txtDate').focus();
+        //            return false;
+        //        }
+        //        else {
+        //            ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF')
+        //        }
+        //        if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+        //            Editclearalerts();
+        //            InlineAlert('Edit_lblErrDate', 'Edit_tdDate', 'Please enter a valid day');
+        //            document.getElementById('Edit_txtDate').focus();
+        //            return false;
+        //        }
+        //        else {
+        //            ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF')
+        //        }
+        //        if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+        //            Editclearalerts();
+        //            InlineAlert('Edit_lblErrDate', 'Edit_tdDate', 'Please enter a valid day');
+        //            document.getElementById('Edit_txtDate').focus();
+        //            return false;
+        //        }
+        //        else {
+        //            ClearInlineAlert('Edit_lblErrDate', 'Edit_tdDate', '#FFFFFF')
+        //        }
+        //    }
+
+        //    if (document.getElementById('Edit_ddlCategory').selectedIndex == 0) {
+        //        Editclearalerts();
+        //        InlineAlert('Edit_lblErrCat', 'Edit_tdCategory', 'Please select category');
+        //        document.getElementById('Edit_ddlCategory').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ClearInlineAlert('Edit_lblErrCat', 'Edit_tdCategory', 'White');
+        //    }
+        //    if (document.getElementById('Edit_txtCost').value == '') {
+        //        Editclearalerts();
+        //        InlineAlert('Edit_lblErrCost', 'Edit_tdcost', 'Please enter total cost');
+        //        document.getElementById('Edit_txtCost').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ClearInlineAlert('Edit_lblErrCost', 'Edit_tdcost', '#FFFFFF');
+        //    }
+
+        //    if (document.getElementById('Edit_txtCost').value != "") {
+        //        Editclearalerts();
+        //        if (fnStringFieldValidate(document.getElementById('Edit_txtCost'), ".0123456789") == 0) {
+        //            clearalerts();
+        //            InlineAlert('Edit_lblErrCost', 'Edit_tdcost', 'Invalid total cost!!! total cost must be in numeric only.');
+        //            document.getElementById('Edit_txtCost').focus();
+        //            return false;
+        //        }
+        //        else {
+        //            ClearInlineAlert('Edit_lblErrCost', 'Edit_tdcost', '#FFFFFF')
+        //        }
+
+        //    }
+        //    if (document.getElementById('Edit_txtCheckNumber').value != "") {
+        //        Editclearalerts();
+        //        var checkn = trim(document.getElementById('Edit_txtCheckNumber').value);
+        //        document.getElementById('Edit_txtCheckNumber').value = checkn;
+        //        if (fnStringFieldValidate(document.getElementById('Edit_txtCheckNumber'), "0123456789") == 0) {
+        //            clearalerts();
+        //            InlineAlert('Edit_lblErrChk', 'Edit_tdChk', 'Invalid check number !!! check number must be in numeric only.');
+        //            document.getElementById('Edit_txtCheckNumber').focus();
+        //            return false;
+        //        }
+        //        else {
+        //            ClearInlineAlert('Edit_lblErrChk', 'Edit_tdChk', 'White');
+        //        }
+
+        //    }
+        //    var vendorc = trim(document.getElementById('Edit_txtVendor').value);
+        //    document.getElementById('Edit_txtVendor').value = vendorc;
+        //    if (MyChars(document.getElementById('Edit_txtVendor')) == "NumError") {
+        //        Editclearalerts();
+        //        InlineAlert('Edit_lblErrVen', 'Edit_tdVen', 'Please enter vendor name properly');
+        //        document.getElementById('Edit_txtVendor').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ClearInlineAlert('Edit_lblErrVen', 'Edit_tdVen', '#FFFFFF');
+        //    }
+        //    if (fnCheckSpecialChars(document.getElementById('Edit_txtVendor')) == 0) {
+        //        Editclearalerts();
+        //        InlineAlert('Edit_lblErrVen', 'Edit_tdVen', 'Please enter vendor name without special characters');
+        //        document.getElementById('Edit_txtVendor').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ClearInlineAlert('Edit_lblErrVen', 'Edit_tdVen', '#FFFFFF');
+        //    }
+        //    var notec = trim(document.getElementById('Edit_txtNotes').value);
+        //    document.getElementById('Edit_txtNotes').value = notec;
+        //    if (document.getElementById('Edit_txtNotes').value.length > 1000) {
+        //        Editclearalerts();
+        //        InlineAlert('Edit_lblErrNotes', 'Edit_tdNotes', 'Please enter at most 1000 characters in the notes field');
+        //        document.getElementById('Edit_txtNotes').focus();
+        //        return (false);
+        //    }
+        //    else {
+        //        ClearInlineAlert('Edit_lblErrNotes', 'Edit_tdNotes', '#FFFFFF');
+        //    }
+
+
+        //    if (document.getElementById('flLogo').value != "") {
+        //        Editclearalerts();
+        //        var strFilePath = document.getElementById('flLogo').value;
+        //        var Files1 = new Array();
+        //        var Files = new Array();
+        //        Files = strFilePath.split('\\');
+        //        var strFileName = Files[parseInt(Files.length) - 1];
+        //        var strreverse = revString(strFileName);
+        //        var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+
+        //        if (strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TIFF" || strExtn.toUpperCase() == "PNG") {
+        //            Editclearalerts();
+        //        }
+        //        else {
+        //            Editclearalerts();
+        //            InlineAlert('lblErr_image', 'tdformatmain', 'Invalid logo!!! the format of the photo selected is not of type image.');
+        //            document.getElementById('flLogo').focus();
+
+        //            return false;
+        //        }
+
+        //    }
+
+        //}
+        function ClearImage() {
+            if (document.getElementById('flLogo').value != 0) {
+                //alert('2');
+
+                document.getElementById('lnkClear').style.display = '';
+            }
+        }
+        function RemoveMozila() {
+            // alert('5');
+            var who = document.getElementById("flLogo");
+            who.value = "";
+            var who2 = who.cloneNode(false);
+            who2.onchange = who.onchange;
+            who.parentNode.replaceChild(who2, who);
+            document.getElementById('lnkClear').style.display = 'none';
+        }
+        function RemoveImage() {
+            var who = document.getElementById("providerimage");
+            document.getElementById("tdimage").style.display = 'none';
+            // document.getElementById('strimage').value = '';
+            document.getElementById('ExistedLogo').value = '';
+            document.getElementById('ExistedExtn').value = '';
+        }
+
+    </script>
+    @*   Add Expense   *@
+    @*<script type="text/javascript">
+        function clearalerts() {
+            ClearInlineAlert('lblpractice', 'tdpractice', 'White');
+            ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF');
+            ClearInlineAlert('lblErrCat', 'tdCategory', 'White');
+            ClearInlineAlert('lblErrCost', 'tdcost', '#FFFFFF');
+            ClearInlineAlert('lblErrChk', 'tdChk', 'White');
+            ClearInlineAlert('lblErrVen', 'tdVen', '#FFFFFF');
+            ClearInlineAlert('lblErrNotes', 'tdNotes', '#FFFFFF');
+            ClearInlineAlert('lblErrimage', 'tdimg', '#FFFFFF');
+        }
+        function AddProviders(count, RoleID) {
+            var rlid = document.getElementById('hdnrlid').value;
+            if (rlid == "1") {
+                if (ComboBox5.selectedIndex() != -1) {
+                }
+                else {
+                    InlineAlert('lblpractice', 'tdpractice', 'please select the Mower Helper.');
+                    return false;
+                }
+            }
+            if (document.getElementById('txtDate').value == '' || document.getElementById('txtDate').value == 'mm/dd/yyyy') {
+                clearalerts();
+                InlineAlert('lblErrDate', 'tdDate', 'Please enter date.');
+                document.getElementById('txtDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF');
+            }
+            if (document.getElementById('txtDate').value != '' && document.getElementById('txtDate').value != 'mm/dd/yyyy') {
+                clearalerts();
+                var Dateid = document.getElementById('txtDate').value;
+                var Dat = Dateid.split("/");
+                var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+                var yearid = Dat[2];
+                var Monthid = Dat[0];
+                var MyId = Dat[1];
+                var CurDt = new Date()
+                var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+                var matchArray = Dateid.match(DatePat);
+                if (matchArray == null) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'The date  format!!! should be like mm/dd/yyyy');
+                    document.getElementById('txtDate').focus();
+                    return false;
+                }
+                else {
+
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (yearid < 1900) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid 4 digit year between 1900 and 2060');
+                    document.getElementById('txtDate').focus();
+                    return false
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (Monthid > 12 || Monthid == 0) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid month');
+                    document.getElementById('txtDate').focus();
+                    return false
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (MyId > 31 || MyId == 0) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid day');
+                    document.getElementById('txtDate').focus();
+                    return false
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (myDat > CurDt) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Invalid date !!! should be less than current date');
+                    document.getElementById('txtDate').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid day');
+                    document.getElementById('txtDate').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+                if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+                    clearalerts();
+                    InlineAlert('lblErrDate', 'tdDate', 'Please enter a valid day');
+                    document.getElementById('txtDate').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrDate', 'tdDate', '#FFFFFF')
+                }
+            }
+
+            if (document.getElementById('ddlCategory').selectedIndex == 0) {
+                clearalerts();
+                InlineAlert('lblErrCat', 'tdCategory', 'Please select category');
+                document.getElementById('ddlCategory').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCat', 'tdCategory', 'White');
+            }
+            //var itemc = trim(document.getElementById('txtItem').value);
+            //document.getElementById('txtItem').value = itemc;
+
+            //if (document.getElementById('txtQuantity').value != "") {
+            //    clearalerts();
+            //    var quan = trim(document.getElementById('txtQuantity').value);
+            //    document.getElementById('txtQuantity').value = quan;
+            //    if (fnStringFieldValidate(document.getElementById('txtQuantity'), "0123456789") == 0) {
+            //        clearalerts();
+            //        InlineAlert('lblErrQuan', 'tdQuan', 'Invalid quantity!!! quantity must be in numeric only.');
+            //        document.getElementById('txtQuantity').focus();
+            //        return false;
+            //    }
+            //    else {
+            //        ClearInlineAlert('lblErrQuan', 'tdQuan', 'White');
+            //    }
+
+            //}
+            if (document.getElementById('txtCost').value == '') {
+                clearalerts();
+                InlineAlert('lblErrCost', 'tdcost', 'Please enter total cost');
+                document.getElementById('txtCost').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCost', 'tdcost', '#FFFFFF');
+            }
+
+            if (document.getElementById('txtCost').value != "") {
+                clearalerts();
+                if (fnStringFieldValidate(document.getElementById('txtCost'), ".0123456789") == 0) {
+                    clearalerts();
+                    InlineAlert('lblErrCost', 'tdcost', 'Invalid total cost!!! total cost must be in numeric only.');
+                    document.getElementById('txtCost').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrCost', 'tdcost', '#FFFFFF')
+                }
+
+            }
+            if (document.getElementById('txtCheckNumber').value != "") {
+                clearalerts();
+                var checkn = trim(document.getElementById('txtCheckNumber').value);
+                document.getElementById('txtCheckNumber').value = checkn;
+                if (fnStringFieldValidate(document.getElementById('txtCheckNumber'), "0123456789") == 0) {
+                    clearalerts();
+                    InlineAlert('lblErrChk', 'tdChk', 'Invalid check number !!! check number must be in numeric only.');
+                    document.getElementById('txtCheckNumber').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrChk', 'tdChk', 'White');
+                }
+
+            }
+            var vendorc = trim(document.getElementById('txtVendor').value);
+            document.getElementById('txtVendor').value = vendorc;
+            if (MyChars(document.getElementById('txtVendor')) == "NumError") {
+                clearalerts();
+                InlineAlert('lblErrVen', 'tdVen', 'Please enter vendor name properly');
+                document.getElementById('txtVendor').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrVen', 'tdVen', '#FFFFFF');
+            }
+            if (fnCheckSpecialChars(document.getElementById('txtVendor')) == 0) {
+                clearalerts();
+                InlineAlert('lblErrVen', 'tdVen', 'Please enter vendor name without special characters');
+                document.getElementById('txtVendor').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrVen', 'tdVen', '#FFFFFF');
+            }
+            var notec = trim(document.getElementById('txtNotes').value);
+            document.getElementById('txtNotes').value = notec;
+            if (document.getElementById('txtNotes').value.length > 1000) {
+                clearalerts();
+                InlineAlert('lblErrNotes', 'tdNotes', 'Please enter at most 1000 characters in the notes field');
+                document.getElementById('txtNotes').focus();
+                return (false);
+            }
+            else {
+                ClearInlineAlert('lblErrNotes', 'tdNotes', '#FFFFFF');
+            }
+
+            if (document.getElementById('flLogo1').value != "") {
+                clearalerts();
+                var strFilePath = document.getElementById('flLogo1').value;
+                var Files1 = new Array();
+                var Files = new Array();
+                Files = strFilePath.split('\\');
+                var strFileName = Files[parseInt(Files.length) - 1];
+                var strreverse = revString(strFileName);
+                var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+
+                if (strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TIFF" || strExtn.toUpperCase() == "PNG") {
+                    clearalerts();
+                }
+                else {
+                    clearalerts();
+                    ////Glb_ShowAlert("Please enter license number  without spaces");
+                    //document.getElementById('tblmain').style.display = '';
+                    //document.getElementById('lblerrorimage').innerHTML = "Invalid logo!!! the format of the photo selected is not of type image.";
+                    //document.getElementById('tderrorimage').style.display = '';
+                    //document.getElementById('tderrorimage').bgColor = "orange";
+                    //document.getElementById('tdformatmain').bgColor = "orange";
+                    InlineAlert('lblErrimage', 'tdimg', 'Invalid logo!!! the format of the photo selected is not of type image.');
+                    document.getElementById('flLogo1').focus();
+
+                    return false;
+                }
+
+            }
+        }
+
+    </script>*@
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</body>
+
+</html>

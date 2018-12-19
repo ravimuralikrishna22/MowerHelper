@@ -1,0 +1,201 @@
+﻿@*@model MowerHelper.Models.Classes.StateCity*@
+@using MowerHelper.Models.BLL.Providers
+@{
+    Layout = null;
+    //Reg_ProvidersDetailInfo objInfo = Reg_ProvidersDetailInfo.Get_ProviderAddressDetails(Convert.ToInt32(Session["Prov_ID"]));
+    Reg_ProvidersDetailInfo objInfo = new Reg_ProvidersDetailInfo();
+    if (Convert.ToString(Session["Roleid"]) != "1")
+    {
+        objInfo = Reg_ProvidersDetailInfo.Get_ProviderAddressDetails(Convert.ToInt32(Session["Prov_ID"]));
+    }
+    else
+    {
+        objInfo = Reg_ProvidersDetailInfo.Get_ProviderAddressDetails(Convert.ToInt32(Session["ComboProv_ID"]));
+    }
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+            $("#zip").keyup(function () {
+                if ($(this).val().length == 5) {
+                    var recordId = $('#zip').val();
+                        $.getJSON("../Public/GetStateCitiesByZip", { zipcode: recordId },
+                     function (data) {
+                         if (data.indexOf(",") != -1) {
+                             var data1 = data.split(',');
+                             $("#stateid").empty();
+                             $('#stateid').append($('<option > </option>').val(0).html("--Select State--"));
+                             $('#stateid').append($('<option > </option>').val(data1[1]).html(data1[0]));
+                             $("select#stateid").prop('selectedIndex', 1);
+                             $("#cityid").empty();
+                             $('#cityid').append($('<option > </option>').val(0).html("--Select City--"));
+                             $('#cityid').append($('<option > </option>').val(data1[3]).html(data1[2]));
+                             $("select#cityid").prop('selectedIndex', 1);
+                         }
+                         else {
+                             $("#stateid").empty();
+                             $('#stateid').append($('<option > </option>').val(0).html("--Select State--"));
+                             $.each(data, function (index, value) {
+                                 $('#stateid').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                             });
+                             $("#cityid").empty();
+                             $('#cityid').append($('<option > </option>').val(0).html("--Select City--"));
+                         }
+                     });                      
+
+                }
+                else {
+                    if (event.keyCode == '8' || event.keyCode == '88' || event.keyCode == '46') {
+                        $.getJSON("../Public/GetStateByZip",
+                     function (data) {
+                         $("#stateid").empty();
+                         $('#stateid').append($('<option > </option>').val(0).html("--Select State--"));
+                         $.each(data, function (index, value) {
+                             $('#stateid').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                         });
+                     });
+                        $("#cityid").empty();
+                        $('#cityid').append($('<option > </option>').val(0).html("--Select City--"));
+                    }
+                }
+            });
+
+    });
+    $(document).ready(function () {
+          @* if ('@ViewBag.SelectedAddress' == "New Location" || '@ViewBag.SelectedAddress' == "") {
+
+               $("#OtherAddressItemList option:contains(" + "New Location" + ")").attr('selected', 'selected');
+               $("#txtcourtlocation").show();
+               $("#trotherAddress").show();
+           }
+           else {
+               $('#defaultCoachAddress').attr('checked', true);
+               $("#OtherAddressItemList option:contains(" + '@ViewBag.SelectedAddress' + ")").attr('selected', 'selected');
+               $("#tdcourtlocation").show();
+          // $("#tdcourtlocation1").show();    
+           $("#trotherdeatails").show();
+
+
+           $.getJSON("GetOtherAddressDetails", { AppAddressId: $("#OtherAddressItemList option:selected").val(), custId: null },
+            function (data) {
+                $('#tblappt tr[id="trotherdeatails"]').show();
+                $('#tblappt tr[id="trotherAddress"]').hide();
+                var address1o = data.Address1;
+                $("#lbloAddress1").html(address1o.replace(",", ""));
+                var cityaray = new Array();
+                var cityaray = data.cityzip.split('-');
+                $("#lblocityzip").html(cityaray[1]);
+                $("#lblostate").html(data.State);
+                $("#lblocity").html(cityaray[0]);
+                // document.getElementById("tdcourtlocation").style.display = "none";  
+                //$("#txtcourtlocation").hide();
+                if (data.CourtLocationName == " " || data.CourtLocationName == null) {
+                    document.getElementById("tdcourtlocation").style.display = "";
+                    document.getElementById("tdcourtlocation1").style.display = "none";
+                }
+                else if (data.CourtLocationName != " ") {
+                    document.getElementById("tdcourtlocation1").style.display = "";
+                    document.getElementById("tdcourtlocation").style.display = "none";
+                    $("#lblcourtlocation").html(data.CourtLocationName);
+                }
+                else if (data.ErrorMessage == 'false') {
+                    alert('Session is expired. You will be redirected to session expired page');
+                    window.location = '@Url.Action("SessionExpire", "Home")';
+                     }
+                     //alert(cityaray[0]);
+                 });
+                      //if ($("#lblcourtlocation").html() == "") {
+                      //    $.getJSON("GetOtherAddressDetails", { AppAddressId: $("#OtherAddressItemList option:selected").val(), custId: null },
+                      //     function (data) {
+                      //         if (data.CourtLocationName != " ") {
+                      //             $("#lblcourtlocation").html(data.CourtLocationName);
+                      //         }
+                      //     });
+                      //}
+         }*@
+           $('#stateid').change(function () {
+               //                   alert("statechange");
+               var recordId = $('#stateid').val();
+               var recordId1 = $("#zip").val();
+               if (recordId != '' && recordId1 == '') {
+                   // alert('a');
+                   $.getJSON("../Public/GetCitiesByStates", { id: recordId },
+                function (data) {
+                    $("#cityid").empty();
+                    $('#cityid').append($('<option > </option>').val(0).html("--Select City--"));
+                    $.each(data, function (index, value) {
+                        $('#cityid').append($('<option > </option>').val(data[index].CityId).html(data[index].CityName));
+                    });
+                    //for (i = 0; i < data.length; i++) {
+                    //   // if (data[i] != null) {
+                    //    if (data[i].CityName != '--Select City--') {
+                    //            $('#cityid').append($('<option > </option>').val(data[i].CityId).html(data[i].CityName));
+                    //        }
+                    //  //  }
+                    //}
+                });
+                   // return false;
+               }
+               else if (recordId != '' && recordId1 != '') {
+                   //alert('b');
+                   $.getJSON("../Public/GetCitiesByZip", { id: recordId, zipcode: recordId1 },
+                function (data) {
+                    $("#cityid").empty();
+                    $('#cityid').append($('<option > </option>').val(0).html("--Select City--"));
+                    $.each(data, function (index, value) {
+                        $('#cityid').append($('<option > </option>').val(data[index].CityId).html(data[index].CityName));
+                    });
+                    //for (i = 0; i < data.length; i++) {
+                    //    //if (data[i] != null) {
+                    //    if (data[i].CityName != '--Select City--') {
+                    //            $('#cityid').append($('<option > </option>').val(data[i].CityId).html(data[i].CityName));
+                    //        }
+                    //   // }
+                    //}
+                });
+                   // return false;
+               }
+               else {
+                   // alert('c');
+                   $("#cityid").empty();
+                   $('#cityid').append($('<option > </option>').val(0).html("--Select City--"));
+                   // return false;
+               }
+           });
+           if ($('#zip').val() != '') {
+               var recordId = $('#zip').val();
+               var stateid = "@objInfo.State_ID";
+               var statename = "@objInfo.Statename";
+               var City_ID = "@objInfo.City_ID";
+               var City = "@objInfo.Cityname";
+               if (recordId != '' && stateid != '' && City_ID != '') {
+                   $("#stateid").empty();
+                   $('#stateid').append($('<option > </option>').val(0).html("--Select State--"));
+                   $('#stateid').append($('<option > </option>').val(stateid).html(statename));
+                   $("select#stateid").prop('selectedIndex', 1);
+                   $("#cityid").empty();
+                   $('#cityid').append($('<option > </option>').val(0).html("--Select City--"));
+                   $('#cityid').append($('<option > </option>').val(City_ID).html(City));
+                   $("select#cityid").prop('selectedIndex', 1);
+               }
+           }
+       });
+</script>
+
+<tr>
+    @*   <td id="tdotAddress" style="width:18%"><font color="red"><b>*</b></font><strong>Address1 :&nbsp;</strong></td>*@
+    <td id="tdotAddress1" style="width: 50%;"><font color="red"><b>*</b></font><strong>Address1 :&nbsp;</strong> @Html.TextBox("otherAddress", "", new { @class = "textfield", autocomplete = "off", style = "width:200px" })</td>
+    <td style="width: 50%">
+        <font color="red"><b>*</b></font><strong>Zip :&nbsp;</strong> @Html.TextBox("zip", objInfo.Zip, new { @class = "textfield", MaxLength = "5", style = "width:50px;", autocomplete = "off" })
+    </td>
+</tr>
+<tr>
+
+    @*   @if (Model.StateList != null)
+                            {*@
+    <td align="left" id="tdstateother" style="width: 50%"><font color="red"><b>*</b></font><strong>State :&nbsp;</strong>@Html.DropDownList("stateid", new SelectList(MowerHelper.Models.Classes.clsCommonCClist.GetStates(), "StateId", "StateFullName"), "--Select State--", new { @style = "width:250px;height:25px;font:13px;" })
+
+    </td>
+    @*  }*@
+
+    <td style="width: 50%"><font color="red"><b>*</b></font><strong>City :&nbsp;</strong> @Html.DropDownList("cityid", new List<SelectListItem> { new SelectListItem { Text = "--Select City-- ", Value = "0", Selected = true } }, new { @style = "width:250px;height:25px;font:13px;" })</td>
+</tr>

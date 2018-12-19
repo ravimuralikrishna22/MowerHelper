@@ -1,0 +1,110 @@
+﻿@model MowerHelper.Models.BLL.Patients.NotesInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    @*<script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>*@
+    @*  <script src="~/SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>*@
+      
+</head>
+<body>
+    @*@using (Html.BeginForm("EditNotes", "Clients", FormMethod.Post, null))
+    {
+        @Html.AntiForgeryToken()
+        *@
+     @using (Ajax.BeginForm("EditNotes", "Clients", new AjaxOptions
+    {
+        
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "EditNotesSuccess",
+        OnComplete = "SessionExpireFail"
+
+    }, new { @id = "EditNotesForm" }))
+    {
+          @Html.AntiForgeryToken()
+    <input type="hidden" id="ToReference_ID" name="ToReference_ID" value="@Model.ToReference_ID" />
+        <input type="hidden" id="GeneralNote_ID" name="GeneralNote_ID" value="@Model.GeneralNote_ID" />
+        <div class="content-box">
+            @*            <div class="content-box-header">
+                <h3><asp:Label ID="lblheading" runat="server"></asp:Label></h3>
+                <div class="clear"></div>
+            </div>*@
+            <div class="content-box-content">
+                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                    border="0">
+        
+                    <tr height="10" class="white_color" id="trnotedate_Edit" runat="server" style="display:none">
+                        <th align="right" width="18%">
+                            <font color="red">*</font><strong>Note date :</strong>&nbsp;
+                        </th>
+                        <td align="left" id="tdNDate_Edit" runat="server" >
+                            @Html.TextBox("txt_Date_Edit", (string)ViewBag.Notes_Date, new { @class = "textfield EditNoteDate Datefield", MaxLength = "10", style = "width:80px", autocomplete = "off", onpaste = "return false" })&nbsp;&nbsp;
+                                <span id="lblNoteDate_Edit" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="20" id="trnotes_Edit" runat="server" class="white_color">
+                        <th align="right" width="18%">
+                            <font color="red">*</font><strong>Note :</strong>&nbsp;
+                        </th>
+                        <td align="left" id="tdNotes_Edit" runat="server" >
+                            @Html.TextArea("Notes", Model.Notes, 3, 3, new { @class = "textfield EditTxtNotes", style = "width:350px;height:80px;" })
+                            &nbsp;&nbsp;(Maximum length upto 1000 characters)
+                            <br /><span id="lblErrNote_Edit" style="font-weight: bold; color: Black"></span>
+                             
+                        </td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                            <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Validate_Edit();" />
+                            &nbsp;
+                                              <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</body>
+     
+    <script type="text/javascript">
+        function EditNotesSuccess(data) {
+
+
+            //if (data.Success == true) {
+            //window.location = '../Clients/ClentAppointments';
+            $('#NoteSummaryDialog').dialog('close');
+            $('#divLoading2').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $("#notesList").load('../Clients/DisplayClientNotesList?S2P2=' + '@Model.PageNO');
+            $('#divLoading2').dialog('close');
+            //}
+        }
+
+        //$(function () {
+        //    $("#txt_Date_Edit").datepicker({
+        //        dateFormat: 'mm/dd/yy',
+        //        changeMonth: true,
+        //        changeYear: true,
+        //        //                showCurrentAtPos: 1,
+        //        showWeeks: true,
+        //        inline: true,
+        //        numberOfMonths: [1, 1],
+        //        yearRange: "1950:2020",
+        //        showOn: "button",
+        //        buttonImage: "../Images/calender.gif",
+        //        buttonImageOnly: true
+
+        //    });
+        // });
+    </script>
+</html>

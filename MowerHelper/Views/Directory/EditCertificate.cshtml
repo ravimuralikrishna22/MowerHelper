@@ -1,0 +1,240 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+     
+</head>
+<body>
+    @using (Html.BeginForm("EditCertificate", "Directory", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        <div id="update-message" class="error" style="padding-left: 250px; font-weight: bold;">
+        </div>
+        <input type="hidden" id="hdncertid" name="hdncertid" value="@ViewBag.docid" />
+        <input type="hidden" id="hdnPaTH" name="hdnPaTH" value="@ViewBag.hdnPaTH" />
+        <input type="hidden" id="hdnPathSuffix" name="hdnPathSuffix" value="@ViewBag.Path_Suffix" />
+        <input type="hidden" id="hdnstrpath" name="hdnstrpath" value="@ViewBag.strpath" />
+        <div class="content-box">
+           @* <div class="content-box-header">
+                <h3>
+                    <span id="lblattribute">Add document</span>
+                </h3>
+                <div class="clear">
+                </div>
+            </div>*@
+            <div class="content-box-content">
+                <table id="tblProvAttributes" border="0" cellspacing="1" cellpadding="6" width="100%"
+                    class="border_style" align="center">
+                    <tr class="white_color">
+                        <td style="font-weight:bold;" align="right" width="40%">
+                            <span style="color: Red;">*</span>Title :&nbsp;
+                        </td>
+                        <td width="60%" align="Left" id="tdcerttitlemain">
+                                @{
+                                                                            bool Yes;
+                                                                            bool No;
+                                                                                                        }
+                                                                                                        @if (ViewBag.txtTitle == "Driver license")
+                                                                                                        {
+                                                                                                            Yes = true;
+                                                                                                            No = false;
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            Yes = false;
+                                                                                                            No = true;
+                                                                                                        }
+                                 @Html.RadioButton("rbtdriverlicense", "1", Yes, new { @GroupName = "LicenseType",onclick = "return drivercheck();" })&nbsp;Driver license&nbsp;
+                                @Html.RadioButton("rbtelelicense", "2", No, new { @GroupName = "LicenseType",onclick = "return electriciancheck();"})&nbsp;Electrician license
+                         @*   @Html.TextBox("txtTitle_cert", (string)ViewBag.txtTitle, new { @class = "textfield", maxlength = "100", style = "width:300px;" })*@
+                            @* <asp:TextBox ID="txtTitle"  class="textfield" MaxLength="100" Width="300px"></asp:TextBox>*@
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td align="right" width="40%">
+                            <b>Description :&nbsp;</b>
+                        </td>
+                        <td width="60%" align="Left" id="tddcertescriptionmain">
+                            @Html.TextArea("txtDescription_cert", (string)ViewBag.txtDescription, 3, 3, new { @class = "textfield", maxlength = "1000", style = "width:500px;height:100px;" })
+                            @*<asp:TextBox ID="txtDescription"  Rows="3" class="textfield" TextMode="MultiLine"
+                            Height="100px" Width="500px"></asp:TextBox>*@<br />
+                            &nbsp;&nbsp;<span>(Maximum length 1000 characters)</span>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td style="height: 15px" align="right" width="40%">
+                            <a id="FileName" href="CertificateDownload/@ViewBag.docid" style="text-align:justify;">@ViewBag.FileName</a>&nbsp;&nbsp; &nbsp;&nbsp;<font color="red">*</font><span
+                                id="Label2" style="font-weight:bold;">Replace with new file :</span> &nbsp;
+                        </td>
+                        <td style="height: 15px" width="60%" align="Left" id="tdcertuploadmain">
+                            @*<table cellspacing="1" cellpadding="1" id="tblFiles" width="100%" border="0">
+                                <tr id="attachcheck">@(string)@ViewBag.FileName,@(string)@ViewBag.hypLnkAttachedFileName
+                                    <td>
+                                        <div id="inputsPlace">
+                                            <div id="div1">
+                                                <input type="checkbox" id="check1" style="display:none;" /><input type="file" id="myFile1" name="myFile1"
+                                                    style="margin-left: 0px; background-color: White;" />&nbsp;&nbsp;(Maximum file
+                                                size : 10mb)
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>*@
+                             <a ID="hypLnkAttachedFileName"  href="#">@ViewBag.hypLnkAttachedFileName </a>
+                            <input type="file" id="CertFileUpLoad" onselectstart="return false;" style="background-color: White;"
+                                onpaste="return false;" onkeypress="return false;" onkeydown="return false;"
+                                onkeyup="return false;" runat="server" name="CertFileUpLoad" /><font id="fonttxt">&nbsp;&nbsp;(Maximum file size
+                                                                        : 10mb)</font>
+                        </td>
+                    </tr>
+                  
+                </table>
+                <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" id="tblCertmain"
+                    style="display: none;">
+                    <tr class="white_color" align="center">
+                        <td id="tdcerttitle" height="30px" style="display: none;">
+                            <span id="lblcerttitle" style="font-weight:bold;color:Black;" ></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdcertdescription" height="30px" style="display: none;">
+                            <span id="lbldescription" style="font-weight:bold;color:Black;"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdcertupload" height="30px" style="display: none;">
+                            <span id="lblcertupload" style="font-weight:bold;color:Black;"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            <table id="tblbuttons" width="100%">
+                <tr>
+                    <td width="100%" align="right" style="padding-right: 10px; padding-bottom: 5px;">
+                        <input type="submit" id="imgbtnSaveFile" value="Save" class="button" onclick="return EditValidate('');" />
+                        <input type="button" class="close button" name="Cancel" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        
+    }
+</body>
+    <script type="text/javascript">
+        function clearalerts() {
+            ValidateAlertClear('tblCertmain', 'lblcerttitle', 'tdcerttitle', 'tdcerttitlemain', 'white');
+            ValidateAlertClear('tblCertmain', 'lbldescription', 'tdcertdescription', 'tddcertescriptionmain', 'white');
+            ValidateAlertClear('tblCertmain', 'lblcertupload', 'tdcertupload', 'tdcertuploadmain', 'white');
+        }
+        function EditValidate(Ext) {
+            //var str_Title;
+            //str_Title = trim(document.getElementById('txtTitle_cert').value);
+            //document.getElementById('txtTitle_cert').value = str_Title;
+            //if (str_Title == '') {
+            //    clearalerts();
+            //    //Glb_ShowAlert("Please enter title");
+            //    document.getElementById('tblCertmain').style.display = '';
+            //    document.getElementById('lblcerttitle').innerHTML = "Please enter title";
+            //    document.getElementById('tdcerttitle').style.display = '';
+            //    document.getElementById('tdcerttitle').bgColor = "orange";
+            //    document.getElementById('tdcerttitlemain').bgColor = "orange";
+            //    document.getElementById('txtTitle_cert').focus();
+            //    return false;
+            //}
+            //else {
+
+            //    ValidateAlertClear('tblCertmain', 'lblcerttitle', 'tdcerttitle', 'tdcerttitlemain', 'white');
+            //}
+            var ta = document.getElementById('txtDescription_cert');
+            if (ta.value.length > 1000) {
+                clearalerts();
+                //Glb_ShowAlert('Please enter description less than  1000 characters');
+                document.getElementById('tblCertmain').style.display = '';
+                document.getElementById('lbldescription').innerHTML = "Please enter description less than  1000 characters";
+                document.getElementById('tdcertdescription').style.display = '';
+                document.getElementById('tdcertdescription').bgColor = "orange";
+                document.getElementById('tddcertescriptionmain').bgColor = "orange";
+                document.getElementById('txtDescription_cert').focus();
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblCertmain', 'lbldescription', 'tdcertdescription', 'tddcertescriptionmain', 'white');
+            }
+            var lblvalue = document.getElementById('FileName');
+            if (document.getElementById('CertFileUpLoad').value == '' && document.getElementById('FileName').innerHTML == '') {
+                clearalerts();
+                //Glb_ShowAlert('Please select a file name');
+                document.getElementById('tblCertmain').style.display = '';
+                document.getElementById('lblcertupload').innerHTML = "Please select a file name";
+                document.getElementById('tdcertupload').style.display = '';
+                document.getElementById('tdcertupload').bgColor = "orange";
+                document.getElementById('tdcertuploadmain').bgColor = "orange";
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblCertmain', 'lblcertupload', 'tdcertupload', 'tdcertuploadmain', 'white');
+            }
+            if (document.getElementById("CertFileUpLoad").style.display == '') {
+                clearalerts();
+                if (document.getElementById('CertFileUpLoad').value != "") {
+                    clearalerts();
+                    var str = document.getElementById('CertFileUpLoad').value;
+                    var Strr = str.toUpperCase();
+                    //                     if ((Strr.indexOf(".DOC") == -1) && (Strr.indexOf(".DOCX") == -1) && (Strr.indexOf(".TXT") == -1) && (Strr.indexOf(".XLS") == -1) && (Strr.indexOf(".PPS") == -1) && (Strr.indexOf(".PPT") == -1) && (Strr.indexOf(".PDF") == -1) && (Strr.indexOf(".XLSX") == -1) && (Strr.indexOf(".PPTX") == -1) && (Strr.indexOf(".ZIP") == -1) && (Strr.indexOf(".RAR") == -1)) {
+                    if ((Strr.indexOf(".DOC") == -1) && (Strr.indexOf(".DOCX") == -1) && (Strr.indexOf(".TXT") == -1) && (Strr.indexOf(".XLS") == -1) && (Strr.indexOf(".PPS") == -1) && (Strr.indexOf(".PPT") == -1) && (Strr.indexOf(".PDF") == -1) && (Strr.indexOf(".XLSX") == -1) && (Strr.indexOf(".PPTX") == -1) && (Strr.indexOf(".ZIP") == -1) && (Strr.indexOf(".RAR") == -1) && (Strr.indexOf(".GIF") == -1) && (Strr.indexOf(".PNG") == -1) && (Strr.indexOf(".JPG") == -1)) {
+                        clearalerts();
+                        //Glb_ShowAlert("Please select only doc,docx,txt,xls,pps,ppt,pdf,zip,rar files for document file");
+                        document.getElementById('tblCertmain').style.display = '';
+                        document.getElementById('lblcertupload').innerHTML = "Please select only doc, docx, txt, xls, pps, ppt, pdf, zip, rar, gif, jpg, png files for document file";
+                        document.getElementById('tdcertupload').style.display = '';
+                        document.getElementById('tdcertupload').bgColor = "orange";
+                        document.getElementById('tdcertuploadmain').bgColor = "orange";
+                        return false;
+                    }
+                    else {
+
+                        ValidateAlertClear('tblCertmain', 'lblcertupload', 'tdcertupload', 'tdcertuploadmain', 'white');
+                    }
+                }
+            }
+            //            document.getElementById('divloading').style.display = '';
+            //            document.body.style.cursor = 'wait';
+        }
+        function drivercheck() {
+
+            document.getElementById("rbtdriverlicense").checked = true;
+            document.getElementById("rbtelelicense").checked = false;
+
+        }
+        function electriciancheck() {
+            document.getElementById("rbtdriverlicense").checked = false;
+            document.getElementById("rbtelelicense").checked = true;
+        }
+        //function checkyes() {
+
+        //    document.getElementById("rbtyes").checked = true;
+        //    document.getElementById("rbtno").checked = false;
+
+        //}
+        //function checkno() {
+        //    document.getElementById("rbtyes").checked = false;
+        //    document.getElementById("rbtno").checked = true;
+        //}
+        var PopupWin = null;
+        function Open(FilePath) {
+            if (PopupWin != null) PopupWin.close();
+            PopupWin = window.open(FilePath);
+            //document.getElementById('hdnInd').value = 1;
+            return false;
+        }
+    </script>
+</html>

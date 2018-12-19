@@ -1,0 +1,630 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+
+@*  <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+          @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+     @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+
+
+
+      <style type="text/css">
+          
+    
+          
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+          
+        }
+        
+    </style>   
+      <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 20px; }
+          tr.gridHead th:nth-child(2) { width: 170px; }
+          tr.gridHead th:nth-child(3) { width: 350px; }
+          tr.gridHead th:nth-child(4) { width: 30px; }
+          tr.gridHead th:nth-child(5) { width: 30px; }
+          tr.gridHead th:nth-child(6) { width: 30px; }
+          tr.gridHead th:nth-child(7) { width: 50px; }
+          tr.gridRow td:nth-child(2) { width: 170px;text-align:left; }
+          tr.gridAltRow td:nth-child(2) { width: 170px;text-align:left; }
+          tr.gridRow td:nth-child(3) { width: 350px;text-align:left; }
+          tr.gridAltRow td:nth-child(3) { width: 350px;text-align:left; }
+             .dvLoading .ui-dialog-titlebar{display:none;}  
+        
+    </style>
+             <script type="text/javascript">
+                 function ondescriptionover(obj) {
+                     document.getElementById(obj).style.position = 'absolute';
+                     document.getElementById(obj).style.display = '';
+                     return false;
+                 }
+                 function ondescriptionout(obj) {
+                     document.getElementById(obj).style.display = 'none';
+                     return false;
+                 }
+    </script>
+      <script type="text/javascript">
+          $(document).ready
+               (
+               function () {
+
+                   var fromdate = $('#hdnFromdate').val();
+                   if (fromdate != '') {
+                       $('#txt_FromDate').val(fromdate);
+                       document.getElementById('tddaterange').style.display = '';
+                   }
+                   else {
+                       $('#txt_FromDate').val("");
+                       document.getElementById('tddaterange').style.display = 'none';
+
+                   }
+
+                   var todate = $('#hdnTodate').val();
+                   if (todate != '') {
+                       $('#txt_ToDate').val(todate);
+                       document.getElementById('tddaterange').style.display = '';
+                   }
+                   else {
+                       $('#txt_ToDate').val("");
+                       document.getElementById('tddaterange').style.display = 'none';
+
+                   }
+
+                   var drange = $('#hdnDaterange').val();
+                   if (drange == 5) {
+                       document.getElementById('tddaterange').style.display = '';
+                       $('#dt_filter').val(drange);
+                   }
+                   else if (drange != '') {
+                       $('#dt_filter').val(drange);
+
+                   }
+
+
+                   var title = $('#hdnTitle').val();
+                   if (title != '') {
+                       $('#txtKeyword').val(title);
+                   }
+                   else {
+                       $('#txtKeyword').val("");
+                   }
+               });
+    </script>
+      <script type="text/javascript">
+
+          $(document).ready(function () {
+              var frm = $("#formname");
+              $('#dt_filter').change(function () {
+                  //            alert("2")
+                  if (document.getElementById('dt_filter').value == '5') {
+                      document.getElementById('tddaterange').style.display = '';
+                      $('#txt_FromDate').val("");
+                      $('#txt_ToDate').val("");
+
+                  }
+                  else {
+                      document.getElementById('tddaterange').style.display = 'none';
+                      document.getElementById('tddaterange').style.display = 'none';
+                      $('#txt_FromDate').val("");
+                      $('#txt_ToDate').val("");
+                  }
+                  return false;
+              });
+          });
+</script>
+      <script type="text/javascript">
+
+          $(function () {
+              //$("#txt_FromDate,#txtEndDateforDaily,#txtEndDateforWeek").datepicker({
+              //    dateFormat: 'mm/dd/yy',
+              //    changeMonth: true,
+              //    changeYear: true,
+              //    //                showCurrentAtPos: 1,
+              //    showWeeks: true,
+              //    inline: true,
+              //    numberOfMonths: [1, 1],
+              //    yearRange: "1950:2020",
+              //    showOn: "button",
+              //    buttonImage: "../Images/calender.gif",
+              //    buttonImageOnly: true
+
+              //});
+            
+              //$("#txt_FromDate").on('change keyup paste mouseup', function () {
+              //    //  alert("1");
+              //    if ($(this).val().length == 10) {
+              //        //alert("2");
+              //        if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+              //        var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+              //        // alert(St);
+              //        var targetDate = new Date(St);
+              //        targetDate.setDate(targetDate.getDate() + 365);
+              //        //   alert(targetDate);
+              //        var todaydate = new Date();
+              //        todaydate.setDate(todaydate.getDate());
+              //        var dd = todaydate.getDate();
+              //        var mm = todaydate.getMonth() + 1; //January is 0!
+              //        var yyyy = todaydate.getFullYear();
+              //        var today = mm + '/' + dd + '/' + yyyy;
+              //        var dd1 = targetDate.getDate();
+              //        var mm1 = targetDate.getMonth() + 1;
+              //        var yyyy1 = targetDate.getFullYear();
+              //        var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+              //        //  alert(target1);
+              //        if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+              //        else { document.getElementById('txt_ToDate').value = target1; return false; }
+              //    }
+              //});
+          });
+
+
+          $(function () {
+              //             alert("4")
+          
+              //$("#txt_ToDate,#txtEndDateforDaily,#txtEndDateforWeek").datepicker({
+              //    dateFormat: 'mm/dd/yy',
+              //    changeMonth: true,
+              //    changeYear: true,
+              //    //                showCurrentAtPos: 1,
+              //    showWeeks: true,
+              //    inline: true,
+              //    numberOfMonths: [1, 1],
+              //    yearRange: "1950:2020",
+              //    showOn: "button",
+              //    buttonImage: "../Images/calender.gif",
+              //    buttonImageOnly: true
+
+              //});
+
+          });
+       </script>
+      <script language="javascript" type="text/javascript">
+          function ValidSearch() {
+
+              //if (document.getElementById('dt_filter').selectedIndex == 0) {
+              //    alert("Select date");
+              //    return false;
+              //}
+              if (document.getElementById('dt_filter').value == '5') {
+
+                  if (document.getElementById('txt_FromDate').value != '' && document.getElementById('txt_FromDate').value != " ") {
+                      if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) {
+                          return false;
+                      }
+                  }
+                  if (document.getElementById('txt_ToDate').value != '' && document.getElementById('txt_ToDate').value != " ") {
+                      if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) {
+                          return false;
+                      }
+                  }
+                  var CDate = new Date()
+                  var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear();
+                  var FromDate = document.getElementById('txt_FromDate').value;
+                  if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == " ") {
+                      alert('Select from date');
+                      document.getElementById('txt_FromDate').focus();
+                      return false;
+                  }
+                  if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == " ") {
+                      alert('Select to date');
+                      document.getElementById('txt_ToDate').focus();
+                      return false;
+                  }
+                  var St = document.getElementById('txt_FromDate').value;
+                  St = new Date(St);
+                  var En = document.getElementById('txt_ToDate').value
+                  En = new Date(En);
+                  if (St > En) {
+                      alert("From date should not be greater than to date")
+                      return false;
+                  }
+
+              }
+              //document.forms.item(0).submit();
+              if ($("#dt_filter").val() == "5") {
+                  //localhost:49259/Forums/ForumsList?hdnSearchType=&hdnsearch=&hdndatesearch=5&hdnDaterange=5&hdnTitle=&txtKeyword=sample&dt_filter=5&txt_FromDate=06%2F01%2F2001&txt_ToDate=6%2F1%2F2016&ddlaction=Select&ddlaction=Select&ddlaction=Select
+                  window.location.href = "../Forums/ForumsList?txtKeyword=" + $("#txtKeyword").val() + "&dt_filter=" + $("#dt_filter").val() + "&txt_FromDate=" + $("#txt_FromDate").val() + '&txt_ToDate=' + document.getElementById('txt_ToDate').value;
+              }
+              else {
+
+                  window.location.href = "../Forums/ForumsList?txtKeyword=" + $("#txtKeyword").val() + "&dt_filter=" + $("#dt_filter").val();
+              }
+          }
+          function cancelbutton() {
+              window.location = "../AdminHome/Tools";
+              return false;
+          }
+
+    </script>
+      <script type="text/javascript">
+
+          $(document).ready(function () {
+              //       alert("3")
+              var Type = $('#hdnSearchType').val();
+              if (Type != '') {
+                  $('#GlbSearch_Status').val(Type);
+              }
+              else {
+                  $('#GlbSearch_Status').val("All");
+              }
+          });
+      </script>
+
+  
+
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("ForumsList", "Forums", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+   
+            <input type="hidden" id="hdnSearchType" name="hdnSearchType" value="@ViewBag.SearchType" />
+       <input type="hidden" id="hdnsearch" name="hdnsearch" value="@ViewBag.search" />
+        <input type="hidden" id="hdndatesearch" name="hdndatesearch" value="@ViewBag.daterange" />
+          <input type="hidden" id="hdnFromdate"  value="@ViewBag.Fromdate"/>
+        <input id="hdnTodate" type="hidden" value="@ViewBag.Todate"/>
+        <input id="hdnDaterange" name="hdnDaterange" type="hidden" value="@ViewBag.Daterange"/>        
+        <input id="hdnTitle" name="hdnTitle" type="hidden" value="@ViewBag.Title"/>      
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+
+           <table width="98%" cellpadding="0" cellspacing="0">
+               <tr class="background_color">
+                                  <td width="36%" align="left">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Forum keyword : </strong>&nbsp;
+                                         <input type="text" name="txtKeyword"  id="txtKeyword" class="textfield" onkeypress="return fnsetfocus(event,'btnsearch')" style="width:200px;"/>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td width="64%">
+                            <table runat="server" style="padding-top:10px; padding-bottom:10px;">
+                        <tr class="background_color">
+                        <td width="40%" align="left" style="padding-left:80px;">
+                                                <strong>Date range&nbsp;:&nbsp; </strong>
+                                                                                    @Html.DropDownList("dt_filter", new List<SelectListItem>
+
+                                                              {
+                                                                new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                                  new SelectListItem{ Text="All", Value = "1" },
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                                new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                                new SelectListItem{ Text="Last 30 days", Value = "30" },
+   
+                                                                new SelectListItem{ Text="Custom", Value = "5" },
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                        </td>  
+                            @Html.Partial("_CustomDate")
+                     @*   <td width="55%" id="tddaterange" runat="server" style="display:none" align="left">
+                    <strong> From : </strong> &nbsp;&nbsp;&nbsp;  
+                                                              <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield" maxlength="10" style="width: 75px;" />
+                                                             &nbsp;&nbsp; <strong> To : </strong> &nbsp;&nbsp;&nbsp; 
+                                                             <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield" maxlength="10" style="width: 75px;" />
+                        </td>*@
+                        <td width="5%" align="right">
+                            <a id="btnsearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                      @* <input type="submit" class="button" id="btnsearch" value="Search" onclick="return ValidSearch();" />*@
+                        </td>
+                        </tr>
+                        </table>
+                            </td>
+                                  </tr>
+        </table>
+ 
+            <br />
+    <br />
+        <div class="content-box">
+            <div class="content-box-header">
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="60%" align="left">
+                    <h3>
+                        Forums</h3>
+                </td>
+
+                <td width="12%" align="center">
+                        <a id="lnkAddnewForum" style="color: #0066CC; font-weight: bold; font-size: 15px; cursor: pointer;"
+                            title="To add a fourm" href="#" onclick="return Displaydialog('AddNewforumDialog','AddNewForum','auto',800,'dvLoading',null,null);">Add new fourm </a>
+                    </td>
+               
+            </tr>
+        </table>
+     </div>
+     <div class="content-box-content">
+                            @{ WebGrid Forumsgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.pagesize ?? "10"));}
+                             @{WebGrid grid = Forumsgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                            if (grid.TotalRowCount != 0)
+                            {
+                                int count = 0;
+                                string pager = grid.Pager().ToString();
+                                string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                columns: grid.Columns(
+
+                                grid.Column("Slno", "#", canSort: false),
+                               grid.Column("ForumName", "Forum Name", canSort: false, format:@<text>
+                                               <table>
+                                    <tr>
+                                        <td align="left">
+                                       @Html.ActionLink((string)item.ForumName, "TopicsList", "Forums", new { Forum_ID = item.Forum_ID}, new { @style = "color:#0066CC;cursor:pointer;" })
+                                            <br />
+                                            <label style="font-family:Arial; font-size:9pt;">Moderator : </label>
+                                            <label style="font-family:Arial; font-size:9pt;">@item.Name </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+
+                                         
+                                        </td>
+                                    </tr>
+                                </table>
+                                            </text>
+),
+                                                                                                grid.Column("", "Description", canSort: false,
+                                                    format:@<text>
+                                                         @{string description = (string)item.Message;
+                                                           if (description.Length > 100)
+                                                           {
+                                                               count = count + 1;
+                                                               description = description.Substring(0, 100);
+                                                           
+                                                           <span>@description</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 400px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Description :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@item.Message</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@item.Message</span>
+                                                           }
+                                                           }
+                                                
+                                                </text>),
+                                                        grid.Column("Topics", "Topics", canSort: false),
+                                                        grid.Column("Replies", "Messages", canSort: false),
+                                                         grid.Column("LatestPost", "Latest Post", canSort: false),
+                                                   grid.Column("Action", canSort: false, format: @<text>
+                                                                                                                       @{
+                                                                                                                           string[] DDList1 = { "Select", "Manage", "Edit", "Delete" };
+                                                                            @Html.DropDownList("ddlaction", new SelectList(DDList1, (string)ViewBag.Prefix), new { @class = "ddlactionclass", onchange = "DDlchange(this.value, '" + item.Forum_ID + "', '" + item.ForumName + "');", style = "font-family:arial;font-size:13px;height:20px;width:130px;" })
+                                                                                                                           
+                                                                          }
+                            </text>)
+                                                  )).ToString();
+
+
+                                gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                            }
+                            else
+                            {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">No
+                                            forums found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            }
+                        }
+                   @* </td>
+                </tr>
+            
+        </table>*@
+
+        <div style="float: right; padding-top: 10px; padding-right: 5px;">
+
+        </div>
+  </div>
+    <div id="AddNewforumDialog" title="Add new forum">
+    </div>
+     <div id="viewactionDialog" title="View action">
+    </div>
+      <div id="EditfourmDialog" title="Edit fourm">
+    </div>
+    <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+    </div>
+    </div>
+        <table style="width:98%;">
+            <tr>
+                <td align="right" style="text-align:right; padding-top:10px;">
+                          <input name="btnCancel" value="Cancel" id="btnCancel" class="button" type="button" onclick="return cancelbutton();">
+                </td>
+            </tr>
+        </table>
+         <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete the forum ?
+            </p>
+        </div>
+ <br /><br />
+        <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+    <script type="text/javascript">
+
+        $.ajaxSetup({ cache: false });
+
+        $(document).ready(function () {
+
+
+            $(".close").live("click", function (e) {
+                e.preventDefault();
+                $(this).closest(".dialog").dialog("close");
+            });
+            $(".btnTask").live("click", function (e) {
+                $('#AddNewforumDialog').dialog("close");
+                $('#EditfourmDialog').dialog("close");
+            });
+
+            $(".close1").live("click", function (e) {
+                
+            });
+
+            $(".actionclose1").live("click", function (e) {
+                $('#viewactionDialog').dialog("close");
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        function DDlchange(id, Forum_ID, ForumName) {
+            if (id == "Manage") {
+                window.location = '../Forums/TopicsList?Forum_ID=' + Forum_ID + '&ForumName=' + ForumName;
+                return false;
+
+            }
+
+            if (id == "Edit") {
+                //var dialogDiv = $('#EditfourmDialog');
+             //   $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Forums/EditForum?Forum_ID=" + Forum_ID;
+                Displaydialog('EditfourmDialog', viewUrl, 'auto', 850, 'dvLoading', null, null);
+                 $('.ddlactionclass').val("Select");
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                // //   $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            }
+
+
+            if (id == "Delete") {
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    close: function () { $('.ddlactionclass').val("Select"); },
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            window.location = '../Forums/DeleteForum?Forum_ID=' + Forum_ID;
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                            $('.ddlactionclass').val("Select");
+                        }
+                    }
+                });
+                $("#dialog-confirm").dialog('open');
+                return false;
+            }
+
+        }
+
+</script>
+
+ <script type="text/javascript">
+     var linkObj;
+     $(function () {
+         var roleid = '@Session["RoleID"]';
+         var td1 = document.getElementById("tdtabs");
+         if (roleid !== "1") {
+             td1.setAttribute("class", "tab-background");
+         }
+         $('#viewactionDialog').dialog({
+             autoOpen: false,
+             width: 900,
+             resizable: false,
+             //                height:500,
+             modal: true,
+             close: function () { $('.ddlactionclass').val("Select"); }
+
+         });
+
+
+         //$('#EditfourmDialog').dialog({
+         //    autoOpen: false,
+         //    width: 850,
+         //    resizable: false,
+         //    //                height: 500,
+         //    modal: true,
+         //    close: function () { $('.ddlactionclass').val("Select"); }
+
+         //});
+
+         //$('#AddNewforumDialog').dialog({
+         //    autoOpen: false,
+         //    width: 800,
+         //    resizable: false,
+         //    modal: true
+
+         //});
+         //$("#lnkAddnewForum").click(function () {
+         //    linkObj = $(this);
+         //    var dialogDiv = $('#AddNewforumDialog');
+         //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+         //    var viewUrl = linkObj.attr('href');
+         //    $.get(viewUrl, function (data) {
+         //        dialogDiv.html(data);
+         //        $('#dvLoading').dialog('close');
+         //        dialogDiv.dialog('open');
+         //    });
+         //    return false;
+         //});
+
+
+     });
+
+      </script>
+        
+        
+        
+    }
+      <script type="text/javascript">
+          $(document).ready(function () {
+              var TopIndex = '@Session["TopIndex"]';
+              var roleid = '@Session["roleid"]';
+              if (roleid == "1") {
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").removeClass();
+                  $("#Menu3").addClass("active");
+              }
+              else {
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").removeClass();
+                  $("#Menu3").removeClass();
+                  $("#Menu4").addClass("active");
+              }
+          });
+    </script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+﻿@model MowerHelper.Models.BLL.Providers.Reg_ProvidersDetailInfo
+@using MowerHelper.Models.Classes
+@{
+    Layout = null;
+        //MowerHelper.Models.BLL.Providers.Reg_ProvidersDetailInfo obj= new MowerHelper.Models.BLL.Providers.Reg_ProvidersDetailInfo();
+        //obj  =MowerHelper.Models.BLL.Providers.Reg_ProvidersDetailInfo.Get_ProviderAddressDetails(Convert.ToInt32(Session["Prov_ID"]));
+}
+
+<script type="text/javascript">
+
+    if ('@ViewBag.practice_ind' == "Y") {
+        $('#chkaddress').prop('checked', true);
+    }
+    else {
+        $('#chkaddress').prop('checked', false);
+    }
+    $('#txtZip').keypress(function (e) {
+        var code = e.keyCode;
+        if (parseInt($('#txtZip').val().length) > 4) {
+            if (code != "8") {
+                return false;
+            }
+        }
+    });
+    function functionchkaddress() {
+
+        if (document.getElementById('chkaddress').checked == true) {
+            $("#EAddress1").attr("disabled", "disabled");
+            $("#EAddress2").attr("disabled", "disabled");
+            $("#txtZip").attr("disabled", "disabled");
+            $("#DDState").attr("disabled", "disabled");
+            $("#DDCity").attr("disabled", "disabled");
+            var firstname = $("<div/>").html("@Model.FirstName").text();
+            $('#txtfirstname').val(firstname);
+            var Lastname = $("<div/>").html("@Model.LastName").text();
+             $('#txtlastname').val(Lastname);
+             $('#EAddress1').val("@Model.Address1");
+             $('#EAddress2').val("@Model.Address2");
+            $('#txtZip').val("@Model.Zip");
+            var Zip_code = $('#txtZip').val();
+           if (Zip_code != '') {
+                $.getJSON('@Url.Action("GetStateCitiesByZip", "Public")', { zipcode: Zip_code },
+               function (data) {
+                   if (data.indexOf(",") != -1) {
+                       var data1 = data.split(',');
+                       $("#DDState").empty();
+                       $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                       $('#DDState').append($('<option > </option>').val(data1[1]).html(data1[0]));
+                       $("select#DDState").prop('selectedIndex', 1);
+                       $("#DDCity").empty();
+                       $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                       $('#DDCity').append($('<option > </option>').val(data1[3]).html(data1[2]));
+                       $("select#DDCity").prop('selectedIndex', 1);
+                   }
+               });
+             }
+         }
+         else {
+             if ("@Model.Address1" != "") {
+                $("input").prop('disabled', false);
+                $("#DDState").prop('disabled', false);
+                $("#DDCity").prop('disabled', false);
+                $('#EAddress1').val("");
+                $('#EAddress2').val("");
+                $('#txtZip').val("");
+                $("#DDState").empty();
+                $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                $("select#DDState").prop('selectedIndex', 1);
+                $("#DDCity").empty();
+                $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                //$('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                $("select#DDCity").prop('selectedIndex', 0);
+                if ("@Model.Address1" != '@ViewBag.Address1' || "@Model.Zip" != '@ViewBag.Zip') {
+                     if ('@ViewBag.Address1' != "") {
+                         $('#EAddress1').val('@ViewBag.Address1');
+                         $('#txtZip').val('@ViewBag.Zip');
+                         $.getJSON('@Url.Action("GetStateCitiesByZip", "Public")', { zipcode: '@ViewBag.Zip' },
+                    function (data) {
+                        if (data.indexOf(",") != -1) {
+                            var data1 = data.split(',');
+                            $("#DDState").empty();
+                            $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                            $('#DDState').append($('<option > </option>').val(data1[1]).html(data1[0]));
+                            $("select#DDState").prop('selectedIndex', 1);
+                            $("#DDCity").empty();
+                            $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                            $('#DDCity').append($('<option > </option>').val(data1[3]).html(data1[2]));
+                            $("select#DDCity").prop('selectedIndex', 1);
+                        }
+                    });
+                         //}
+                     }
+                     else {
+                         $.getJSON('@Url.Action("GetStateByZip", "Public")',
+             function (data) {
+                 $("#DDState").empty();
+                 $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                 $.each(data, function (index, value) {
+                     $('#DDState').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                 });             
+             });
+                     }
+                 }
+                 else {
+
+                     $("#EAddress1").removeAttr("disabled");
+                     $("#EAddress2").removeAttr("disabled");
+                     $("#txtZip").removeAttr("disabled");
+                     $("#DDState").removeAttr("disabled");
+                     $("#DDCity").removeAttr("disabled");
+                     $('#EAddress1').val(null);
+                     $('#EAddress2').val(null);
+                     $('#txtZip').val(null);
+                     $('#DDState').val(0);
+                     $('#DDCity').val(0);
+                     $("#DDState").empty();
+                     $.getJSON('@Url.Action("GetStateByZip", "Public")',
+                   function (data) {
+                       $("#DDState").empty();
+                       $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                       $.each(data, function (index, value) {
+                           $('#DDState').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                       });
+                   });
+                     $("#DDCity").empty();
+                     $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                     // return false;
+                 }
+                 @* }*@
+             }
+        }
+    }
+    $(function () {
+        $("#txtZip").keyup(function () {
+
+            if ($(this).val().length == '5') {
+                var recordId = $('#txtZip').val();
+                    $.getJSON('@Url.Action("GetStateCitiesByZip", "Public")', { zipcode: recordId },
+                   function (data) {
+                       if (data.indexOf(",") != -1) {
+                           var data1 = data.split(',');
+                           $("#DDState").empty();
+                           $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                           $('#DDState').append($('<option > </option>').val(data1[1]).html(data1[0]));
+                           $("select#DDState").prop('selectedIndex', 1);
+                           $("#DDCity").empty();
+                           $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                           $('#DDCity').append($('<option > </option>').val(data1[3]).html(data1[2]));
+                           $("select#DDCity").prop('selectedIndex', 1);
+                       }
+                       else {
+                           $("#DDState").empty();
+                           $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                           $.each(data, function (index, value) {
+                               $('#DDState').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                           });
+                           $("#DDCity").empty();
+                           $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                       }
+                   });
+
+
+            }
+            else {
+                if (event.keyCode == '8' || event.keyCode == '88' || event.keyCode == '46') {
+                    $.getJSON('@Url.Action("GetStateByZip", "Public")',
+                  function (data) {
+                      $("#DDState").empty();
+                      $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                      $.each(data, function (index, value) {
+                          $('#DDState').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                      });
+                  });
+                    $("#DDCity").empty();
+                    $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                }
+            }
+        });
+
+    });
+    $(document).ready(function () {
+        $('#chkaddress').prop('checked', true);
+        if ($('#txtZip').val() != '') {
+            var recordId = $('#txtZip').val();
+            var stateid = "@Model.State_ID";
+            var statename = "@Model.Statename";
+            var City_ID = "@Model.City_ID";
+            var Cityname = "@Model.Cityname";
+            if (recordId != '' && stateid != '' && City_ID != '') {
+                $("#DDState").empty();
+                $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                $('#DDState').append($('<option > </option>').val(stateid).html(statename));
+                $("select#DDState").prop('selectedIndex', 1);
+                $("#DDCity").empty();
+                $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                $('#DDCity').append($('<option > </option>').val(City_ID).html(Cityname));
+                $("select#DDCity").prop('selectedIndex', 1);
+            }
+        }
+        functionchkaddress();
+        $('#chkaddress').change(function () { functionchkaddress();})
+        if ($('#txtZip').val() != '') {
+            var recordId = $('#txtZip').val();
+            var stateid = "@Model.State_ID";
+             var statename = "@Model.Statename";
+             var City_ID = "@Model.City_ID";
+             var Cityname = "@Model.Cityname";
+             if (recordId != '' && stateid != '' && City_ID != '') {
+                 $("#DDState").empty();
+                 $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                 $('#DDState').append($('<option > </option>').val(stateid).html(statename));
+                 $("select#DDState").prop('selectedIndex', 1);
+                 $("#DDCity").empty();
+                 $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                 $('#DDCity').append($('<option > </option>').val(City_ID).html(Cityname));
+                 $("select#DDCity").prop('selectedIndex', 1);
+             }
+         }
+
+        $('#DDState').change(function () {
+            var recordId = $('#DDState').val();
+            var recordId1 = $("#txtZip").val();
+            if (recordId != '' && recordId1 == '') {
+                $.getJSON('@Url.Action("GetCitiesByStates", "Public")', { id: recordId },
+                  function (data) {
+                      $("#DDCity").empty();
+                      $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                      $.each(data, function (index, value) {
+                          $('#DDCity').append($('<option > </option>').val(data[index].CityId).html(data[index].CityName));
+                      });
+                  });
+                 // return false;
+             }
+             else if (recordId != '' && recordId1 != '') {
+                $.getJSON('@Url.Action("GetCitiesByZip", "Public")', { id: recordId, zipcode: recordId1 },
+                  function (data) {
+                      $("#DDCity").empty();
+                      $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                      $.each(data, function (index, value) {
+                          $('#DDCity').append($('<option > </option>').val(data[index].CityId).html(data[index].CityName));
+                      });
+                  });
+                 // return false;
+             }
+             else {
+
+                 $("#DDCity").empty();
+                 $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                 // return false;
+             }
+         });
+    });
+
+</script>
+<tr class="white_color">
+    <td align="right" style="width: 30%">
+        <font color="red"><b>*</b></font><strong>Zip :&nbsp;</strong>
+    </td>
+    <td id="Etdzip">
+        @Html.TextBox("txtZip", (string)Model.Zip, new { @class = "textfield", autocomplete = "off", style = "width:50px", onkeypress = "return ValidZip(event);", disabled = "disabled" })&nbsp;&nbsp;&nbsp;<span
+            id="Elblzip" style="display: none"></span>
+    </td>
+</tr>
+<tr class="nav_blue_color">
+    <td align="right" style="width: 30%">
+        <font color="red"><b>*</b></font><strong>State :&nbsp;</strong>
+    </td>
+    <td id="Etdstate" runat="server">
+        @* @Html.DropDownList("state")*@
+        @*@if (clsCommonCClist.GetStates().StateList != null)
+        {*@
+        @Html.DropDownList("DDState", new SelectList(clsCommonCClist.GetStates(), "StateId", "StateFullName"), "--Select State--", new { @class = "textfield", @style = "width:270px;height:25px;font:13px;", disabled = "disabled" })
+        @*}*@
+        &nbsp;&nbsp;&nbsp;<span id="Elblstate" style="display: none"></span>
+    </td>
+</tr>
+<tr class="white_color">
+    <td align="right" style="width: 30%">&nbsp;<font color="red"><b>*</b></font><strong>City :&nbsp;</strong>
+    </td>
+    <td id="Etdcity" runat="server">
+        @* @Html.DropDownList("city")*@
+        @Html.DropDownList("DDCity", new List<SelectListItem> { new SelectListItem { Text = "--Select City-- ", Value = "0", Selected = true } }, new { @class = "textfield", @style = "width:270px;height:25px;font:13px;", disabled = "disabled" })
+        &nbsp;&nbsp;&nbsp;<span id="Elblcity" style="display: none"></span>
+    </td>
+</tr>

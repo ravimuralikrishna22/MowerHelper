@@ -1,0 +1,784 @@
+﻿@model MowerHelper.Models.BLL.Billing.RPBilling
+@using MowerHelper.Models.BLL.Billing;
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@{
+    string Fdate = Model.FromDate;
+    string Tdate = Model.ToDate;
+    string Vddlrecords = Model.NoOfRecords;
+    string VSetdt = Model.Date_range;
+    string Vpage = Model.PageNo;
+    string Vpid = Model.PatientID;
+    int? Vplid = Model.PatientLogin_ID;
+    string clientphone = Model.clientphone;
+    int? type_id = Model.type_id;
+    string CustEmail = Model.Customer_Email;
+}
+<style>
+    .gridFooter span
+    {
+        background:white !important;
+        border:none !important;
+    }
+        .gridFooter span span
+        {
+            background:#469400 url('../../../images/bg-button-green.gif') top left repeat-x !important;
+        }
+</style>
+<script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+    
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.gridFooter span a').click(function () {
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("DisplayTransactions", "Billing")' + queryString;
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $('#gridcontent1').load(requestUrl, function(data){$('#dvLoading').dialog('close');});
+                return false;
+        });
+        $('.gridHead th a').click(function () {
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("DisplayTransactions", "Billing")' + queryString;
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $('#gridcontent1').load(requestUrl, function(data){$('#dvLoading').dialog('close');});
+            return false;
+        });
+
+        $("#addTranClick ,#lnk030,#lnk3060,#lnk6090,#lnk90120,#lnkOver120,#editCharge,#editPayment,#editChPay").click(function (event) {
+            event.preventDefault();
+        });
+
+        var chgcnt = '@ViewBag.totrec';
+        if (chgcnt > 0) {
+            document.getElementById('ulALLPDF').style.display = "";
+            document.getElementById('ulallexel').style.display = "";
+        }
+        if('@Model.PatientID' == "")
+        {
+            $('#lnkinvoice').hide();
+        }
+        else  
+        {
+            $('#lnkinvoice').show();
+        }
+        $('#FromDate').val('@Fdate');
+        $('#ToDate').val('@Tdate');
+        $('#ddlrecords').val('@Model.NoOfRecords');
+        $("#lnkinvoice").click(function (e) {
+            e.preventDefault();
+            if($("#hdnclientEmail").val()=="" || $("#hdnclientEmail").val()==null){
+                if('@Session["hdnclientEmail"]' != null && '@Session["hdnclientEmail"]' != "")
+                {
+                    $("#hdnclientEmail").val('@Session["hdnclientEmail"]');
+                }
+            }
+            if($("#hdnclientEmail").val()=="" || $("#hdnclientEmail").val()==null)
+            {
+                var viewUrl = "../Clients/CustInvoice?patientid=" + $("#hdnpatid").val() + '&ProviderID=' + $("#hdnProv_ID").val() + '&ProviderLoginID=' + $("#hdnUserID").val()+'&ddlrecords=' + document.getElementById('ddlrecords').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&hdnPid=' + $("#hdnPid").val() + '&hdnPlId=' + $("#hdnPlId").val() + '&fdate=' + document.getElementById('FromDate').value + '&tdate=' + document.getElementById('ToDate').value + '&clientphone=' + $("#clienttranphone").val()+"&BillingInd=Y"+'&hdnclientEmail='+$("#txtEmailID").val() + '&type_id=' + '@type_id';
+                Displaydialog('divInvoice', viewUrl, 'auto', 700, 'dvLoading', null, null)
+                return false;
+            }
+            else
+            {
+                var msg="An invoice in the form of PDF file is sent to " + $("#hdnclientEmail").val() +  " address."
+                alert(msg);
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                $('#gridcontent1').load('../Clients/CustomerInvoice?patientid=' +  $("#hdnpatid").val() + '&Provider_ID=' + $("#hdnProv_ID").val() + '&ProviderLoginID=' +  $("#hdnUserID").val()+'&NoOfRecords=' + document.getElementById('ddlrecords').value + '&Date_range=' + document.getElementById('dt_filter').value /*+ '&hdnPid=' + $("#hdnPid").val() */+ '&PatientLogin_ID=' + $("#PatientLogin_ID1").val() + '&FromDate=' + document.getElementById('FromDate').value + '&ToDate=' + document.getElementById('ToDate').value + '&clientphone=' + $("#clienttranphone").val()+"&Ind=Y"+'&Customer_Email='+$('#hdnclientEmail').val() + '&type_id=' + '@type_id', function(data){$('#dvLoading').dialog('close');});
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var PCtotal = "@ViewBag.PageChargeTotal";
+        var PPtotal = "@ViewBag.PagePaymentTotal";
+        var GCtotal = "@ViewBag.GrandChargeTotal";
+        var GPtotal = "@ViewBag.GrandPaymentTotal";
+        var RecordCount = "@ViewBag.RecordCount";
+        $('.gridTable').append('<tr><td style="padding:10px;text-align:right;" colspan="5"><b>Total of these ' + RecordCount + ' transactions : </b></td><td style="padding:10px;text-align:center;"><b>' + PCtotal + '</b></td><td style="padding:10px;text-align:center;"><b>' + PPtotal + '</b></td><td colspan="3"></td></tr><tr><td style="padding:10px;text-align:right;" colspan="5"><b>Grand total : </b></td><td style="padding:10px;text-align:center;"><b>' + GCtotal + '</b></td><td style="padding:10px;text-align:center;"><b>' + GPtotal + '</b></td><td colspan="3"></td></tr>');
+        });
+    </script>
+    @Html.Hidden("hdnclientEmail")
+    @Html.Hidden("hdnpatid", Model.PatientID)
+    @Html.Hidden("hdnProv_ID", Model.Provider_id)
+    @Html.Hidden("hdnUserID", Model.UserId)
+    @Html.Hidden("hdnfrmdate", Model.FromDate)
+    @Html.Hidden("hdntodate", Model.ToDate)
+    @Html.Hidden("PatientLogin_ID1", Model.PatientLogin_ID)
+    @Html.Hidden("Date_range")
+    @Html.Hidden("NoOfRecords")
+    @Html.Hidden("clientphone")
+    @Html.Hidden("type_id")
+    <input type="hidden" id="hdnsort" name="hdnsort" value="@Model.OrderbyItem" />
+            <input type="hidden" id="hdnsortdir" name="hdnsortdir" value="@Model.orderBy" />
+
+<div class="content-box">
+                <div class="content-box-header">
+                    <h3>Search filters</h3>
+                    <ul class="content-box-tabs" id="ulALLPDF" style="list-style: none!important; padding-right: 5px; display: none">
+                        <li>
+                            <a id="lnkprint" href="" onclick="return printalltrspdf();" style="color: #0066CC; font-weight: bold; font-size: 14px;">
+                                <img alt="" id="" src="../Images/thumbnailCADZAOWV.png" style="width: 40px; border-width: 0px;" />
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="content-box-tabs" id="ulallexel" style="list-style: none!important; padding-right: 5px; display: none">
+                        <li>
+                            <a id="lnkprint" href="" onclick="return printalltransexel();" style="color: #0066CC; font-weight: bold; font-size: 14px;">
+                                <img alt="" id="" src="~/Images/ExportExcel.png" style="width: 40px; border-width: 0px;" />
+                            </a>
+                        </li>
+                    </ul>
+                    <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                        <li><strong>Rows per page :&nbsp;</strong>
+                             @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                                                    <script>$("#ddlrecords").change(function () {
+    
+    @*  if ($("#comboboxMain_SelectedText").val() != "--Select Client--") {
+
+        // window.location.href = "../Billing/TransactionDisplay?hdnfrmdate=" + $("#hdnfrmdate").val() + "&hdntodate=" + $("#hdntodate").val() + "&hdnsort=" + '@ViewBag.sort' + "&hdnsortdir=" + '@ViewBag.sortdir' + "&hdnnoofrecords=" + $("#hdnnoofrecords").val() + "&ddlrecords=" + $("#ddlrecords").val() + "&comboboxMain_SelectedText=" + $("#comboboxMain_SelectedText").val() + "&comboboxMain_SelectedIndex=" + $("#comboboxMain_SelectedIndex").val() + "&dt_filter=" + $("#dt_filter").val() + "&txt_FromDate=" + $("#txt_FromDate").val() + "&txt_ToDate=" + $("#txt_ToDate").val();// + "&sort=" + $("#sort").val() + "&sortdir=" + $("#sortdir").val;
+     
+            window.location.href = "../Billing/TransactionDisplay?ddlrecords=" + $("#ddlrecords").val() + "&dt_filter=" + $("#dt_filter").val() + "&hdnPid=" + $("#hdnPid").val() + "&hdnPlId=" + $("#hdnPlId").val() + "&fdate=" + $("#txt_FromDate").val() + "&tdate=" + $("#txt_ToDate").val();
+    }*@
+    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+    if($("#type_id").val() != "")
+    {
+        $("#gridcontent1").load('@Url.Action("DisplayTransactions", "Billing")?NoOfRecords=' + $("#ddlrecords").val() + "&Date_range=" + $("#dt_filter").val() + "&PatientID=" + $("#hdnPid").val() + "&PatientLogin_ID=" + $("#hdnPlId").val() + "&FromDate=" + $("#FromDate").val() + "&ToDate=" + $("#ToDate").val() + "&clientphone=" + "@Model.clientphone" + "&type_id=" + $('#type_id').val() +'&Customer_Email='+$('#hdnclientEmail').val() + "&sort=" + $("#hdnsort").val() + "&sortdir=" + $("#hdnsortdir").val(), function(data){$('#dvLoading').dialog('close');});
+    }
+    else if ($("#FromDate").val() != "") {
+        
+        $("#gridcontent1").load('@Url.Action("DisplayTransactions", "Billing")?NoOfRecords=' + $("#ddlrecords").val() + "&Date_range=" + $("#dt_filter").val() + "&PatientID=" + $("#hdnPid").val() + "&PatientLogin_ID=" + $("#hdnPlId").val() + "&FromDate=" + $("#FromDate").val() + "&ToDate=" + $("#ToDate").val() + "&clientphone=" + "@Model.clientphone" + '&Customer_Email='+$('#hdnclientEmail').val() + "&sort=" + $("#hdnsort").val() + "&sortdir=" + $("#hdnsortdir").val(), function(data){$('#dvLoading').dialog('close');});
+    }
+    else {
+        $("#gridcontent1").load('@Url.Action("DisplayTransactions", "Billing")?NoOfRecords=' + $("#ddlrecords").val() + "&Date_range=" + $("#dt_filter").val() + "&PatientID=" + $("#hdnPid").val() + "&PatientLogin_ID=" + $("#hdnPlId").val() + "&clientphone=" + "@Model.clientphone" + '&Customer_Email='+$('#hdnclientEmail').val() + "&sort=" + $("#hdnsort").val() + "&sortdir=" + $("#hdnsortdir").val(), function(data){$('#dvLoading').dialog('close');});
+        
+    }
+});</script>
+                        </li>
+                    </ul>
+                    @if (ViewBag.BalanceDue != "$0.00" && Model.PatientID != null)
+                    {
+                       
+                    <ul class="content-box-tabs" id="ullnkinvoice" style="list-style: none!important; padding-right: 10px;">
+                        <li>
+                            <a href="#" id="lnkinvoice" style="display:none; color: #0066CC; font-weight: bold; font-size: 14px;">Send Invoice</a>&nbsp;&nbsp;
+                        </li>
+                        
+                    </ul>
+                            
+                    }
+                </div>
+                <div class="clear"></div>
+                <div class="content-box-content">
+                    <table class="border_style" id="tblFilter" cellspacing="1" cellpadding="0" width="100%" align="center" border="0" runat="server">
+                        <tr class="white_color" id="trpatient" runat="server">
+                            <td width="40%" align="left" valign="top">
+                                <table class="border_style" cellspacing="1" cellpadding="4" width="100%" align="center" border="0" runat="server">
+                                    <tr>
+                                       @* <td align="right" width="14%"><strong>Client&nbsp;:</strong></td>*@
+                                        <td align="left"  >
+                                            @Html.Obout(new Obout.Mvc.ComboBox.ComboBox("comboboxMain")
+                                       {
+                                           Width = 390,
+                                           MenuWidth = 390,
+                                           Height = 180,
+                                           EmptyText = "--Select Client--",
+                                           FolderStyle = ViewData["comboboxMain_Folderstyle"].ToString(),
+                                           HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                                               @:<div class="header  c1">Client</div><div class="header c2">Phone</div><div class="header c3">Balance($)</div>
+),
+
+                                           ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+                                             @:<div class="item c1">@(((MowerHelper.Models.BLL.BLLSchedule.ListofPatients)item.DataItem).PatientName)</div><div class="item c2">@(((MowerHelper.Models.BLL.BLLSchedule.ListofPatients)item.DataItem).Phone)</div><div class="item c3">@(((MowerHelper.Models.BLL.BLLSchedule.ListofPatients)item.DataItem).Balance)</div>
+)
+                                                                                       ,
+                                           ClientSideEvents = new ComboBoxClientSideEvents()
+                                           {
+                                               OnSelectedIndexChanged = "comboboxMain_ItemClick"
+                                           }
+                                       })
+                                        </td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        @*<td width="14%" align="right" height="25px"><strong>Date&nbsp;:</strong></td>*@
+                                        <td  id="Td2" align="left" valign="middle"  >
+                                            <table border="0" width="100%">
+                                                <tr>
+                                                    <td align="left" width="20%" >
+                                                        @Html.DropDownList("dt_filter", new List<SelectListItem>
+                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                                new SelectListItem{ Text="Last 15 days" ,Value="last15days"},
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                              
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                                                    </td>
+                                                     @*@Html.Partial("_CustomDate")*@
+                                                    <td id="tddaterange"  style="display: none;" align="left" >
+                                                        <strong>&nbsp;From&nbsp;:&nbsp;</strong>
+                                                        <input type="text" name="FromDate" id="FromDate" class="textfield Datefield" maxlength="10" style="width: 70px;" />
+                                                        &nbsp;<strong>&nbsp;To :&nbsp;</strong>
+                                                        <input type="text" name="ToDate" id="ToDate" class="textfield Datefield" maxlength="10" style="width: 70px;" />
+                                                    </td>
+                                                    <td id="divDates" valign="middle" align="right" colspan="2" height="30px" >
+
+                                                      @*  <input type="submit" value="Search" name="command" id="ibtnSearch" class="button" onclick="return ValidSearch();" />
+                          <input type="submit" value="Clear" name="ibtnClear" id="ibtnClear" class="button" onclick="return btnclear();" />*@
+                                                        <a id="lnkSearch" href="#" onclick="return ValidSearch(event);" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                                                        
+                                            <a id="lnkClear" href="#" onclick="return btnclear();" title="Clear"><img alt="" id="" src="~/Images/refreshimages.png" style="width:30px;" /></a>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                            <table>
+                                                <tr id="trduration" style="display: none">
+                                                    <td style="padding-left: 150px;"><span>(Maximum 12 months)</span></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    @*        <tr>
+                        <td id="divDates" valign="middle" align="right" colspan="2" style="padding-right:30px;" height="29px">
+                          <input type="submit" value="Search"  name="command" id="ibtnSearch" class="button" onclick="return ValidSearch();"/>&nbsp;&nbsp;
+                          <input type="submit" value="Clear"  name="ibtnClear" id="ibtnClear" class="button" onclick="return btnclear();"/>
+                        </td>
+                                </tr>*@
+                                </table>
+                            </td>
+                            <td width="60%" >
+                                @*<table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr style="background: none;">
+                                        <td width="100%">*@
+                                            <div class="content-box">
+                                                @*    <div class="content-box-header"><h3>By days outstanding</h3>
+        </div>*@
+                                                @* <div class="clear"></div>*@
+                                                <div class="content-box-content">
+                                                    @Html.Raw(ViewBag.DaysOut)
+                                                </div>
+                                            </div>
+                                      @*  </td>
+                                    </tr>
+                                </table>*@
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <br />
+<div class="content-box">
+ <div class="content-box-header">
+                    <h3>List of transactions
+                        <label id="lblHeaderTran">@ViewBag.lblHeaderTran</label>
+                    </h3>
+                    @if (ViewBag.totrec > 0)
+                    {               
+                        <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+                            <li>
+                                <a id="lnkprint" href="" onclick="return printTranpdf();" style="display: none; color: #0066CC; font-weight: bold; font-size: 14px;">
+                                    <img alt="" id="" src="../Images/thumbnailCADZAOWV.png" style="width: 40px; border-width: 0px;" />
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+                            <li>
+                                <a id="lnkprint1" href="" onclick="return printTranexcel();" style="display: none; color: #0066CC; font-weight: bold; font-size: 14px;">
+                                    <img alt="" id="" src="~/Images/ExportExcel.png" style="width: 40px; border-width: 0px;" />
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                    <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+                        <a href="#" id="addTranClick" class="clstran" onclick="return Displaydialog('divtran','@Url.Action("AddTransaction", "Billing", new { @ddlrecords = @Vddlrecords, @dt_filter = @VSetdt, page = @Vpage, @hdnPid = @Vpid, @hdnPlId = @Vplid, @fdate = @Fdate, @tdate = @Tdate, @clientphone = @clientphone, @type_id = @type_id })', 'auto', 900, 'dvLoading', null, null);" style = "color:#0066CC;font-size:14px;font-weight:bold;">Add new transaction</a>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+<div class="content-box-content">
+@{string heading1;
+  if (Model.OrderbyItem == "Transaction_Date" && Model.orderBy == "ASC")
+  {
+      heading1 = "Transaction date ▲";
+  }
+  else if (Model.OrderbyItem == "Transaction_Date" && Model.orderBy == "DESC")
+  {
+      heading1 = "Transaction date ▼";
+  }
+  else
+  {
+      heading1 = "Transaction date ▼";
+  }
+                    }
+                    @{string Chgpagesize = (Model.NoOfRecords == null ? "10" : Model.NoOfRecords);
+                      WebGrid Chggrid = new WebGrid(canPage: true, rowsPerPage: Convert.ToInt32(Chgpagesize), ajaxUpdateContainerId: "gridcontentnew", pageFieldName: "PageNo");}
+                    @{WebGrid grid = Chggrid.Bind(rowCount: ViewBag.totrec, source: Model.BillingTransList, autoSortAndPage: false);
+                      if (grid.TotalRowCount != 0)
+                      {
+                          int count = 0;
+                          string pager = HttpUtility.HtmlDecode(grid.Pager().ToString());
+                          string pageno = (Request["PageNo"] == null ? "1" : Request["PageNo"]);
+                          string newpager = HttpUtility.HtmlDecode(System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>"));
+                          string gridhtml = grid.GetHtml(htmlAttributes: new { id = "gridcontentnew" }, tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                          columns: grid.Columns(grid.Column("Transaction_Date", heading1, style: "Date"),
+                          grid.Column("apptdate", "Appointment date", style: "Aptdate", canSort: false),
+                          grid.Column("BillableParty", "Client name", style: "Aptdate", canSort: false),
+                          grid.Column("PaymentMode", "Payment mode", style: "Aptdate", canSort: false),
+                          grid.Column("", "Notes",
+                          format:@<text>
+                        @{string chgNote = (string)item.Notes;
+                          if (chgNote != null)
+                          {
+                              if (chgNote.Length > 100)
+                              {
+                                  count = count + 1;
+                                  chgNote = chgNote.Substring(0, 100);
+                                                           
+<span>@chgNote</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+<div id="tbldesc @count" style="width: 400px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Notes </h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4" width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:5px; padding-top: 5px;" align="left"> <span>@Html.Raw(HttpUtility.HtmlDecode(item.Notes))</span> </td> </tr>
+                                                             </table> </div>
+                              }
+                              else
+                              {
+<span>@Html.Raw(HttpUtility.HtmlDecode(item.Notes))</span>
+                              }
+
+                          }
+                          else
+                          {
+<span>@Html.Raw(HttpUtility.HtmlDecode(item.Notes))</span>
+                          }
+                        }
+
+                        </text>
+                                                
+),
+grid.Column("TotalCharges", "Charge($)", style: "Aptdate", canSort: false),
+grid.Column("TotalPayments", "Payment($)", style: "Aptdate", canSort: false),
+                                                                                grid.Column("", "Edit", style: "cDel", canSort: false,
+                          format:@<text>
+                        @{string type = (string)item.TransactionType;
+                          if (type == "Charge")
+                          {
+                               <a href="#" id="editCharge" onclick="return Displaydialog('divEditcharge','@Url.Action("EditCharge", "Billing", new { tId = (int)item.Transaction_ID, ddlrecords = @Vddlrecords, dt_filter = @VSetdt, page = @Vpage, hdnPid = @Vpid, hdnPlId = @Vplid, @fdate = @Fdate, @tdate = @Tdate, hdnnew = "Y", @clientphone = @clientphone, @type_id = @type_id, pageRowCount = @Model.BillingTransList.Count })', 'auto', 900,'dvLoading','Transaction_Amount','TxtTransactionType');" class = "EditChargediv", title = "Click here to Edit transaction" >
+                                   <img src="~/Images/edit.gif" />
+                              </a> 
+                          }
+                          else if (type == "Payment")
+                          {
+                             <a href="#" id="editPayment" onclick="return Displaydialog('divEditPay','@Url.Action("EditPayment", "Billing", new { tId = (int)item.Transaction_ID, ddlrecords = @Vddlrecords, dt_filter = @VSetdt, page = @Vpage, hdnPid = @Vpid, hdnPlId = @Vplid, @fdate = @Fdate, @tdate = @Tdate, hdnnew = "Y", @clientphone = @clientphone, @type_id = @type_id, pageRowCount = @Model.BillingTransList.Count })', 'auto', 900,'dvLoading','txtPAmount','TxtTranTypePayment');" class = "EditPaydiv", title = "Click here to Edit transaction" >
+                                   <img src="~/Images/edit.gif" />
+                              </a> 
+                          }
+                          else
+                          {
+                              <a href="#" id="editChPay" onclick="return Displaydialog('divEditTran','@Url.Action("EditTransaction", "Billing", new { tId = (int)item.Transaction_ID, ddlrecords = @Vddlrecords, dt_filter = @VSetdt, page = @Vpage, hdnPid = @Vpid, hdnPlId = @Vplid, @fdate = @Fdate, @tdate = @Tdate, hdnnew = "Y", @clientphone = @clientphone, @type_id = @type_id, pageRowCount = @Model.BillingTransList.Count })', 'auto', 900,'dvLoading','txt_PAmount','txt_EditTransaction');" class = "Edittrandiv", title = "Click here to Edit transaction" >
+                                   <img src="~/Images/edit.gif" />
+                              </a>
+                          }
+                        }
+                        </text>),
+
+
+grid.Column("", "Delete", style: "cDel", canSort: false,
+                            format:@<text>
+                        @{string tnstype = (string)item.TransactionType;
+                          if (tnstype != "Payment")
+                          {
+                                <a href="@Url.Action("DeleteTran", "Billing", new { tId = (int)item.Transaction_ID, trTypeid = item.TransactionType_ID, ddlrecords = @Vddlrecords, dt_filter = @VSetdt, page = (@Model.BillingTransList.Count == 1 && Convert.ToInt32(@Vpage) > 1) ? (Convert.ToInt32(@Vpage) - 1).ToString() : @Vpage, hdnPid = @Vpid, hdnPlId = @Vplid, @fdate = @Fdate, @tdate = @Tdate, hdnnew = "Y", @clientphone = @clientphone, @type_id = @type_id, @CustEmail = @CustEmail })" class = "confirmDialog", title = "Click here to delete transaction" >
+                                   <img src="~/Images/cross.png" />
+                              </a>
+                          }
+                          else
+                          {
+                               <a href="@Url.Action("DeleteTran", "Billing", new { tId = (int)item.Transaction_ID, trTypeid = item.TransactionType_ID, ddlrecords = @Vddlrecords, dt_filter = @VSetdt, page = (@Model.BillingTransList.Count == 1 && Convert.ToInt32(@Vpage) > 1) ? (Convert.ToInt32(@Vpage) - 1).ToString() : @Vpage, hdnPid = @Vpid, hdnPlId = @Vplid, @fdate = @Fdate, @tdate = @Tdate, hdnnew = "Y", @clientphone = @clientphone, @type_id = @type_id, @CustEmail = @CustEmail })" class = "confirmDialog1", title = "Click here to delete transaction" >
+                                   <img src="~/Images/cross.png" />
+                              </a>
+                          }
+                        }
+                        </text>))).ToString();
+                          gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                          System.Text.RegularExpressions.Regex reg1 = new System.Text.RegularExpressions.Regex("<script(.|\n)*?</script>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                          string _script = reg1.Match(newpager).Value.ToString();
+                          newpager = newpager.Replace(_script, "");
+                        @(new HtmlString(gridhtml))
+                          if (newpager != "")
+                          {
+                        <br />                                               
+                        <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>                                                 
+                        <br />
+                          }
+                      }
+                      else
+                      {
+                        <table id="tdcharge" runat="server" width="100%">
+                            <tr>
+                                <td align="center" valign="middle" height="25px"><span id="lblCharges" class="errormsg" style="font-size: 13px; font-weight: bold;">No transactions found</span></td>
+                            </tr>
+                        </table>                                               
+                      }
+                    }
+    </div>
+    </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+      
+        var setddl = "@Model.NoOfRecords";
+        if (setddl != null && setddl != "") {
+            $("#ddlrecords").val(setddl);
+        }
+        else {
+            $("#ddlrecords").val("10");
+        }
+        //$("#dt_filter").val("last15days");
+        //**********************************changed*******************************
+        //$("#FromDate,#ToDate").datepicker({
+        //    dateFormat: 'mm/dd/yy',
+        //    changeMonth: true,
+        //    changeYear: true,
+        //    //                showCurrentAtPos: 1,
+        //    showWeeks: true,
+        //    inline: true,
+        //    numberOfMonths: [1, 1],
+        //    yearRange: "1950:2020",
+        //    showOn: "button",
+        //    buttonImage: "../Images/calender.gif",
+        //    buttonImageOnly: true
+
+        //});
+        $('#dt_filter').change(function () {
+            if (document.getElementById('dt_filter').value == 'Custom') {
+                document.getElementById('tddaterange').style.display = '';
+                $('#FromDate').val("");
+                $('#ToDate').val("");
+                document.getElementById('trduration').style.display = "";
+            }
+            else {
+                document.getElementById('tddaterange').style.display = 'none';
+                $('#FromDate').val("");
+                $('#ToDate').val("");
+                document.getElementById('trduration').style.display = "none";
+            }
+            return false;
+        });
+        var setdt = "@Model.Date_range";
+        var cmbselect = "@Model.PatientID";
+        if (cmbselect != "" && cmbselect != null) {
+            $('#dt_filter').append($('<option > </option>').val("All").html("All"));
+        }
+        if (setdt != "" && setdt != null) {
+            if (setdt == "All") {
+
+                $("#dt_filter").val("All");
+            }
+            else {
+                $('#dt_filter').val(setdt);
+            }
+            if (setdt == "Custom") {
+                document.getElementById('tddaterange').style.display = '';
+                document.getElementById('trduration').style.display = '';
+                $('#FromDate').val("@Fdate");
+                $('#ToDate').val("@Tdate");
+            }
+        }
+        else {
+            $('#dt_filter').val("last15days");
+        }
+        $('#lnk030').mouseover(function () {
+            var shw030 = "@ViewBag.day030";
+            if (shw030 != "N") {
+                document.getElementById("divDays0_30").style.zIndex = '1005';
+                document.getElementById("divDays0_30").style.left = '530px';
+                document.getElementById("divDays0_30").style.top = '220px';
+                document.getElementById("divDays0_30").style.position = 'absolute';
+                document.getElementById("divDays0_30").style.display = '';
+            }
+            else {
+                document.getElementById('divDays0_30').style.display = 'none';
+            }
+        });
+        $('#lnk030').mouseout(function () {
+            document.getElementById('divDays0_30').style.display = 'none';
+        });
+        $('#lnk3060').mouseover(function () {
+            var shw3060 = "@ViewBag.day3060";
+            if (shw3060 != "N") {
+                document.getElementById("divDays30_60").style.zIndex = '1005';
+                document.getElementById("divDays30_60").style.left = '600px';
+                document.getElementById("divDays30_60").style.top = '220px';
+                document.getElementById("divDays30_60").style.position = 'absolute';
+                document.getElementById("divDays30_60").style.display = '';
+            }
+            else {
+                document.getElementById('divDays30_60').style.display = 'none';
+            }
+        });
+        $('#lnk3060').mouseout(function () {
+            document.getElementById('divDays30_60').style.display = 'none';
+        });
+        $('#lnk6090').mouseover(function () {
+            var shw6090 = "@ViewBag.day6090";
+            if (shw6090 != "N") {
+                document.getElementById("divDays60_90").style.zIndex = '1005';
+                document.getElementById("divDays60_90").style.left = '680px';
+                document.getElementById("divDays60_90").style.top = '220px';
+                document.getElementById("divDays60_90").style.position = 'absolute';
+                document.getElementById("divDays60_90").style.display = '';
+            }
+            else {
+                document.getElementById('divDays60_90').style.display = 'none';
+            }
+        });
+        $('#lnk6090').mouseout(function () {
+            document.getElementById('divDays60_90').style.display = 'none';
+        });
+        $('#lnk90120').mouseover(function () {
+            var shw90120 = "@ViewBag.day90120";
+            if (shw90120 != "N") {
+                document.getElementById("divDays90_120").style.zIndex = '1005';
+                document.getElementById("divDays90_120").style.left = '800px';
+                document.getElementById("divDays90_120").style.top = '220px';
+                document.getElementById("divDays90_120").style.position = 'absolute';
+                document.getElementById("divDays90_120").style.display = '';
+            }
+            else {
+                document.getElementById('divDays90_120').style.display = 'none';
+            }
+        });
+        $('#lnk90120').mouseout(function () {
+            document.getElementById('divDays90_120').style.display = 'none';
+        });
+        $('#lnkOver120').mouseover(function () {
+            var shwOver120 = "@ViewBag.dayOver120";
+            if (shwOver120 != "N") {
+                document.getElementById("divDaysOver120").style.zIndex = '1005';
+                document.getElementById("divDaysOver120").style.left = '900px';
+                document.getElementById("divDaysOver120").style.top = '220px';
+                document.getElementById("divDaysOver120").style.position = 'absolute';
+                document.getElementById("divDaysOver120").style.display = '';
+            }
+            else {
+                document.getElementById('divDaysOver120').style.display = 'none';
+            }
+        });
+        $('#lnkOver120').mouseout(function () {
+            document.getElementById('divDaysOver120').style.display = 'none';
+        });
+    });
+    //function bValidate() {
+    //    window.location = '../Tools/ToolsHome';
+    //}
+    //$("#txt_FromDate").keyup(function () {
+    //************************************changed*******************************************
+    $("#FromDate").on('change keyup paste mouseup', function() {
+        //  alert("1");
+        if ($(this).val().length == 10) {
+            //alert("2");
+            if (CheckValidDate(document.getElementById('FromDate')) == 0) { return false; }
+            var St = document.getElementById('FromDate').value; St = new Date(St);
+            // alert(St);
+            var targetDate = new Date(St);
+            targetDate.setDate(targetDate.getDate() + 365);
+            //   alert(targetDate);
+            var todaydate = new Date();
+            todaydate.setDate(todaydate.getDate());
+            var dd = todaydate.getDate();
+            var mm = todaydate.getMonth() + 1; //January is 0!
+            var yyyy = todaydate.getFullYear();
+            var today = mm + '/' + dd + '/' + yyyy;
+            var dd1 = targetDate.getDate();
+            var mm1 = targetDate.getMonth()+1;
+            var yyyy1 = targetDate.getFullYear();
+            var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+            //  alert(target1);
+            if (targetDate > todaydate) { document.getElementById('ToDate').value = today; return false; }
+            else { document.getElementById('ToDate').value = target1; return false; }
+        }
+    });
+    function ondescriptionover(obj) {
+        document.getElementById(obj).style.position = 'absolute';
+        document.getElementById(obj).style.display = '';
+        return false;
+    }
+    function ondescriptionout(obj) {
+        document.getElementById(obj).style.display = 'none';
+        return false;
+    }
+    Date.prototype.days = function (to) {
+        return Math.abs(Math.floor(to.getTime() / (3600 * 24 * 1000)) - Math.floor(this.getTime() / (3600 * 24 * 1000)))
+
+    }
+    function ValidSearch(e) { 
+        e.preventDefault();
+        if (comboboxMain.selectedIndex() != -1) {
+            $("#hdnPid").val(comboboxMain.options[comboboxMain.selectedIndex()].value);
+            $("#patselect").val("Yes");
+        }        
+        if (document.getElementById('dt_filter').selectedIndex == 0) { alert("Please select date"); return false; }
+        if (document.getElementById('dt_filter').value == 'Custom') {
+
+            if (document.getElementById('FromDate').value != '' && document.getElementById('FromDate').value != "mm/dd/yyyy") {
+                if (CheckValidDate(document.getElementById('FromDate')) == 0) {
+                    return false;
+                }
+            }
+            if (document.getElementById('ToDate').value != '' && document.getElementById('ToDate').value != "mm/dd/yyyy") {
+                if (CheckValidDate(document.getElementById('ToDate')) == 0) {
+                    return false;
+                }
+            }
+            var CDate = new Date()
+            var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear();
+            var FromDate = document.getElementById('FromDate').value;
+            if (document.getElementById('FromDate').value == '' || document.getElementById('FromDate').value == "mm/dd/yyyy") {
+                alert('Select from date');
+                document.getElementById('FromDate').focus();
+                return false;
+            }
+            if (document.getElementById('ToDate').value == '' || document.getElementById('ToDate').value == "mm/dd/yyyy") {
+                alert('Select to date');
+                document.getElementById('ToDate').focus();
+                return false;
+            }
+            var St = document.getElementById('FromDate').value;
+            St = new Date(St);
+            var En = document.getElementById('ToDate').value
+            En = new Date(En);
+            if (St > En) {
+                alert("From date should not be greater than to date")
+                return false;
+            }
+            var frmdt1 = new Date(document.getElementById('FromDate').value);
+            var tdt1 = new Date(document.getElementById('ToDate').value);
+            var diffdate = new Date(frmdt1).days(new Date(tdt1));
+            if (diffdate > 365) {
+                alert("maximum 12 months is allowed");
+                return false;
+            }
+            var frmdt1 = new Date(document.getElementById('FromDate').value);
+            var tdt1 = new Date(document.getElementById('ToDate').value);
+            var diffdate = new Date(frmdt1).days(new Date(tdt1));
+            if (diffdate > 365) {
+                alert("maximum 12 months is allowed");
+                return false;
+            }
+          
+        }
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        if (document.getElementById('dt_filter').value == 'Custom') {
+            $("#gridcontent1").load('@Url.Action("DisplayTransactions", "Billing")?NoOfRecords=' + document.getElementById('ddlrecords').value + '&Date_range=' + document.getElementById('dt_filter').value + '&PatientID=' + $("#hdnPid").val() + '&PatientLogin_ID=' + ($("#hdnPlId").val() == "" ? '@Model.PatientLogin_ID' : $("#hdnPlId").val()) + '&FromDate=' + document.getElementById('FromDate').value + '&ToDate=' + document.getElementById('ToDate').value + '&clientphone=' + $("#clienttranphone").val()+'&Customer_Email='+$('#hdnclientEmail').val(), function(data){$('#dvLoading').dialog('close');});
+        }
+        else {
+            $("#gridcontent1").load('@Url.Action("DisplayTransactions", "Billing")?NoOfRecords=' + document.getElementById('ddlrecords').value + '&Date_range=' + document.getElementById('dt_filter').value + '&PatientID=' + $("#hdnPid").val() + '&PatientLogin_ID=' + ($("#hdnPlId").val() == "" ? '@Model.PatientLogin_ID' : $("#hdnPlId").val()) + '&clientphone=' + $("#clienttranphone").val()+'&Customer_Email='+$('#hdnclientEmail').val(), function(data){$('#dvLoading').dialog('close');});
+        }
+        
+    }
+    function btnclear() {
+        window.location = '../Billing/TransactionDisplay';
+        return false;
+    }
+    @*function printTranpdf() {
+        var fromdate = document.getElementById('hdnfrmdate').value;
+        var todate = document.getElementById('hdntodate').value;
+        var hdnPid = document.getElementById('hdnPid').value;
+        var sort = document.getElementById('hdnsort').value;
+        var sortdir = document.getElementById('hdnsortdir').value;
+        var noofrecords = document.getElementById('hdnnoofrecords').value;
+        //var noofrecords = document.getElementById('hdnnoofrecords').value;
+        // var daterange = document.getElementById('hdndaterange').value;
+        // var sortdir = document.getElementById('hdnsortdirection').value;
+        window.location.href = 'Transactionpdf/?fromdate=' + fromdate + '&todate=' + todate + '&hdnPid=' + hdnPid + '&sort=' + sort + '&sortdir=' + sortdir + '&noofrecords=' + noofrecords;
+        return false;
+    }
+    function printTranexcel() {
+        var fromdate = document.getElementById('hdnfrmdate').value;
+        var todate = document.getElementById('hdntodate').value;
+        var hdnPid = document.getElementById('hdnPid').value;
+        var sort = document.getElementById('hdnsort').value;
+        var sortdir = document.getElementById('hdnsortdir').value;
+        var noofrecords = document.getElementById('hdnnoofrecords').value;
+        //var noofrecords = document.getElementById('hdnnoofrecords').value;
+        // var daterange = document.getElementById('hdndaterange').value;
+        // var sortdir = document.getElementById('hdnsortdirection').value;
+        if ('@Session["UserID"]' != null)
+        {
+            window.location.href = 'Transactionexcel/?fromdate=' + fromdate + '&todate=' + todate + '&hdnPid=' + hdnPid + '&sort=' + sort + '&sortdir=' + sortdir + '&noofrecords=' + noofrecords;
+        }
+        else
+        {
+            window.location.href = '../Home/SessionExpire';
+        }
+        return false;
+    }*@
+    function printalltrspdf() {
+        var fromdate = document.getElementById('hdnfrmdate').value;
+        var todate = document.getElementById('hdntodate').value;
+        var palgnid = document.getElementById('PatientLogin_ID1').value;
+        //var chtotrec = document.getElementById('hdnnoofrecords').value;
+        //var chsort = document.getElementById('hdnsort').value;
+        //var chsortdir = document.getElementById('hdnsortdir').value;
+        //var adjtotrec = document.getElementById('hdnadjtotrec').value;
+        var hdnpatid = document.getElementById('hdnpatid').value;
+        var sort = document.getElementById('hdnsort').value;
+        var sortdir = document.getElementById('hdnsortdir').value;
+        if (@Session["UserID"] != null)
+        {
+            window.location.href = 'Totaltransactionspdf/?fromdate=' + fromdate + '&todate=' + todate + '&palgnid=' + palgnid + '&sort=' + sort + '&sortdir=' + sortdir + '&hdnpatid=' + hdnpatid;
+        }
+        else
+        {
+            window.location.href = '../Home/SessionExpire';
+        }
+        return false;
+    }
+
+    function printalltransexel() {
+        var fromdate = document.getElementById('hdnfrmdate').value;
+        var todate = document.getElementById('hdntodate').value;
+        var palgnid = document.getElementById('PatientLogin_ID1').value;
+        var sort = document.getElementById('hdnsort').value;
+        //var sort = document.getElementById('hdnsortdir').value;
+        var sortdir = document.getElementById('hdnsortdir').value;
+        var hdnpatid = document.getElementById('hdnpatid').value;
+       
+        if (@Session["UserID"] != null)
+        {
+           
+            window.location.href = 'Toataltransactionsexel/?fromdate=' + fromdate + '&todate=' + todate + '&palgnid=' + palgnid + '&sort=' + sort + '&sortdir=' + sortdir + '&hdnpatid=' + hdnpatid;
+        }
+        else
+        {
+            window.location.href = '../Home/SessionExpire';
+        }
+        return false;
+    }
+</script>

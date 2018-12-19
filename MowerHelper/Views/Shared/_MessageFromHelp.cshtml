@@ -1,0 +1,176 @@
+﻿
+
+
+  <div class="content-box-content">
+                                            @{string heading1;
+                                              if (Request["sort"] == "Sender" && Request["sortdir"] == "ASC")
+                                              {
+                                                  heading1 = "Sender ▲";
+                                              }
+                                              else if (Request["sort"] == "Sender" && Request["sortdir"] == "DESC")
+                                              {
+                                                  heading1 = "Sender ▼";
+                                              }
+                                              else
+                                              {
+                                                  heading1 = "Sender .";
+                                              }
+                                            }
+                                            @{
+                                              WebGrid Dsmgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.Thpagesize));}
+                                            @{WebGrid grid = Dsmgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (string.IsNullOrEmpty(Request["page"])? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  if (ViewBag.Type != "Archived")
+                                                  {
+                                                      string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                      columns: grid.Columns(grid.Column("Sender", heading1), grid.Column("SendingDate", "Requested date"),
+                                                      grid.Column("", "Topic", canSort: false,
+                                      format:@<text>@Html.ActionLink((string)HttpUtility.HtmlDecode(item.Subject), "MessageDetails", new { Msg_id = (int)item.Message_ID }, new { @class = "TopicLink", @style = ((string)(item.Read_IndWrite) == "N" ? "font-weight:bold;color:#0066CC;cursor:pointer;" : "font-weight:;color:#0066CC;cursor:pointer;") })</text>),
+                                                                                                                 grid.Column(header: "Archive", format: (item) =>
+                                                                                                                 {
+                                                                                                                     var str = item.ArchiveInd;
+                                                                                                                     if (str == "N")
+                                                                                                                         return @Html.ActionLink("Archive", "MsgArchive", new { Msg_id = (int)item.Message_ID },
+                                          new { @style = ((string)(item.Read_IndWrite) == "N" ? "font-weight:bold;color:#0066CC;cursor:pointer;" : "font-weight:;color:#0066CC;cursor:pointer;"), @class = "confirmDialog", @title = "Click here to archive message" });
+
+
+                                                                                                                     else
+                                                                                                                         return Html.Label("-");
+
+                                                                                                                 }),
+                                                          grid.Column("", "Reply", canSort: false,
+                                          format:@<text>@Html.ActionLink("Reply", "MessageReply", new { Msg_id = (int)item.Message_ID, Ind = "2", MsgCategory_ID = (int)item.MsgCategory_ID }, new { @class = "ReplyLink", @style = ((string)(item.Read_IndWrite) == "N" ? "font-weight:bold;color:#0066CC;cursor:pointer;" : "font-weight:;color:#0066CC;cursor:pointer;") })</text>)
+
+                                                         )).ToString();
+                                                      gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  }
+
+
+                                                  else
+                                                  {
+
+                                                      string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                     columns: grid.Columns(grid.Column("Sender", heading1), grid.Column("SendingDate", "Requested date"),
+                                                     grid.Column("", "Topic", canSort: false,
+                                     format:@<text>@Html.ActionLink((string)item.Subject, "MessageDetails", new { Msg_id = (int)item.Message_ID }, new { @class = "TopicLink", @style = ((string)(item.Read_IndWrite) == "N" ? "font-weight:bold;color:#0066CC;cursor:pointer;" : "font-weight:;color:#0066CC;cursor:pointer;") })</text>)
+
+                                                        )).ToString();
+                                                      gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                            
+                                            
+                                            
+                                                  }
+                                                <br />
+                                                <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                    <tr id="trdsmerror" class="white_color">
+                                                        <td align="center" height="25px" valign="middle" colspan="2">
+                                                            <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">No messages found</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                            }
+                                        </div>
+
+  <div>
+             @if (grid.Rows.Count <= 9)
+              {
+                  if (grid.Rows.Count <= 3)
+                  {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+                  }
+                  else
+                  {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                  }
+              }           
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+
+
+<script>
+   
+    $("#FromTennisHelp").text("From Mower Helper" + " " +  "(" + '@ViewBag.FromThhelpCount'+  ")"  );
+    $("#SentMessages").text('Sent messages' + " " + "(" + '@ViewBag.Sentcount' + ")");
+
+    $(".TopicLink").click(function () {
+        //change the title of the dialog
+        linkObj = $(this);
+        var dialogDiv = $('#TopicDialog');
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        var viewUrl = linkObj.attr('href');
+        //alert(viewUrl);
+        $.get(viewUrl, function (data) {
+            dialogDiv.html(data);
+            $('#dvLoading').dialog('close');
+            dialogDiv.dialog('open');
+        });
+        return false;
+    });
+    $(".ReplyLink").click(function () {
+        //change the title of the dialog
+        linkObj = $(this);
+        var dialogDiv = $('#ReplyDialog');
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        var viewUrl = linkObj.attr('href');
+        viewUrl = viewUrl + "&ddlListingMsgsType=" + $('#ddlListingMsgsType').val() + "&ddlrecords=" + $('#ddlrecords').val() + "&curPage=" + curPage;
+        $.get(viewUrl, function (data) {
+            dialogDiv.html(data);
+            $('#dvLoading').dialog('close');
+            dialogDiv.dialog('open');
+        });
+        return false;
+    });
+
+
+    $('.gridFooter a').click(function () {
+        //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        var href = $(this).attr("href");
+        $(this).attr("href", "#");
+        var queryString = href.substring(href.indexOf('?'), href.length);
+        var requestUrl = '@Url.Action("DisplayMessageFromHelp", "Messages")' + queryString;
+         //$('#gridcontent1').load(requestUrl);
+
+        $.ajax({
+
+            url: requestUrl,
+            type: "get",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+
+                $('#MessageFrom').html(data);
+                $("#dvLoading").dialog('close');
+            }
+
+        });
+        return false;
+    });
+    $(".gridHead th a").click(function () {
+
+        return false;
+    });
+    curPage = '@Request["page"]';
+</script>
+  

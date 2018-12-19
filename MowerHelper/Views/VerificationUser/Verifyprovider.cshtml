@@ -1,0 +1,414 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+     <link href="../../Content/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="../../SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             var licensno = "@ViewBag.licensno";
+             document.getElementById('txtLicense').value = licensno;
+         });
+
+    </script>
+    <script type="text/javascript">
+        function clearalerts() {
+            ValidateAlertClear('tblmain', 'lbllic', 'tdlic', 'tdElicense', 'white');
+            ValidateAlertClear('tblmain', 'lbldate', 'tddate', 'lbldate', 'white');
+
+            ValidateAlertClear('tblmain', 'lbltitle', 'tdtitle', 'tdtitlemain', 'white');
+            ValidateAlertClear('tblmain', 'lbldescription', 'tddescription', 'tddescriptionmain', 'white');
+            ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+        }
+        function Validate(Filename) {
+
+            // alert('1');
+            var strLicense = trim(document.getElementById('txtLicense').value);
+            document.getElementById('txtLicense').value = strLicense;
+            if (document.getElementById('txtLicense').value == "") {
+                clearalerts()
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lbllic').innerHTML = "Please enter license number";
+                document.getElementById('tdlic').style.display = '';
+                document.getElementById('tdlic').bgColor = "orange";
+                document.getElementById('tdElicense').bgColor = "orange";
+                document.getElementById('txtLicense').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lbllic', 'tdlic', 'tdElicense', 'white');
+            }
+            if (MyChars(document.getElementById('txtLicense')) == "SpaceError") {
+                clearalerts()
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lbllic').innerHTML = "Enter license number  without spaces first";
+                document.getElementById('tdlic').style.display = '';
+                document.getElementById('tdlic').bgColor = "orange";
+                document.getElementById('tdElicense').bgColor = "orange";
+                document.getElementById('txtLicense').focus();
+                return false;
+            }
+
+
+            if (fnCheckSpecialChars(document.getElementById('txtLicense')) == 0) {
+                clearalerts()
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lbllic').innerHTML = "Please enter license number correctly, there shouldn't be any special characters";
+                document.getElementById('tdlic').style.display = '';
+                document.getElementById('tdlic').bgColor = "orange";
+                document.getElementById('tdElicense').bgColor = "orange";
+                document.getElementById('txtLicense').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lbllic', 'tdlic', 'tdElicense', 'white');
+            }
+            if (document.getElementById('txtexpirydate').value != '' && document.getElementById('txtexpirydate').value != 'mm/dd/yyyy') {
+                clearalerts()
+                var Dateid = document.getElementById('txtexpirydate').value;
+                var Dat = Dateid.split("/");
+                var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+                var yearid = Dat[2];
+                var Monthid = Dat[0];
+                var MyId = Dat[1];
+                var CurDt = new Date()
+                var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+                var matchArray = Dateid.match(DatePat);
+
+                if (matchArray == null) {
+                    clearalerts()
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lbldate').innerHTML = "Invalid license expiry date format!!! should be like mm/dd/yyyy";
+                    document.getElementById('tddate').style.display = '';
+                    document.getElementById('tddate').bgColor = "orange";
+                    document.getElementById('tdEdate').bgColor = "orange";
+                    document.getElementById('txtexpirydate').focus();
+                    return false
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lbldate', 'tddate', 'tdEdate', 'white');
+                }
+                if (yearid < 1900) {
+                    clearalerts()
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lbldate').innerHTML = "Invalid license expiry date!!! year should be greater than 1900";
+                    document.getElementById('tddate').style.display = '';
+                    document.getElementById('tddate').bgColor = "orange";
+                    document.getElementById('tdEdate').bgColor = "orange";
+                    document.getElementById('txtexpirydate').focus();
+                    return false
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lbldate', 'tddate', 'tdEdate', 'white');
+                }
+                if (Monthid > 12 || Monthid == 0) {
+                    clearalerts()
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lbldate').innerHTML = "Invalid license expiry date!!! month should be entered in between 1 to 12";
+                    document.getElementById('tddate').style.display = '';
+                    document.getElementById('tddate').bgColor = "orange";
+                    document.getElementById('tdEdate').bgColor = "orange";
+                    document.getElementById('txtexpirydate').focus();
+                    return false
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lbldate', 'tddate', 'tdEdate', 'white');
+                }
+                if (MyId > 31 || MyId == 0) {
+                    clearalerts()
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lbldate').innerHTML = "Invalid license expiry date!!! date should be entered in between 1 to 31";
+                    document.getElementById('tddate').style.display = '';
+                    document.getElementById('tddate').bgColor = "orange";
+                    document.getElementById('tdEdate').bgColor = "orange";
+
+                    document.getElementById('txtexpirydate').focus();
+                    return false
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lbldate', 'tddate', 'tdEdate', 'white');
+                }
+                if (myDat < CurDt) {
+                    clearalerts()
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lbldate').innerHTML = "Invalid license expiry date!!! should not be less than or equal to current date";
+                    document.getElementById('tddate').style.display = '';
+                    document.getElementById('tddate').bgColor = "orange";
+                    document.getElementById('tdEdate').bgColor = "orange";
+                    document.getElementById('txtexpirydate').focus();
+                    return false;
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lbldate', 'tddate', 'tdEdate', 'white');
+                }
+            }
+
+
+
+
+
+            var str_Title;
+            str_Title = trim(document.getElementById('txtTitle').value);
+            document.getElementById('txtTitle').value = str_Title;
+            if (str_Title == '') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter title");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lbltitle').innerHTML = "Please enter title";
+                document.getElementById('tdtitle').style.display = '';
+                document.getElementById('tdtitle').bgColor = "orange";
+                document.getElementById('tdtitlemain').bgColor = "orange";
+                document.getElementById('txtTitle').focus();
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblmain', 'lbltitle', 'tdtitle', 'tdtitlemain', 'white');
+            }
+            var ta = document.getElementById('txtDescription');
+            if (ta.value.length > 1000) {
+                clearalerts();
+                //Glb_ShowAlert('Please enter description less than  1000 characters');
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lbldescription').innerHTML = "Please enter description less than  1000 characters";
+                document.getElementById('tddescription').style.display = '';
+                document.getElementById('tddescription').bgColor = "orange";
+                document.getElementById('tddescriptionmain').bgColor = "orange";
+                document.getElementById('txtDescription').focus();
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblmain', 'lbldescription', 'tddescription', 'tddescriptionmain', 'white');
+            }
+            if (document.getElementById("tblFiles").style.display == '') {
+                clearalerts();
+                var container = document.getElementById("inputsPlace");
+                var inputElls = container.getElementsByTagName("input");
+                var count = 0;
+                var count1 = 0;
+                for (var i = 0; i < inputElls.length; i++) {
+                    var inputElement = inputElls[i];
+                    if (inputElement.type == "checkbox") {
+                        clearalerts();
+                        count += 1;
+                        // alert(count);
+                        var fileval = inputElement.id.replace('check', 'myFile');
+                        if (document.getElementById(fileval).value != "") {
+                            clearalerts();
+                            count1 += 1;
+
+                            var str = document.getElementById(fileval).value;
+                            var Strr = str.toUpperCase();
+                            if ((Strr.indexOf(".DOC") == -1) && (Strr.indexOf(".DOCX") == -1) && (Strr.indexOf(".TXT") == -1) && (Strr.indexOf(".XLS") == -1) && (Strr.indexOf(".PPS") == -1) && (Strr.indexOf(".PPT") == -1) && (Strr.indexOf(".PDF") == -1) && (Strr.indexOf(".XLSX") == -1) && (Strr.indexOf(".PPTX") == -1) && (Strr.indexOf(".ZIP") == -1) && (Strr.indexOf(".RAR") == -1) && (Strr.indexOf(".GIF") == -1) && (Strr.indexOf(".PNG") == -1) && (Strr.indexOf(".JPG") == -1)) {
+                                clearalerts();
+                                //Glb_ShowAlert("Please select only doc,docx,txt,xls,pps,ppt,pdf,zip,rar, GIF, PNG, JPG files for document file");
+                                document.getElementById('tblmain').style.display = '';
+                                document.getElementById('lblupload').innerHTML = "Please select only doc, docx, txt, xls, pps, ppt, pdf, zip, rar, gif, png, jpg files for document file";
+                                document.getElementById('tdupload').style.display = '';
+                                document.getElementById('tdupload').bgColor = "orange";
+                                document.getElementById('tduploadmain').bgColor = "orange";
+                                return false;
+                            }
+                            else {
+
+                                ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+                            }
+                        }
+                    }
+                }
+                if (count != 0) {
+                    clearalerts();
+                    if (count1 == 0) {
+
+                        clearalerts();
+                        //Glb_ShowAlert('Please select at least one file');
+                        document.getElementById('tblmain').style.display = '';
+                        document.getElementById('lblupload').innerHTML = "Please select at least one file";
+                        document.getElementById('tdupload').style.display = '';
+                        document.getElementById('tdupload').bgColor = "orange";
+                        document.getElementById('tduploadmain').bgColor = "orange";
+                        return false;
+                    }
+                    else {
+
+                        ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+                    }
+                }
+                else {
+                    if (count1 == 0) {
+
+                        clearalerts();
+                        //Glb_ShowAlert('Please select at least one file');
+                        document.getElementById('tblmain').style.display = '';
+                        document.getElementById('lblupload').innerHTML = "Please select at least one file";
+                        document.getElementById('tdupload').style.display = '';
+                        document.getElementById('tdupload').bgColor = "orange";
+                        document.getElementById('tduploadmain').bgColor = "orange";
+                        return false;
+                    }
+                    else {
+
+                        ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+                    }
+                }
+
+            }
+        }
+        function checkyes() {
+
+            document.getElementById("rbtyes").checked = true;
+            document.getElementById("rbtno").checked = false;
+
+        }
+        function checkno() {
+            document.getElementById("rbtyes").checked = false;
+            document.getElementById("rbtno").checked = true;
+        }
+    </script>
+       <style type="text/css">
+        .ui-datepicker-trigger {margin-left : 5px;vertical-align : middle}
+        .ui-datepicker {background: #AADDFF;border: 1px solid #555;color: #000000;}
+        .Highlighted a {background-color: Green !important; background-image: none !important; color: White !important; font-weight: bold !important;font-size: 10pt;}
+        .ui-widget-header  { font-size:15px;height:25px; }
+
+   </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#txtexpirydate,#txtEndDateforDaily,#txtEndDateforWeek").datepicker({
+                showOn: "button",
+                buttonImage: "../Images/calender.gif",
+                buttonImageOnly: true
+            });
+
+
+        });
+
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("Verifyprovider", "VerificationUser", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        
+        <input type="hidden" id="Hdnprovid" name="Hdnprovid" value="@ViewBag.provid" />
+        <input type="hidden" id="Hdnpracticeid" name="Hdnpracticeid" value="@ViewBag.practiceid" />
+        
+        <div id="update-message" class="error" style="padding-left: 250px; font-weight: bold;">
+        </div>
+        <div class="content-box">
+            <div class="content-box-content">
+                <table id="tblProvAttributes" border="0" cellspacing="1" cellpadding="6" width="100%"
+                    class="border_style" align="center">
+                                        <tr class="white_color">
+                        <td style="font-weight:bold;" align="right" width="40%">
+                            <span style="color: Red;">*</span>License number :&nbsp;
+                        </td>
+                        <td width="60%" align="left" id="tdElicense">
+                            @Html.TextBox("txtLicense", null, new { @class = "textfield", maxlength = "100", style = "width:300px;" })
+                           @* <span style="color:Blue;">Enter  ‘xxxx’  if you have no license number</span>*@
+                        </td>
+                    </tr>
+                                                            <tr class="white_color">
+                        <td style="font-weight:bold;" align="right" width="40%">
+                             <strong>License expiry date :&nbsp;</strong>
+                        </td>
+                        <td width="60%" align="left" id="tdEdate">
+                          @*  @Html.TextBox("", null, new { @class = "textfield", maxlength = "100", style = "width:300px;" })*@
+                             @Html.TextBox("txtexpirydate", "mm/dd/yyyy", new { @class = "textfield", MaxLength = "10", style = "width:82px;", onfocus = "return ClearDate('txtexpirydate');" })
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td style="font-weight:bold;" align="right" width="40%">
+                            <span style="color: Red;">*</span>Title :&nbsp;
+                        </td>
+                        <td width="60%" align="left" id="tdtitlemain">
+                            @Html.TextBox("txtTitle", null, new { @class = "textfield", maxlength = "100", style = "width:300px;" })
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td align="right" width="40%">
+                            <b>Description :&nbsp;</b>
+                        </td>
+                        <td width="60%" align="left" id="tddescriptionmain">
+                            @Html.TextArea("txtDescription", null, 3, 3, new { @class = "textfield", maxlength = "1000", style = "width:500px;height:100px;" })
+                            <br />
+                            &nbsp;&nbsp;<span>(Maximum length 1000 characters)</span>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td style="height: 15px" align="right" width="40%">
+                            <a id="FileName" href="#"></a>&nbsp;&nbsp; &nbsp;&nbsp;<font color="red">*</font><span
+                                id="Label2" style="font-weight:bold;">Attach new file :</span> &nbsp;
+                        </td>
+                        <td style="height: 15px" width="60%" align="Left" id="tduploadmain">
+                            <table cellspacing="1" cellpadding="1" id="tblFiles" width="100%" border="0">
+                                <tr id="attachcheck">
+                                    <td>
+                                        <div id="inputsPlace">
+                                            <div id="div1">
+                                                <input type="checkbox" id="check1" style="display:none;" /><input type="file" id="myFile1" name="myFile1"
+                                                    style="margin-left: 0px; background-color: White;" />&nbsp;&nbsp;(Maximum file
+                                                size : 10mb)
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                   
+                </table>
+                <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" id="tblmain"
+                    style="display: none;">
+
+                                        <tr class="white_color" align="center">
+                        <td id="tdlic" height="30px" style="display: none;">
+                            <span id="lbllic" style="font-weight:bold;color:Black;" ></span>
+                        </td>
+                    </tr>
+                                        <tr class="white_color" align="center">
+                        <td id="tddate" height="30px" style="display: none;">
+                            <span id="lbldate" style="font-weight:bold;color:Black;" ></span>
+                        </td>
+                    </tr>
+
+
+                    <tr class="white_color" align="center">
+                        <td id="tdtitle" height="30px" style="display: none;">
+                            <span id="lbltitle" style="font-weight:bold;color:Black;" ></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tddescription" height="30px" style="display: none;">
+                            <span id="lbldescription" style="font-weight:bold;color:Black;"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdupload" height="30px" style="display: none;">
+                            <span id="lblupload" style="font-weight:bold;color:Black;"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            <table id="tblbuttons" width="100%">
+                <tr>
+                    <td width="100%" align="right" style="padding-right: 10px; padding-bottom: 5px;">
+                        <input type="submit" id="imgbtnSaveFile" value="Save" class="button" onclick="return Validate('');" />
+                        <input type="button" class="close button" name="Cancel" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        
+    }
+</body>
+</html>

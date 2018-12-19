@@ -1,0 +1,165 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             $(".close").live("click", function (e) {
+                 var dialogDiv = $('#EditDocDialog1');
+                 dialogDiv.dialog('close');
+             });
+
+         });
+
+    </script>
+     <script type="text/javascript">
+         function ondescriptionover(obj) {
+             //alert(obj);
+             document.getElementById(obj).style.position = 'absolute';
+             document.getElementById(obj).style.display = '';
+             return false;
+         }
+         function ondescriptionout(obj) {
+             document.getElementById(obj).style.display = 'none';
+             return false;
+         }
+    </script>
+     <style type="text/css">
+    .Vtitle
+    {
+        width:350px;
+       
+    }
+    .Vdescription
+    {
+        width:650px;
+
+    }
+   
+    </style>
+</head>
+<body>
+  @{string Dpagesize = "10";
+    WebGrid Docgrid = new WebGrid(rowsPerPage: Convert.ToInt32(Dpagesize), fieldNamePrefix: "S2", pageFieldName: "P2");}
+                                            @{WebGrid grid = Docgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                 string pager = grid.Pager().ToString();
+                                                 string pageno = (Request["S2P2"] == null ? "1" : Request["S2P2"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("Title", "Title", canSort: true, style: "Vtitle",
+                                                  format:@<text>@{  count = count + 1;
+                                                                    //string obj = "tbldesc " + count;
+                                                                    }
+                                                  @Html.ActionLink((string)item.Title, null, null, new { @onclick = "return false;", onmouseover = "return ondescriptionover('Ptbldesc " + count + "');", onmouseout = "return ondescriptionout('Ptbldesc " + count + "');", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                  @{
+                                                    
+                                                       <div id="Ptbldesc @count" style="width: 500px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Description :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td class="white_color" style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@item.DocDescription</span> </td> </tr>
+                                                             </table> </div>
+                                                      
+                                                      }
+                                                  
+                                                   </text> ),
+                                                           grid.Column("", "File name", canSort: false, format:@<text>@Html.ActionLink((string)item.FileName, "CertificateDownload", "Directory", new { @id = (int)item.ProviderDocument_ID }, new { @title = "Click here to download the file", style = "font-weight:bold;" })   </text>),
+                                                  grid.Column("CreatedOn", "Date of creation", canSort: false),
+                                                   grid.Column("", "Edit", canSort: false,
+                                                  format:@<text>@*@Html.ActionLink(" ", "EditCertificate", new { id = (int)item.ProviderDocument_ID },
+                                   new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditDialog1", @title = "Click here to Edit certificate" })*@
+                                            <a href="#" style="height: 40px;width:30px;padding-left:20px;padding-bottom:15px;" class = "EditDialog1" title = "Click here to Edit certificate" onclick="return Displaydialog('EditDocDialog1', '@Url.Action("EditCertificate", new { id = (int)item.ProviderDocument_ID})', 'auto', 1000, 'dvLoading', null, null);"><img src="../Images/edit.gif" /></a></text>),
+                                                  grid.Column("", "Delete", canSort: false,
+                                                  format:@<text>@Html.ActionLink(" ", "DeleteCertificate", new { id = (int)item.ProviderDocument_ID },
+                                             new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog1", @title = "Click here to delete certificate" })</text>))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table id="tblOutMsg1" width="98%" horizontalalign="Center">
+                                                    <tr id="troutmsg1">
+                                                        <td align="center" height="60px" valign="Middle">
+                                                            <span id="lblOutputMsg1" style="font-weight: bold;" class="errormsg">Upload scanned copies of your Drivers license, Professional licenses and Education certificates.&nbsp;&nbsp;After we verify these documents, we will show your profile on our public domain.</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                              }
+                                               <div id="dialog-confirm1" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete the plumber certificate document?
+            </p>
+        </div>
+         <div id="EditDocDialog1" title="Edit certficate"></div>
+    <script type="text/javascript">
+        $(".confirmDialog1").live("click", function (e) {
+
+            var url = $(this).attr('href');
+            $("#dialog-confirm1").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.location = url;
+
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirm1").dialog('open');
+            return false;
+        });
+        var linkObj;
+        $(function () {
+            //$('#EditDocDialog1').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    resizable: false,
+            //    modal: true
+            //});
+
+            //$(".EditDialog1").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#EditDocDialog1');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+
+        });
+        </script>
+</body>
+</html>

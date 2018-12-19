@@ -1,0 +1,46 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+     <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+
+</head>
+<body>
+@using (Ajax.BeginForm("NewCategory", "OfficeExpenses", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "AddmotSuccess",
+    OnComplete = "SessionExpireFail"
+
+}, new { @id = "NewCategoryForm" }))
+{
+    <table border="0" cellpadding="6" cellspacing="1" width="100%" class="border_style">
+        <tr class="white_color">
+            <td width="25%" align="right">
+            <font color="red">*</font><strong>Add new category</strong>
+            </td>
+             <td id="tdMot">
+             <input name="txtcategory" maxlength="90" id="txtcategory" class="textfield" style="width:450px;" type="text"/>&nbsp;&nbsp<span id="lblErrMot" style="font-weight: bold; color: Black"></span>
+            </td>
+        </tr>
+    </table>
+   <div style="height:15px"></div>
+    <table border="0" cellpadding="0" cellspacing="0" width="76%">
+             <tr style="text-align:right">
+                 <td>
+                  <input class="button"  type="submit" name="Save" value="Save" onclick="return validMot();" />&nbsp;
+                 <input type="button" class="Addcatclose button" name="Cancel" value="Cancel" />
+                 </td>
+             </tr>
+         </table>
+}
+</body>
+ 
+</html>

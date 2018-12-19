@@ -1,0 +1,100 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+        @using (Ajax.BeginForm("SubmitFaqs", "AdminFaqs", new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "searchResults", InsertionMode = InsertionMode.Replace }, new { @id = "frmfaq" }))
+    {
+    <div>
+    
+                
+                    <div class="content-box">
+       <input type="hidden" id="" name="" value="" />
+                        <input type="hidden" id="hdnchecklist1" name="hdnchecklist1" value="@ViewBag.checklist1" />
+                        <input type="hidden" id="hdnchecklist2" name="hdnchecklist2" value="@ViewBag.checklist2" />
+                        <input type="hidden" id="hdnchecklist4" name="hdnchecklist4" value="@ViewBag.checklist4" />
+                        <input type="hidden" id="hdnfaq" name="hdnfaq" value="@ViewBag.faq" />
+                        <input type="hidden" id="hdndelfaqid" name="hdndelfaqid" value="@ViewBag.delfaqid" />
+                    <div class="content-box-content">
+                    <table class="border_style" cellpadding="6" cellspacing="1" width="100%" align="center">
+                        <tr class="white_color">
+                            <th align="right" style="width: 40px;">
+                               <strong> Question :</strong>
+                            </th>
+                            <td align="left" style="width: 150px;">
+                            <input typeq="text" id="txtrelfaq" name="txtrelfaq" class="textfield" style="width:200px;" />
+                             
+                            </td>
+                           
+                           
+                            <td style="width: 50px;">
+                            <input type="submit" id="imgrelsearch" name="imgrelsearch" class="button" value="Search" />
+                            </td>
+                        </tr>
+                        <tr class="nav_blue_color">
+                            <td colspan="5">
+                                  <table id="searchResults" width="100%" align="center">
+        
+        </table>
+                              <div id="container-grid">
+         @{
+              WebGrid Docgrid = new WebGrid(rowsPerPage: 10);}
+                                            @{WebGrid grid = Docgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totalrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("Sino", "#", style: "width: 700px;", canSort: false),
+                                                  grid.Column("Question", "Question", canSort: false, format: @<text><a  href="#"    id="asid @item.Question_Id" onclick="return selected1('@item.Question','@item.Question_Id');">@item.Question</a></text>),
+                                                   grid.Column("Category_Name", "Category name", canSort: false)                                                   
+                                                  )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>    
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table cellspacing="0" id="tblnorecords" runat="server" cellpadding="0" width="100%" border="0" align="center">
+     <tr class="white_color" runat="server">
+                <td align="center" height="25px" valign="middle" width="100%">
+                  <label id="" style="font-weight:bold; font-size:13px;">No Faqs found.</label>
+                   </td>
+        </tr>
+     </table>
+                                              }
+                                              }  
+    </div>
+                            </td>
+                        </tr>
+                       
+                      
+                    </table>
+                        <table style="width:100%;">
+                              <tr style="width:100%;">
+                        <td colspan="5" align="right" style="padding-top:5px; padding-bottom:5px; padding-right:5px">
+                        <input type="submit" id="btnfaqclose" name="btnfaqclose" value="Close" class="faqclose button" />
+                       
+                        </td>
+                        </tr>
+                        </table>
+                    </div></div>
+       </div>
+        }
+</body>
+</html>

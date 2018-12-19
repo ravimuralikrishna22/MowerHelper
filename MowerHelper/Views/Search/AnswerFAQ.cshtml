@@ -1,0 +1,623 @@
+﻿@model Publicfaq
+@{
+    ViewBag.Title = "AnswerFAQ";
+    Layout = "~/Views/Shared/_ArticlesMaster.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+ 
+<style>
+    .style1
+    {
+        height: 15px;
+    }
+    .dvLoading .ui-dialog-titlebar{display:none;}
+</style>
+
+  @*<meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+     @Styles.Render("~/Content/themes/base/jqueryCSS")
+    @Scripts.Render("~/Scripts/Thscriptscript")
+    @Scripts.Render("~/ThScripts/Thjquerycripts")
+    <script type="text/javascript">
+        function cancel() {
+            //alert(content);
+            //  alert('Your request will be processed soon.');
+            window.location.href = '@Url.RouteUrl("FAQSHome")';
+        }
+        function AnswerFaqCog() {
+            this.Question_id = "";
+            this.Ratevalue = "";
+            this.Comment = "";
+            this.verificationcode = "";
+            this.hdnverificationcode = "";
+        }
+
+    </script>
+    <script type="text/javascript">
+
+        var linkObj;
+        $(function () {
+
+            //$('#sendemaildialog').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+
+            //$("#sendmail").click(function () {
+            //    //change the title of the dialog
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#sendemaildialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+
+            //    });
+            //    return false;
+            //});
+
+        });
+</script>
+    <script type ="text/javascript">
+        function check1() {
+            if (document.getElementById('myRadio1').checked == true) {
+                document.getElementById('myRadio2').checked = false;
+                document.getElementById('myRadio3').checked = false;
+                document.getElementById('myRadio4').checked = false;
+                document.getElementById('myRadio5').checked = false;
+                document.getElementById('hdnchk').value = document.getElementById('myRadio1').value;
+            }
+        }
+        function check2() {
+            if (document.getElementById('myRadio2').checked == true) {
+                document.getElementById('myRadio1').checked = false;
+                document.getElementById('myRadio3').checked = false;
+                document.getElementById('myRadio4').checked = false;
+                document.getElementById('myRadio5').checked = false;
+                document.getElementById('hdnchk').value = document.getElementById('myRadio2').value;
+            }
+        }
+        function check3() {
+            if (document.getElementById('myRadio3').checked == true) {
+                document.getElementById('myRadio2').checked = false;
+                document.getElementById('myRadio1').checked = false;
+                document.getElementById('myRadio4').checked = false;
+                document.getElementById('myRadio5').checked = false;
+                document.getElementById('hdnchk').value = document.getElementById('myRadio3').value;
+            }
+        }
+        function check4() {
+            if (document.getElementById('myRadio4').checked == true) {
+                document.getElementById('myRadio2').checked = false;
+                document.getElementById('myRadio3').checked = false;
+                document.getElementById('myRadio1').checked = false;
+                document.getElementById('myRadio5').checked = false;
+                document.getElementById('hdnchk').value = document.getElementById('myRadio4').value;
+            }
+        }
+        function check5() {
+            if (document.getElementById('myRadio5').checked == true) {
+                document.getElementById('myRadio2').checked = false;
+                document.getElementById('myRadio3').checked = false;
+                document.getElementById('myRadio4').checked = false;
+                document.getElementById('myRadio1').checked = false;
+                document.getElementById('hdnchk').value = document.getElementById('myRadio5').value;
+            }
+        }
+    </script>
+    <script type="text/javascript">
+
+        function chkqus() {
+            // var group = document.getElementById('hdnchk').value;  
+            //  if (document.getElementById('txtMessage').value == '') {
+            if (document.getElementById('hdnchk').value == '') {
+                alert("Please give rating ..");
+                return false;
+            }
+            //  }
+            if (document.getElementById('hdnchk').value == '') {
+                if (document.getElementById('txtMessage').value == '') {
+                    alert("please enter message");
+                    document.getElementById('txtMessage').focus();
+                    return false;
+                }
+            }
+            if (document.getElementById('txtMessage').value != '') {
+                if (document.getElementById('txtimgKey1').value == '') {
+                    alert("Enter verification code");
+                    document.getElementById('txtimgKey1').focus();
+                    return false;
+                }
+            }
+
+        }
+
+
+        @*        $(document).ready(function () {
+            $('#btnSave').click(function () {
+                var group = document.Form1.myRadio;
+                for (var i = 0; i < group.length; i++) {
+                    if (group[i].checked)
+                        break;
+                }
+                if (i == group.length) {
+                    alert("Please give rating ..");
+                    return false;
+                }
+
+                if (document.getElementById('txtMessage').value == '') {
+                    _blnInd = false;
+                    alert("please enter message");
+                    document.getElementById('txtMessage').focus();
+                    return false;
+                }
+
+                if (document.getElementById('txtimgKey1').value == '') {
+                    _blnInd = false;
+                    alert("Enter verification code");
+                    document.getElementById('txtimgKey1').focus();
+                    return false;
+                }
+
+                if (_blnInd = true) {
+                    var cnt = new AnswerFaqCog();
+                    cnt.Question_id = $("#hdnquid").val();
+                    //                    cnt.Ratevalue = $("#rborating input:radio").val();
+                    cnt.Ratevalue = $('input[name=myRadio]:checked').val();
+                    cnt.Comment = $("#txtMessage").val();
+                    cnt.verificationcode = $("#txtimgKey1").val();
+                    cnt.hdnverificationcode = $("#hdnkey").val();
+                    var postData = JSON.stringify(cnt);
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("SubmitfaqRating","Search")',
+                        data: JSON.stringify(cnt),
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        processData: false,
+                        success: function (data) {
+                            if (data == 'true') {
+                                window.location.href = '@Url.RouteUrl("FAQSHome")';
+                            }
+                            else {
+                                alert("You need to enter valid Security Code to register...");
+                            }
+                        }
+
+                    });
+                }
+            });
+        }); *@     
+    </script>
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
+
+        $(document).ready(function () {
+            $(".openDialog").live("click", function (e) {
+                e.preventDefault();
+
+                $("<div></div>")
+                    .addClass("dialog")
+                    .attr("id", $(this)
+                    .attr("data-dialog-id"))
+                    .appendTo("body")
+                    .dialog({
+                        title: $(this).attr("data-dialog-title"),
+                        close: function () { $(this).remove(); },
+                        modal: true,
+                        height: 450,
+                        width: 800,
+                        left: 0
+
+                    })
+                    .load(this.href);
+            });
+
+
+            $(".close").live("click", function (e) {
+                e.preventDefault();
+                $(this).closest(".dialog").dialog("close");
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        function chkver() {
+            var strver = document.getElementById('txtimgKey1').value;
+            strver = strver.replace(/^\s+/, '');
+            document.getElementById('txtimgKey1').value = strver;
+        }
+</script>
+    <script language="javascript">
+
+        var fHasWMP1 = navigator.mimeTypes && navigator.mimeTypes["application/x-vlc-plugin"] &&
+     navigator.mimeTypes["application/x-vlc-plugin"].enabledPlugin;
+        var fHasWMP2 = navigator.mimeTypes && navigator.mimeTypes["application/x-mplayer2"] &&
+     navigator.mimeTypes["application/x-mplayer2"].enabledPlugin;
+
+    </script>
+    <script language="VBScript">
+     On Error  Resume Next
+     ' Set theObject = CreateObject("QuickTimeCheckObject.QuickTimeCheck.1")
+      fHasWMP1 = (IsObject(CreateObject("VideoLAN.Vlcplugin.1")))        
+      fHasWMP2= (IsObject(CreateObject("MediaPlayer.MediaPlayer.1")))
+             On Error  goto 0         
+    </script>
+    <script language="Javascript">
+        var haveqt = false;
+    </script>
+    <script language="VBScript">
+    On Error  Resume Next
+       Set theObject = CreateObject("QuickTimeCheckObject.QuickTimeCheck.1")
+    On Error  goto 0
+
+    If IsObject(theObject) Then
+      If theObject.IsQuickTimeAvailable(0) Then   'Just check for file
+        haveqt = true
+      End If
+    End If
+    </script>
+    <script language="Javascript">
+        if (navigator.plugins) {
+            for (i = 0; i < navigator.plugins.length; i++) {
+                if (navigator.plugins[i].name.indexOf("QuickTime") >= 0)
+                { haveqt = true; }
+            }
+        }
+    </script>
+    <script type="text/javascript" language="Javascript">
+<!--        //
+    var ssit_RealPresent = 0;
+    var ssit_RealPlayer4 = 0;
+    var ssit_RealPlayer5 = 0;
+    var ssit_RealPlayerG2 = 0;
+    var ssit_bIsMac5 = ((navigator.appVersion.indexOf("Macintosh") != -1) && (navigator.appVersion.indexOf("MSIE 5") != -1));
+    var ssit_bIsOpera = (navigator.userAgent.indexOf("Opera") != -1);
+    if ((navigator.userAgent.indexOf("MSIE") < 0) || (ssit_bIsMac5) || (ssit_bIsOpera)) {
+        numPlugins = navigator.plugins.length;
+        for (ssit_i = 0; ssit_i < numPlugins; ssit_i++) {
+            plugin = navigator.plugins[ssit_i];
+            if ((plugin.name.indexOf("RealPlayer") != -1) || (plugin.name.indexOf("RealOne") != -1) || (plugin.name == "rpnp.so")) {
+                ssit_RealPresent = 1;
+            }
+        }
+    }
+    if ((navigator.userAgent.indexOf('MSIE') != -1) && (navigator.userAgent.indexOf('Win') != -1) && (!ssit_bIsOpera)) {
+        document.writeln(' <script language="VBScript"> ');
+        document.writeln(' on error resume next ');
+        document.writeln(' ssit_RealPlayerG2 = (NOT IsNull(CreateObject("rmocx.RealPlayer G2 Control"))) ');
+        document.writeln(' ssit_RealPlayer5 = (NOT IsNull(CreateObject("RealPlayer.RealPlayer(tm) ActiveX Control (32-bit)"))) ');
+        document.writeln(' ssit_RealPlayer4 = (NOT IsNull(CreateObject("RealVideo.RealVideo(tm) ActiveX Control (32-bit)"))) ');
+        document.writeln(' <\/script> ');
+    }
+    // Set Mac IE3 and IE4 opt-out - attempts to play regardless
+    var ssit_bIsMac = ((navigator.appVersion.indexOf("Macintosh") != -1) && ((navigator.appVersion.indexOf("MSIE") != -1) && (!ssit_bIsMac5)));
+    // End Mac IE3/4 opt-out
+    if (ssit_RealPresent || ssit_RealPlayerG2 || ssit_RealPlayer5 || ssit_RealPlayer4 || ssit_bIsMac) {
+        //document.write ("installed Real Player");
+
+        //document.getElementById('<%=hdnRealPlayer.ClientId %>').value = 'Y'
+    }
+    else {
+        //document.write (" not installed Real Player")
+        // document.getElementById('<%=hdnRealPlayer.ClientId %>').value = 'N'
+        //document.write('For help downloading or upgrading RealPlayer for free, visit our <a href="http://www.bbc.co.uk/radio/audiohelp.shtml?focuswin" target="_blank" class="downloadLink">audio/video help</a> page<br><br>');
+        //document.write('Alternatively you can try to <a href="http://news.bbc.co.uk/media/video/otdvideo/86/05/03/nb/3118_03-05-86_4x3_nb.ram" class="downloadLink">play the clip in the standalone player</a> or <a href="http://www.bbc.co.uk/mediaselector/check/media/video/otdvideo/86/05/03/3118_03-05-86?bgc=6699CC&nbram=1&bbram=1&size=4x3&news=1&prefs=1" onclick="changePrefs()" class="downloadLink">change your preferences</a>.</b></font></div>');
+    }
+    // -->
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".sendfaqclose").live("click", function (e) {
+                var dialogDiv = $('#sendemaildialog');
+                dialogDiv.dialog('close');
+                return false;
+            });
+
+
+        });
+
+    </script>
+     </head>
+    <body>
+                  @using (Ajax.BeginForm("AnswerFaq", "Search", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateRating"
+
+        }))
+          {
+                      <input type="hidden" id="Hdnqid" name="Hdnqid" value="@ViewBag.quesid" />
+                      <input type="hidden" id="hdnchk" name="hdnchk" />
+          <div class="video-library">
+         
+        <div class="article-search">
+            <h4 >
+                 @Html.RouteLink("Frequently Asked Questions", "FAQSHome",null, new { @style="color:#044a7d;text-decoration:none;"})
+                </h4>
+                </div>
+          </div>
+    <div class="article-library">
+        <div class="affairs">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="center">
+                <tr height="20px">
+                    <td colspan="2" align="right" style="font-family: Arial; font-size: 12pt; font-weight: bold; color:#044a7d;cursor: pointer;">
+   <a id="sendmail" href="#" onclick="return Displaydialog('sendemaildialog','@Url.Action("SendFAQ", new { id = ViewBag.QUEid })','auto',900,'dvLoading',null,null);" class="button" title="Click here to Send Email">Send this link to a friend</a>
+  </td>
+                </tr>
+                <tr>
+                    <td style="font-family: Arial; font-size: 12pt; color: #044a7d;font-weight: bold;" >
+                        Question / Issue
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height: 30px">
+                        <hr />
+                    </td>
+                </tr>
+                <tr>
+                    <td >
+                                        
+                        <a id="aQuestion" runat="server" style="font-family: Arial; font-size: 11pt;" >
+                            @ViewBag.Text</a>                        
+                        &nbsp;
+                     
+                        <a id="aRating" runat="server" style="font-family: Arial; font-size: 11pt; font-style: italic; color: gray;" >
+                            @ViewBag.rating</a>  
+                        &nbsp;
+                     
+                         <a id="aViewedCount" runat="server" style="font-family: Arial; font-size: 11pt; font-style: italic; color: gray;" >
+                            @ViewBag.ViewedCount</a>  
+                        &nbsp;
+                      
+                         <a id="aUpdatedon" runat="server" style="font-family: Arial; font-size: 11pt; font-style: italic; color: gray;" >
+                            @ViewBag.updatedon</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" height="30px">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-family: Arial; font-size: 12pt; color: #044a7d;font-weight: bold;" >
+                        Answer / Solution
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <hr />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-family: Arial; font-size: 10pt;" >
+                         <a id="aAnswer" runat="server" style="font-family: Arial; font-size:11pt;" >
+                           @ViewBag.answer</a> 
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" height="30px">
+                    </td>
+                </tr>
+             @if (ViewBag.relatedlinkcount > 0)
+             {
+                  
+                             <tr id="trref" runat="server">
+                    <td style="font-family: Arial; font-size: 12pt; color: #044a7d" class="bluemenu1">
+                        Media Links
+                    </td>
+                </tr>
+                <tr id="trref1" runat="server">
+                    <td>
+                        <hr />
+                    </td>
+                </tr>
+             }
+                <tr id="trref2" runat="server">
+                    <td style="font-family: Arial; font-size: 9pt;" id="tdlinks" runat="server">
+                        <table>
+                                <tr>
+                                <td>
+                                    
+                                    
+                                        @foreach (var item1 in ViewBag.relatedlinks)
+                                        {
+                                            string filepath = item1["FilePath"];
+                                            string str = item1["Title"];
+                                            string text = str.ToString();
+                                            string fileext = System.IO.Path.GetExtension(item1["FilePath"]);
+                                            string path = item1["ImagepathSuffix"] + "AdminTutorialVideo" + fileext;
+                                           
+                                      
+                                          <table>
+                                        <tr>
+                                        <td>                                           
+                                     @Html.ActionLink(str, "download2", new { @id = path, @ext = fileext }, new { @class = "openDialog", @data_dialog_id = "aboutlDialog" })                  
+                                    <br />
+                                    @Html.Raw(item1["Descript"])
+                                        </td>
+                                        </tr>                                                                                
+                                        </table>    
+                                        }
+                                      
+                                </td>
+                            </tr>
+                        </table>
+                       
+                    </td>
+                </tr>
+             
+            
+                <tr>
+                
+                    <td colspan="2" height="30px">
+                     </td>
+                </tr>
+                               
+                              @if (ViewBag.relatedfaqcount>0)
+                              {
+
+                               
+                                  <tr id="trrelfaq1" >
+                                  
+                    <td style="font-family: Arial; font-size: 12pt; color: #044a7d" >
+                        Related Faq's
+                    </td>
+              
+                </tr>
+                <tr id="trrelfaq2">
+                    <td>
+                        <hr />
+                    </td>
+                </tr>
+                                      }
+                                 
+                <tr id="trrelfaq3">
+                    <td style="font-family: Arial; font-size: 9pt;" id="td2" runat="server">
+                    @foreach (var item2 in ViewBag.relatedfaqs)
+                    {
+                        string str = null;
+                        str = (string)item2["Question"];
+                        int qno = (int)item2["ChildFaq_id"];
+                  
+                  
+             <table>
+             <tr>  
+             <td>
+               </td>                               
+             <td style="font-family: Arial; font-size: 11pt; color:#044a7d;text-decoration:none;">
+
+                                  
+                                 
+                                    @Html.ActionLink(str, "AnswerFAQ", new { @id = item2["ChildFaq_id"] })
+            
+             </td>
+             </tr><br />
+             </table>
+                    }
+
+                    </td>
+                        
+                </tr> 
+                <tr>
+                   <td colspan="2" height="30px">
+                    </td>
+                </tr>
+                <tr>
+                <td  style="font-family: Arial; font-size: 12pt; color: #044a7d;font-weight: bold;">
+                        How would you rate this article?
+                    </td>
+                </tr>
+                <tr>
+                
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    Poor
+                                </td>
+                                <td>
+                                    1 @Html.RadioButton("myRadio1", "1", false, new {onclick="return check1();" })
+                                    2 @Html.RadioButton("myRadio2","2",false, new {onclick="return check2();" })
+                                    3 @Html.RadioButton("myRadio3","3",false, new {onclick="return check3();" })
+                                    4 @Html.RadioButton("myRadio4","4",false, new {onclick="return check4();" })
+                                    5 @Html.RadioButton("myRadio5","5",false, new {onclick="return check5();" })
+                               @*  1 <input type="radio" name="myRadio" value="0"/>
+                                 2 <input type="radio" name="myRadio" value="1" />
+                                 3 <input type="radio" name="myRadio" value="2" />
+                                 4 <input type="radio" name="myRadio" value="3" />
+                                 5 <input type="radio" name="myRadio" value="4" />*@
+                                </td>
+                                <td>
+                                    Great
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="td1" runat="server">
+                             <textarea id="txtMessage" name="txtMessage" class="text" rows="2" cols="2" maxlength="1000" style="width:500px; height: 120px;"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="12px">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-family: Arial; font-size: 10pt;" >
+                        Type Verification Image :
+                          <input type="text" id="txtimgKey1" name="txtimgKey1"  class="textfield" maxlength="6" onkeyup="return chkver();" style=" font-size: 9pt; width: 80px;" autocomplete="off" />
+                          <a>
+              @*                             <span   style="width:60px; height:40px;background-color:transparent;font-size:16px;" >@ViewBag.captcha</span>
+                                       <input type="hidden" id="hdnkey" name="hdnkey" value="@ViewBag.captcha" />*@
+                              <img style="padding-left:20px;width: 90px;" src="@Url.Action("ShowCaptchaimg","Search")" />
+                          </a>                   
+                    </td>              
+                    
+                </tr>
+                <tr>
+                    <td align="right" style="padding-right: 400px;">
+                    <br /> <br />
+                @* <input id="btnSave" type="submit"  value="Submit"  style="width: 60px;" class="button"/>*@
+                        <input id="btnSave" value="Submit" type="submit" style="width: 60px;" class="button"
+                                                         onclick="return chkqus();" />
+                    </td>
+                    <td align="left">
+                       <br /> <br />             
+                <input value="Back" type="button" class="button" style="width: 60px;" id="btnclose" onclick="return cancel();"/>
+                        
+                    </td>
+                </tr>
+            </table>
+            <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0" runat="server"
+                id="Table2">
+                <tr>
+                    <td>
+                        <div id="divEmailFriend" runat="server" style="display: none; z-index: 101; left: 295px;
+                            position: absolute; top: 50px; width: 60%;" class="PublicModalPopup">
+                            </div>
+                    </td>
+                </tr>
+            </table>         
+        </div>
+    </div>
+        <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+                                            
+<div id="sendemaildialog" title="Send this link to a friend">
+    </div>
+          }
+        </body>
+    <script type="text/javascript">
+
+        function updateRating(data) {
+
+            if (data != '' & data.Success == true) {
+                //$('#dvLoading').dialog('close');
+                window.location.href = '@Url.RouteUrl("FAQSHome")';
+                return false;
+            }
+            else {
+                //$('#dvLoading').dialog('close');
+               // alert(data.ErrorMessage
+                if (data != '_Logon_') {
+                    alert(data.ErrorMessage);
+                }
+
+                document.getElementById('txtimgKey1').focus();
+
+                return false;
+            }
+        }
+    </script>   
+    </html>

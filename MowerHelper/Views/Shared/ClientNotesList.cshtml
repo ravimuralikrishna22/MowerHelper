@@ -1,0 +1,137 @@
+﻿
+
+
+ <div class="content-box-content">
+                                            @{WebGrid Cptgrid = new WebGrid(rowsPerPage: 10, fieldNamePrefix: "S2", pageFieldName: "P2");}
+                                            @{WebGrid grid = Cptgrid.Bind(rowCount: ViewBag.totrec, source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["S2P2"] ?? "1");
+                                                  ViewBag.pageno1 = pageno;
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                 grid.Column("Notes_Date", "Date", canSort: false, format: @<text>@(@item.Notes_Date.ToString("MM/dd/yyyy") == "01/01/0001" ? String.Empty : @item.Notes_Date.ToString("MM/dd/yyyy"))</text>),
+
+                                                   grid.Column("", "Note summary", canSort: false,
+                                                  format:@<text>
+                                                         @{var description = (string)HttpUtility.HtmlDecode(item.Notes);
+                                                           if (!string.IsNullOrEmpty(description))
+                                                           {
+                                                               if (description.Length > 100)
+                                                               {
+                                                                   count = count + 1;
+                                                                   description = description.Substring(0, 100);
+                                                                   //@Html.ActionLink(description, "EditNotes", new { Generalnoteid = (int)item.GeneralNote_ID }, new { @class = "NoteSummaryLink", @style = "color:#0066CC;cursor:pointer;",@title="Click here to edit notes" })<a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                              @* <a href="#" style="color:#0066CC;cursor:pointer;" title="Click here to edit notes" onclick="return Displaydialog('NoteSummaryDialog','../Clients/EditNotes?Generalnoteid='+'item.GeneralNote_ID','auto',850,'divLoading',null,null);">description</a>*@
+                                                               <a  style="color:#0066CC;cursor:pointer;" title="Click here to edit notes" onclick="return Displaydialog('NoteSummaryDialog','../Clients/EditNotes?Generalnoteid='+'@item.GeneralNote_ID'+'&S2P2='+'@pageno','auto',850,'divLoading',null,null);">@description</a>
+
+                                                             <a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 400px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Notes :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@HttpUtility.HtmlDecode(item.Notes)</span> </td> </tr>
+                                                             </table> </div>
+                                                               }
+                                                               else
+                                                               {
+                                                                   //@Html.ActionLink((string)HttpUtility.HtmlDecode(item.Notes), "EditNotes", new { Generalnoteid = (int)item.GeneralNote_ID }, new { @class = "NoteSummaryLink", @style = "color:#0066CC;cursor:pointer;", @title = "Click here to edit notes" })
+                                                              
+                                                                    <a  style="color:#0066CC;cursor:pointer;" title="Click here to edit notes" onclick="return Displaydialog('NoteSummaryDialog','../Clients/EditNotes?Generalnoteid='+'@item.GeneralNote_ID'+'&S2P2='+'@pageno','auto',850,'divLoading',null,null);">@HttpUtility.HtmlDecode(item.Notes)</a>
+                                                               }
+                                                           }
+                                                           }
+                                                
+                                                </text>),
+                                                                                                      grid.Column("", "Action", canSort: false,
+                                                  format:@<text>
+                                            @if (string.IsNullOrEmpty(item.Transaction_id) == true)
+                                            {
+                                                  if (Model.Count > 1)
+                                                                    {
+                                             <a class="lnkarchive" href="#" title = "Click here to change the status"  onclick="return Showalert('@item.Transaction_id','@item.GeneralNote_ID','@pageno');" >
+                                        <img src="~/Images/archive.png" />
+                                    </a>
+                                            }
+                                            else
+                                            {
+                                                var archivepage = Convert.ToInt32(pageno) - 1;
+                                                        <a class="lnkarchive" href="#" title = "Click here to change the status"  onclick="return Showalert('@item.Transaction_id','@item.GeneralNote_ID','@archivepage');" >
+                                        <img src="~/Images/archive.png" />
+                                    </a>
+                                                  }
+                                            }
+                                            else
+                                            {
+                                         <label>-</label>
+                                            }
+                                          @*   <a href="@Url.Action("ChangeStatus", "Clients", new { Generalnoteid = (int)item.GeneralNote_ID })" class = "confirmDialog3", title = "Click here to archive note" >
+                                        <img src="~/Images/archive.png" />
+                                    </a>*@
+                                         @*   @Html.ActionLink(" ", "ChangeStatus", new { Generalnoteid = (int)item.GeneralNote_ID },
+                                                  new { @style = "background: url('../Images/archive.png') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;padding-top:5px;", @class = "confirmDialog3", @title = "Click here to archive note" })*@
+            </text>)
+
+                                                 )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                                <div id="gridFootern" class="gridFooter" style="padding-left: 300px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+                                                  }
+
+
+
+                                              }
+                                              else
+                                              {
+                                            <table id="tdcharge" runat="server" width="100%">
+                            <tr><td style="text-align:center; vertical-align:middle; height:25px;"><span id="lblnorecords" class="errormsg" style="font-size:13px;font-weight:bold;">No notes found</span></td></tr>
+                        </table>
+                                              }
+                                            }
+                                        </div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#gridFootern a').click(function () {
+            $('#divLoading2').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            var href = $(this).attr("href");
+            $(this).attr("href", "");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("DisplayClientNotesList", "Clients")' + queryString;
+            //$('#notesList').load(requestUrl);
+            //$("#divLoading2").dialog('close');
+            $.ajax({
+                url: requestUrl,
+                type: "get",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+                    $('#notesList').html(data);
+                    $("#divLoading2").dialog('close');
+                }
+
+            });
+            return false;
+        });
+
+
+    });
+
+    newNotePage = '@Request["S2P2"]';
+    $("#lnkarchive").click(function (event) {
+        event.preventDefault();
+    });
+  </script> 

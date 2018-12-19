@@ -1,0 +1,308 @@
+﻿@model MowerHelper.Models.BLL.Patients.Patient_Info
+@using MowerHelper.Models.Classes;
+@using MowerHelper.Models.BLL.Providers;
+@{
+    Layout = null;
+    Reg_ProvidersDetailInfo objInfo = new Reg_ProvidersDetailInfo();
+    if (Convert.ToString(Session["Roleid"]) != "1")
+    {
+        objInfo = Reg_ProvidersDetailInfo.Get_ProviderAddressDetails(Convert.ToInt32(Session["Prov_ID"]));
+    }
+    else
+    {
+        objInfo = Reg_ProvidersDetailInfo.Get_ProviderAddressDetails(Convert.ToInt32(Model.ProviderID));
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DefaultCourt</title>
+    <script type="text/javascript">
+        @*function SaveDefaultCourt()
+        {
+            var patId = '@ViewBag.PatId';
+            var courtId = $("#OtherAddressItemList option:selected").val();
+            var proId = '@ViewBag.ProId';
+            $.ajax({
+                url: "/Clients/DefaultCourt",
+                type: "post",
+                data: { "patientId": patId, "DefaultCourtId": courtId, "ProviderID": proId },
+                dataType: "json",
+                //contentType: "application/json;charset=utf-8",
+                Success: Result,
+                Error:ErrResult
+            });
+            $('#divDefaultcourt').dialog('close');
+            window.location.href = "/Clients/ClientsHome";
+
+        }
+        function Result(data)
+        {
+            alert("1")
+            $('#divDefaultcourt').dialog('close');
+            window.location.href = "/Clients/ClientsHome";
+        }
+        function ErrResult(data)
+        {
+            alert("2")
+        }*@
+        function SaveDefaultCourt() {
+            /*******************************************/
+            if (document.getElementById('trEotherAddress').style.display == "" || document.getElementById('trEotherAddress').style.display != "none") {
+                document.getElementById('EotherAddress1').value = trim(document.getElementById('EotherAddress1').value);
+                if (document.getElementById('EotherAddress1').value == '') {
+                    alert('Please enter Address1'); document.getElementById('EotherAddress1').focus(); return false;
+                }
+                if (document.getElementById('txtEZip').value == '') {
+                    alert('Please enter Zip code'); document.getElementById('txtEZip').focus(); return false;
+                }
+                if (document.getElementById('txtEZip').value != '') {
+                    if (document.getElementById('txtEZip').value.length != 5) {
+                        alert('Invalid zip code');
+                        document.getElementById('txtEZip').focus(); return false;
+                    }
+                    if (fnStringFieldValidate(document.getElementById('txtEZip'), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 0) {
+                        alert('Invalid zip code!!! zip code must be in alphanumeric only.');
+                        document.getElementById('txtEZip').focus(); return false;
+                    }
+                }
+                if (document.getElementById('DDEState').selectedIndex == 0) {
+                    alert('Please select state');
+                    document.getElementById('DDEState').focus();
+                    return false;
+                }
+                if (document.getElementById('DDECity').selectedIndex == 0) {
+                    alert('Please select city');
+                    document.getElementById('DDECity').focus();
+                    return false;
+                }
+            }
+            var courtId = $("#OtherAddressItemList1 option:selected").val();
+            $('#hdncourtId').val(courtId);
+        }
+        //$("#OtherAddressItemList1").change(function () {
+        //    var courtId = $("#OtherAddressItemList1 option:selected").val();
+        //    $('#hdncourtId').val(courtId);
+        //});
+        $(".ui-dialog-titlebar-close").click(function () {
+            $('.ddlactionclass').val("0");
+        })
+    </script>
+    <script type="text/javascript">
+        $("#OtherAddressItemList1").change(function () {
+            $("#OtherAddressItemList1 option[value='-0']").prop('disabled', true);
+            var recordtext = $("#OtherAddressItemList1 option:selected").text();
+            $('#tblcourt tr[id="trEotherAddress"]').hide();
+            if (recordtext == "New Location") {
+                $('#tblcourt tr[id="trEotherAddress"]').show();
+                $('#DefCourtLocationName').show();
+            }
+            else {
+                $('#DefCourtLocationName').hide();
+                $('#tblcourt tr[id="trEotherAddress"]').hide();
+            }
+        });
+        $(document).ready(function () {
+            $("#OtherAddressItemList1 option[value='-0']").prop('disabled', true);
+            var recordtext = $("#OtherAddressItemList1 option:selected").text();
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#txtEZip").keyup(function () {
+                if ($(this).val().length == 5) {
+                    var recordId = $('#txtEZip').val();
+                    $.getJSON("../Public/GetStateCitiesByZip", { zipcode: recordId },
+                 function (data) {
+                     if (data.indexOf(",") != -1) {
+                         var data1 = data.split(',');
+                         $("#DDEState").empty();
+                         $('#DDEState').append($('<option > </option>').val(0).html("--Select State--"));
+                         $('#DDEState').append($('<option > </option>').val(data1[1]).html(data1[0]));
+                         $("select#DDEState").prop('selectedIndex', 1);
+                         $("#DDECity").empty();
+                         $('#DDECity').append($('<option > </option>').val(0).html("--Select City--"));
+                         $('#DDECity').append($('<option > </option>').val(data1[3]).html(data1[2]));
+                         $("select#DDECity").prop('selectedIndex', 1);
+                     }
+                     else {
+                         $("#DDEState").empty();
+                         $('#DDEState').append($('<option > </option>').val(0).html("--Select State--"));
+                         $.each(data, function (index, value) {
+                             $('#DDEState').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                         });
+                         $("#DDECity").empty();
+                         $('#DDECity').append($('<option > </option>').val(0).html("--Select City--"));
+                     }
+                 });
+                }
+                else {
+                    if (event.keyCode == '8' || event.keyCode == '88' || event.keyCode == '46') {
+                        $.getJSON("../Public/GetStateByZip",
+                     function (data) {
+                         $("#DDEState").empty();
+                         $('#DDEState').append($('<option > </option>').val(0).html("--Select State--"));
+                         $.each(data, function (index, value) {
+                             $('#DDEState').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                         });
+                     });
+                        $("#DDECity").empty();
+                        $('#DDECity').append($('<option > </option>').val(0).html("--Select City--"));
+                    }
+                }
+            });
+
+        });
+        $(document).ready(function () {
+         
+            $('#DDEState').change(function () {
+                //                   alert("statechange");
+                var recordId = $('#DDEState').val();
+                var recordId1 = $("#txtEZip").val();
+                if (recordId != '' && recordId1 == '') {
+                    // alert('a');
+                    $.getJSON("../Public/GetCitiesByStates", { id: recordId },
+                 function (data) {
+                     $("#DDECity").empty();
+                     $('#DDECity').append($('<option > </option>').val(0).html("--Select City--"));
+                     $.each(data, function (index, value) {
+                         $('#DDECity').append($('<option > </option>').val(data[index].CityId).html(data[index].CityName));
+                     });
+                 });
+                    // return false;
+                }
+                else if (recordId != '' && recordId1 != '') {
+                    //alert('b');
+                    $.getJSON("../Public/GetCitiesByZip", { id: recordId, zipcode: recordId1 },
+                 function (data) {
+                     $("#DDECity").empty();
+                     $('#DDECity').append($('<option > </option>').val(0).html("--Select City--"));
+                     $.each(data, function (index, value) {
+                         $('#DDECity').append($('<option > </option>').val(data[index].CityId).html(data[index].CityName));
+                     });
+                 });
+                    // return false;
+                }
+                else {
+                    // alert('c');
+                    $("#DDECity").empty();
+                    $('#DDECity').append($('<option > </option>').val(0).html("--Select City--"));
+                    // return false;
+                }
+            });
+            if ($('#txtEZip').val() != '') {
+                var recordId = $('#txtEZip').val();
+                var stateid = "@objInfo.State_ID";
+                var statename = "@objInfo.Statename";
+                var City_ID = "@objInfo.City_ID";
+                var City = "@objInfo.Cityname";
+                if (recordId != '' && stateid != '' && City_ID != '') {
+                    $("#DDEState").empty();
+                    $('#DDEState').append($('<option > </option>').val(0).html("--Select State--"));
+                    $('#DDEState').append($('<option > </option>').val(stateid).html(statename));
+                    $("select#DDEState").prop('selectedIndex', 1);
+                    $("#DDECity").empty();
+                    $('#DDECity').append($('<option > </option>').val(0).html("--Select City--"));
+                    $('#DDECity').append($('<option > </option>').val(City_ID).html(City));
+                    $("select#DDECity").prop('selectedIndex', 1);
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    @using (Ajax.BeginForm("DefaultCourt", "Clients", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "UpdateCourtID",
+        OnComplete = "SessionExpireFail"
+
+    }))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <input type="hidden" id="PatientID" name="PatientID" value="@Model.PatientID" />
+            <input type="hidden" id="hdncourtId" name="hdncourtId" />
+            <input type="hidden" id="ProviderID" name="ProviderID" value="@Model.ProviderID" />
+            <table id="tblcourt" class="border_style" cellspacing="1" width="100%" align="center" border="0">
+                <tr class="nav_blue_color" height="40">
+                    <td width="18%" style="font-size: 13px; text-align: right">
+                        <strong>Default Court :&nbsp;</strong>
+                    </td>
+                    <td width="35%" align="left">&nbsp;&nbsp;&nbsp;
+                     @Html.DropDownList("OtherAddressItemList1", new List<SelectListItem> {new SelectListItem{Text="New Location",Value="0"}}, "--Select Default Court--", new { @class = "textfield", @style = "width:250px;" })
+
+                        &nbsp;&nbsp;&nbsp;
+                  @Html.TextBox("DefCourtLocationName", "", new { @class = "textfield", autocomplete = "off", style = "width:200px;display:none", placeholder = "Court location name",MaxLength="100" })
+                    </td>
+                </tr>
+                <tr id="trEotherAddress" class="nav_blue_color" height="40" style="display: none">
+                    <td width="25%" style="font-size: 13px; text-align: right"><strong>Address :&nbsp;</strong></td>
+                    <td width="75%" runat="server" style="font-size: 13px;">
+                        <table cellpadding="4" cellspacing="0" border="0" width="100%">
+                            @* @Html.Partial("_OtherCitiesStates", Model)*@
+                            <tr>
+                                @*   <td id="tdotAddress" style="width:18%"><font color="red"><b>*</b></font><strong>Address1 :&nbsp;</strong></td>*@
+                                <td id="tdotAddress1" style="width: 50%;"><font color="red"><b>*</b></font><strong>Address1 :&nbsp;</strong> @Html.TextBox("EotherAddress1", "", new { @class = "textfield", autocomplete = "off", style = "width:200px" })</td>
+                                <td style="width: 50%">
+                                    <font color="red"><b>*</b></font><strong>Zip :&nbsp;</strong> @Html.TextBox("txtEZip", objInfo.Zip, new { @class = "textfield", MaxLength = "5", style = "width:50px;", autocomplete = "off" })
+                                </td>
+                            </tr>
+                            <tr>
+
+                                @*@if (clsCommonCClist.GetStates() != null)
+                                {*@
+                                <td align="left" id="tdstateother" style="width: 50%"><font color="red"><b>*</b></font><strong>State :&nbsp;</strong>@Html.DropDownList("DDEState", new SelectList(clsCommonCClist.GetStates(), "StateId", "StateFullName"), "--Select State--", new { @style = "width:250px;height:25px;font:13px;" })
+
+                                </td>
+                                @*}*@
+
+                                <td style="width: 50%"><font color="red"><b>*</b></font><strong>City :&nbsp;</strong> @Html.DropDownList("DDECity", new List<SelectListItem> { new SelectListItem { Text = "--Select City-- ", Value = "0", Selected = true } }, new { @style = "width:250px;height:25px;font:13px;" })</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table border="0" cellpadding="0" cellspacing="0" width="98%">
+                <tr style="text-align: right; height: 50px">
+                    <td>
+                        <input class="button" type="submit" name="Save" value="Save" onclick="return SaveDefaultCourt();" />&nbsp;
+                 <input type="button" class="defaultcancel button" name="Cancel" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+</body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                url: "@Url.Action("FillCourtLocations","Schedule")",
+                type: "get",
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    $("#OtherAddressItemList1").empty();
+                    $.each(data, function (index, value) {
+                        $('#OtherAddressItemList1').append($('<option> </option>').val(data[index].Value).html(data[index].Text));
+                        $("#OtherAddressItemList1 option[value='']").prop('disabled', true);
+                    });
+                   // alert('@ViewBag.Selectedcourt');
+                    if ("@ViewBag.Selectedcourt" == '') {
+                      //  alert('1');
+                        $("#OtherAddressItemList1").val(0);
+                        $('#tblcourt tr[id="trEotherAddress"]').show();
+                        $('#DefCourtLocationName').show();
+                    }
+                    else {
+                        $("#OtherAddressItemList1").val("@ViewBag.Selectedcourt");
+                    }
+                }
+            });
+        });
+    </script>
+</html>

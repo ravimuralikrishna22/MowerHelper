@@ -1,0 +1,259 @@
+﻿@{
+    Layout = null;
+}
+<style type="text/css">
+        .dvTopLoading .ui-dialog-titlebar{ display: none;}
+    .mobilelogin
+    {
+         padding-left:45px;
+    }
+</style>
+
+ <style type="text/css">#webklipper-publisher-widget-container, #webklipper-publisher-widget-container * {overflow:visible; -webkit-box-sizing: content-box; -moz-box-sizing: content-box;  box-sizing: content-box;}</style>
+    <script  type="text/javascript">window.history.forward();</script>
+
+    <div id="header_admin">
+        <div class="logo">
+        @if (Session["Roleid"].ToString() != "1")
+        {
+        <a href="@ViewBag.HomeUrl">Mower Helper </a>
+        }
+        else{
+              <a href="@Url.Action("Providerprofile","Providers",null)">Mower Helper </a>
+        }
+                           </div>
+    <div class="top_admin_right"><div id="td_HeaderSections" runat="server" class="nav_admin">@Html.Raw(ViewBag.topsection)@*<%= ViewBag.topsection%>*@<div class="clear"></div></div><div class="admin_right_top"><ul id="tddisplaylinks" runat="server">
+                 <li>
+                                    <span id="lblLastLoginTime2"    style="font-weight:bold;">@Html.Raw(ViewBag.fullname)</span>
+                                     @if (Session["BeforeLoginDate"].ToString() != "" && Session["BeforeLoginDate"] != null)
+                                    {
+                                  <a href="#" onclick="return ShowWebLoginHistroyDetails();"  style="color:#044a7d;font-weight:bold;text-decoration:none;" title="Click here to see last web login details">  @Html.Raw(ViewBag.lastlogin)</a>
+                                    }
+                       @if (Session["MobileLoginDate"].ToString() != "" && Session["MobileLoginDate"] != null)
+                                    {
+                    <br />
+                                  <a href="#" onclick="return ShowMobileLoginHistroyDetails();" style="color:#044a7d;font-weight:bold;text-decoration:none;" title="Click here to see last mobile login details" class="mobilelogin"> @Html.Raw(ViewBag.mobilelogin)</a>
+                       }
+                              @*  }*@
+
+                </li>
+       
+               
+                @if (Session["Roleid"].ToString() != "1")
+                {
+                     <li style="display:none;">
+                 <a href="@Url.Action("ProviderFaqs", "FAQs", null)" title="Click here to view FAQ's" class="help_icon" ></a>
+               </li>
+                          }
+                else
+                {
+                          <li >
+                <a href="@Url.Action("Help", "AdminFaqs", null)" title="Click here to view FAQ's" class="help_icon" ></a>
+               </li>
+                               }
+                
+                <li class="no_img">@Html.RouteLink("Log Out", "Logout", null, new { @class = "logout_icon", style = "font-weight:bold;", title = "Click here to logout" }) </li>
+
+            </ul><div class="clear"> </div></div><div class="clear"></div>
+            @if (ViewBag.Roleid != "31" & ViewBag.Roleid != "38" & ViewBag.Roleid != "1")
+            {
+
+            <ul id="TopSections1_Migrated_PatientTopSearch1_tbltopsearch" class="shadetabs">
+            <li>
+                <a id="TopSections1_Migrated_PatientTopSearch1_Pat" title="Click here to go to Clients list" href="../Clients/ClientsHome">Clients :</a>
+                &nbsp;&nbsp;
+            @{
+                Int16 intChar;
+            }
+            @for (intChar = 65; intChar <= 90; intChar++)
+            {
+                foreach (var item in ViewBag.patalphabets)
+                {
+                    string str = item["Alphabets"];                
+                    if (str.Contains(Convert.ToChar(intChar) + ","))
+                    {
+               <a id="PatientTopSearch1_C80" title="Last name starting with @Convert.ToChar(intChar) :" class="on" href="@Url.Action("ClientsHome", "Clients", new { lastname = @Convert.ToChar(intChar) })" >@Convert.ToChar(intChar)</a>
+                    }
+                    else
+                    {
+                <span style="color:Gray;">@Convert.ToChar(intChar)</span>
+                    }
+                }
+            }
+
+            </li>
+            </ul>
+            @*<div class="search_admin">*@
+                <div class="search_admin" style="border-left:none">
+                 @if (ViewBag.Roleid == "4" & ViewBag.Showschedule == "Y")
+                 {
+                              @Html.ActionLink((string)ViewBag.aptTotcount, "ScheduleMessages", "Messages", null, new { @class = "margin_top",@id="lnkapptrequests",@Style="color: #0066CC;font:bold 17px Arial;"})
+                 }
+                
+                              @Html.ActionLink("New client", "ClientInformation", "ClientReg", null, new { @class = "margin_top",@Style="font:bold 17px Arial;"})
+            </div>
+            }
+        @if (ViewBag.Roleid == "1")
+        {
+        <ul id="TopSections1_Migrated_ProviderTopSearch1_tbltopsearch" class="shadetabs">
+            <li><a id="TopSections1_Migrated_ProviderTopSearch1_Pat" title="Mower Helpers name starting with" href="../Providers/Providerprofile">Mower Helpers : </a>&nbsp;&nbsp;
+                @{
+            Int16 intprovChar;
+                }
+                @for (intprovChar = 65; intprovChar <= 90; intprovChar++)
+                {
+                    foreach (var item in ViewBag.Provideralphabets)
+                    {
+                        string str = item["Alphabets"];
+                        if (str.Contains(Convert.ToChar(intprovChar) + ","))
+                        {
+                            <a id="ProviderTopSearch1_C80" title="Last name starting with @Convert.ToChar(intprovChar) :" class="on" href="@Url.Action("Providerprofile", "Providers", new { lastname = @Convert.ToChar(intprovChar) })">@Convert.ToChar(intprovChar)</a>
+                        }
+                        else
+                        {
+                            <span style="color:Gray;">@Convert.ToChar(intprovChar)</span>
+                        }
+                    }
+                }
+
+            </li>
+        </ul>
+        }
+<div class="clear"></div>
+    </div></div>
+    @*@if(ViewBag.ccinfoid!=null){
+<div>
+
+<div id="divrenewimg" style="margin: 0px; padding: 0px; position: fixed; border-width: 1px 0px 1px 1px; border-style: solid; border-color: rgb(204, 204, 204); -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; background-color: rgb(249, 249, 249); right: 0px; width: 26px; top: 285px; z-index: 16776273;">
+    <div style="margin: 0px; padding: 0px 0px; cursor: pointer; background-color: turquoise; background-repeat: no-repeat; background-position: center 0px; display: block; height: 83px; width: 25px; float: left; z-index: 16776274;">
+        <div style="width: 25px; height: 83px; margin: 0px; padding: 0px;">
+            <a id="Exarenewal" title="Click here to renewal your credit card." onclick="return selectPage();">
+            <img src="../Images/re2.png" /></a>
+        </div>
+      </div>
+
+</div>
+</div>
+    }*@
+    @* <div id="updateDialog1editpay" title="Credit card process">
+    </div>*@
+<div id="divweblogin" title="@ViewBag.lblHeaderweb"></div>
+<div id="divmobilelogin" title="@ViewBag.lblHeadermobile"></div>
+
+<div id="dvTopLoading" style="display:none; text-align:center; vertical-align:middle"><img src="../Images/ajax-loader2.gif" alt="Processing"  /></div>
+  
+<script type="text/javascript">
+    //$('#divweblogin').dialog({
+    //    autoOpen: false,
+    //    width: 900,
+    //    resizable: false,
+    //    height: 630,
+    //    modal: true
+
+    //});
+    //$('#divmobilelogin').dialog({
+    //    autoOpen: false,
+    //    width: 900,
+    //    resizable: false,
+    //    height: 630,
+    //    modal: true
+
+    //});
+    function ShowWebLoginHistroyDetails() {
+        //var dialogDiv = $('#divweblogin');
+
+        var viewUrl = '../Tools/WebLoginHistoryDetails';
+        Displaydialog('divweblogin', viewUrl, 630, 900, 'dvTopLoading', null, null);
+        //$('#dvTopLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //$.get(viewUrl, function (data) { dialogDiv.html(data); $('#dvTopLoading').dialog('destroy'); dialogDiv.dialog('open'); });
+        return false;
+    }
+    @*function loadclients(Lastname) {
+        $('#gridcontent1').load('@Url.Action("ClientsHome", "Clients")?LastName=' + Lastname, function (data) { $('#dvLoading').dialog('close'); });
+    }*@
+    function ShowMobileLoginHistroyDetails() {
+        //var dialogDiv = $('#divmobilelogin');
+
+        var viewUrl = '../Tools/MobileLoginHistoryDetails';
+        Displaydialog('divmobilelogin', viewUrl, 630, 900, 'dvTopLoading', null, null);
+        //$('#dvTopLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //$.get(viewUrl, function (data) { dialogDiv.html(data); $('#dvTopLoading').dialog('destroy'); dialogDiv.dialog('open'); });
+        return false;
+    }
+    @*$('#updateDialog1editpay').dialog({
+        autoOpen: false,
+        width: 1100,
+        resizable: false,
+        modal: true,
+        position: ['middle', 40],
+        open: function (event, ui) { $('body').css('overflow', 'hidden'); $('.ui-widget-overlay').css('width', '100%'); },
+        close: function (event, ui) { $('body').css('overflow', 'auto'); }
+
+    });
+    function selectPage() {
+        var dialogDiv = $('#updateDialog1editpay');
+        var id = "@ViewBag.ccinfoid";
+        var expdate = "@ViewBag.daysremining";
+        var viewUrl = '../Tools/ExpiryPaymentMethod?id=' + id + '&expdate=' + expdate;
+         $('#dvTopLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $.get(viewUrl, function (data) { dialogDiv.html(data); $('#dvTopLoading').dialog('destroy'); dialogDiv.dialog('open'); });
+            return false;
+    }
+    $(".exclose").live("click", function (e) {
+        e.preventDefault();
+        $(this).closest("#updateDialog1editpay").dialog("close");
+
+    });*@
+    function ExInfoSuccess(data) {
+        if (data != '' & data.Success == true) {
+            window.location = '../Directory/ViewIdentifyingInfo';
+        }
+        else {
+            $('#CCDialog').dialog('open');
+            document.body.style.cursor = 'pointer';
+            document.getElementById("div10").style.display = '';
+            document.getElementById("updNote").style.display = 'none';
+            $("#update-message").html(data.ErrorMessage);
+            $("#update-message").show();
+        }
+    }
+    //$("#Exarenewal").mouseover(function () {
+    //    document.getElementById("Exdivrenewal").style.zIndex = '1005';
+    //    document.getElementById("Exdivrenewal").style.left = '730px';
+    //    document.getElementById("Exdivrenewal").style.top = '360px';
+    //    document.getElementById("Exdivrenewal").style.position = 'absolute';
+    //    document.getElementById("Exdivrenewal").style.display = '';
+    // });
+    //    $("#Exarenewal").mouseout(function () {
+    //        document.getElementById("Exdivrenewal").style.display = 'none';
+    //    });
+    $(document).ready(
+          function () {
+              var roleid = "@Session["Roleid"]";
+
+              var Showsch = "@ViewBag.Showschedule";
+              var shoele = "@ViewBag.ShowElectricians";
+              if (roleid == 4) {
+                  if (Showsch == "N" || shoele!="Y") {
+                     // document.getElementById("lnkapptrequests").style.display = "none";
+                  }
+                  else {
+                      document.getElementById("lnkapptrequests").style.display = "";
+                  setInterval(function () {
+                      $.getJSON('@Url.Action("GetAptreqcount", "Tools")',
+                                  function (data) {
+                                      $("#lnkapptrequests").text("Requests (" + data.NewMsgsCount + ")")
+                                      if (data.ErrorMessage == "false") {
+                                          window.location.href = '../Home/SessionExpire';
+                                      }
+                                  });
+
+                  }, 300000);
+
+                  }
+              }
+             // else {
+             //     document.getElementById("lnkapptrequests").style.display = "none";
+             // }
+            });
+</script>

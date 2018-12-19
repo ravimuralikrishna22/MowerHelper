@@ -1,0 +1,102 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+          <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+        function validate() {
+            ClearInlineAlert('lblcategory', 'tdmaincategory', 'white');
+            ClearInlineAlert('lblfield', 'tdmainfield', 'white');
+            ClearInlineAlert('lbldesc', 'tdmaindesc', 'white');
+            if (document.getElementById('txtcategoryname')) {
+
+                document.getElementById('txtcategoryname').value = trim(document.getElementById('txtcategoryname').value)
+                if (document.getElementById('txtcategoryname').value === '') {
+                    //Glb_ShowAlert("Please enter category name");
+                    InlineAlert('lblcategory', 'tdmaincategory', 'Please enter category name');
+                    document.getElementById('txtcategoryname').focus();
+                    return false;
+                }
+            }
+            document.getElementById('txtArticleName').value = trim(document.getElementById('txtArticleName').value)
+            if (document.getElementById('txtArticleName').value == '') {
+                //Glb_ShowAlert("Please enter field name ");
+                InlineAlert('lblfield', 'tdmainfield', 'Please enter field name');
+                document.getElementById('txtArticleName').focus();
+                return false;
+            }
+
+            document.getElementById('txtArticleDesc').value = trim(document.getElementById('txtArticleDesc').value)
+            if (document.getElementById('txtArticleDesc').value == '') {
+                //Glb_ShowAlert("Please enter description");
+                InlineAlert('lbldesc', 'tdmaindesc', 'Please enter description');
+                document.getElementById('txtArticleDesc').focus();
+                return false;
+            }
+
+        }
+</script>
+</head>
+<body>
+@using (Html.BeginForm("AddKnowledgebase", "AdminFaqs", FormMethod.Post, null))
+{
+    <div>
+        <table cellspacing="0" cellpadding="0" width="100%" align="center">
+                        <tr class="background_color">
+                            <td id="tdDesign" width="1%" runat="server" >
+                            <div class="content">
+                                <div class="content-box">
+                               
+                                <div class="content-box-content">
+                                 
+                                <table id="EditService" class="border_style" cellspacing="1" cellpadding="4" width="100%"
+                                    align="center" border="0">
+                                    <tr class="white_color">
+                                    <td align="right"><font color="red"><b>*</b></font> <strong>Category name&nbsp;:&nbsp;</strong></td>
+                                    <td align="left" id="tdmaincategory">
+                                    <input type="text" id="txtcategoryname" name="txtcategoryname" autocomplete="off" class="textfield" style="width:280px;" />
+                                   @* <asp:TextBox ID="txtcategoryname" autocomplete="off" runat="server" Width="280px" CssClass="textfield"></asp:TextBox>*@
+                               <label id="lblcategory" style="font-weight:bold;"></label>
+                                    </td>
+                                    </tr>
+                                    <tr class="white_color">
+                                        <th style="height: 24px" align="right" width="25%">
+                                            <font color="red"><b>*</b></font> <strong>Field name&nbsp;:&nbsp;</strong></th>
+                                        <td align="left" style="width: 733px" id="tdmainfield">
+                                        <input type="text" id="txtArticleName" name="txtArticleName" autocomplete="off" class="textfield" maxlength="1000" style="width:280px;" />
+                                            &nbsp;&nbsp;<label id="lblfield" style="font-weight:bold;"></label>
+                                           </td>
+                                    </tr>
+                                    <tr class="white_color">
+                                        <th align="right" width="25%">
+                                            <font color="red"><b>*</b></font> <strong>Description&nbsp;:&nbsp;</strong> </th>
+                                        <td align="left" style="width: 733px" id="tdmaindesc">
+                                        <textarea id="txtArticleDesc" name="txtArticleDesc" class="textfield" rows="2" cols="2" maxlength="1000" style="width:280px; height: 100px;"></textarea>
+                                                &nbsp;&nbsp;<label id="lbldesc" style="font-weight:bold"></label>
+                                            
+                                        </td>
+                                    </tr>
+                                  
+                                </table>
+                                
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%" align="center">
+                                    <tr width="98%" align="right" class="white_color">
+                                        <td align="right" style="padding-right:10px; padding-bottom:5px; padding-top:5px;">
+                                        <input type="submit" id="btndSave" name="btndSave" class="button" onclick="return validate();" value="Save" />
+                                            <input type="submit" id="btndCancel" name="btndCancel" class="button Addclose" value="Cancel" />
+                                          
+                                            </td>
+                                    </tr>
+                                </table></div></div></div>
+                            </td>
+                        </tr>
+                    </table>
+    </div>
+}
+</body>
+</html>

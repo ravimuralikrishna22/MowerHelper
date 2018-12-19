@@ -1,0 +1,133 @@
+﻿
+@{
+    Layout = null;
+    //int pid = ViewBag.patid;
+}
+
+@*<!DOCTYPE html>
+
+<html>
+<head>*@
+@*    <meta name="viewport" content="width=device-width" />*@
+    @*<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <title>Mower Helper-Find an Mower Helper</title>*@
+@*    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")*@
+     <style type="text/css">
+    .Date{ width:30%;}
+         .Note{ width:62%;}
+.action{ width:8%;}
+    </style>
+      @*  <script type="text/javascript">
+            $(document).ready(function () {
+                var psize = $('#hdnpagesize').val();
+                if (psize != '') {
+                    $('#ddlrecords').val(psize);
+                }
+                else {
+                    $('#ddlrecords').val("10");
+
+                }
+            });
+    </script>*@
+@*    <script  type="text/javascript">
+
+        function ondescriptionover(obj) {
+            document.getElementById(obj).style.position = 'absolute';
+            document.getElementById(obj).style.display = '';
+            return false;
+        }
+        function ondescriptionout(obj) {
+            document.getElementById(obj).style.display = 'none';
+            return false;
+        }
+    </script>*@
+    @*<script type="text/javascript">
+        $(function () {
+            var roleid = $("#hdnrole").val();
+            if (roleid == "1") {
+                document.getElementById('auditdiv').style.display = '';
+            }
+            else {
+                document.getElementById('auditdiv').style.display = 'none';
+            }
+        });
+    </script>*@
+   @* <script type="text/javascript">
+        function ondescriptionover(obj) {
+            document.getElementById(obj).style.position = 'absolute';
+            document.getElementById(obj).style.display = '';
+            return false;
+        }
+        function ondescriptionout(obj) {
+            document.getElementById(obj).style.display = 'none';
+            return false;
+        }
+    </script>*@
+@*</head>
+<body>*@
+@*@using (Html.BeginForm("ProfileCDProgress", "ProgressReports", FormMethod.Get, null))
+{*@
+    @*<input id="hdnpagesize" type="hidden" value="10"/>*@
+    @*
+     <input id="hdnpagesize" type="hidden" value="@Model.NoOfRecords"/>*@
+         <input type="hidden" id="hdnrole" name="hdnrole" value="@Session["RoleID"]" />
+                                <div id="appList">
+                   <img src="../Images/ajax-loader2.gif" alt="Processing" style="margin-left:250px" />
+              </div>
+   
+    <div>
+</div>
+                                          <div id="EditlDialog" title="Edit Appointment">
+            </div>
+    <div id="divLoading2" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+@*}*@
+
+@*</body>*@
+    <script type="text/javascript">
+
+        $.ajaxSetup({ cache: false });
+        //$('#EditlDialog').dialog({
+        //    autoOpen: false,
+        //    width: 930,
+        //    resizable: false,           
+        //    modal: true
+        //});
+        $("#EditDialog").click(function (event) {
+            event.preventDefault();
+        });
+        //$(".EditDialog").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#EditlDialog');
+        //    $('#divLoading2').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#divLoading2').dialog('destroy');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+     
+        $(".EditApptclose").live("click", function (e) {
+            e.preventDefault();
+            $('#EditlDialog').dialog('close');
+        });
+</script>
+     <script type="text/javascript">
+         $(document).ready(function () {
+           @*    $("#appList").load('../Clients/DisplayClientApptList?S1P1=' + '@ViewBag.appPage');*@
+             $("#appList").load('../Clients/DisplayClientApptList');
+             var TopIndex = '@Session["TopIndex"]';
+             var roleid = '@Session["roleid"]';
+             if (roleid == "1") {
+                 $("#Menu0").addClass("active");
+                 $("#Menu1").removeClass();
+                 $("#Menu2").removeClass();
+                 $("#Menu3").removeClass();
+             }
+         });
+    </script>
+@*</html>*@

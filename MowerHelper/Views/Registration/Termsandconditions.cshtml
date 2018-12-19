@@ -1,0 +1,62 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+       @Styles.Render("~/Content/styles")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <style type="text/css" media="print">
+        @@media print
+        {
+    #wrapper { display:none; }
+    #TermsDialog { display: block; }
+       }
+    </style>
+         <script type="text/javascript">
+             function Printpage() {
+                 document.getElementById('trprint').style.display = "none";
+                 window.print();
+                 document.getElementById('trprint').style.display = "";
+                 return false;
+             }
+        </script>
+</head>
+<body>
+@*<div id="main-content">*@
+    <div>
+        <div id="divcondition" runat="server" z-index: 101; left: 30px; padding-right:30px;
+            position: absolute; top: 50px;" class="PublicModalPopup">
+@*            <div class="content-box">
+                    <div class="content-box-content">*@
+                        <table border="0" cellspacing="0" width="100%" cellpadding="0">
+                       
+                            <tr>
+                                <td align="center" colspan="2" class="bg_none" style="font-family: Arial; font-size: 9pt;
+                                    padding-left: 80px; padding-top: 5px; padding-bottom: 5px; padding-right: 80px;">
+                                        <div name="InnerHtml" style="font-family: Arial; font-size: 9pt;" id="dvTerms" runat="server">
+                                       @* @Html.Raw(ViewBag.InnerHtml)*@
+                                             @Html.Raw(System.Web.HttpUtility.HtmlDecode((string)ViewBag.InnerHtml))
+                                        </div>
+                                </td>
+                            </tr>
+                             <tr id="trprint">
+                        <td align="right" style="padding-right:20px; padding-top:10px;">
+                                                  <input class="button" id="btnPrint" runat="server"
+                            type="button" value="Print" name="btnPrint" onclick="return Printpage();">
+                            <input type="button" class="close button" name="Cancel" value="Cancel" />
+                        </td>
+                        </tr>
+                        </table>
+@*                        </div>
+                </div>*@
+          
+        </div>
+    </div>
+   @* </div>*@
+</body>
+</html>

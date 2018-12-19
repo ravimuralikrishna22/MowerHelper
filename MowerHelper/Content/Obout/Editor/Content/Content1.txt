@@ -1,0 +1,14 @@
+<br />
+<p style="margin: 0px; text-align: center;"><img vspace="0" hspace="0" border="0" align="" title="" src="/Content/Obout/Editor/Content/images/examples/text_decoration_header.gif" alt="" /></p>
+<p style="margin: 0px; text-align: center;"><br />
+</p>
+<p style="margin: 0px; text-align: center;">Generates browser-independent</p>
+<p style="margin: 0px; text-align: center;">and standards-compliant HTML.</p>
+<p style="margin: 0px; text-align: center;">Loads features on demand -- lightweight and fast</p>
+<p style="margin: 0px; text-align: center;">Fully customizable: external image galleries,</p>
+<p style="margin: 0px; text-align: center;">custom buttons, import/export content, templates.</p>
+<p style="margin: 0px; text-align: center;">Integrates with grid, AJAXPage, flyout and other controls</p>
+<p style="margin: 0px; text-align: center;"><br />
+</p>
+<p style="margin: 0px; text-align: center;"><img vspace="0" hspace="0" border="0" align="" title="" src="/Content/Obout/Editor/Content/images/examples/text_decoration_footer.gif" alt="" />
+</p>

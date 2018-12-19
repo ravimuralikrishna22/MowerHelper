@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<template xmlns="obout:editor:template-schema">
+  <property name="Appearance" value="lite" />
+
+  <collection name="Buttons">
+    <!--Add a custom button-->
+    <item name="Custom">
+      <property name="OnClientClick" value="insertDate" /> <!--Client-side method on click-->
+      <property name="ImageName" value="ed_date_n.gif" /> <!--Image of the button-->
+      <property name="ToolTip" value="Insert current date" /> <!--Title-->
+    </item>
+  </collection>
+</template>

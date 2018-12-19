@@ -1,0 +1,196 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var project = $('#HdnddlProject').val();
+            if (project != '') {
+                $('#ddlProj').val(project);
+            }
+            else {
+                $('#ddlProj').val("1");
+
+            }
+            var status = $('#HdnStatus_Ind').val();
+            if (status != '') {
+                $('#ddlProject_Ind').val(status);
+            }
+            else {
+                $('#ddlProject_Ind').val("1");
+
+            }
+
+        });
+    </script>
+    <script type="text/javascript">
+        function EditrblInUseyesCheck() {
+            if (document.getElementById('rbtnInUseyes').checked == true) {
+                document.getElementById('rbtnInUseyes').checked = true;
+                document.getElementById('rbtnInUseno').checked = false;
+            }
+        }
+        function EditrblInUsenocheck() {
+            if (document.getElementById('rbtnInUseno').checked == true) {
+                document.getElementById('rbtnInUseno').checked = true;
+                document.getElementById('rbtnInUseyes').checked = false;
+            }
+
+        }
+            </script>
+            <script type="text/javascript">
+                function EditValidate() {
+                    var uname = trim(document.getElementById('txtParameter_Key_edit').value);
+                    document.getElementById('txtParameter_Key_edit').value = uname;
+                    if (document.getElementById('txtParameter_Key_edit').value == '') {
+                        document.getElementById('tddes').bgColor = "White";
+                        document.getElementById('lblErrdes').style.display = 'none';
+                        document.getElementById('lblErrpkey').style.display = '';
+                        document.getElementById('lblErrpkey').innerHTML = 'Please enter Parameter Key';
+
+                        document.getElementById('tdpkey').bgColor = "orange";
+                        document.getElementById('txtParameter_Key_edit').focus();
+
+                        return false;
+                    }
+                    else {
+                        document.getElementById('tdpkey').bgColor = "White";
+                        document.getElementById('lblErrpkey').style.display = 'none';
+
+                    }
+
+
+
+                    var des = trim(document.getElementById('txt_Description').value);
+                    document.getElementById('txt_Description').value = des;
+                    if (document.getElementById('txt_Description').value != '') {
+                        if (document.getElementById('txt_Description').value.length > 1000) {
+//                            alert("Description can be up to 1000 characters.");
+                            //                            document.getElementById('txt_Description').focus();
+                            document.getElementById('lblErrdes').style.display = '';
+                            document.getElementById('lblErrdes').innerHTML = 'Description can be up to 1000 characters.';
+
+                            document.getElementById('tddes').bgColor = "orange";
+                            document.getElementById('txt_Description').focus();
+                            return false;
+                        }
+                        else {
+                            document.getElementById('tddes').bgColor = "White";
+                            document.getElementById('lblErrdes').style.display = 'none';
+
+                        }
+                    }
+
+                }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("EditWebconfig", "Technicalarea", FormMethod.Post, null))
+    {
+        
+   <input type="hidden" id="HdnParameter_ID" name="HdnParameter_ID" value="@ViewBag.Parameter_ID" />
+        <input type="hidden" id="HdnddlProject" name="HdnddlProject" value="@ViewBag.Project_ID" />
+        <input type="hidden" id="HdnStatus_Ind" name="HdnStatus_Ind" value="@ViewBag.ProjectStatus_ID" />
+    <div class="content-box">
+       <div class="content-box-content">
+                 <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                        border="0">
+ <tr height="10" runat="server" class="white_color">
+                            <th align="right" width="30%"><b><font color="red">*</font></b> <strong>Project :</strong>&nbsp;</th>
+                            <td align="left" id="tdMainPhone" runat="server" width="70%">
+
+                                                                                          @Html.DropDownList("ddlProj", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="Cognode", Value = "1" }
+                                                              },
+                                                                      new { style = "font-family:arial;font-size:13px;height:25px;width:200px;" })
+                            </td>
+                        </tr>
+                         <tr height="10" runat="server" class="white_color">
+                            <th align="right" width="30%"><b><font color="red">*</font></b> <strong>Project Status :</strong>&nbsp;</th>
+                            <td align="left" runat="server" width="70%">
+
+                                                                                          @Html.DropDownList("ddlProject_Ind", new List<SelectListItem>
+
+                                                              {
+                                                                  new SelectListItem{ Text="Release", Value = "1" },
+                                                               new SelectListItem{ Text="Test", Value = "2" }
+                                                               
+                                                              },
+                                                                      new { style = "font-family:arial;font-size:13px;height:25px;width:200px;" })
+                            </td>
+                        </tr>
+                        <tr height="10" class="white_color" runat="server">
+                            <th align="right"> <b><font color="red">*</font></b><strong> Parameter Key :</strong>&nbsp;</th>
+                            <td align="left" id="tdpkey" runat="server">
+                                 @Html.TextBox("txtParameter_Key_edit", (string)ViewBag.Parameter_Key, new { @class = "textfield", style = "width:350px", autocomplete = "off" })
+                                 &nbsp;&nbsp;&nbsp
+                                <span id="lblErrpkey" style="font-weight: bold; color: Black"></span>
+                            </td>
+                        </tr>
+                        <tr height="10" class="white_color" runat="server">
+                            <th align="right"> <strong>Parameter Value :</strong>&nbsp;</th>
+                            <td align="left" runat="server">
+                                 @Html.TextBox("txtParameter", (string)ViewBag.Parameter_Value, new { @class = "textfield", style = "width:350px", autocomplete = "off" })
+                               @* <span id="lblErrLength" style="font-weight: bold; color: Black"></span>*@
+                            </td>
+                        </tr>
+                        <tr height="10" class="white_color" runat="server">
+                            <th align="right"> <strong>Description :</strong>&nbsp;</th>
+                            <td align="left" id="tddes" runat="server">
+                                  @Html.TextArea("txt_Description", null, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })
+                                  <br />
+                                (Maximum length upto 1000 characters)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                
+                                <span id="lblErrdes" style="font-weight: bold; color: Black"></span>
+                            </td>
+                        </tr>
+                        <tr height="10" class="white_color" runat="server">
+                            <th align="right"> <strong>In Use :</strong>&nbsp;</th>
+                            <td align="left" runat="server">
+                                                                                                                      @{
+                                        bool str8 = false;
+                                        bool str9 = false;
+                                                                             }
+                                                                           @if (ViewBag.Inuse_Ind != null)
+                                                                           {
+                                                                               if (ViewBag.Inuse_Ind.ToString() == "Y")
+                                                                               {
+                                                                                   str8 = true;
+                                                                                   str9 = false;
+                                                                               }
+                                                                               else
+                                                                               {
+                                                                                   str8 = false;
+                                                                                   str9 = true;
+                                                                               }
+                                                                           }
+                                 @Html.RadioButton("rbtnInUseyes", "1", str8, new { @GroupName = "use", onclick = "return EditrblInUseyesCheck();" })&nbsp;Yes&nbsp;
+                                 @Html.RadioButton("rbtnInUseno", "1", str9, new { @GroupName = "use", onclick = "return EditrblInUsenocheck();" })&nbsp;No&nbsp;
+                               @* <span id="lblErrLength" style="font-weight: bold; color: Black"></span>*@
+                            </td>
+                        </tr>
+                    </table>
+                                                                                       <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return EditValidate();" />
+                                                          &nbsp;
+                                              <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+      </div></div>
+        
+    }
+</body>
+</html>

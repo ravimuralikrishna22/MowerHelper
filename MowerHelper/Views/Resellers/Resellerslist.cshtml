@@ -1,0 +1,561 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+
+ @* <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+@*                               @Styles.Render("~/Content/themes/base/jqueryCSS")
+                       @Styles.Render("~/Content/themes/base/autocomplete")
+            @Scripts.Render("~/Scripts/Thscriptscript")*@
+
+          @Styles.Render("~/Content/themes/base/jqueryCSS")
+      @Scripts.Render("~/Scripts/Thscriptscript")
+     @Scripts.Render("~/bundles/jqueryval")
+      <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 20px; }
+          tr.gridHead th:nth-child(2) { width: 170px; }
+          tr.gridHead th:nth-child(3) { width: 250px; }
+          tr.gridHead th:nth-child(4) { width: 30px; }
+          tr.gridHead th:nth-child(5) { width: 100px; }
+          tr.gridHead th:nth-child(6) { width: 50px; }
+          tr.gridHead th:nth-child(7) { width: 50px; }
+          tr.gridRow td:nth-child(2) { width: 170px;text-align:left; }
+          tr.gridAltRow td:nth-child(2) { width: 170px;text-align:left; }
+          tr.gridRow td:nth-child(3) { width: 250px;text-align:left; }
+          tr.gridAltRow td:nth-child(3) { width: 250px;text-align:left; }
+             .dvLoading .ui-dialog-titlebar{display:none;}  
+        
+    </style>
+             <script type="text/javascript">
+                 function ondescriptionover(obj) {
+                     document.getElementById(obj).style.position = 'absolute';
+                     document.getElementById(obj).style.display = '';
+                     return false;
+                 }
+                 function ondescriptionout(obj) {
+                     document.getElementById(obj).style.display = 'none';
+                     return false;
+                 }
+    </script>
+      <script type="text/javascript">
+          $(document).ready
+               (
+               function () {
+            var StrFName ="@ViewBag.FName";
+                   if (StrFName != '') {
+                       $('#txtfirstname').val(StrFName);
+                   }
+                   else {
+                       $('#txtfirstname').val("");
+                   }
+
+                   var StrLName = "@ViewBag.LName";
+                   if (StrLName != '') {
+                       $('#txtLastname').val(StrLName);
+                   }
+                   else {
+                       $('#txtLastname').val("");
+                   }
+                   var psize = $('#hdnpagesize').val();
+                   if (psize != '') {
+                       $('#ddlrecords').val(psize);
+                   }
+                   else {
+                       $('#ddlrecords').val("10");
+
+                   }
+               });
+    </script>
+      <script language="javascript" type="text/javascript">
+          function cancelbutton() {
+              window.location = "../AdminHome/AdminArea";
+              return false;
+          }
+          function ValidSearch() {
+              //document.forms.item(0).submit();
+              //localhost:49219/Resellers/Resellerslist?hdnpagesize=10&txtfirstname=&txtLastname=&ddlrecords=10&ddlaction=Select&ddlaction=Select&ddlaction=Select&ddlaction=Select&ddlaction=Select&ddlaction=Select&ddlaction=Select&ddlaction=Select&ddlaction=Select&ddlaction=Select
+              if (document.getElementById('txtfirstname').value != '' && document.getElementById('txtLastname').value != '') {
+
+                  window.location.href = '@Url.Action("Resellerslist", "Resellers")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtfirstname=' + document.getElementById('txtfirstname').value + '&txtLastname=' + document.getElementById('txtLastname').value;
+              }
+              else if (document.getElementById('txtfirstname').value != '') {
+
+                  window.location.href = '@Url.Action("Resellerslist", "Resellers")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtfirstname=' + document.getElementById('txtfirstname').value;
+              }
+              else if (document.getElementById('txtLastname').value != '') {
+
+                  window.location.href = '@Url.Action("Resellerslist", "Resellers")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtLastname=' + document.getElementById('txtLastname').value;
+              }
+              else {
+                  window.location.href = '@Url.Action("Resellerslist", "Resellers")?ddlrecords=' + document.getElementById('ddlrecords').value;
+              }
+          }
+    </script>
+
+  
+
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("Resellerslist", "Resellers", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");    
+        <input id="hdnpagesize" name="hdnpagesize" type="hidden" value="@ViewBag.pagesize"/>  
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr id="trtabs">
+                            <td width="100%" class="navigation">
+                                <div class="admin-tab">
+                                 <a class="admin-link" href="Resellerslist" id="aReseller"><span>Resellers</span>
+                                    </a>
+                                </div>
+                                       <div class="admin-tab">
+                                    <a class="inadmin-link" id="apromocode" href="ResellerReport"><span>Reseller report</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                                                        <tr class="background_color">
+                            <td id="tdtabs" class="tab-background" width="100%">
+
+           <table width="80%" cellpadding="0" cellspacing="0">
+               <tr class="background_color">
+                                  <td width="36%" align="left">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>First name : </strong>&nbsp;
+                                         <input type="text" name="txtfirstname"  id="txtfirstname" class="textfield" onkeypress="return fnsetfocus(event,'btnsearch')" style="width:200px;"/>
+                                    </li>
+                                </ul>
+                            </td>
+                   <td width="40%" align="left" style="padding-left:80px;">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Last name : </strong>&nbsp;
+                                         <input type="text" name="txtLastname"  id="txtLastname" class="textfield" onkeypress="return fnsetfocus(event,'btnsearch')" style="width:200px;"/>
+                                    </li>
+                                </ul>
+                        </td>
+                                           <td width="5%" align="right">
+                       @*<input type="submit" class="button" id="btnsearch" value="Search"/>*@
+ <a id="btnsearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                        </td>
+                                  </tr>
+        </table>
+        <div class="content-box">
+            <div class="content-box-header">
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="60%" align="left">
+                    <h3>
+                        Resellers</h3>
+                </td>
+                      <td width="20%" align="center">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                        @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                                new {  style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                                <script>$("#ddlrecords").change(function () {
+    if (document.getElementById('txtfirstname').value != '' && document.getElementById('txtLastname').value != '') {
+
+        window.location.href = '@Url.Action("Resellerslist", "Resellers")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtfirstname=' + document.getElementById('txtfirstname').value + '&txtLastname=' + document.getElementById('txtLastname').value;
+    }
+    else if (document.getElementById('txtfirstname').value != '') {
+        window.location.href = '@Url.Action("Resellerslist", "Resellers")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtfirstname=' + document.getElementById('txtfirstname').value;
+    }
+    else if (document.getElementById('txtLastname').value != '') {
+        window.location.href = '@Url.Action("Resellerslist", "Resellers")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtLastname=' + document.getElementById('txtLastname').value;
+    }
+    else {
+        window.location.href = '@Url.Action("Resellerslist", "Resellers")?ddlrecords=' + document.getElementById('ddlrecords').value;
+    }
+
+});</script>
+                                                            @* //new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:48px;" })*@
+                                                             
+                                    </li>
+                                </ul>
+                            </td>
+                             @*   <td width="20%" align="center">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                     @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}
+                                    </li>
+                                </ul>
+                            </td>*@
+                <td width="12%" align="center">
+                        <a id="lnkAddnewreseller" style="color: #0066CC; font-weight: bold; font-size: 15px; cursor: pointer;"
+                            title="To add a fourm" href="#" onclick="return Displaydialog('AddNewresellerDialog','AddNewReseller','auto',800,'dvLoading',null,null);">Register New Reseller </a>
+                    </td>
+               
+            </tr>
+        </table>
+     </div>
+     <div class="content-box-content">
+                            @{ WebGrid Resellersgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.pagesize ?? "10"));}
+                             @{WebGrid grid = Resellersgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                            if (grid.TotalRowCount != 0)
+                            {
+                                int count = 0;
+                                string pager = grid.Pager().ToString();
+                                string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                columns: grid.Columns(
+
+                                grid.Column("Slno", "#", canSort: false),
+                                                        grid.Column("FullName", "Reseller Name", canSort: false),
+                                                        grid.Column("Address1", "Address", canSort: false),
+                                                         grid.Column("Email", "Email", canSort: false),
+                                                           grid.Column("WorkPhone", "Phone No", canSort: false),
+                                                                                                                                                                        grid.Column("Status", canSort: false, format: @<text>
+                                                                                                                       @{
+                                                                                                                           string Status_Ind = (string)item.Status_Ind;
+                                                                                                                           if (Status_Ind == "A")
+                                                                                                                           {
+                                                                                                                                <span>Active</span>
+                                                                                                                           }
+                                                                                                                           else
+                                                                                                                           {
+                                                                                                                               <span>In Active</span>
+                                                                                                                           }
+                                                                                                                           
+                                                                          }
+                            </text>),
+                                                   grid.Column("Action", canSort: false, format: @<text>
+                                                                                                                       @{
+                                                                                                                                                                                                                       string Status_Ind = (string)item.Status_Ind;
+                                                                                                                           if (Status_Ind == "A")
+                                                                                                                           {
+                                                                                                                               string[] DDList1 = { "Select", "Edit", "View", "In Active", "View Referral code" };
+                                                                            @Html.DropDownList("ddlaction", new SelectList(DDList1, (string)ViewBag.Prefix), new { @class = "ddlactionclass", onchange = "DDlchange(this.value, '" + item.CRM_Agent_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:130px;" })
+                                                                                                                       }
+                                                                                                                       else
+                                                                                                                       {
+                                                                                                                           string[] DDList2 = { "Select", "Edit", "View", "Active", "View Referral code" };
+                                                                            @Html.DropDownList("ddlaction", new SelectList(DDList2, (string)ViewBag.Prefix), new { @class = "ddlactionclass", onchange = "DDlchange(this.value, '" + item.CRM_Agent_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:130px;" })
+                                                                                                                           }
+                                                                                                                           
+                                                                          }
+                            </text>)
+                                                  )).ToString();
+
+
+                                gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                            }
+                            else
+                            {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">No
+                                            Resellers found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            }
+                        }
+                   @* </td>
+                </tr>
+            
+        </table>*@
+
+        <div style="float: right; padding-top: 10px; padding-right: 5px;">
+
+        </div>
+  </div>
+    <div id="AddNewresellerDialog" title="Reseller registration">
+    </div>
+      <div id="EditresellerDialog" title="Reseller edit">
+    </div>
+                  <div id="ViewresellerDialog" title="Reseller view">
+    </div>
+                  <div id="ViewPromoCodeDialog" title="View Referral code details">
+    </div>
+    <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+    </div>
+                <table style="width:98%;">
+            <tr>
+                <td align="right" style="text-align:right; padding-top:10px;">
+                          <input name="btnCancel" value="Cancel" id="btnCancel" class="button" type="button" onclick="return cancelbutton();">
+                </td>
+            </tr>
+        </table>
+                                                                </td>
+                                                            </tr>
+                                </table>
+    </div>
+         <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to In active the reseller ?
+            </p>
+        </div>
+        <div id="dialog-confirm1" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to active the reseller ?
+            </p>
+        </div>
+ <br /><br />
+        <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+    <script type="text/javascript">
+
+        $.ajaxSetup({ cache: false });
+
+        $(document).ready(function () {
+
+
+            $(".close").live("click", function (e) {
+                e.preventDefault();
+                $(this).closest(".dialog").dialog("close");
+            });
+            $(".btnTask").live("click", function (e) {
+                //$('#AddNewresellerDialog').dialog("close");
+            });
+
+            $(".close1").live("click", function (e) {
+                $('#EditresellerDialog').dialog("close");
+                $('#AddNewresellerDialog').dialog("close");
+            });
+            $(".close3").live("click", function (e) {
+                $('#ViewresellerDialog').dialog("close");
+            });
+            $(".close2").live("click", function (e) {
+                $('#ViewPromoCodeDialog').dialog("close");
+            });
+
+            $(".actionclose1").live("click", function (e) {
+                $('#viewactionDialog').dialog("close");
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        function DDlchange(id, CRM_Agent_ID) {
+            //if (id == "Manage") {
+            //    window.location = '../Forums/TopicsList?Forum_ID=' + Forum_ID + '&ForumName=' + ForumName;
+            //    return false;
+
+            //}
+
+            if (id == "Edit") {
+                //var dialogDiv = $('#EditresellerDialog');
+                //   $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Resellers/EditReseller?CRM_Agent_ID=" + CRM_Agent_ID;
+                Displaydialog('EditresellerDialog', viewUrl, 'auto', 850, 'dvLoading', null, null);
+                $('.ddlactionclass').val("Select");
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    //   $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            }
+            if (id == "View") {
+                //var dialogDiv = $('#ViewresellerDialog');
+                //   $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Resellers/Resellersdetails?CRM_Agent_ID=" + CRM_Agent_ID;
+                Displaydialog('ViewresellerDialog', viewUrl, 'auto', 600, 'dvLoading', null, null);
+                $('.ddlactionclass').val("Select");
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    //   $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            }
+            
+            if (id == "View Referral code") {
+                var dialogDiv = $('#ViewPromoCodeDialog');
+                //   $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Resellers/Promocodelist?CRM_Agent_ID=" + CRM_Agent_ID;
+                Displaydialog('ViewPromoCodeDialog', viewUrl, 'auto', 750, 'dvLoading', null, null);
+                $('.ddlactionclass').val("Select");
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    //   $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            }
+
+
+            if (id == "In Active") {
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    close: function () { $('.ddlactionclass').val("Select"); },
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            var Status = "I";
+                            window.location = '../Resellers/ResellerStatusChange?CRM_Agent_ID=' + CRM_Agent_ID + '&Status=' + Status;
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                            $('.ddlactionclass').val("Select");
+                        }
+                    }
+                });
+                $("#dialog-confirm").dialog('open');
+                return false;
+            }
+
+            if (id == "Active") {
+                $("#dialog-confirm1").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    close: function () { $('.ddlactionclass').val("Select"); },
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            var Status = "A";
+                            window.location = '../Resellers/ResellerStatusChange?CRM_Agent_ID=' + CRM_Agent_ID + '&Status=' + Status;
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+                            $('.ddlactionclass').val("Select");
+                        }
+                    }
+                });
+                $("#dialog-confirm1").dialog('open');
+                return false;
+            }
+
+        }
+
+</script>
+
+ <script type="text/javascript">
+     var linkObj;
+     $(function () {
+         var roleid = '@Session["RoleID"]';
+         var td1 = document.getElementById("tdtabs");
+         if (roleid !== "1") {
+             td1.setAttribute("class", "tab-background");
+         }
+         $('#viewactionDialog').dialog({
+             autoOpen: false,
+             width: 900,
+             resizable: false,
+             //                height:500,
+             modal: true,
+             close: function () { $('.ddlactionclass').val("Select"); }
+
+         });
+
+
+         //$('#EditresellerDialog').dialog({
+         //    autoOpen: false,
+         //    width: 850,
+         //    resizable: false,
+         //    //                height: 500,
+         //    modal: true,
+         //    close: function () { $('.ddlactionclass').val("Select"); }
+
+         //});
+         //$('#ViewresellerDialog').dialog({
+         //    autoOpen: false,
+         //    width: 600,
+         //    resizable: false,
+         //    //                height: 500,
+         //    modal: true,
+         //    close: function () { $('.ddlactionclass').val("Select"); }
+
+         //});
+         //$('#ViewPromoCodeDialog').dialog({
+         //    autoOpen: false,
+         //    width: 750,
+         //    resizable: false,
+         //    //                height: 500,
+         //    modal: true,
+         //    close: function () { $('.ddlactionclass').val("Select"); }
+
+         //});
+
+         //$('#AddNewresellerDialog').dialog({
+         //    autoOpen: false,
+         //    width: 800,
+         //    resizable: false,
+         //    modal: true
+
+         //});
+         //$("#lnkAddnewreseller").click(function () {
+         //    linkObj = $(this);
+         //    var dialogDiv = $('#AddNewresellerDialog');
+         //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+         //    var viewUrl = linkObj.attr('href');
+         //    $.get(viewUrl, function (data) {
+         //        dialogDiv.html(data);
+         //        $('#dvLoading').dialog('close');
+         //        dialogDiv.dialog('open');
+         //    });
+         //    return false;
+         //});
+
+
+     });
+
+      </script>
+        
+        
+        
+    }
+      <script type="text/javascript">
+          $(document).ready(function () {
+              var TopIndex = '@Session["TopIndex"]';
+              var roleid = '@Session["roleid"]';
+              if (roleid == "1") {
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").removeClass();
+                  $("#Menu3").addClass("active");
+              }
+              else {
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").removeClass();
+                  $("#Menu3").removeClass();
+                  $("#Menu4").addClass("active");
+              }
+          });
+    </script>
+</body>
+</html>

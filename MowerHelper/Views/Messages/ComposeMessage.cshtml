@@ -1,0 +1,167 @@
+﻿@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+      <title>Mower Helper-Find an Mower Helper</title>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+       
+
+</head>
+<body>
+@*    @using (Html.BeginForm("ComposeMessage", "Messages", FormMethod.Post, null))*@
+    @*  @using (Html.BeginForm("ComposeMessage", "Messages", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+      {
+          *@
+      @Html.AntiForgeryToken()
+    
+     @*    @Html.Hidden("curPage")       *@
+    <input type="hidden" id="HdnTab_ID" name="HdnTab_ID" value="@ViewBag.Tabid" />@*
+    <div id="main-content">*@
+<div class="content-box">
+          <div class="content-box-content">
+                                   @* <div class="content-box">*@
+                                        <table runat="server" width="100%" class="border_style" cellspacing="1" cellpadding="0">
+                                       @if (ViewBag.Roleid != "31" & ViewBag.Roleid != "38")
+                                       {
+                                            <tr class="white_color" id="tblto">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                    <span style="font-size: 8pt; color: red;">*</span><strong>To :</strong>
+                                                </td>
+                                                <td align="left" style="padding-left: 4px; padding-top:4px; padding-bottom:4px;" colspan="2">
+                                                    <span style="font-size:13px; font-weight:bold;">Mower Helper-Find an Mower Helper admin</span>
+                                                 @*  @{string[] msglist = { "Mower Helper-Find an Mower Helper admin" };}
+                                                   @Html.DropDownList("ddlRoles", new SelectList(msglist, (string)ViewBag.Prefix), new { @style = "width:300px;height:25px;font-size:13px;" })*@
+                                                </td>
+                                            </tr>
+                                       }
+                                        else
+                                           {
+                                       <tr class="white_color" id="tblto1">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                    <span style="font-size: 8pt; color: red;">*</span><strong>To :</strong>
+                                                </td>
+                                                <td align="left" style="padding-left: 4px; padding-top:4px; padding-bottom:4px;">
+
+                                                    @{string[] VSuper = { "Mower Helper-Find an Mower Helper admin", "verification user" };}
+                                                   @{string[] VUser = { "Mower Helper-Find an Mower Helper admin", "verification supervisor"};}
+                                                   @Html.DropDownList("ddlRoles1", new SelectList((ViewBag.Roleid == "38" ? VSuper : VUser), (string)ViewBag.Prefix), new { @style = "width:300px;height:25px;font-size:13px;" })
+                                                </td>
+                                                <td align="left" id="tdSelectedPatient1" style=" display:none; padding-left:4px;" runat="server">
+
+
+
+
+             @Html.Obout(new Obout.Mvc.ComboBox.ComboBox("combobox2")
+    {
+        Width = 400,
+        MenuWidth = 400,
+        HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+            @:<div class="header  c1" >User name</div>
+),
+
+        ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+          @:<span class=" c1" >@(((MowerHelper.Models.BLL.MessageStation.Ms_user)item.DataItem).Username)</span>
+)
+    })
+                                                </td>
+                                            </tr>
+                                           }
+                                            <tr class="white_color" id="tblMessageDetails1" runat="server">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                    <span style="font-size: 8pt; color: red;"></span><strong>Topic&nbsp;:</strong>
+                                                </td>
+                                                <td width="80%" class="Messagestationclass" align="left" colspan="4" style="padding-left: 4px;
+                                                    padding-top: 4px; padding-bottom: 4px;">
+                                                     @Html.TextBox("txtTopics", (string)ViewBag.Subject, new { @class = "textfield", MaxLength = "200", style = "width:600px", autocomplete = "off" })
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" style="height: 20" id="tblMessageDetails2" runat="server">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                    <span style="font-size: 8pt; color: red;">*</span><strong>Message&nbsp;:</strong>
+                                                </td>
+                                                <td width="80%" id="tdmessagesmain" class="Messagestationclass" align="left" colspan="4" style="padding-left: 4px;
+                                                    padding-top: 4px; padding-bottom: 4px;">
+                                                   @Html.TextArea("txtMessages", null, 3, 3, new { @class = "textfield", style = "width:600px;height:80px;", maxlength = "8000" })
+                                                   <br />(Maximum length 8000 characters)
+                                                           
+                                                                <br />
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" id="tblMessageDetails3" runat="server">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                <img src="~/Images/help2.png" id="imglblshowcontact"  onmouseout="hideddrivetip()" onmouseover="ddrivetip('@ViewBag.showcontact' ,320);" />
+                                                    <strong>&nbsp;Attachment&nbsp;:</strong>
+                                                </td>
+                                                <td width="80%" id="tdattachmain" class="Messagestationclass" align="left" colspan="4" style="padding-left: 4px;
+                                                    padding-top: 4px; padding-bottom: 4px;">
+                                                    @*<input id="fileAttachment" onselectstart="return false;" onpaste="return false;"
+                                                        oncut="return false;" type="file" name="fileAttachment" runat="server" style="width: 300px;
+                                                        background-color: White;" />*@
+                                                         <input type="file" id="fileAttachment" name="fileAttachment"
+                                                    style="margin-left: 0px; background-color: White;" />
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                                                @*    </div>*@
+                        </div>
+                         <br />
+                         <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" id="tblmain"
+                                            style="display: none;">
+                                                                         <tr class="white_color" align="center">
+                                                <td id="tdreceiver" height="30px" style="display: none;">
+                                                    <span id="lblreceiver" style="font-weight: bold; color: Black"></span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" align="center">
+                                                <td id="tdmessages" height="30px" style="display: none;">
+                                                    <span id="lblmessages" style="font-weight: bold; color: Black"></span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" align="center">
+                                                <td id="tdattach" height="30px" style="display: none;">
+                                                    <span id="lblattach" style="font-weight: bold; color: Black"></span>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                         <table border="0" cellpadding="0" cellspacing="0" width="90%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnDsave" value="Save" title="Save" class="button" onclick="return Save1();" />
+                                                          &nbsp;
+                                              <input type="button" class="close button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <input type="hidden" id="HdnRoleid" name="HdnRoleid" value="" />
+       
+                    </div>@*
+    </div>*@
+  @*    }*@
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#ddlRoles1').change(function () {
+                if (document.getElementById('ddlRoles1').value == 'verification user' || document.getElementById('ddlRoles1').value == 'verification supervisor') {
+                    document.getElementById('tdSelectedPatient1').style.display = '';
+                    document.getElementById('HdnRoleid').value = "3";
+                }
+                else {
+                    document.getElementById('tdSelectedPatient1').style.display = 'none';
+                    document.getElementById('HdnRoleid').value = "1";
+                }
+                return false;
+            });
+        });
+</script>
+</body>
+</html>

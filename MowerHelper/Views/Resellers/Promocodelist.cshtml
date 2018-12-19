@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+<title>Mower Helper-Find an Mower Helper &#8211;Find an Mower Helper</title>
+          <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 120px; }
+          tr.gridHead th:nth-child(2) { width: 450px; }
+          tr.gridHead th:nth-child(3) { width: 80px; }
+          tr.gridHead th:nth-child(4) { width: 100px; } 
+        
+    </style>
+
+</head>
+<body>
+
+    @using (Html.BeginForm("Promocodelist", "Resellers", FormMethod.Get, null))
+    {
+                                    <div class="content-box">
+                                        <div class="content-box-content">
+                                          
+                                               @{ WebGrid grid = new WebGrid(Model, rowsPerPage:10);}
+                                            @if (grid.TotalRowCount != 0)
+                                            {
+
+
+                                                string pager = grid.Pager().ToString();
+                                                string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRowmax", alternatingRowStyle: "gridAltRowmax",
+                                                    columns: grid.Columns(grid.Column("PromoCode", "Referral Code", canSort: false),
+      grid.Column("Promocodeurl", "Referral code url", canSort: false),
+      grid.Column("Status", canSort: false, format: @<text>
+      @{
+        string Status_Ind = (string)item.Status_Ind;
+        if (Status_Ind == "A")
+        {
+        <span>Active</span>
+         }
+         else
+         {
+          <span>In Active</span>
+          }
+          }
+         </text>),
+                grid.Column("CreatedOn", "Created on",canSort:false)                                            
+      )).ToString();
+                                                gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+
+                                   
+                                            }
+                                            else
+                                            {
+                                                <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                    <tr id="trdsmerror" class="white_color">
+                                                        <td style="text-align:center; vertical-align:middle;" height="25px" colspan="2">
+                                                            <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                                No promocode details found</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            }
+                                        </div>
+                                    </div>
+                                    <table id="TdlDownEditCancelBtn" width="98%">
+                                    <tr class="background_color">
+                                        <td align="Right" class="background_color" style="padding-top:10px;">
+                                            <input type="button" class="close2 button" name="Cancel" value="Cancel" />
+                                           
+                                        </td>
+                                    </tr>
+                                </table>
+ 
+    }
+      
+</body>
+</html>

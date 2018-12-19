@@ -1,0 +1,90 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+            <script type="text/javascript">
+                function Edit_Validate() {
+
+                    var path = trim(document.getElementById('Edit_txtpagepath').value);
+                    document.getElementById('Edit_txtpagepath').value = path;
+
+                    if (document.getElementById('Edit_txtnotes').value != '') {
+                        if (document.getElementById('Edit_txtnotes').value.length > 1000) {
+                            document.getElementById('Edit_lblErrnotes').style.display = '';
+                            document.getElementById('Edit_lblErrnotes').innerHTML = 'page notes can be up to 1000 characters';
+                            document.getElementById('Edit_tdnotes').bgColor = "orange";
+                            document.getElementById('Edit_txtnotes').focus();
+                            return false;
+                            return false;
+                        }
+                        else {
+                            document.getElementById('Edit_tdnotes').bgColor = "White";
+                            document.getElementById('Edit_lblErrnotes').style.display = 'none';
+
+                        }
+                    }
+
+
+
+                }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var secid = $('#hdsecid').val();
+            if (secid != '') {
+                $('#Edit_ddsectionDiv').val(secid);
+            }
+
+        });
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("Editpageno", "Technicalarea", FormMethod.Post, null))
+    {
+         <input id="hdnpageid" name="hdnpageid" type="hidden" value="@ViewBag.Page_ID"/>
+    <div class="content-box">
+       <div class="content-box-content">
+           <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+               border="0">
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <strong>Page path :</strong>&nbsp;
+                   </th>
+                   <td align="left">
+                       @Html.TextBox("Edit_txtpagepath", (string)ViewBag.path, new { @class = "textfield", style = "width:400px", autocomplete = "off" })
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <b><font color="red">*</font></b> <strong>Page notes :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="Edit_tdnotes" runat="server">
+                       @Html.TextArea("Edit_txtnotes", (string)ViewBag.notes, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })
+                        <br />
+                                                                (Max length 1000 characters)
+                       &nbsp;&nbsp;&nbsp <span id="Edit_lblErrnotes" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+           </table>
+                                                                                       <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Edit_Validate();" />
+                                                          &nbsp;
+                                              <input type="button" class="close button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+      </div></div>
+        
+    }
+</body>
+</html>

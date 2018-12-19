@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "ProviderVerification";
+    Layout = "~/Views/Shared/_ProviderProfileMaster.cshtml";
+}
+
+<html>
+<head>
+   <title>Mower Helper-Find an Mower Helper</title>
+<script type="text/javascript">
+       function cancel() {
+           window.location.href = '@Url.RouteUrl("ProviderProfile",new { randomnumber = ViewBag.rnum, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })'; 
+        }
+</script>
+</head>
+<body>
+
+    <table  border="0" cellpadding="0" cellspacing="0" width="950px" align="center" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="font-family: Arial; font-size: 9pt;">
+                <table border="0" cellpadding="0" cellspacing="0" width="800px" align="center">
+                    <tr bgcolor="#669ACC">
+                        <td style="padding-top: 10px; padding-left: 5px; padding-bottom: 3px;">
+                        <label id="lblProviderName" style="font-weight:bold; font-family:Arial; font-size:18px; color:Black;">@ViewBag.ProviderName</label>
+                           
+                        </td>
+                    </tr>
+                    <tr bgcolor="#669ACC">
+                        <td style="padding-bottom: 10px; padding-left: 5px; height: 28px;">
+                         <label id="lblBusinessName" style="font-weight:bold; font-family:Arial; font-size:13px; color:Black;">@ViewBag.BusinessName</label>
+                            </td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: Arial; font-size: 9pt;">
+                        <table width="800" align="center" border="0" cellSpacing="0" cellPadding="0">
+
+                            
+                                <tr id="trVerify" runat="server">
+                                    <td style="padding-left: 10px; font-family: Arial; text-align: justify; padding-right: 10px;
+                                        padding-top: 10px;">
+                                        <a name="Verify">
+                                        <table id="ctl00_CPID_Table1" style="width: 100%; border-collapse: collapse;" border="0" cellSpacing="0" cellPadding="5">
+		<tbody><tr>
+			<td style="font-family: Arial; font-size: 9pt; font-weight: bold; color:Black;">
+                                                        Verified by <a id="a1" style="font-family: Arial; font-size: 9pt; " href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a><br /><br /></td>
+		</tr><tr>
+			<td style="font-family: Arial; font-size: 9pt; color:Black;">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The information in the
+                                                        <a id="a2" style="font-family: Arial; font-size: 9pt;" href="@Url.Action("Index", "Home", null)" >Mower Helper-Find an Mower Helper.com</a>
+                                                        Directory is provided only by participating Electricians. When you see this image
+                                                        it means <a id="a3" style="font-family: Arial; font-size: 9pt; " href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a>
+                                                        has verified the followings:
+                                                        <br />
+                                                        <br />
+                                                    </td>
+		</tr><tr>
+			<td style="font-family: Arial; font-size: 9pt; font-weight: bold;"><table id="Table2" style="width: 90%; border-collapse: collapse; background-color: rgb(239, 239, 239);" border="0" cellSpacing="0" cellPadding="5">
+				<tbody><tr>
+					<td><img id="Image3" style="border-width: 0px;" alt="Profile" src="~/images/profile.gif"> <br/><br/> </td><td style="font-family: Arial; font-size: 9pt; font-weight:bold; color:Black;">
+                                                                                                                            The name and contact details of the professional
+                                                                                                                            <br/> <br/>
+                                                                                                                           
+                                                               </td>
+				</tr>
+                
+                <tr>
+					<td style="font-family: Arial; font-size: 9pt;"><img id="Image4" style="border-width: 0px;" alt="Profile" src="~/images/profile.gif"><br/><br/></td><td style="font-family: Arial; font-size: 9pt; font-weight:bold; color:Black;">
+                                                                                                                            That the professional's license, if applicable, is valid within the state in which
+                                                                                                                            he or she practices
+                                                                                                                            <br/><br/>
+                                                                </td>
+				</tr><tr>
+					<td style="font-family: Arial; font-size: 9pt;"><img id="ctl00_CPID_Image2" style="border-width: 0px;" alt="Profile" src="~/images/profile.gif"><br/><br/></td><td style="font-family: Arial; font-size: 9pt; font-weight:bold; color:Black;">
+                                                                                                                            That the professional is not subject to any license strictures preventing practice
+                                                                                                                            <br/><br/>
+                                                                </td>
+				</tr>
+			</tbody></table><br /></td>
+		</tr><tr>
+			<td style="font-family: Arial; font-size: 9pt; color:Black;">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="ctl00_CPID_a4" style="font-family: Arial; font-size: 9pt; " href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a> verifies
+                                                        the information at the time a Mower Helper is initially listed in the <a id="ctl00_CPID_a5" style="font-family: Arial; font-size: 9pt; " href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a> Directory
+                                                        and then annually thereafter.
+                                                        <br /><br />
+                                                    </td>
+		</tr><tr>
+			<td style="font-family: Arial; font-size: 9pt; color:Black;">
+                                                                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you find any of the information in the our Directory to be inaccurate in any
+                                                                                                                way, please tell us by emailing: info@Mower Helper-Find an Mower Helper.com.
+                                                                                                                <br /><br />
+                                                    </td>
+		</tr><tr>
+			<td style="font-family: Arial; font-size: 9pt; color:Black;">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You assume full responsibility
+                                                        for the communications with any Mower Helper you contact through the <a id="ctl00_CPID_a6" style="font-family: Arial; font-size: 9pt;" href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a> Directory.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                       Mower Helper-Find an Mower Helper, Inc. shall in no event be liable to you or to anyone for any decision
+                                                        made or action taken by you in the reliance on information provided in the <a id="ctl00_CPID_a7" style="font-family: Arial; font-size: 9pt;" href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a>
+                                                        or any of our other Directories.
+                                                        <br /><br />
+                                                    </td>
+		</tr><tr>
+			<td style="font-family: Arial; font-size: 9pt; color:Black;">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The <a id="ctl00_CPID_a8" style="font-family: Arial; font-size: 9pt;" href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a> Directory
+                                                        is not intended as a tool for verifying the credentials, qualifications, or abilities
+                                                        of any Electricians it lists. Inclusion in the <a id="ctl00_CPID_a9" style="font-family: Arial; font-size: 9pt;" href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a> Directory does not imply recommendation
+                                                        or endorsement nor does omission from the &nbsp;<a id="ctl00_CPID_a10" style="font-family: Arial; font-size: 9pt;" href="@Url.Action("Index", "Home", null)">Mower Helper-Find an Mower Helper.com</a>
+                                                        Directory imply MowerHelper.com, Inc. disapproval.Mower Helper-Find an Mower Helper, Inc. does
+                                                        not warrant or represent that our Directories or any part thereof is accurate or
+                                                        complete.Mower Helper-Find an Mower Helper, Inc. disclaims all warranties, either express or implied,
+                                                        including but not limited to the implied warranties of merchantability and fitness
+                                                        for particular purpose.
+                                                    </td>
+		</tr>
+	</tbody></table>
+                                           
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="font-family: Arial; font-size: 9pt; padding-left: 10px;
+                            font-family: Arial; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;">
+                             <input value="Back" type="button" class="button" style="width: 60px;" id="btnclose" onclick="return cancel();"/>
+                           
+                            
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table style="display: none">
+        <tr>
+            <td id="tdSiteMeter" runat="server" style="width: 3px">
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

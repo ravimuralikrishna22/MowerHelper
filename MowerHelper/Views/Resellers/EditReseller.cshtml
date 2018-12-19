@@ -1,0 +1,706 @@
+﻿@model List<MowerHelper.Models.BLL.Providers.CRMAgent>
+@using MowerHelper.Models.Classes
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+<title>Mower Helper-Find an Mower Helper &#8211;Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+       @* <script src="../../SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>*@
+   <style type="text/css">
+        .ui-datepicker-trigger {margin-left : 5px;vertical-align : middle}
+        .ui-datepicker {background: #AADDFF;border: 1px solid #555;color: #000000;}
+        .Highlighted a {background-color: Green !important; background-image: none !important; color: White !important; font-weight: bold !important;font-size: 10pt;}
+        .ui-widget-header  { font-size:15px;height:25px; }
+
+   </style>
+      
+</head>
+<body>
+                 @using (Ajax.BeginForm("EditReseller", "Resellers", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "EditSuccess",
+            OnComplete = "SessionExpireFail"
+           
+        }, new { @id = "updateCarForm" }))
+        {
+        <input type="hidden" id="CRM_Agent_ID" name="CRM_Agent_ID" value="@ViewBag.CRM_Agent_ID" />
+    <div>
+                        <div class="content-box" style="margin: 0 auto;">
+                        <div class="content-box-content">
+                            <table cellspacing="1" cellpadding="6" class="border_style" border="0" width="100%"
+                                align="center">
+                                <tr class="white_color" style="display:none">
+                                    <th align="right">
+                                        <strong>Expiry date :</strong>
+                                    </th>
+                                    <td id="tdEDob" runat="server">
+                                        @Html.TextBox("txt_DOB", "mm/dd/yyyy", new { @class = "textfield", MaxLength = "10", style = "width:90px", autocomplete = "off", onfocus = "return ClearDate('txt_DOB');" })
+                                    </td>
+                                </tr>
+                                <tr class="white_color" height="30">
+                                    <th align="right" width="31%">
+                                        <span style="color: #ff0000">*</span><strong>Name :</strong>
+                                    </th>
+                                    <td id="tdEName" runat="server" style="height: 30px" width="69%">
+                                        @{string[] PreArray = { " ", "Dr", "Miss", "Mr", "Mrs", "Ms" };}
+                                        @Html.DropDownList("DDPrefix", new SelectList(PreArray, (string)Model[0].Prefix), new { @style = "width:58px;height:22px;font-size:13px;" })
+
+                                        @Html.TextBox("txtFName", Model[0].FirstName, new { @class = "textfield", MaxLength = "50", style = "width:128px;" })
+
+                                        @Html.TextBox("txtMName", Model[0].MI, new { @class = "textfield", MaxLength = "1", style = "width:15px;" })
+
+                                        @Html.TextBox("txtLName", Model[0].LastName, new { @class = "textfield", MaxLength = "50", style = "width:128px;" })
+                                        @{string[] PostArray = { " ", "I", "II", "III", "IV", "Jr", "Sr" };}
+                                        @Html.DropDownList("cbosuffix", new SelectList(PostArray, Model[0].Suffix), new { @style = "width:45px;height:22px;font-size:13px;" })
+
+                                        <br />
+
+                                        <br />
+
+                                    </td>
+                                </tr>
+                                <tr class="white_color">
+                                    <th align="right">
+                                        <strong>Company Name :</strong>
+                                    </th>
+                                    <td>
+                                        @Html.TextBox("txt_Employer", Model[0].CompanyName, new { @class = "textfield", MaxLength = "25", style = "width:160px", autocomplete = "off" })
+                                    </td>
+                                </tr>
+                                <tr class="white_color" height="30">
+                                    <th align="right" style="width: 19%">
+                                        <strong>Address 1 :</strong>
+                                    </th>
+                                    <td style="width: 81%; height: 30px;">
+                                        @Html.TextBox("txt_Address1",  Model[0].Address1, new { @class = "textfield", MaxLength = "50", style = "width:200px", autocomplete = "off" })
+                                    </td>
+                                </tr>
+                                <tr class="nav_blue_color" height="30">
+                                    <th align="right" style="width: 19%">
+                                        <strong>Address 2 :</strong>
+                                    </th>
+                                    <td style="width: 81%; height: 30px;">
+                                        @Html.TextBox("txt_Address2",  Model[0].Address2, new { @class = "textfield", MaxLength = "50", style = "width:200px", autocomplete = "off" })
+                                    </td>
+                                </tr>
+                                 @Html.Partial("_CitiesStates", null, new ViewDataDictionary { { "Zip", Model[0].ZIP} , { "State_ID", Model[0].State_ID},{ "City_ID", Model[0].City_ID} , { "Statename", Model[0].State},{ "Cityname", Model[0].City}})
+                                @*<tr class="white_color">
+                                    <td align="right" style="width: 19%">
+                                        <strong>Zip code :</strong>
+                                    </td>
+                                    <td id="tdzip" runat="server" style="width: 81%; height: 30px;" align="left">
+                                        @Html.TextBox("txtZip", (string)ViewBag.ZIP, new { @class = "textfield", MaxLength = "5", style = "width:48px", autocomplete = "off" })
+                                    </td>
+
+                                </tr>
+                                <tr class="nav_blue_color">
+                                    <td style="width: 19%" align="right">
+                                        <strong>State :</strong>
+                                    </td>
+                                    <td id="td_statemain" style="width: 81%; height: 30px;">
+                                        @if (Model.StateList != null)
+                                        {
+                                            @Html.DropDownList("DDLState", Model.StateList, "--Select State--", new { @style = "width:270px;height:25px;font-size:13px;" })
+                                        }
+                                    </td>
+                                </tr>
+                                <tr class="white_color">
+                                    <td style="width: 19%" align="right">
+                                        <strong>City :</strong>
+                                    </td>
+                                    <td id="td_citymain" style="width: 81%; height: 30px">
+
+                                        @Html.DropDownList("DDLCity", Model.CityList, new { @style = "width:270px;height:25px;font-size:13px;" })
+                                    </td>
+                                </tr>*@
+                                <tr class="nav_blue_color">
+                                    <th align="right">
+                                        <span style="color: #ff0000">*</span><strong>Email :</strong>
+                                    </th>
+                                    <td id="td_EEmail" runat="server">
+                                        @Html.TextBox("txt_Email",  Model[0].Email, new { @class = "textfield", MaxLength = "35", style = "width:200px", autocomplete = "off" })
+                                    </td>
+                                </tr>
+                                <tr class="white_color" height="30px">
+                                    <th align="right" style="width: 19%">
+                                        <font color="green">*</font><strong>Cell phone :</strong>
+                                    </th>
+                                    <td id="tdECphone" runat="server" style="width: 81%; height: 30px;">
+                                        @Html.TextBox("txt_CPhone1",!string.IsNullOrEmpty(Convert.ToString(Model[0].HomePhone))? Convert.ToString(Model[0].HomePhone).Substring(0, 3):"", new
+                                                                  {
+                                                                      @class = "textfield",
+                                                                      MaxLength = "3",
+                                                                      style = "width:30px;",
+                                                                      onkeypress = "return AlphaNumbers(event);",
+                                                                      autocomplete = "off"
+                                                                  })
+                                        -
+                                                                            @Html.TextBox("txt_CPhone2", !string.IsNullOrEmpty(Convert.ToString(Model[0].HomePhone))? Convert.ToString(Model[0].HomePhone).Substring(4, 3):"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off"
+                                                                       })
+                                        -
+                                                                           @Html.TextBox("txt_CPhone3", !string.IsNullOrEmpty(Convert.ToString(Model[0].HomePhone))? Convert.ToString(Model[0].HomePhone).Substring(8, 4):"", new
+                                                                      {
+                                                                          @class = "textfield",
+                                                                          MaxLength = "4",
+                                                                          style = "width:40px;",
+                                                                          onkeypress = "return AlphaNumbers(event);",
+                                                                          autocomplete = "off"
+                                                                      })
+                                    </td>
+                                </tr>
+
+
+                                <tr class="white_color" height="30px">
+                                    <th align="right" style="width: 19%">
+                                        <font color="green">*</font><strong>Work phone :</strong>
+                                    </th>
+                                    <td id="tdEHPhone" runat="server" style="width: 81%; height: 30px;">
+                                        @Html.TextBox("txt_WPhone1", !string.IsNullOrEmpty(Convert.ToString(Model[0].WorkPhone))? Convert.ToString(Model[0].WorkPhone).Substring(0, 3):"", new
+                                                                  {
+                                                                      @class = "textfield",
+                                                                      MaxLength = "3",
+                                                                      style = "width:30px;",
+                                                                      onkeypress = "return AlphaNumbers(event);",
+                                                                      autocomplete = "off"
+                                                                  })
+                                        -
+                                                                            @Html.TextBox("txt_WPhone2", !string.IsNullOrEmpty(Convert.ToString(Model[0].WorkPhone))? Convert.ToString(Model[0].WorkPhone).Substring(4, 3):"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off"
+                                                                       })
+                                        -
+                                                                           @Html.TextBox("txt_WPhone3", !string.IsNullOrEmpty(Convert.ToString(Model[0].WorkPhone))? Convert.ToString(Model[0].WorkPhone).Substring(8, 4):"", new
+                                                                      {
+                                                                          @class = "textfield",
+                                                                          MaxLength = "4",
+                                                                          style = "width:40px;",
+                                                                          onkeypress = "return AlphaNumbers(event);",
+                                                                          autocomplete = "off"
+                                                                      })
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" id="tblErrResp" runat="server" style="display:none">
+                                                    <tr class="white_color" align="center">
+                        <td id="tdErrDob" height="30px" style="display: none;">
+                            <span id="lblErrDOB" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+              <tr class="white_color" align="center">
+                        <td id="tdErrName" height="30px" style="display: none;">
+                            <span id="lblErrName" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+
+                    <tr class="white_color" align="center">
+                        <td id="tdErrZip" height="30px" style="display: none;">
+                            <span id="lblErrZip" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                                                    <tr class="white_color" align="center">
+                        <td id="tdErrEmail" height="30px" style="display: none;">
+                            <span id="lblErrEmail" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                                       <tr class="white_color" align="center">
+                        <td id="tdErrCell" height="30px" style="display: none;">
+                            <span id="lblErrCell" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                                                    <tr class="white_color" align="center">
+                        <td id="tdErrHphone" height="30px" style="display: none;">
+                            <span id="lblHphone" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+
+        </table>
+                            <table id="TdlDownEditCancelBtn" width="98%">
+                                    <tr class="background_color">
+                                        <td align="Right" class="background_color">
+                                          <input type="submit" value="Save" title="Save" onclick="return CheckPageValid();" class="button" />
+                                          
+                                           @* @Html.ActionLink("Cancel", "PatientsHome", null, new { @class = "button", Style = "width:34px;height:14px;" })*@
+                                            <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                                           
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </div>
+                            <input id="hdnssn" type="hidden" value="@ViewBag.Enssn"/>
+    </div>
+    }
+</body>
+<script type="text/javascript">
+    $('#trCountry').hide();
+    function EditSuccess(data) {
+
+
+
+        if (data != '' & data.Success == true) {
+            $('#updateDialog').dialog('close');
+            window.location.href = 'Resellerslist';
+        }
+        //else if (data.ErrorMessage == 'expire') {
+        //    window.location.href = '../Home/SessionExpire';
+        //}
+        else {
+            $('#updateDialog').dialog('close');
+            if (data != '_Logon_') {
+                alert(data.ErrorMessage);
+            }
+
+            $("#update-message").html(data.ErrorMessage);
+            $("#update-message").show();
+        }
+    }
+    </script>
+      <script type="text/javascript">
+      
+  
+    </script>
+           <script type="text/javascript">
+
+               $(function () {
+                   $("#txt_DOB").datepicker({
+                       dateFormat: 'mm/dd/yy',
+                       changeMonth: true,
+                       changeYear: true,
+                       //                showCurrentAtPos: 1,
+                       showWeeks: true,
+                       inline: true,
+                       numberOfMonths: [1, 1],
+                       yearRange: "1950:2020",
+                       showOn: "button",
+                       buttonImage: "../Images/calender.gif",
+
+                       buttonImageOnly: true,
+                       defaultDate: new Date('1 January 1977')
+                   });
+               });
+       </script>
+            <script type="text/javascript">
+                $(function () {
+                    $("#txt_CPhone1").keyup(function () {
+                        if ($(this).val().length == 3) {
+                            $("#txt_CPhone2").focus();
+                        }
+                    });
+                    $("#txt_CPhone2").keyup(function () {
+                        if ($(this).val().length == 3) {
+                            $("#txt_CPhone3").focus();
+                        }
+                    });
+                    $("#txt_WPhone1").keyup(function () {
+                        if ($(this).val().length == 3) {
+                            $("#txt_WPhone2").focus();
+                        }
+                    });
+                    $("#txt_WPhone2").keyup(function () {
+                        if ($(this).val().length == 3) {
+                            $("#txt_WPhone3").focus();
+                        }
+                    });
+
+                    $("#txtZip").keyup(function () {
+                        if ($(this).val().length == 5) {
+                            $("#DDLState").focus();
+                        }
+                    });
+
+                });
+    </script>
+    <script language="javascript" type="text/javascript">
+        function CheckPageValid() {
+            clearalerts();
+            ValidateAlertClear('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', '#FFFFFF'); 
+            ValidateAlertClear('tblErrResp', 'lblErrName', 'tdErrName', 'tdEName', '#FFFFFF'); 
+            ValidateAlertClear('tblErrResp', 'lblErrEmail', 'tdErrEmail', 'td_EEmail', '#F0F6FF'); 
+            ValidateAlertClear('tblErrResp', 'lblErrCell', 'tdErrCell', 'tdECphone', '#FFFFFF'); 
+            ValidateAlertClear('tblErrResp', 'lblHphone', 'tdErrHphone', 'tdEHPhone', '#F0F6FF'); 
+            ValidateAlertClear('tblErrResp', 'lblErrZip', 'tdErrZip', 'tdzip', 'white'); 
+
+            //if (document.getElementById('txt_DOB').value != '' && document.getElementById('txt_DOB').value != 'mm/dd/yyyy') {
+            //    //                if (CheckValidDate(document.getElementById('txt_DOB')) == 0) {
+            //    //                    return false;
+            //    //                }
+
+            //    if (document.getElementById('txt_DOB').value != '' && document.getElementById('txt_DOB').value != 'mm/dd/yyyy') {
+            //        //                alert("2");
+            //        var Dateid = document.getElementById('txt_DOB').value;
+            //        var Dat = Dateid.split("/");
+            //        var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+            //        var yearid = Dat[2];
+            //        var Monthid = Dat[0];
+            //        var MyId = Dat[1];
+            //        var CurDt = new Date()
+            //        var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+            //        var matchArray = Dateid.match(DatePat);
+
+            //        if (matchArray == null) {
+            //            //                    alert("3");
+            //            //Glb_ShowAlert('Invalid date of birth format!!! should be like mm/dd/yyyy');
+            //            ValidateAlert('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', 'The date format!!! should be like mm/dd/yyyy');
+            //            document.getElementById('txt_DOB').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', '#FFFFFF');
+            //        }
+            //        if (yearid < 1900) {
+            //            //Glb_ShowAlert('Invalid date of birth!!! year should be greater than 1900');
+            //            ValidateAlert('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', 'Please enter a valid 4 digit year between 1900 and 2060');
+            //            document.getElementById('txt_DOB').focus();
+            //            return false
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', '#FFFFFF');
+            //        }
+            //        if (Monthid > 12 || Monthid == 0) {
+            //            //Glb_ShowAlert('Invalid date of birth!!! month should be entered in between 1 to 12');
+            //            //        ValidateAlert('tblErrContacts', 'lblErrDOB', 'tdErrDob', 'tdDob', 'The date!!! month should be entered in between 1 to 12');
+            //            ValidateAlert('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', 'Please enter a valid month');
+            //            document.getElementById('txt_DOB').focus();
+            //            return false
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', '#FFFFFF');
+            //        }
+            //        if (MyId > 31 || MyId == 0) {
+            //            //Glb_ShowAlert('Invalid date of birth!!! date should be entered in between 1 to 31');
+            //            ValidateAlert('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', 'Please enter a valid day');
+            //            document.getElementById('txt_DOB').focus();
+            //            return false
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', '#FFFFFF');
+            //        }
+            //        if (myDat > CurDt) {
+            //            //Glb_ShowAlert('Invalid date of birth!!! should be less than current date');
+            //            ValidateAlert('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', 'Invalid date of birth!!! should be less than current date');
+            //            document.getElementById('txt_DOB').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', '#FFFFFF');
+            //        }
+            //        if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+            //            ValidateAlert('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', 'Please enter a valid day');
+            //            document.getElementById('txt_DOB').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', '#FFFFFF');
+            //        }
+            //        if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+            //            ValidateAlert('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', 'Please enter a valid day');
+            //            document.getElementById('txt_DOB').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', '#FFFFFF');
+            //        }
+            //    }
+
+            //}
+            //if (document.getElementById('txt_DOB').value != '' && document.getElementById('txt_DOB').value != 'mm/dd/yyyy') {
+            //    var PtDOB = new Date(document.getElementById('txt_DOB').value);
+            //    var CurDt = new Date()
+            //    if (PtDOB > CurDt) {
+            //        //                    Glb_ShowAlert('Invalid date Of birth!!!should be less than current date');
+            //        ValidateAlert('tblErrResp', 'lblErrDOB', 'tdErrDob', 'tdEDob', 'Invalid date Of birth!!!should be less than current date')
+            //        document.getElementById('txt_DOB').focus();
+            //        return false;
+            //    }
+            //}
+
+            var strfirstname = trim(document.getElementById('txtFName').value);
+            document.getElementById('txtFName').value = strfirstname;
+            var strlastname = trim(document.getElementById('txtLName').value);
+            document.getElementById('txtLName').value = strlastname;
+            var strmiddlename = trim(document.getElementById('txtMName').value);
+            document.getElementById('txtMName').value = strmiddlename;
+            if (document.getElementById('txtFName').value == '' || document.getElementById('txtFName').value == 'First Name') {
+                //                Glb_ShowAlert("Please enter  First Name");
+                ValidateAlert('tblErrResp', 'lblErrName', 'tdErrName', 'tdEName', 'Please enter  First Name')
+                document.getElementById('txtFName').focus();
+                return false;
+            }
+            if (document.getElementById('txtFName').value != '' && document.getElementById('txtFName').value != 'First Name') {
+                if (MyChars(document.getElementById('txtFName')) == "SpaceError") {
+                    Glb_ShowAlert("Please enter  First Name with out space");
+                    document.getElementById('txtFName').focus();
+                    return false;
+                }
+
+                if (fnStringFieldValidate(document.getElementById('txtFName'), "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'#- /_:;,.&()'") == 0) {
+                    //                    var StrMsg = Glb_ShowAlert("Please enter  First Name correctly, there shouldn't be any special characters");
+                    ValidateAlert('tblErrResp', 'lblErrName', 'tdErrName', 'tdEName', "Please enter  First Name correctly, there shouldn't be any special characters")
+                    document.getElementById('txtFName').focus();
+                    return false;
+                }
+                else {
+                    if (document.getElementById('txtLName').value == 0 || document.getElementById('txtLName').value == 'Last Name') {
+                        //                        Glb_ShowAlert("Please enter  Last Name");
+                        ValidateAlert('tblErrResp', 'lblErrName', 'tdErrName', 'tdEName', "Please enter  Last Name")
+                        document.getElementById('txtLName').focus();
+                        return false;
+                    }
+                }
+            }
+            if (document.getElementById('txtMName').value == 'MI') {
+                document.getElementById('txtMName').value = '';
+            }
+            if (document.getElementById('txtMName').value != '' && document.getElementById('txtMName').value != 'MI') {
+
+                if (MyChars(document.getElementById('txtMName')) == "SpaceError") {
+                    Glb_ShowAlert("Please enter  Middle Name with out space");
+                    document.getElementById('txtFName').focus();
+                    return false;
+                }
+
+                if (fnStringFieldValidate(document.getElementById('txtMName'), "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'#- /_:;,.&()'") == 0) {
+                    //                    var StrMsg = Glb_ShowAlert("Please enter  Middle Name correctly correctly, there shouldn't be any special characters");
+                    ValidateAlert('tblErrResp', 'lblErrName', 'tdErrName', 'tdEName', "Please enter  Middle Name correctly correctly, there shouldn't be any special characters")
+                    document.getElementById('txtMName').focus();
+                    return false;
+                }
+
+
+                else {
+                    if (document.getElementById('txtFName').value == '' || document.getElementById('txtFName').value == 'First Name') {
+                        //                        Glb_ShowAlert("Please enter Accreditor First Name");
+                        ValidateAlert('tblErrResp', 'lblErrName', 'tdErrName', 'tdEName', "Please enter Accreditor First Name")
+                        document.getElementById('txtFName').focus();
+                        return false;
+                    }
+
+                }
+
+            }
+            if (document.getElementById('txtLName').value != '' && document.getElementById('txtLName').value != 'Last Name') {
+                if (MyChars(document.getElementById('txtLName')) == "SpaceError") {
+                    Glb_ShowAlert("Please enter  Last Name with out space");
+                    document.getElementById('txtLName').focus();
+                    return false;
+                }
+
+                if (fnStringFieldValidate(document.getElementById('txtLName'), "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'#- /_:;,.&()'") == 0) {
+                    //                    var StrMsg = Glb_ShowAlert("Please enter  Last Name correctly, there shouldn't be any special characters");
+                    ValidateAlert('tblErrResp', 'lblErrName', 'tdErrName', 'tdEName', "Please enter  Last Name correctly, there shouldn't be any special characters")
+                    document.getElementById('txtLName').focus();
+                    return false;
+                }
+            }
+            function clearalerts() {
+               
+                document.getElementById('tdstate').bgColor = 'White';               
+                document.getElementById('lblstate').style.display = 'none';
+                document.getElementById('tdcity').bgColor = 'White';  
+                document.getElementById('lblcity').style.display = 'none';
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+            //if (document.getElementById('txtZip').value != '') {
+          
+            if (document.getElementById('txtZip').value == '') {
+                
+                clearalerts(); 
+                //Glb_ShowAlert("Please enter zip code")
+               
+              //  document.getElementById('tdlblzip').style.display = '';
+               
+                document.getElementById('lblzip').style.display = ''; 
+                document.getElementById('lblzip').innerHTML = 'Please enter zip code'; 
+                document.getElementById('tdzip').bgColor = 'Orange'; 
+                document.getElementById('txtZip').focus(); 
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+            var txtZip = document.getElementById('txtZip').value;
+            if (!txtZip.match("^[a-zA-Z0-9]*$")) {
+                clearalerts();
+                document.getElementById('lblzip').innerHTML = "Please enter valid zip";
+                $("#lblzip").show();
+                document.getElementById('tdzip').bgColor = "orange";
+                return false;
+            }
+            if (document.getElementById('txtZip').value.length != '5') {
+                clearalerts();
+                document.getElementById('tdzip').bgColor = 'Orange';
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Please enter valid zip code';
+                return false;
+            }
+          
+            if (document.getElementById('DDState').selectedIndex == 0) {
+                clearalerts(); 
+                //Glb_ShowAlert("Please select state")
+              //  document.getElementById('tblmain').style.display = '';
+               // document.getElementById('tdlblstate').style.display = '';
+               // document.getElementById('tdlblstate').bgColor = 'Orange';
+                document.getElementById('lblstate').style.display = '';
+                document.getElementById('lblstate').innerHTML = 'Please select state';
+                document.getElementById('tdstate').bgColor = 'Orange';
+                document.getElementById('DDState').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdstate').bgColor = 'White';
+               // document.getElementById('tblmain').style.display = 'none';
+               // document.getElementById('tdstate').style.display = 'none';
+                document.getElementById('lblstate').style.display = 'none';
+            }
+            if (document.getElementById('DDCity').selectedIndex == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Please select city")
+             
+               // document.getElementById('tdlblcity').bgColor = 'Orange';
+                document.getElementById('lblcity').style.display = '';
+                document.getElementById('lblcity').innerHTML = 'Please select city';
+                document.getElementById('tdcity').bgColor = 'Orange';
+                document.getElementById('DDCity').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdcity').bgColor = 'White';
+                //document.getElementById('tblmain').style.display = 'none';
+               // document.getElementById('tdcity').style.display = 'none';
+                document.getElementById('lblcity').style.display = 'none';
+            }
+
+            //    if (fnStringFieldValidate(document.getElementById('txtZip'), '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ') == 0) {
+            //        //                    Glb_ShowAlert('Invalid zip code!!! zip code must be in alphanumeric only.');
+            //        ValidateAlert('tblErrResp', 'lblErrZip', 'tdErrZip', 'tdzip', 'Invalid zip code!!! zip code must be in alphanumeric only.')
+            //        document.getElementById('txtZip').focus();
+            //        return false;
+
+            //    }
+            //}
+            if (document.getElementById('txt_Email').value == '') {
+                ValidateAlert('tblErrResp', 'lblErrEmail', 'tdErrEmail', 'td_EEmail', 'Please enter email')
+                document.getElementById('txt_Email').focus();
+                return false;
+            }
+            if (document.getElementById('txt_Email').value != '') {
+                var stremail = trim(document.getElementById('txt_Email').value);
+                document.getElementById('txt_Email').value = stremail;
+                if (ValidateEmail(document.getElementById('txt_Email')) == 0) {
+                    //                    Glb_ShowAlert('Please enter valid email');
+                    ValidateAlert('tblErrResp', 'lblErrEmail', 'tdErrEmail', 'td_EEmail', 'Please enter valid email')
+                    document.getElementById('txt_Email').focus();
+                    return false;
+                }
+            }
+            if (document.getElementById('txt_WPhone1').value == '' && document.getElementById('txt_WPhone2').value == '' && document.getElementById('txt_WPhone3').value == '' && document.getElementById('txt_CPhone1').value == '' && document.getElementById('txt_CPhone2').value == '' && document.getElementById('txt_CPhone3').value == '') {
+                //                   Glb_ShowAlert('Please enter atleast one phone number');
+                ValidateAlert('tblErrResp', 'lblErrCell', 'tdErrCell', 'tdECphone', 'Please enter atleast one phone number')
+                document.getElementById('txt_CPhone1').focus();
+                return false;
+            }
+            //if (document.getElementById('txt_CPhone1').value == '' && document.getElementById('txt_CPhone2').value == '' && document.getElementById('txt_CPhone3').value == '') {
+            //    //                    Glb_ShowAlert('Please enter cell phone number')
+            //    ValidateAlert('tblErrResp', 'lblErrCell', 'tdErrCell', 'tdECphone', 'Please enter cell phone number')
+            //    document.getElementById('txt_CPhone1').focus();
+            //    return false;
+            //}
+            if (document.getElementById('txt_CPhone1').value != '' || document.getElementById('txt_CPhone2').value != '' || document.getElementById('txt_CPhone3').value != '') {
+                if (IsValidPhone(document.getElementById('txt_CPhone1').value + document.getElementById('txt_CPhone2').value + document.getElementById('txt_CPhone3').value) == 'false') {
+                    //                    Glb_ShowAlert('Please enter valid Cell phone number');
+                    ValidateAlert('tblErrResp', 'lblErrCell', 'tdErrCell', 'tdECphone', 'Please enter valid Cell phone number')
+                    document.getElementById('txt_CPhone1').focus();
+                    return false;
+                }
+                if (IsValidPhone(document.getElementById('txt_CPhone1').value + document.getElementById('txt_CPhone2').value + document.getElementById('txt_CPhone3').value) == 'false') {
+                    //                    Glb_ShowAlert('Please enter valid Cell phone number');
+                    ValidateAlert('tblErrResp', 'lblErrCell', 'tdErrCell', 'tdECphone', 'Please enter valid Cell phone number')
+                    document.getElementById('txt_CPhone1').focus();
+                    return false;
+                }
+            }
+            if (document.getElementById('txt_CPhone1').value != '' || document.getElementById('txt_CPhone2').value != '' || document.getElementById('txt_CPhone3').value != '') {
+                if (fnStringFieldValidate(document.getElementById('txt_CPhone1'), '0123456789') == 0) {
+                    //                    Glb_ShowAlert('Invalid Cell phone number!!! Cell phone number must be in numeric only.');
+                    ValidateAlert('tblErrResp', 'lblErrCell', 'tdErrCell', 'tdECphone', 'Invalid Cell phone number!!! Cell phone number must be in numeric only.')
+                    document.getElementById('txt_CPhone1').focus();
+                    return false;
+
+                }
+                if (fnStringFieldValidate(document.getElementById('txt_CPhone2'), '0123456789') == 0) {
+                    //                    Glb_ShowAlert('Invalid Cell phone number!!! Cell phone number must be in numeric only.');
+                    ValidateAlert('tblErrResp', 'lblErrCell', 'tdErrCell', 'tdECphone', 'Invalid Cell phone number!!! Cell phone number must be in numeric only.')
+                    document.getElementById('txt_CPhone1').focus();
+                    return false;
+                }
+                if (fnStringFieldValidate(document.getElementById('txt_CPhone3'), '0123456789') == 0) {
+                    //                    Glb_ShowAlert('Invalid Cell phone number!!! Cell phone number must be in numeric only.');
+                    ValidateAlert('tblErrResp', 'lblErrCell', 'tdErrCell', 'tdECphone', 'Invalid Cell phone number!!! Cell phone number must be in numeric only.')
+                    document.getElementById('txt_CPhone1').focus();
+                    return false;
+                }
+
+            }
+            if (document.getElementById('txt_WPhone1').value != '' || document.getElementById('txt_WPhone2').value != '' || document.getElementById('txt_WPhone3').value != '') {
+                if (IsValidPhone(document.getElementById('txt_WPhone1').value + document.getElementById('txt_WPhone2').value + document.getElementById('txt_WPhone3').value) == 'false') {
+                    //                    Glb_ShowAlert('Please enter valid home phone number');
+                    ValidateAlert('tblErrResp', 'lblHphone', 'tdErrHphone', 'tdEHPhone', 'Please enter valid work phone number')
+                    document.getElementById('txt_WPhone1').focus();
+                    return false;
+
+                }
+            }
+
+
+            //         if(document.Form1.txt_WPhone1.value  !=''||document.Form1.txt_WPhone2.value  !='' || document.Form1.txt_WPhone3.value  !='' || document.Form1.txt_HPhoneExtn.value!='')
+            if (document.getElementById('txt_WPhone1').value != '' || document.getElementById('txt_WPhone2').value != '' || document.getElementById('txt_WPhone3').value != '') {
+                if (fnStringFieldValidate(document.getElementById('txt_WPhone1'), '0123456789') == 0) {
+                    //                    Glb_ShowAlert('Invalid home phone number!!! home phone number must be in numeric only.');
+                    ValidateAlert('tblErrResp', 'lblHphone', 'tdErrHphone', 'tdEHPhone', 'Invalid work phone number!!! home phone number must be in numeric only.')
+                    document.getElementById('txt_WPhone1').focus();
+                    return false;
+
+                }
+
+
+                if (fnStringFieldValidate(document.getElementById('txt_WPhone2'), '0123456789') == 0) {
+                    //                    Glb_ShowAlert('Invalid home phone number!!! home phone number must be in numeric only.');
+                    ValidateAlert('tblErrResp', 'lblHphone', 'tdErrHphone', 'tdEHPhone', 'Invalid work phone number!!! home phone number must be in numeric only.')
+                    document.getElementById('txt_WPhone1').focus();
+                    return false;
+                }
+                if (fnStringFieldValidate(document.getElementById('txt_WPhone3'), '0123456789') == 0) {
+
+                    //                    Glb_ShowAlert('Invalid home phone number!!! home phone number must be in numeric only.');
+                    ValidateAlert('tblErrResp', 'lblHphone', 'tdErrHphone', 'tdEHPhone', 'Invalid work phone number!!! home phone number must be in numeric only.')
+                    document.getElementById('txt_WPhone1').focus();
+                    return false;
+                }
+
+            }
+
+        }
+    </script>
+</html>
+

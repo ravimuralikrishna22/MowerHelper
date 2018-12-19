@@ -1,0 +1,650 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../../favicon.ico" />
+    @Styles.Render("~/Content/styles")
+    @*   @Styles.Render("~/Content/themes/base/autocomplete")*@
+    @Scripts.Render("~/ThScripts/ThJquery")
+    @* @Scripts.Render("~/Scripts/jscript_zjcarousellite.js")*@
+    <script type="text/javascript" src="http://www.google.com/jsapi?key=AIzaSyCgKM4MCuYrILJ8CFPR-a5xXelNuobdK50"></script>
+    <script type="text/javascript">
+        function slideSwitch() {
+            var $active = $('#slideshow IMG.active');
+            if ($active.length == 0) $active = $('#slideshow IMG:last');
+            var $next = $active.next().length ? $active.next() : $('#slideshow IMG:first'); $active.addClass('last-active');
+            $next.css({ opacity: 0.0 }).addClass('active').animate({ opacity: 1.0 }, 2000, function () {
+                $active.removeClass('active last-active');
+            });
+        }
+        $(function () { setInterval("slideSwitch()", 4000); });
+        //$(function () { $(".carousel").jCarouselLite({ btnNext: ".next", btnPrev: ".prev", visible: 3 }); });
+        function resetPosition() { document.body.scrollTop = 0; }
+    </script>
+    <script type="text/javascript">
+        var showele = '@ViewBag.ShowElectricians';
+        if (showele == 'Y') {
+            $(function () {
+
+                if (google.loader.ClientLocation) {
+                    visitor_lat = google.loader.ClientLocation.latitude;
+                    // alert(visitor_lat);
+                    visitor_lon = google.loader.ClientLocation.longitude;
+                    //visitor_city = google.loader.ClientLocation.address.city;
+                    // visitor_region = google.loader.ClientLocation.address.region;
+                    // visitor_country = google.loader.ClientLocation.address.country;
+                    // visitor_countrycode = google.loader.ClientLocation.address.country_code;
+                    $.ajax({
+                        type: "get",
+                        contentType: "application/json;charset=utf-8",
+                        url: '@Url.Action("Getzipbylatlon", "Home")',
+                        data: { "lat": visitor_lat, "lon": visitor_lon },
+                        dataType: "json",
+                        success: Result,
+                        error: Eresult
+                    });
+                }
+                else {
+                    document.getElementById('content-links').style.display = 'none';
+                    document.getElementById('contentlinksbox').style.display = 'none';
+                }
+            });
+            function Eresult() {
+                // alert('Session is expired. You will be redirected to session expired page');
+                // window.location = '@Url.Action("SessionExpire", "Home")';
+            }
+            function Result(data) {
+                if (data == '') {
+                    document.getElementById('content-links').style.display = 'none';
+                    document.getElementById('contentlinksbox').style.display = 'none';
+                }
+                else {
+                    var ind = data[0].ind;
+                    //alert(ind);
+                    if (ind == "Citylist") {
+                        var div = document.getElementById("divstatecitylist")
+                        div.innerHTML = "Near by Cities";
+                        var cnt = data[0].count;
+                        var j;
+                        var k = 0;
+                        var rows = cnt / 4;
+                        var cnt1 = 0;
+                        var table = document.getElementById("tblstates1");
+                        for (j = 0; j <= rows; j++) {
+                            var row = document.createElement("tr");
+                            for (i = k; i <= cnt - 1; i++) {
+                                if (cnt1 < 4) {
+                                    var td3 = document.createElement("td");
+                                    var li = document.createElement("li");
+                                    var title = "Find Electricians in " + data[i].CityName;
+                                    var obj3 = document.createElement("a");
+                                    // obj3.setAttribute("linkText", data[0].CityName);
+                                    obj3.setAttribute("id", data[i].CITY_ID);
+                                    obj3.setAttribute("title", title);
+                                    var cityname = data[i].CityName;//Html.RouteLink(ctynme, "Cities", new { city = city.Trim().ToString() }
+                                    //  var Routeurlone = 'Url.Action("ListOfProviders", "Search", new  { city='+cityname+'})';
+                                    //   var Routeurl = '<%=Url.Action("ListOfProviders", "Search", new { city = 999 }) %>'.replace('999', cityname)
+
+                                    var actionUrl = '@Url.Action("ListOfProviders", "Search", new { city = "PLACE_HOLDER" })'.replace("PLACE_HOLDER", cityname);
+                                    //  var Routeurl = actionUrl.replace("PLACE_HOLDER", cityname);
+                                    obj3.setAttribute("href", actionUrl);
+                                    obj3.innerHTML = data[i].CityName;
+                                    li.appendChild(obj3);
+                                    td3.appendChild(li);
+                                    cnt1 = cnt1 + 1;
+                                }
+                                else {
+
+                                    k = i;
+                                    cnt1 = 0;
+                                    i = cnt - 1;
+
+                                }
+                            }
+                            row.appendChild(td3);
+                            table.appendChild(row);
+                        }
+                    }
+                    else if (ind == "Statelist") {
+
+                        var div1 = document.getElementById('divstatecitylist');
+                        div1.innerHTML = "United States";
+                        var cnt = data[0].count;
+                        var j;
+                        var k = 0;
+                        var rows = cnt / 4;
+                        var cnt1 = 0;
+                        //  alert(data[0].City);
+                        var table = document.getElementById("tblstates1");
+                        // var row = document.createElement("tr");
+                        for (j = 0; j <= rows; j++) {
+                            var row = document.createElement("tr");
+                            for (i = k; i <= cnt - 1; i++) {
+                                if (cnt1 < 4) {
+                                    var td = document.createElement("td");
+                                    var li = document.createElement("li");
+                                    var StateNm = data[i].State_Name;
+                                    var StateNm1 = StateNm.replace(" ", "-");
+                                    var title = "Find Electricians in " + StateNm1;
+                                    var obj3 = document.createElement("a");
+                                    // obj3.setAttribute("linkText", data[0].CityName);
+                                    obj3.setAttribute("id", data[0].State_Name);
+                                    obj3.setAttribute("title", title);
+                                    var actionUrl = '@Url.Action("ListOfProviders", "Search", new { StateNm = "PLACE_HOLDER" })'.replace("PLACE_HOLDER", StateNm1);
+                                    obj3.setAttribute("href", actionUrl);
+                                    // obj3.setAttribute("href", '../Search/ListOfProviders?StateNm=' + StateNm1);
+                                    obj3.innerHTML = data[i].State_Name;
+                                    li.appendChild(obj3);
+                                    td.appendChild(li);
+                                    row.appendChild(td);
+                                    cnt1 = cnt1 + 1;
+                                }
+                                else {
+
+                                    k = i;
+                                    cnt1 = 0;
+                                    i = cnt - 1;
+
+                                }
+                            }
+
+                            table.appendChild(row);
+                        }
+
+                    }
+                    else {
+                        document.getElementById('content-links').style.display = 'none';
+                        document.getElementById('contentlinksbox').style.display = 'none';
+                    }
+            }
+        }
+    }
+    </script>
+
+
+    @*<script type="text/javascript">
+        $(function () {
+            $("#txtzip").autocomplete({
+                source: 'Home/Zipcodes',
+                minLength: 2,
+                select: function (event, ui) {$("#txtzip").val(ui.item.value); }
+            });
+        });
+    </script>*@
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+      
+        <div id="wrapper">
+            @Html.Partial("_TopSection")
+            @*  <div id="flttop">
+                <div id="header01">
+                    <div id="headermain02">
+                        <div id="logopublic">
+                            <a id="logo_find1" runat="server" title="Home" href="@Url.Action("Index", "Home", null)" style="text-decoration: none;" class="bluemenuPublic">
+                               Mower Helper-Find an Mower Helper</a></div>
+                        <div id="mainnavcon">
+                            <div class="mainnav">
+                                <ul>
+                                    @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                        <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                    }
+                                    <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div id="flt02">
+                <div id="bodycon">
+                    <div id="bannercon">
+                        <div id="banner">
+                            <div id="slideshow">
+                                <img src="~/images/01.jpg" alt="" class="active" width="970px" height="272px" />
+                                <img src="~/images/02.jpg" alt="" width="970px" height="272px" />
+                                <img src="~/images/03.jpg" alt="" width="970px" height="272px" />
+                            </div>
+                        </div>
+                        @if (ViewBag.ShowElectricians == "Y")
+                        {
+                            <div id="searchcon">
+                                <div id="search">
+                                    <div style="width: 311px; float: left; padding: 10px 0px 10px 42px; font: bold italic 18px georgia; color: #FFFFFF;">
+                                        Find a Mower Helper today!
+                                    </div>
+                                    <div style="width: 329px; float: left; padding: 4px 12px 10px 12px; font: 12px Arial, Helvetica, sans-serif; color: #b2d9ff; line-height: 17px; text-align: justify;">
+                                        Search through Mower Helper-Find an Mower Helper&#8217;s directory of verified Mower Helper, psychologists,
+                                    marriage and family counselors, social workers, licensed professional counselors
+                                    and psychiatrists.
+                                    </div>
+
+                                    <div style="width: 325px; float: left; padding: 18px 14px 14px 14px;">
+                                        <div style="width: 108px; float: left; font: 12px Arial, Helvetica, sans-serif; color: #b2d9ff; padding-top: 6px; padding-left: 2px;">
+                                            US City or Zip Code
+                                        </div>
+                                        <div style="width: 202px; height: 25px; float: left; padding-left: 10px;">
+                                            <input type="text" name="txtzip" id="txtzip" class="searchinput" aria-autocomplete="list" />
+                                        </div>
+                                    </div>
+                                    <div style="width: 325px; float: left; padding: 10px 14px 14px 14px;">
+                                        <div class="advanced" style="width: 130px; float: left; padding-left: 30px; padding-top: 7px;">
+                                            @Html.RouteLink("Advanced Search", "AdvancedSearch")
+                                            @*   @Html.ActionLink("Advanced Search", "ProviderSearch", "AdvancedSearch")*@
+                                        </div>
+                                        <div style="width: 85px; float: left; padding-left: 80px;">
+                                            <input name="search_btn" id="search_btn" type="image" src="~/Images/searchf.jpg" />
+                                        </div>
+                                        <div style="width: 318px; float: left; padding: 30px 17px 0px 5px; text-align: center;">
+                                            <div class="states" style="width: 71px; float: left; text-align: center;">
+                                                @Html.ActionLink("Chicago", "ListOfProviders", "Search", new { city = "Chicago", StateNm = "Illinois" }, new { @title = "Chicago Electricians" })
+                                            </div>
+                                            <div class="states" style="width: 73px; float: left; text-align: center;">
+                                                @Html.ActionLink("Houston", "ListOfProviders", "Search", new { city = "Houston", StateNm = "Texas" }, new { @title = "Houston Electricians" })
+                                            </div>
+                                            <div class="states" style="width: 95px; float: left; text-align: center;">
+                                                @Html.ActionLink("Los Angeles", "ListOfProviders", "Search", new { city = "Los-Angeles", StateNm = "California" }, new { @title = "Los Angeles Electricians" })
+                                            </div>
+                                            <div class="states" style="width: 78px; float: left; text-align: center;">
+                                                @Html.ActionLink("New York", "ListOfProviders", "Search", new { city = "New-York", StateNm = "New-York" }, new { @title = "New York Electricians" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div id="contentpannel">
+                        <div id="leftcon">
+                            <div class="content2" style="text-align: justify;">
+                                @*  <h1 style="padding-bottom: 15px;">
+                                    Get Therapy Help</h1>*@
+                                <p>
+                                    At Mower Helper-Find an Mower Helper our business is to help Mower Helpers manage your business. We help Mower Helpers in managing clients, scheduling and billing.
+                                 We also help Mower Helpers in communicating with clients, appointment confirmation emails, billing dues and text messaging.
+                                </p>
+                                <p>We provide two ways to manage your business</p>
+                                <p>1) A website that can be used by office manager or someone who is taking calls and managing your schedule.</p>
+                                <p>2) A mobile application that you can use while you are out render your services. </p>
+                                <p style="text-align: justify;">
+                                    If you are a single person business, you can use Mobile application to add clients, appointments, email invoices to clients from your phone. 
+                                 If you are a business where you have few employees helping you, you can manage their schedule as well.
+                                </p>
+                                <br />
+                            </div>
+                            @*<div style="border: none; padding-bottom: 5px;" class="content">
+                                <div style="width: 697px; float: left; padding-left: 5px;">
+                                    <h1 style="padding-bottom: 5px;">
+                                        Featured Products for Providers</h1>
+                                </div>
+                                <div class="carousel-box1" style="width: 702px; float: left; background-repeat: repeat-x;
+                                    background-position: left top;">
+                                    <div class="carousel-box2" style="width: 688px; float: left; background-repeat: no-repeat;
+                                        background-position: left top; padding-left: 14px;">
+                                        <div class="carousel-box3" style="width: 674px; float: left; background-repeat: no-repeat;
+                                            background-position: right top; padding-top: 32px; padding-right: 14px; padding-bottom: 25px;">
+                                            <div class="carousel-box">
+                                                <a class="prev"></a><a class="next"></a>
+                                                <div class="carousel">
+                                                    <ul>
+                                                        <li><a href="#">
+                                                            <img src="~/images/gallery/01.jpg" width="145px" height="99px" /></a><div class="bottom">
+                                                                <a href="#" style="text-decoration: none;">Market your Plumber business</a></div>
+                                                        </li>
+                                                        <li><a href="#">
+                                                            <img src="~/images/gallery/02.jpg" width="145px" height="99px" /></a>
+                                                            <div class="bottom">
+                                                                <a href="#" style="text-decoration: none;">Register your customer</a></div>
+                                                        </li>
+                                                        <li><a href="#">
+                                                            <img src="~/images/gallery/03.jpg" width="145px" height="99px" /></a>
+                                                            <div class="bottom">
+                                                                <a href="#" style="text-decoration: none;">Scheduling</a></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*@
+                            @if (ViewBag.ShowElectricians == "Y")
+                            {
+                                <div id="content-links">
+                                    <div id="contentlinksbox">
+                                        <div id="divstatecitylist" style="width: 692px; float: left; padding: 8px 0px 8px 10px; font: 20px georgia; font-size: 16px; color: #03467e; font-style: italic;">
+                                        </div>
+                                        <div style="width: 702px; float: left;">
+                                            <div class="gadget">
+                                                <ul class="sb_menu">
+                                                    <table id="tblstates1"></table>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div id="content-links" style="display: none">
+                                @{Html.RenderAction("LinkedSites", "Home");}
+                            </div>
+                        </div>
+                        @if (ViewBag.ShowElectricians == "Y")
+                        {
+                            <div id="rightcon">
+                                <div class="rightcon" style="width: 228px; float: left; padding: 5px 0px 18px 10px; background-repeat: no-repeat; background-position: left top;">
+                                    <h2>Featured Electricians</h2>
+                                </div>
+                                <div style="width: 208px; float: left; padding: 0px 15px 0px 15px;">
+                                    @{
+                            string imgind = null;
+                                    }
+                                    @if (ViewBag.FeaturedListcount > 0)
+                                    {
+                                        foreach (var item in ViewBag.FeaturedList)
+                                        {
+                                            //  string id = @item.Provider_ID;
+                                  
+                                        <div id="divline" class="divline" style="width: 208px; float: left; padding-top: 10px; background-repeat: repeat-x; background-position: bottom left; padding-bottom: 10px;">
+                                            <div style="width: 42px; height: 40px; float: left; border: 1px #006600 solid;">
+                                                @{
+                                            string domain = null;
+                                            //MowerHelper.Models.Classes.clsWebConfigsettings objconfig = new MowerHelper.Models.Classes.clsWebConfigsettings();
+                                            string Requesturl = null;
+                                            if (Request.Url != null)
+                                            {
+                                                Requesturl = Request.Url.ToString();
+                                            }
+                                            var strurl = Requesturl.Split('/');
+                                                }
+                                                @if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("Islocal") == "Y")
+                                                {
+                                                    if (Requesturl.Contains("localhost:"))
+                                                    {
+                                                        domain = strurl[0] + "//" + strurl[2] + "/";
+
+                                                    }
+                                                    else if (Requesturl.Contains("vbv"))
+                                                    {
+                                                        domain = strurl[0] + "//" + strurl[2] + "/" + strurl[3] + "/";
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    domain = MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("PublicImageChecklocal");
+                                                }
+                                                @if (!DBNull.Value.Equals(item["Picture"]) && item["Picture"] != null)
+                                                {
+
+                                                    string str = item["Picture"];
+                                                    ViewData["str"] = str;
+                                                    ViewBag.strimage = str;
+                                                    if (str.Contains(".") == true)
+                                                    {
+                                                        string[] str1 = str.Split('.');
+                                                        ViewData["ExistedLogo"] = str1[0];
+                                                        ViewBag.ExistedLogo = str1[0];
+                                                        ViewData["ExistedExtn"] = str1[1];
+                                                        ViewBag.ExistedExtn = str1[1];
+                                                    }
+
+                                                    string strings = null;
+
+                                                    //  strings = "../Attachments/Providers" + "/";
+                                                    strings = Path.Combine(Server.MapPath("~/Attachments/Providers"), str);
+                                                    if (System.IO.File.Exists(strings))
+                                                    {
+
+                                                        ViewBag.imageavail = "Y";
+                                                        ViewBag.image = "Y";
+                                                        ViewBag.providerimage5 = domain + "Attachments/Providers/" + str;
+
+
+                                                    }
+                                                    //else if (Convert.ToString(item["gender"]) == "Male")
+                                                    // {
+                                                    //     ViewBag.imageavail = "Y";
+                                                    //     ViewBag.providerimage5 = domain + "images/male.png";
+                                                    //     //ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/male.png&Width=100&Height=80";
+                                                    // }
+                                                    // else if (Convert.ToString(item["gender"]) == "Female")
+                                                    // {
+                                                    //     ViewBag.imageavail = "Y";
+                                                    //     ViewBag.providerimage5 = domain + "images/female.png";
+                                                    //     //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/female.png&Width=100&Height=80";
+                                                    // }
+                                                    else
+                                                    {
+
+                                                        ViewBag.providerimage5 = domain + "images/Coach1.JPG";
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    //if (Convert.ToString(item["gender"]) == "Male")
+                                                    //{
+                                                    //    ViewBag.imageavail = "Y";
+                                                    //    ViewBag.providerimage5 = domain + "images/male.png";
+                                                    //    //ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/male.png&Width=100&Height=80";
+                                                    //}
+                                                    //else if (Convert.ToString(item["gender"]) == "Female")
+                                                    //{
+                                                    //    ViewBag.imageavail = "Y";
+                                                    //    ViewBag.providerimage5 = domain + "images/female.png";
+                                                    //  //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/female.png&Width=100&Height=80";
+                                                    //}
+                                                    //else
+                                                    //{
+                                                    ViewBag.providerimage5 = domain + "images/Coach1.JPG";
+                                                    //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/Coach1.JPG&Width=100&Height=80";
+
+                                                    //  }
+
+
+                                                }
+
+                                                <img width="42px" height="40px" alt="@item["ProviderName"]" src="@ViewBag.providerimage5" />
+
+
+
+                                            </div>
+                                            <div style="width: 160px; float: right;">
+                                                <div class="featured" style="width: 160px; float: left; padding: 0px; margin: 0px;">
+                                                    @{
+                                                string elestate = null;
+                                                string elecity = null;
+                                                elestate = item["l_state"].ToString().Trim().Replace("/ ", "-");
+                                                elestate = elestate.ToString().Trim().Replace(" ", "-");
+                                                elestate = elestate.Replace("/", "-");
+                                                elecity = item["l_City"].ToString().Trim().Replace("/ ", "-");
+                                                elecity = elecity.ToString().Trim().Replace(" ", "-");
+                                                elecity = elecity.Replace("/", "-");
+                                                    }
+                                                    @Html.RouteLink((string)item["ProviderName"], "ProviderProfile", new { @randomnumber = item["Random_number"], Therapistname = item["PublicURL"].ToString().Trim().Replace(" ", "-"), state = elestate, city = elecity, zip = item["l_zipcode"] }, new { @title = "see full profile of " + item["ProviderName"] + ", Mower Helper in " + item["l_City"] + ", " + item["l_state"] + " " + item["l_zipcode"] })
+                                                </div>
+                                                <div class="featured" style="width: 160px; float: left; padding-top: 5px;">
+                                                    @item["Address"]
+                                                </div>
+                                            </div>
+                                            <div class="clearme">
+                                                <img id="imgspace2" alt="" src="~/Images/speacer.gif" width="1px" height="1px" />
+                                            </div>
+                                        </div>
+@* @Html.Hidden((string)item.Provider_ID)
+                                    @Html.Hidden((string)item.CityName)
+                                    @Html.Hidden((string)item.StateName)
+                                    @Html.Hidden((string)item.Zip)*@
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span style="color: Red;">No Featured Electricians Found</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="clearme">
+                            <img src="~/images/speacer.gif" />
+                        </div>
+                    </div>
+                    @Html.Partial("_Footer")
+                    @*   <div id="footercon" style="padding-top:80px;">
+                        <div id="footerpublic" style="text-align: right;">
+                            <div>
+                            @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                            {
+                            <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                         
+                                <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.ShowArticles == "Y")
+                            {
+                                <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.Showforums == "Y")
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                      <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li style="display:none;">
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                    
+                            </ul>
+                            }
+                                </div>
+                            <div class="copy" style="font-size: small;">
+                                Copyright © 2016.Mower Helper-Find an Mower Helper, Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    }
+
+</body>
+@*<script src="http://www.google.com/jsapi?key=ABQIAAAAi81Rjwr1-u7oEXnMu8ZAshRP-nnpuPPJcaGqMEuDu4Fa5RASehTAD1XdjlFzs64mT_zVzd4AF45vVA"
+        type="text/javascript"></script>*@
+<script type="text/javascript">
+    if (getcookie('City') == null) {
+        if (google.loader.ClientLocation) {
+            visitor_lat = google.loader.ClientLocation.latitude; createcookie("Latitude", visitor_lat, 1);
+            visitor_lon = google.loader.ClientLocation.longitude; createcookie("Longitude", visitor_lon, 1);
+            visitor_city = google.loader.ClientLocation.address.city; createcookie("City", visitor_city, 1);
+            visitor_region = google.loader.ClientLocation.address.region; createcookie("State", visitor_region, 1);
+            visitor_country = google.loader.ClientLocation.address.country; createcookie("Country", visitor_country, 1);
+            visitor_countrycode = google.loader.ClientLocation.address.country_code; createcookie("Countrycode", visitor_countrycode, 1);
+        }
+    }
+
+    function createcookie(name, val, days) {
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() + days);
+        document.cookie = name + "=" + escape(val) + "; path=/";
+    }
+    function getcookie(name) {
+        if (document.cookie.length > 0) {
+            var cStart = document.cookie.indexOf(name + "=");
+            if (cStart != -1) {
+                cStart = cStart + name.length + 1;
+                var cEnd;
+                cEnd = document.cookie.indexOf(";", cStart);
+                if (cEnd == -1)
+                    cEnd = document.cookie.length;
+
+                return unescape(document.cookie.substring(cStart, cEnd));
+            }
+            else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+</script>
+</html>

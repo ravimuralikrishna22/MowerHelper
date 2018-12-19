@@ -1,0 +1,737 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+       @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <style type="text/css">
+        .Vtitle
+        {
+            width: 350px;
+        }
+
+        .Vdescription
+        {
+            width: 650px;
+        }
+
+        .dvLoading .ui-dialog-titlebar
+        {
+            display: none;
+        }
+    </style>
+    <style type="text/css">
+     .statement-nav {width:673px;border-bottom:1px solid #cfdede;float:left;padding:0 0 4px 0;}
+.statement-nav img.bookmarks {float:left;margin:2px 0 0 40px;}
+.statement-nav ul {margin:0;padding:0;list-style:none;float:right;width:502px;}
+.statement-nav ul li {list-style:none;padding-left:3px;float:left;}
+.statement-nav ul li a {font:bold 13px Arial;text-transform:uppercase;padding:7px 28px 6px 28px;background:url(../images/bg-article-library-nav.gif) repeat-x 0 0;color:#ffffff!important;text-decoration:none!important;}
+.statement-nav ul li a, x:-moz-any-link {padding:7px 28px 5px 28px;}
+.statement-nav ul li a:hover, .statement-nav ul li a.current {color:#000000!important;background:none repeat scroll 0 0 #cfdede;}
+.statement-nav1 {width:100%;border-bottom:1px solid #cfdede;float:left;padding:0 0 4px 0;}
+.statement-nav1 img.bookmarks {float:left;margin:2px 0 0 40px;}
+.statement-nav1 ul {margin:0;padding:0;list-style:none;float:right;width:502px;}
+.statement-nav1 ul li {list-style:none;padding-left:3px;float:left;}
+.statement-nav1 ul li a {font:bold 13px Arial;text-transform:uppercase;padding:7px 28px 6px 28px;background:url(../images/bg-article-library-nav.gif) repeat-x 0 0;color:#ffffff!important;text-decoration:none!important;}
+.statement-nav1 ul li a, x:-moz-any-link {padding:7px 28px 5px 28px;}
+.statement-nav1 ul li a:hover, .statement-nav1 ul li a.current {color:#000000!important;background:none repeat scroll 0 0 #cfdede;}
+#content .profile_yellow_bg		{ background:#fff url(../Images/profile_yellow_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .right_partbg 	{ /*background:#02437b url(../images/right_bg.png) repeat-x;*/ margin:0; padding:20px 0 0 0; float:left; width:271px;}
+.right_headingbg 		{ width:195px; height:31px; background:url(../Images/right_headingbg.png) no-repeat; font:italic 16px Georgia; color:#fff; padding:8px 0 0 60px;}
+.right_text_part 		{ padding:0 10px 0 15px; color:#b2d9ff;}
+.right_text_part p 		{ color:#333; line-height:18px}
+#content .center_right_profile .right_text_part p 	{ color:#B2D9FF; line-height:18px}
+#content .center_right_profile .right_partbg 		{ background:#02437b url(../Images/right_bg.png) repeat-x; margin:0; padding:20px 0 0 0; float:left; width:270px;}
+
+.profile_img 		{ margin:0; padding:0;}
+.profile_img img 	{ border: 1px solid #000; border-radius:4px; height:130px; padding:1px; width:120px; margin:0 0 10px 52px;}
+
+.profile_img1 		{ margin:15px 0 0 0; padding:0;}
+.profile_img1 img 	{ border: 1px solid #000; border-radius:4px; height:130px; padding:1px; width:120px; margin:0 15px 0 0; float:left;}
+#content { width:996px; margin:-31px 0 0 0; padding:0; position:relative;}
+
+#content .center_right			{ background:#fff url(../Images/center_right.png) repeat-y right top; margin:0 0 0 15px; float:left;}
+#content .center_right_profile	{ background:#fff url(../Images/center_right_profile.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_blue_bg		{ background:#fff url(../Images/profile_blue_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_gray_bg		{ background:#fff url(../Images/profile_gray_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_greenbg		{ background:#fff url(../Images/profile_greenbg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_lightblue_bg	{ background:#fff url(../Images/profile_lightblue_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_yellow_bg		{ background:#fff url(../Images/profile_yellow_bg.jpg) repeat-y right top; margin:0; width:996px;}
+
+#content .center_right_profile h4 {color: #B2D9FF; font: italic 14px Georgia,"Times New Roman",Times,serif; margin: 0 0 5px;}
+
+
+
+#content .left_nev 									{ float:left; margin:25px 0 0 0; padding:0; width:186px;}
+.left_nev ul 										{ font:italic 17px Georgia, "Times New Roman", Times, serif; text-align:right; margin:0; padding:0;}
+#navigation-block 									{ position:relative; text-align:right;}
+#hide 												{ position:absolute; top:30px; left:-190px;}
+ul#sliding-navigation li.sliding-element h3, ul#sliding-navigation li.sliding-element a { display: block; width:141px; margin: 0;}
+ul#sliding-navigation li.sliding-element a 			{ color:#333; background:url(../Images/nav_arrow.png) no-repeat right 10px; border-bottom:1px solid #c7d0d5; 
+													  padding:10px 30px 10px 0;}
+ul#sliding-navigation li.sliding-element a:hover	{ color: #046EC6; background: url(../Images/nav_arrow1.png) no-repeat right 10px; }
+ul#sliding-navigation li.sliding-element a.on 		{ color: #046EC6; background: url(../Images/nav_arrow1.png) no-repeat right 10px; }
+
+#content .center_part 	{ width:500px; float:left; margin:0 0 30px 0; padding:25px 10px 10px 14px; background:#fff; min-height:397px;}
+#content .center_part1 	{ width:771px; float:left; margin:0 0 30px 15px; padding:25px 10px 10px 14px; background:#fff; min-height:397px;}
+.center_part p a 		{ color:#333; font:bold 12px Arial, Helvetica, sans-serif;}
+.center_part p a:hover 	{ text-decoration:underline; color:#046EC6;}
+
+.more_arrow 		{ margin:0; padding:0 0 0 26px; background:url(../Images/more_arrow.png) no-repeat; float:right;}
+.more_arrow a 		{ color:#ff7000 !important; font:italic 15px Georgia, "Times New Roman", Times, serif !important;}
+.more_arrow a:hover { color:#333 !important;}
+
+#content .right_partbg 	{ /*background:#02437b url(../images/right_bg.png) repeat-x;*/ margin:0; padding:20px 0 0 0; float:left; width:271px;}
+.right_headingbg 		{ width:195px; height:31px; background:url(../Images/right_headingbg.png) no-repeat; font:italic 16px Georgia; color:#fff; padding:8px 0 0 60px;}
+.right_text_part 		{ padding:0 10px 0 15px; color:#b2d9ff;}
+.right_text_part p 		{ color:#333; line-height:18px}
+#content .center_right_profile .right_text_part p 	{ color:#B2D9FF; line-height:18px}
+#content .center_right_profile .right_partbg 		{ background:#02437b url(../Images/right_bg.png) repeat-x; margin:0; padding:20px 0 0 0; float:left; width:270px;}
+.text-center   { text-align:center; }
+.iner_bg		{ background:url(../Images/tr.png) repeat; border-top:dashed 1px #3785c7; margin:15px 0 0 0; padding:10px; opacity: 0.8; border-radius:0 0 4px 4px;}
+.content_ul1 			{ font:bold 12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#fff }
+.content_ul1 li			{ background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; }
+.content_ul1 li a 		{ color:#333;}
+.content_ul1 li a:hover { color:#1B81C8; text-decoration:underline;}
+.follow_us p 			{ color:#333; margin:0 0 10px 0; text-align:center !important;}
+
+#content .center_right_profile .content_ul1 			{ font:bold 12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#fff }
+#content .center_right_profile .content_ul1 li 			{ background:url(../Images/small_arrow.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #B2D9FF; }
+#content .center_right_profile .content_ul1 li a 		{ color:#fff;}
+#content .center_right_profile .content_ul1 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+.previes		{ background:url(../Images/Featured_bg2.jpg) repeat-x; border-radius:4px; cursor:pointer; margin:0 0 10px 0; padding:5px 8px; font:bold 13px Arial; 
+				 box-shadow:3px 3px 4px #ccc; opacity: 0.9; color:#fff; float:left;}
+.previes:hover	{ color:#fff; text-decoration:underline;}
+.content_ul4 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#666; }
+.content_ul4 li 		{ background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; }
+.content_ul4 li a 		{ color:#333;}
+.content_ul4 li a:hover { color:#1B81C8; text-decoration:underline;}
+
+#content .center_right_profile .content_ul4 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:rgba(179, 218, 255, 0.47); }
+#content .center_right_profile .content_ul4 li 			{ background:url(../Images/small_arrow.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #ccc; }
+#content .center_right_profile .content_ul4 li a 		{ color:#fff; opacity:0.6;}
+#content .center_right_profile .content_ul4 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+.content_ul2 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#666; }
+.content_ul2 li 		{background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; float:left; width:44px; margin:0 7px 0 0 }
+.content_ul2 li a 		{ color:#fff;}
+.content_ul2 li a:hover { color:#B2D9FF; text-decoration:underline;}
+
+#content .center_right_profile .content_ul2 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:rgba(179, 218, 255, 0.47); }
+#content .center_right_profile .content_ul2 li 			{ padding:4px 15px; border-bottom:1px dotted hsl(0, 0%, 80%); float:left; width:44px; margin:0 7px 0 0 }
+#content .center_right_profile .content_ul2 li a 		{ color:#fff; opacity:0.6;}
+#content .center_right_profile .content_ul2 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+ </style>
+   @Scripts.Render("~/ThScripts/THViewscripts")
+    
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            //$('#imgPreview').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    //                      height: 400,
+            //    resizable: false,
+            //    modal: true
+            //});
+
+            $("#btnimgPreview").click(function () {
+                //linkObj = $(this);
+                //var dialogDiv = $('#imgPreview');
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                // var viewUrl = linkObj.attr('href');
+                var viewUrl = '../Directory/ProfilePreview/?randomnumber=' + '@ViewBag.Random_number';
+                Displaydialog('imgPreview', viewUrl, 'auto', 1000, 'dvLoading', null, null);
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    $('#dvLoading').dialog('destroy');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            });
+
+        });
+        $(document).ready(function () {
+            $(".closeprivew").live("click", function (e) {
+                var dialogDiv = $('#imgPreview');
+                dialogDiv.dialog('close');
+            });
+        });
+    </script>
+   @* @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Scripts.Render("~/SCRIPTS/scriptCognetwork.js")*@
+        
+
+    
+</head>
+<body>
+   @{Html.RenderAction("Topsection", "Tools");} 
+   <div id="main-content">
+            <input type="hidden" id="hdnproid" name="hdnproid" value="@ViewBag.proid" />
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr class="background_color">
+                    <td align="left" valign="top" width="100%">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr id="trtabs" runat="server">
+                                <td width="100%" class="navigation">
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="aprovider" href="ViewIdentifyingInfo" >
+                                              @if (Session["Roleid"].ToString()=="1")
+                            {
+                                <span>@Session["Elebusenessnm"].ToString()</span>
+                            }
+                            else{
+                                <span>Mower Helper Info</span>
+                            }
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="acontent"  href="ViewElectricianAdvancedSearch"><span>Content Settings</span>
+                                        </a>
+                                    </div>
+                                 @*   <div class="admin-tab">
+                                        <a class="inadmin-link" id="avideo" href="VideoAudioFiles" ><span>Video/Audio Files</span>
+                                        </a>
+                                    </div>*@
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument" href="ViewElectricianDocumentInfo" ><span>Certificates & Youtube Video Files</span>
+                                        </a>
+                                    </div>
+                                    @*<div class="admin-tab">
+                                        <a class="inadmin-link" id="astatistic" href="Sitestatistics" ><span>Site Statistics</span>
+                                        </a>
+                                    </div>*@
+                                </td>
+                            </tr>
+                            <tr class="background_color">
+                                <td id="tdtabs" class="tab-background"   width="100%">
+                                    <div class="content-box">
+                                        <div class="content-box-header">
+                                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                <tr>
+                                                    <td width="80%" align="left">
+                                                        <h3 style="cursor: s-resize;">
+                                                            Content settings</h3>
+                                                    </td>
+                                                     <td width="10%" style="text-align:right;">
+                                            <input type="submit" value="Profile Preview" title="Profile Preview" class="button"  id="btnimgPreview" name="btnimgPreview"/>&nbsp;
+                                          &nbsp;
+                                            </td>
+                                                    <td width="10%" style="text-align:right;">
+                                             @Html.ActionLink("Edit", "EditElectricianAdvancedSearch", null, new {@class = "button",@title="edit content settings" ,Style = "width:30px;height:14px;"})
+                                          &nbsp; &nbsp;&nbsp;
+                                            </td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="content-box-content">
+                                            <table cellspacing="1" cellpadding="6" border="0" class="border_style" width="100%">
+                                                <tbody>
+                                                    <tr class="white_color">
+                                                        <td  align="right" id="tdpersonal"  style="width:17.5%;">
+                                                            <strong>Personal statement :&nbsp;</strong>
+                                                        </td>
+                                                        <td align="left">
+                                                   
+                                                  @Html.Raw(System.Web.HttpUtility.HtmlDecode((string)ViewBag.paragraph))
+                                                    
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <table id="tblProvContInfo" width="100%" cellpadding="0" cellspacing="0" border="0"
+                                                class="border_style">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="50%" align="center" valign="top">
+                                                            <table width="100%" id="tblprov"   cellspacing="1" cellpadding="6" border="0" class="border_style">
+                                                                <tbody>
+                                                                    <tr class="nav_blue_color">
+                                                                        <td width="35%" align="right">
+                                                                            <strong>Payments/condition :&nbsp;</strong>
+                                                                        </td>
+                                                                        <td width="65%" align="left">
+                                                                           
+                                                                            <span id="lblpayment" style="text-align: justify; font-family: Arial; font-size: 9pt;"
+                                                                                >@ViewBag.Payments </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                     <tr id="tryear" class="white_color" >
+                                                                                        <td align="right" width="35%">
+                                                                                            <strong>Years  in service :&nbsp;</strong>
+                                                                                        </td>
+                                                                                        <td width="65%" align="left">
+                                                                                            <span ID="lblYearsPractice" >@ViewBag.Yearinpractice </span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                    <tr class="nav_blue_color">
+                                                <td align="right">
+                                                     <strong><span id="lblWeb">Your website link :&nbsp;</span></strong>
+                                                </td>
+                                                <td width="60%" align="left">
+                                                    <span id="lblWebsite">@ViewBag.Website</span>
+                                                </td>
+                                            </tr>                                           
+                                            <tr class="white_color">
+                                                <td width="30%" align="right">
+                                                     <strong>
+                                                    <span id="lblfacebook">Facebook url :&nbsp;</span></strong>
+                                                </td>
+                                                <td width="60%" align="left">
+                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                        <tr class="white_color">
+                                                            <td align="left" width="10%">
+                                                                <span id="lblfacebookurl">@ViewBag.facebookurl</span>&nbsp;
+                                                            </td>
+                                                            <td align="left" width="90%">
+
+                                                                <a href="#" id="afbimg" title="Click here to view help image">
+                                                                    <img src="~/Images/help2.png" id="Img2" /></a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr class="nav_blue_color">
+                                                <td width="30%" align="right">
+                                                    <strong>
+                                                        <span>Facebook comments :&nbsp;</span></strong>
+                                                </td>
+                                                <td width="60%" align="left">
+                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                        <tr class="nav_blue_color">
+                                                            <td align="left" width="10%">
+                                                                <span id="lblfirstfeesession1">@ViewBag.fbcomments </span>
+                                                            </td>
+                                                            <td align="left" width="90%">
+                                                                @if (ViewBag.fbcommentsmsg != null)
+                                                                {
+                                                                    <img src="~/Images/help2.png" id="imgfbcommentsmsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.fbcommentsmsg' ,320);" />
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr> 
+<tr class="white_color">
+                                                <td align="right">
+                                                     <strong><span id="lbltwitter">Twitter url :&nbsp;</span></strong>
+                                                </td>
+                                                <td width="60%" align="left">
+                                                    <span id="lbltwitterurl">@ViewBag.twitterurl</span>
+                                                </td>
+                                            </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                        <td width="50%" align="center" valign="top">
+                                                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <table width="100%" id="tblprov1"  cellspacing="1" cellpadding="6" border="0" class="border_style">
+                                                                                <tbody>
+                                                                                   
+                                                                                    <tr id="trcontact"  class="nav_blue_color">
+                                                                                        <td align="right" width="37%">
+                                                                                            <span ID="lblcontact" >
+			      <strong>Show contact form :&nbsp;</strong></span>
+                                                                                        </td>
+                                                                                        <td width="63%" align="left">
+                                                                                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                                                                <tr class="nav_blue_color" id="trhelp" >
+                                                                                                    <td width="10%">
+                                                                                                    @{string Contact_Info=null;}
+                                                                                                    
+                                                                                                    @if(ViewBag.Is_Contact_Info == "Y")
+                                                                                                    {
+                                                                                                    Contact_Info = "Yes";
+                                                                                                   }
+                                                                                                   else
+                                                                                                   {
+                                                                                                     Contact_Info = "No";
+                                                                                                    }
+                                                                                                 
+                                                                                                        <span ID="lblshowcontact" >@Contact_Info </span>
+                                                                                                    </td>
+                                                                                                    <td width="90%">
+                                                                                                    @if(ViewBag.showcontact!=null)
+                                                                                                    {
+                                                                                                        <img src="~/Images/help2.png" id="imglblshowcontact"  onmouseout="hideddrivetip()" onmouseover="ddrivetip('@ViewBag.showcontact' ,320);" />
+                                                                                                       }
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    @if(Session["stroutispaid"] != "N" )
+                                                                                    {
+                                                                                    <tr id="trurl"   class="white_color">
+                                                                                        <td width="37%" align="right">
+                                                                                            <strong>Plumber-help profile link :&nbsp;</strong>
+                                                                                        </td>
+                                                                                        <td width="63%" align="left">
+                                                                                        <span>http://www.tenniscoachhelp.com/TennisCoaches/@ViewBag.URL/@ViewBag.state/@ViewBag.city/@ViewBag.zip/@ViewBag.Random_number/Profile </span>
+                                                                                          
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                   }
+                                                                                    <tr class="nav_blue_color" id="trSession" >
+                                                                                        <td width="37%" align="right">
+                                                                                            <strong>Hourly fee range :&nbsp;</strong>
+                                                                                        </td>
+                                                                                        <td width="63%" align="left">
+                                                                                              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                                                                <tr class="nav_blue_color" id="trhelp" >
+                                                                                                    <td width="60%">
+                                                                                                    From :&nbsp;$&nbsp;@Html.TextBox("txtFromFee", (string)ViewBag.FeeRange_From, new {@style = "width:50px;", disabled = "true"})
+                                                                                            &nbsp;To
+                                                                                            :&nbsp;$&nbsp;@Html.TextBox("txtToFee", (string)ViewBag.FeeRange_to, new {@style = "width:50px;", disabled = "true"})
+                                                                                           
+                                                                                                    </td>
+                                                                                                    <td width="40%">
+                                                                                                    @if (ViewBag.hfeerange != null)
+                                                                                                    {
+                                                                                                        <img src="~/Images/help2.png" id="imglblhfeerange"  onmouseout="hideddrivetip()" onmouseover="ddrivetip('@ViewBag.hfeerange' ,320);" />
+                                                                                                       }
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                          
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    @if (ViewBag.Freeestimate=="Y"){
+                                                                                    <tr class="white_color">
+                                                    <td width="37%" align="right">
+                                                        <strong>
+                                                            <span id="Label10">Free estimate  :&nbsp;</span></strong>
+                                                    </td>
+                                                    <td width="63%" align="left">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td align="left" width="10%">
+                                                                    <span id="lblfirstfeesession">@ViewBag.freesession </span>
+                                                                </td>
+                                                                <td align="left" width="90%">
+                                                                    @if (ViewBag.firstfeesession != null)
+                                                                    {
+                                                                        <img src="~/Images/help2.png" id="imgfirstfeesession"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.firstfeesession' ,320);" />
+                                                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                                                    }
+                                                                                    @if(ViewBag.Showschedule == "Y")
+                                                                                    {
+                                                                                    <tr class="nav_blue_color">
+                                                    <td width="37%" align="right">
+                                                        <strong>
+                                                            <span id="Label11">Show schedule  :&nbsp;</span></strong>
+                                                    </td>
+                                                    <td width="63%" align="left">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td align="left" width="10%" class="nav_blue_color">
+                                                                    <span id="lblschedule">@ViewBag.schedule </span>
+                                                                </td>
+                                                                <td align="left" width="90%" class="nav_blue_color">
+                                                                    @if (ViewBag.scheduleicon != null)
+                                                                    {
+                                                                        <img src="~/Images/help2.png" id="imgfirstfeesession1"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.scheduleicon' ,320);" />
+                                                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                                                    }
+                                                                                     
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    @*<div class="content-box" id="tblFilesGrid">
+                        <div class="content-box-header1">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                <tr>
+                                    <td width="16%" align="left">
+                                        <h3>List of video/audio files</h3>
+                                    </td>
+                                    <td align="center" width="68%">
+                                        <ul style="list-style: none!important;" class="content-box-tabs1">
+                                            <li style="padding: 0px; margin: 0px;">
+                                                <a id="LinkButton2" style="font-weight: bold;">Help to add Videos to your profile </a>
+                                            </li>
+                                            <li style="padding: 0px; margin: 0px;">
+                                                <a id="HyperLink5" target="_blank" style="font-weight: bold;" href="http://www.youtube.com/watch?v=9w-gQAwS2uc">http://www.youtube.com/watch?v=9w-gQAwS2uc</a>
+                                            </li>
+                                            <li style="padding: 0px; margin: 0px;">
+                                                <a id="HyperLink3" target="_blank" style="font-weight: bold;" href="http://www.youtube.com/watch?NR=1&v=ZnehCBoYLbc&feature=endscreen">http://www.youtube.com/watch?NR=1&v=ZnehCBoYLbc&feature=endscreen</a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td width="16%" align="center">
+                                        <ul style="list-style: none!important; padding-right: 15px;" class="content-box-tabs1">
+                                            <li style="padding: 0px; padding-right: 10px; margin: 0px;">
+                                                <a id="lnkAudioVideoFile" style="font-weight: bold; font-size: 15px; cursor: pointer" href="Addvideo">Add new video/audio file</a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="clear">
+                            </div>
+                        </div>
+                        <div class="content-box-content">
+                            <table align="center" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td valign="top" width="100%">
+                                        @{string vpagesize = "10";
+                                          WebGrid videogrid = new WebGrid(rowsPerPage: Convert.ToInt32(vpagesize));}
+                                        @{WebGrid grid = videogrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                          if (grid.TotalRowCount != 0)
+                                          {
+                                              int count = 0;
+
+                                              string pager = grid.Pager().ToString();
+                                              string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                              string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                              string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                              columns: grid.Columns(
+                                              grid.Column("", "Title", canSort: false, style: "Vtitle",
+                                              format:@<text>@Html.ActionLink((string)item.Title, "Playvideo", "Directory", new { @id = (int)item.Provider_Greeting_ID }, new { @class = "Playvideofile", title = "Click here to play video", style = "font-weight:bold;" }) </text> ),
+                                              grid.Column("", "Status", canSort: false, format:@<text>@Html.ActionLink((string)item.Status_Ind, "StatusChange", "Directory", new { @id = (int)item.Provider_Greeting_ID, status = (string)item.Status_Ind }, new { @title = "Click here to change the status", style = "font-weight:bold;" })   </text>),
+                                              grid.Column("", "Description", canSort: false, style: "Vdescription",
+                                              format:@<text>
+                                            @{string description = (string)item.Description;
+                                              if (description.Length > 100)
+                                              {
+                                                  count = count + 1;
+                                                  description = description.Substring(0, 100);
+                                                           
+<span>@description</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+<div id="tbldesc @count" style="width: 500px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Description :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@item.Description</span> </td> </tr>
+                                                             </table> </div>
+                                              }
+                                              else
+                                              {
+<span>@item.Description</span>
+                                              }
+                                            }
+
+                                            </text> ),
+                                              grid.Column("ViewedCount", "View count", canSort: false),
+                                              grid.Column("", "Delete", canSort: false,
+                                              format:@<text>@Html.ActionLink(" ", "Delete", new { id = (int)item.Provider_Greeting_ID },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog", @title = "Click here to delete video" })</text>))).ToString();
+                                              gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                            @(new HtmlString(gridhtml))
+                                            <br />
+                                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                            <br />
+
+
+
+                                          }
+                                          else
+                                          {
+                                            <table id="Table28" width="98%" align="center">
+                                                <tr id="trerror">
+                                                    <td align="center" height="60px" valign="middle">
+                                                        <span class="errormsg" id="lblerrormsg" style="font-weight: bold;">No video/audio file links are added, you can upload your video greeting to YouTube and give us the link, we will play it on your profile page.</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                          }
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>*@
+                                   
+                                </td>
+                            </tr>
+                        </table>
+                        
+     
+         
+        
+ 
+                    </td>
+                </tr>
+                  
+            </table>
+        </div>
+      <div id="updateDialog" title="Add video/audio file">
+    </div>
+    <div id="playvideodialog" title="Playing Video File"></div>
+    <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            Do you want to delete the Video?
+        </p>
+    </div>
+     <div id="imgPreview" title="Profile Preview"></div>
+        
+    <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+        <img src="../Images/ajax-loader2.gif" alt="Processing" />
+    </div>
+    <div id="viewfbimg" title="Facebook url help"></div>
+   <div style="height:200px;"></div>
+     @{Html.RenderAction("Bottomsections", "Tools");} 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+            //$('#viewfbimg').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    resizable: false,
+            //    modal: true,
+            //    position: ['middle', 40]
+            //});
+            $.ajaxSetup({ cache: false });
+            $("#afbimg").click(function () {
+                //$.ajaxSetup({ cache: false });
+                //var dialogDiv = $('#viewfbimg');
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = 'Showfbhelp';
+                Displaydialog('viewfbimg', viewUrl, 'auto', 1000, 'dvLoading', null, null);
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            });
+        });
+    </script>
+     <script type="text/javascript">
+         $(".confirmDialog").live("click", function (e) {
+
+             var url = $(this).attr('href');
+             $("#dialog-confirm").dialog({
+                 autoOpen: false,
+                 height: 170,
+                 width: 350,
+                 show: { effect: 'drop', direction: "up" },
+                 modal: true,
+                 buttons: {
+                     "Yes": function () {
+                         $(this).dialog("close");
+                         window.location = url;
+
+                     },
+                     "No": function () {
+                         $(this).dialog("close");
+
+                     }
+                 }
+             });
+             $("#dialog-confirm").dialog('open');
+             return false;
+         });
+
+         var linkObj;
+         $(function () {
+             $('#updateDialog').dialog({
+                 autoOpen: false,
+                 width: 800,
+                 resizable: false,
+                 modal: true
+
+             });
+             $('#playvideodialog').dialog({
+                 autoOpen: false,
+                 width: 800,
+                 height: 500,
+                 resizable: false,
+                 modal: true,
+                 buttons: [{
+
+                     text: "Cancel",
+                     "class": 'button',
+                     click: function () {
+
+                         $(this).dialog("close");
+                     }
+
+                 }
+                 ]
+             });
+             $("#lnkAudioVideoFile").click(function () {
+                 //change the title of the dialog
+                 linkObj = $(this);
+                 var dialogDiv = $('#updateDialog');
+                 $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                 var viewUrl = linkObj.attr('href');
+                 $.get(viewUrl, function (data) {
+                     dialogDiv.html(data);
+                     $('#dvLoading').dialog('close');
+                     dialogDiv.dialog('open');
+                 });
+                 return false;
+             });
+             $(".Playvideofile").click(function () {
+                 //change the title of the dialog
+                 linkObj = $(this);
+                 var dialogDiv = $('#playvideodialog');
+                 $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                 // alert(dialogDiv);
+                 var viewUrl = linkObj.attr('href');
+                 // alert(viewUrl);
+                 $.get(viewUrl, function (data) {
+                     dialogDiv.html(data);
+                     $('#dvLoading').dialog('close');
+                     dialogDiv.dialog('open');
+                 });
+                 return false;
+             });
+         });
+         function updateSuccess(data) {
+             if (data != '' & data.Success == true) {
+                 //we update the table's info
+                 location.reload();
+                 $('#updateDialog').dialog('close');
+             }
+             else {
+                 $("#update-message").html(data.ErrorMessage);
+                 $("#update-message").show();
+             }
+         }
+    </script>
+
+     <script type="text/javascript">
+         $(document).ready(function () {
+             var TopIndex = '@Session["TopIndex"]';
+             $("#Menu0").addClass("active");
+             $("#Menu1").removeClass();
+             $("#Menu2").removeClass();
+             $("#Menu3").removeClass();
+         });
+    </script>
+</body>
+</html>

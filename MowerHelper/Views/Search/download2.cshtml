@@ -1,0 +1,64 @@
+﻿@model Publicfaq
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+   @* <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>  
+</head>
+   <body>
+    <form id="form1" runat="server" method="post">
+        <div id ="Div1" align="center" runat="server">
+            <div id="vlccontent" style="display: none;" runat="SERVER">
+                <span id="spanplayer" runat="server">If you are unable to load the media player&nbsp;</span><asp:HyperLink
+                    ID="hypmedia" Target="_blank" runat="server" Text="Click Here"></asp:HyperLink><span>
+                        to Download the player</span>
+            </div>
+            <div id="wmpplugin" style="display: none;" runat="SERVER">
+                <span id="spnplugin" runat="server">If you are unable to play the video&nbsp;</span><asp:HyperLink
+                    ID="hypplugin" Target="_blank" runat="server" Text="Click Here"></asp:HyperLink><span>
+                        to Download and install the windows media player plugin.</span>
+            </div>
+            @{
+                string fileext = ViewBag.ext;
+                string path1 = ViewBag.relatedlink;
+                   
+                    }
+
+                  @if (fileext == ".asf" | fileext == ".asx" | fileext == ".avi" | fileext == ".wav" | fileext == ".wma" | fileext == ".wax" | fileext == ".wm" | fileext == ".wmv" | fileext == ".wvx" | fileext == "m3u" | fileext == "mp2v" | fileext == ".mpg" | fileext == ".mpeg" | fileext == ".m1v" | fileext == ".mp2" | fileext == ".mp3" | fileext == ".m3u" | fileext == ".mpa" | fileext == ".mpe" | fileext == "mpv2")
+                  {
+                     
+       @Video.MediaPlayer(path: path1, width: "750", height: "400", autoStart: true, playCount: 1, uiMode: "full", enableContextMenu: false, volume: 75)
+              
+          }
+                  else if (fileext == ".MOV" | fileext == ".QT" | fileext == ".AVI" | fileext == ".MPG" | fileext == ".M1V" | fileext == ".M2P" | fileext == ".M2T" | fileext == ".M2TS" | fileext == ".MTS" | fileext == ".TOD" | fileext == ".MPE" | fileext == ".MPEG" | fileext == ".DV" | fileext == ".DVI" | fileext == ".MP4" | fileext == ".M4V" | fileext == ".AVC" | fileext == ".FLV" | fileext == ".F4V")
+                  {
+              @Video.Flash(path: path1, width: "750", height: "400", play: true, embedName: null)
+                  }
+                
+@*              }
+          }*@
+          
+        </div>  
+             <div id="Div2" runat="server">
+            <asp:Label ID="LabelShowYouTubeVideo" runat="server"></asp:Label>
+         </div>
+        <div align="center">
+            <table width="98%" align="center" cellpadding="1" cellspacing="1">
+                <tr id="tr_MainBanners" runat="server">
+                    <td>
+                        <asp:PlaceHolder ID="PHL_Banners" runat="server"></asp:PlaceHolder>
+                        <asp:Label ID="lblZone1" runat="server" Visible="false"></asp:Label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</body>
+
+</html>

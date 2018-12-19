@@ -1,0 +1,156 @@
+﻿@{
+    Layout = null;
+    string PLId = Convert.ToString(ViewBag.plId);
+    string frm = ViewBag.frm;
+    string VSetdt = ViewBag.dt_filter;
+  
+    
+}
+
+@*<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>pmtlist</title>*@
+    <style type="text/css">
+.Date { width:15%; }
+.ChgTo { width:20%;}
+.chgAmt { width:12%; }
+.ModeOf{ width:25%; }
+.cDel{ width:5%; }
+</style>
+    <script type="text/javascript">
+        $(".confirmPDialog").live("click", function (e) {
+            var url = $(this).attr('href');
+            $("#dialogP-confirm").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.location = url;
+                    },
+                    "NO": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $("#dialogP-confirm").dialog('open');
+            return false;
+        });
+             </script>
+              <script type="text/javascript">
+                  $(document).ready(function () {
+                      var totalrecors = "@ViewBag.Paytotrec";
+                      document.getElementById('hdnPaytotrec').value = totalrecors;
+                      if (totalrecors > 0) {
+                          document.getElementById('ulpayments').style.display = "";
+                          document.getElementById('ulpayments1').style.display = "";
+                      } else {
+                          document.getElementById('ulpayments').style.display = "none";
+                          document.getElementById('ulpayments1').style.display = "none";
+                      }
+                  });
+    </script>
+@*</head>
+<body>*@
+
+    @{string heading1;
+        if (Request["sort"] == "Transaction_Date" && Request["sortdir"] == "ASC")
+           {
+               heading1 = "Date ▲";
+           }
+        else if (Request["sort"] == "Transaction_Date" && Request["sortdir"] == "DESC")
+           {
+               heading1 = "Date ▼";
+           }
+           else
+           {
+               heading1 = "Date ▼";
+           }
+                                            }
+                                            @{string Pmtpagesize = (ViewBag.Pmtpagesize ?? "5");
+                                              WebGrid Paygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Pmtpagesize), fieldNamePrefix: "g2", pageFieldName: "p2");}
+                                            @{WebGrid grid = Paygrid.Bind(rowCount: Convert.ToInt32(ViewBag.Paytotrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["g2p2"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Transaction_Date", heading1, style: "Date"), grid.Column("PaymentMode", "Payment mode", style: "ModeOf"), grid.Column("", "Notes",
+                                                  format:@<text>
+                                                         @{var chgNote = (string)item.Notes;
+                                                           if( chgNote != null)
+                                                           {
+                                                           if (chgNote.Length > 100  )
+                                                           {
+                                                               count = count + 1;
+                                                               chgNote = chgNote.Substring(0, 100);
+                                                           
+                                                           <span>@chgNote</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tblPmtdesc @count');" onmouseout="return ondescriptionout('tblPmtdesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tblPmtdesc @count" style="width: 500px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Notes </h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4" width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:5px; padding-top: 5px;" align="left"> <span>@item.Notes</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                            else
+                                                           {
+                                                               <span>@item.Notes</span>
+                                                           }
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@item.Notes</span>
+                                                           }
+                                                           }
+                                                
+                                                </text>
+                                                
+),
+
+grid.Column("Transaction_Amount", "Amount($)", style: "chgAmt",canSort:false, format:@<text>@Html.ActionLink((string)item.Transaction_Amount, "EditPayment", new { tId = (int)item.Transaction_ID, plid = @PLId, @frm = @frm, @dt_filter = @VSetdt },
+new { @class = "EditPaydiv" }) </text>), grid.Column("", "Delete", style: "cDel", canSort: false,
+                                                    format:@<text>@Html.ActionLink(" ", "DeleteTran", new { tId = (int)item.Transaction_ID, trTypeid = item.TransactionType_ID, @frm = @frm, @dt_filter = @VSetdt },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;width:8%;", @class = "confirmPDialog" })</text>))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tblpaymenterror" width="100%" style="display: ;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td valign="middle" align="center" height="25px">
+                                                                <span id="lblPayments" class="errormsg" style="font-weight: bold;">No payments found</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                               
+                                              }
+                                            }
+    <div id="dialogP-confirm" title="Mower Helper" style="display: none;">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            Do you want to delete the Payment?
+        </p>
+    </div>
+@*</body>
+</html>*@

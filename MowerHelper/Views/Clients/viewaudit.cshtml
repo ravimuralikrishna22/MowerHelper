@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+    <div id="grid_div" runat="server" class="content-box-content">
+                                                                                            <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                                                                <tr>
+                                                                                                    <td>
+ @{WebGrid grid = new WebGrid(Model, rowsPerPage: 20);}
+                                            @if (grid.TotalRowCount != 0)
+                                            {
+
+
+                                                string pager = grid.Pager().ToString();
+                                                string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRowmax", alternatingRowStyle: "gridAltRowmax",
+      columns: grid.Columns(grid.Column("Field", "Event type", canSort: false, style: "name"),
+                                                        grid.Column("Field", "Title", canSort: false),
+                                                  grid.Column("PreviousValue", "Previous value", canSort: false),
+                                                  grid.Column("Presentvalue", "Current value", canSort: false))).ToString();
+                                                gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+
+                                   
+                                            }
+                                            else
+                                            {
+                                              <table id="tblOutMsg" width="98%" horizontalalign="Center">
+                                                    <tr id="troutmsg">
+                                                        <td align="center" height="25px" valign="Middle">
+                                                            <span id="lblOutputMsg" style="font-weight: bold;" class="errormsg">
+                                                            No information log found</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            }
+
+                                                                                                    
+                                                                                                       
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                            
+                                                                                        </div>
+</body>
+</html>

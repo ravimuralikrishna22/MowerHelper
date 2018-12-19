@@ -1,0 +1,65 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<style  type="text/css">
+       
+ div.MaskedDiv
+    {
+        visibility: hidden;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        font-family: verdana;
+        font-weight: bold;
+        z-index: 100;
+        background-image: url(../../images/Mask.png); /* ieWin only stuff */
+        _background-image: none;
+         opacity: 0.4;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)"; /* first!*/
+         filter: alpha(opacity=40);
+        /*_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=scale src='../../images/Mask.png');*/
+         background-color: gray;
+    }
+    
+
+
+div.ModalPopup {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+    position:absolute;
+	/* set z-index higher than possible */
+	z-index:10000;
+	color: Black;
+}
+    </style>
+  <div id="flttop">
+        <div id="header01">
+            <div id="headermain02">
+                <div id="logopublic">
+                   <a id="logo_find1" runat="server" title="Home" href="@Url.Action("Index", "Home", null)" style="text-decoration:none;" class="bluemenuPublic">
+                       Mower Helper</a></div>
+                <div id="mainnavcon">
+                   
+                    <div class="mainnav">
+                        <ul>
+                            @if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES"){
+                            <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                            }
+                            <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

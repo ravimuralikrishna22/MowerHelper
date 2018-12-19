@@ -1,0 +1,105 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+        function Edit_Validate() {
+            document.getElementById('Edit_tdbody').bgColor = "White";
+            document.getElementById('Edit_lblErrbody').style.display = 'none';
+
+            var title = trim(document.getElementById('Edit_txtTitle').value);
+            document.getElementById('Edit_txtTitle').value = title;
+            if (document.getElementById('Edit_txtTitle').value == '') {
+                document.getElementById('Edit_lblErrbody').style.display = '';
+                document.getElementById('Edit_lblErrbody').innerHTML = 'Please enter email msg body';
+                document.getElementById('Edit_tdbody').bgColor = "orange";
+                document.getElementById('Edit_txtTitle').focus();
+                return false;
+            }
+            else {
+                document.getElementById('Edit_tdbody').bgColor = "White";
+                document.getElementById('Edit_lblErrbody').style.display = 'none';
+
+            }
+            if (document.getElementById('Edit_txtTitle').value.length > 50) {
+                document.getElementById('Edit_lblErrbody').style.display = '';
+                document.getElementById('Edit_lblErrbody').innerHTML = 'email msg body description can be up to 50 characters';
+                document.getElementById('Edit_tdbody').bgColor = "orange";
+                document.getElementById('Edit_txtTitle').focus();
+                return false;
+                return false;
+            }
+            else {
+                document.getElementById('Edit_tdbody').bgColor = "White";
+                document.getElementById('Edit_lblErrbody').style.display = 'none';
+
+            }
+
+
+        }
+    </script>
+@*    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var category = $('#hdnCategory').val();
+            if (category != '') {
+                $('#Edit_DDLCategory').val(category);
+            }
+            else {
+                $('#Edit_DDLCategory').val("0");
+
+            }
+
+        });
+    </script>*@
+</head>
+<body>
+    @using (Html.BeginForm("EditEmailoption", "Technicalarea", FormMethod.Post, null))
+    {
+             <input id="hdnCategory" name="hdnCategory" type="hidden" value="@ViewBag.Category"/>
+        <input id="hdnoptionid" name="hdnoptionid" type="hidden" value="@ViewBag.Option_ID"/>
+ <div class="content-box">
+       <div class="content-box-content">
+           <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+               border="0">
+               <tr height="10" runat="server" class="white_color">
+                   <th align="right" width="25%">
+                       <b><font color="red">*</font></b> <strong>E-mail Category :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="Edit_tdcat" runat="server" width="75%">
+                   @Html.Label((string)ViewBag.Title)
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <b><font color="red">*</font></b> <strong>E-mail Msg body :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="Edit_tdbody" runat="server">
+                       @Html.TextArea("Edit_txtTitle", null, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })
+                          <br />
+                                (Maximum length upto 50 characters)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span id="Edit_lblErrbody" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+           </table>
+                                                                                       <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Edit_Validate();" />
+                                                          &nbsp;
+                                              <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+      </div></div>
+    }
+</body>
+</html>

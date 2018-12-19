@@ -1,0 +1,75 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+    <div>
+        @{Html.RenderAction("Topsection", "Tools");}
+    </div>
+       <div id="main-content">
+        <table width="90%" align="center">
+            <tr class="background_color">
+                <td align="left" width="70%">
+                    <strong>View mobile access statistics for&nbsp;:&nbsp;</strong>
+                    <asp:DropDownList ID="ddlDuration" Height="28px" Width="100px" runat="server" AutoPostBack="true">
+                    </asp:DropDownList>
+                </td>
+                <td align="right" width="30%">
+                  <asp:Button CssClass="button" Text="Cancel" ID="btnCancel1" runat="server"/></td>
+            </tr>
+        </table>
+        <br />
+        <div class="content-box">
+            <div class="content-box-header" id="tblFacilitylist" runat="server">
+                <h3>Mobile access statistics list</h3>
+            </div>
+            <div class="content-box-content">
+        <table cellspacing="1" class="border_style" cellpadding="0" width="100%" align="center"
+            border="0">
+            <tr>
+                <td valign="top" align="center" width="100%" id="tdSitestatistics"
+                    runat="server" colspan="2">
+                    <asp:DataGrid ID="dgMobileAccessStatistics" runat="server" CellPadding="6" CellSpacing="1"
+                        HorizontalAlign="Center" CssClass="border_style" Width="100%" AutoGenerateColumns="False"
+                        BorderWidth="0px" AllowSorting="true" GridLines="None">
+                        <AlternatingItemStyle CssClass="nav_blue_color"></AlternatingItemStyle>
+                        <ItemStyle CssClass="white_color"></ItemStyle>
+                        <HeaderStyle HorizontalAlign="Center" CssClass="tr_bgcolor" Height="25px">
+                        </HeaderStyle>
+                        <Columns>
+                            <asp:BoundColumn HeaderText="&lt;div&gt;Duration time&lt;/div&gt;" DataField="DurationTime">
+                                <HeaderStyle Font-Bold="true"></HeaderStyle>
+                                <ItemStyle HorizontalAlign="Center"></ItemStyle>
+                            </asp:BoundColumn>
+                            <asp:TemplateColumn HeaderStyle-Font-Bold="true">
+                                <HeaderTemplate>
+                                    <asp:Label ID="lbl" Text="No of users accessed" runat="server"></asp:Label>
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <asp:Label ID="lblAccessCount" runat="server"><%#DataBinder.Eval(Container.DataItem, "ViewedCount")%></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateColumn>
+                       </Columns>
+                    </asp:DataGrid>
+                </td>
+            </tr>
+            <tr id="trerror" runat="server" style="display:none;">
+                <td align="center" colspan="2" valign="middle" height="25px">
+                    <asp:Label ID="lblOutputMsg" Font-Bold="True" CssClass="errormsg" runat="server"></asp:Label></td>
+            </tr>
+        </table>
+        </div>
+        </div>
+        </div>
+       <div>
+@{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+</body>
+</html>

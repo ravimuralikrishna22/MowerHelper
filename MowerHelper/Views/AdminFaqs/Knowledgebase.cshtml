@@ -1,0 +1,208 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    @Styles.Render("~/Content/themes/base/jqueryCSS")
+     @Scripts.Render("~/ThScripts/ThJquery")
+               @Scripts.Render("~/Scripts/Thscriptscript")
+             @Scripts.Render("~/ThScripts/Thjquerycripts")
+      <style type="text/css">
+             .dvLoading .ui-dialog-titlebar{display:none;}  
+             </style>
+             <script type="text/javascript">
+                 $(function () {
+                  $("#ImageCancel").click(function () {
+                     window.location.href = "../AdminFaqs/Help";
+                 });
+             });
+             </script>
+ <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#divaddknowledgebase').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+            //});
+            //$('#divEditknowledgebase').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+            //});
+            $(".Editclose").live("click", function (e) {
+                var dialogDiv = $('#divEditknowledgebase');
+                dialogDiv.dialog('close');
+                return false;
+            });
+            $(".Addclose").live("click", function (e) {
+                var dialogDiv = $('#divaddknowledgebase');
+                dialogDiv.dialog('close');
+                return false;
+            });
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+           $("#Menu0").removeClass();
+           $("#Menu1").removeClass();
+           $("#Menu2").removeClass();
+           $("#Menu3").addClass("active");
+       });
+            </script>
+<script type="text/javascript">
+    $(function () {
+        $("#BtnAddNew").click(function () {
+            //                alert("1");
+            //linkObj = $(this);
+            //var dialogDiv = $('#divaddknowledgebase');
+            //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //var viewUrl = linkObj.attr('href');
+            var viewUrl = "../AdminFaqs/AddKnowledgebase";
+            Displaydialog('divaddknowledgebase', viewUrl, 'auto', 800, 'dvLoading', null, null);
+            //$.get(viewUrl, function (data) {
+            //    dialogDiv.html(data);
+            //    $('#dvLoading').dialog('close');
+            //    dialogDiv.dialog('open');
+            //});
+            //return false;
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        //$(".EditDialog").click(function () {
+        //    //                alert("1");
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#divEditknowledgebase');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    //var viewUrl = "../AdminFaqs/EditKnowledgebase";
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+    });
+    
+</script>
+</head>
+
+<body>
+
+<div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+   <div id="body-wrapper">
+       
+         <div id="main-content">
+        @Html.Partial("_NavigationTool")
+        
+                <input id="hdnStyle" name="hdnStyle" type="hidden" runat="server"/>
+            
+                
+               
+                <table cellpadding="0" cellspacing="0" width="100%" align="center">
+                    <tr style="background:none;">
+                        <td id="tdGrid" runat="server">
+                            <table cellspacing="0" cellpadding="0" width="98%" align="center">
+                                <tr style="background:none;">
+                                    <td align="right">
+                               <input type="submit" id="BtnAddNew" name="BtnAddNew" value="Add New" class="button" />&nbsp;
+                               <input id="ImageCancel" name="ImageCancel" style="width:40px;" value="Cancel" class="button"/>
+
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+                            <div class="content-box" style="width:80%; margin:0 auto;">
+                            <div class="content-box-header"><h3>
+                            <label class="headingtext" id="Label3">&nbsp;&nbsp;Knowledge base</label>
+                            </h3>
+                           
+                            </div>
+                            <div class="content-box-content">
+             <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                 <tr><td align="center" valign="top">
+                     @{string Cptpagesize = "10";
+                       WebGrid grid = new WebGrid(Model, rowsPerPage: Convert.ToInt32(Cptpagesize));}
+                                              @if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("Fieldid", "Fieldid", style: "width: 700px;", canSort: false),
+                                                  grid.Column("Modulename", "category name", canSort: false),
+                                                  grid.Column("Fieldname", "Field name", canSort: false),
+                                                  grid.Column("Description", "Description", canSort: false),
+                                                                                                    grid.Column("", "Edit", canSort: false,
+                                                  format:@<text>
+                                                  @{
+                                                      
+                                                      }
+                                                  @*@Html.ActionLink(" ", "EditKnowledgebase", new { Fieldid = (int)item.Fieldid },
+                                   new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditDialog", @title = "Click here to Edit" })*@
+                     <a href="#" style="height: 40px;width:30px;padding-left:20px;padding-bottom:15px;" onclick="return Displaydialog('divEditknowledgebase','@Url.Action("EditKnowledgebase", "AdminFaqs", new { Fieldid = (int)item.Fieldid })','auto',800,'dvLoading',null,null);" class = "EditDialog" title = "Click here to Edit"><img src="~/Images/edit.gif" /></a>
+                     </text>),
+                                                  grid.Column("", "Delete", canSort: false,
+                                                  format:@<text>@Html.ActionLink(" ", "DeleteKnowledgebase", new { Fieldid = (int)item.Fieldid },
+                                             new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog", @title = "Click here to delete" })</text>)
+                                                  )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>    
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table cellspacing="0" id="tblnorecords" runat="server" cellpadding="0" width="100%" border="0" align="center">
+     <tr class="white_color" runat="server">
+                <td align="center" height="25px" valign="middle" width="100%">
+                  <label id="" style="font-weight:bold; font-size:13px;">No field description found.</label>
+                   </td>
+        </tr>
+     </table>
+                                              }
+                                              
+
+
+
+                                
+                                </td></tr>
+             </table>
+             </div>
+             </div>
+                        </td>
+                    </tr>
+                </table>
+               </div>
+
+         
+        
+        </div> 
+        <input id="hdnPageGenarateYN" type="hidden" name="hdnPageGenarateYN" runat="server">
+        <input id="hdnEdit" type="hidden" runat="Server" />
+            <div id="divaddknowledgebase" title="Add"></div>
+            <div id="divEditknowledgebase" title="Edit"></div>
+             <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>   
+        <div>
+             @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+</body>
+</html>

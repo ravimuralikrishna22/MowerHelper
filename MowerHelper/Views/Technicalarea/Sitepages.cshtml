@@ -1,0 +1,281 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css" ></style>
+      @Styles.Render("~/Content/themes/base/jqueryCSS")
+       @Styles.Render("~/Content/themes/base/autocomplete")
+      @Scripts.Render("~/Scripts/Thscriptscript")
+
+      <style type="text/css">
+@*                  tr.gridHead th:nth-child(1) { width: 100px; }
+          tr.gridHead th:nth-child(2) { width: 100px; }
+          tr.gridHead th:nth-child(3) { width: 300px; }
+          tr.gridHead th:nth-child(4) { width: 70px; }
+          tr.gridHead th:nth-child(5) { width: 60px; }*@
+              .dvLoading .ui-dialog-titlebar{display:none;}
+        
+    </style>
+
+  <script type="text/javascript">
+      $(document).ready(function () {
+
+          var psize = $('#hdnpagesize').val();
+          if (psize != '') {
+              $('#ddlrecords').val(psize);
+          }
+          else {
+              $('#ddlrecords').val("10");
+
+          }
+          var search = $('#hdnsearch').val();
+          if (search != '') {
+              $('#txtCategory').val(search);
+          }
+
+      });
+      $(document).ready(function () {
+          var TopIndex = '@Session["TopIndex"]';
+           $("#Menu0").removeClass();
+           $("#Menu1").removeClass();
+           $("#Menu2").removeClass();
+           $("#Menu3").addClass("active");
+       });
+    </script>
+    <script type="text/javascript">
+
+        var linkObj;
+        $(function () {
+
+
+
+
+            $(".Editclick").click(function () {
+                linkObj = $(this);
+                var dialogDiv = $('#Editwebdialog');
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = linkObj.attr('href');
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    $('#dvLoading').dialog('close');
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            });
+
+            $('#Editwebdialog').dialog({
+                autoOpen: false,
+                width: 1200,
+                resizable: false,
+                modal: true
+
+            });
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            JqAutocomplete1('GetSitePagesCategorys', "txtCategory");
+         
+        });
+    </script>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+
+
+                        $(".close1").live("click", function (e) {
+                            var dialogDiv = $('#Editwebdialog');
+                            dialogDiv.dialog('close');
+                        });
+                    });
+
+                             function cancel() {
+            window.location.href = "@Url.Action("Tools", "AdminHome", new { sectionid = "333" })"; 
+        }
+                    function ValidSearch() {
+
+                        //localhost:49219/Technicalarea/Sitepages?hdnpagesize=10&hdnsearch=&txtCategory=&ddlrecords=10&sp-f=ISO-8859-1&sp-f=ISO-8859-1
+                       // document.forms.item(0).submit();
+                        if (document.getElementById('txtCategory').value != '') {
+
+                            window.location.href = '@Url.Action("Sitepages", "Technicalarea")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtCategory=' + document.getElementById('txtCategory').value ;
+                        }
+                        else {
+                            window.location.href = '@Url.Action("Sitepages", "Technicalarea")?ddlrecords=' + document.getElementById('ddlrecords').value ;
+                        }
+                    }
+    </script>
+
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("Sitepages", "Technicalarea", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+        <br />
+        <input id="hdnpagesize" name="hdnpagesize" type="hidden" value="@ViewBag.pagesize"/>
+        <input id="hdnsearch" name="hdnsearch" type="hidden" value="@ViewBag.search"/>
+
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+    <table id="tblsearch" runat="server" width="90%" align="center">
+      <tr class="background_color">
+                                  <td width="55%" align="left">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Categories : </strong>&nbsp;
+                                        <input type="text" name="txtCategory" id="txtCategory" class="textfield" onkeypress="return fnsetfocus(event,'btnSearch')" style="width: 200px;" />
+                                    </li>
+                                </ul>
+                            </td>
+
+                            <td>
+                            @*<input type="submit" name="btnSearch" value="Search" id="btnSearch" class="button" />*@
+                            <a id="btnSearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                            <input value="Cancel" type="button" class="button" style="width: 60px;vertical-align:top;" id="btnclose" onclick="return cancel();"/>
+                            </td>
+                                  </tr>
+      </table>
+        <div class="content-box">
+            <div class="content-box-header">
+
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="70%" align="left">
+                    <h3>
+                        Site pages</h3>
+                </td>
+                                               @if (Convert.ToInt32(ViewBag.totrec) > 0)
+                                               {
+                <td width="15%" align="center">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                         @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new {  style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                   @*  @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}*@
+                                    </li>
+                                </ul>
+                            </td>
+                                               }
+               
+            </tr>
+        </table>
+                 <script>$("#ddlrecords").change(function () {
+                   if (document.getElementById('txtCategory').value != '') {
+
+                            window.location.href = '@Url.Action("Sitepages", "Technicalarea")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtCategory=' + document.getElementById('txtCategory').value ;
+                        }
+                        else {
+                            window.location.href = '@Url.Action("Sitepages", "Technicalarea")?ddlrecords=' + document.getElementById('ddlrecords').value ;
+                   }
+});
+    </script>
+     </div>
+     <div class="content-box-content">
+                                                                       @{ WebGrid provgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.pagesize ?? "10"));}
+                                            @{WebGrid grid = provgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  //int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                                  columns: grid.Columns(
+
+                                                  grid.Column("ApplicationName", "Application", canSort: false),
+                                                   grid.Column("Category", "Category", canSort: false),
+                                                    grid.Column("Subject_Title", "Subject title", canSort: false),
+                                                   grid.Column("Subject_Text", "Subject text", canSort: false, format:@<text>@{string ind = (string)item.Subject_Text; if (ind != null)
+                                                   {
+                                                      @Html.Raw(System.Web.HttpUtility.HtmlDecode((string)item.Subject_Text))
+                                                   }
+                                                   }</text>),
+
+
+                                                  grid.Column("", "Edit", canSort: false,
+                                                  format:@<text>@Html.ActionLink(" ", "EditSitepages", new { SitePage_ID = (int)item.SitePage_ID },
+          new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @title = "Click here to Edit" })</text>)
+
+
+
+                                                                    )).ToString();
+
+
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                                              }
+                                              else
+                                              {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">
+                                            No site pages found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                                              }
+                        }
+  </div>
+ 
+    
+    </div>
+
+    </div>
+        <div id="Editwebdialog" title="Edit site papes"></div>
+                       <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+                                              if (grid.Rows.Count <= 9)
+                                              {
+                                                  if (grid.Rows.Count <= 4)
+                                                  {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+                                                  }
+                                                  else
+                                                  {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                                                  }
+                                              }
+                                              Html.RenderAction("Bottomsections", "Tools");
+
+
+
+    }
+               
+
+</body>
+</html>

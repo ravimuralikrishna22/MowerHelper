@@ -1,0 +1,155 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+@using Obout.Mvc.HTMLEditor;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+           @Styles.Render("~/Content/themes/base/jqueryCSS")
+            @Scripts.Render("~/Scripts/Thscriptscript")
+             @Scripts.Render("~/ThScripts/Thjquerycripts")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+             $("#Menu0").removeClass();
+             $("#Menu1").removeClass();
+             $("#Menu2").removeClass();
+             $("#Menu3").addClass("active");
+         });
+        function validate() {
+
+            ValidateAlertClear('tblErrResp', 'lblErrcat', 'tdErrcat', 'tdcat', '#FFFFFF');
+
+            if (document.getElementById('DDLCategory').selectedIndex == 0) {
+                ValidateAlert('tblErrResp', 'lblErrcat', 'tdErrcat', 'tdcat', 'Please select category')
+                document.getElementById('DDLCategory').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblErrResp', 'lblErrcat', 'tdErrcat', 'tdcat', '#FFFFFF');
+
+            }
+            var title = trim(document.getElementById('txtSubjectTitle').value);
+            document.getElementById('txtSubjectTitle').value = title;
+            if (document.getElementById('txtSubjectTitle').value == '') {
+                ValidateAlert('tblErrResp', 'lblErrtitle', 'tdErrtitle', 'tdtitle', 'Please select subject title')
+                document.getElementById('txtSubjectTitle').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdsub').bgColor = "White";
+                ValidateAlertClear('tblErrResp', 'lblErrtitle', 'tdErrtitle', 'tdtitle', '#FFFFFF');
+
+            }
+            var sub = oboutGetEditor("txtSubjectText").getContent();
+            //var sub = trim(document.getElementById('txtSubjectText').value);
+            //document.getElementById('txtSubjectText').value = sub;
+            if (sub == '') {
+                ValidateAlert('tblErrResp', 'lblErrsub', 'tdErrsub', 'tdsub', 'Please select subject text')
+                //document.getElementById('txtSubjectText').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdsub').bgColor = "White";
+                ValidateAlertClear('tblErrResp', 'tdErrsub', 'tdErrtitle', 'tdsub', '#FFFFFF');
+
+            }
+        }
+                                     function cancel() {
+            window.location.href = "@Url.Action("Tools", "AdminHome",new{sectionid="333"})"; 
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("Sitepage", "Technicalarea", FormMethod.Post, null))
+    {
+           Html.RenderAction("Topsection", "Tools");
+        <br />
+    <div>
+                                            <div id="main-content">
+        @Html.Partial("_NavigationTool")
+                  <div class="content-box">
+                  <div class="content-box-header">
+                  <h3>Site Page</h3>
+                   </div>
+                   <div class="content-box-content">
+                     <table cellspacing="1" cellpadding="6" class="border_style" width="100%" align="center"
+            border="0">
+            <tr class="white_color">
+                <th align="right" width="20%">
+                    <b><font style="color: red">*</font></b><strong>&nbsp;Application_ID :</strong></th>
+                <td align="left" style="width: 733px">
+                    @Html.Label("Help")
+                    </td>
+            </tr>
+            <tr>
+                <th align="right" width="20%">
+                    <b><font style="color: red">*</font></b><strong>&nbsp;Site category ID :</strong></th>
+                <td align="left" id="tdcat" style="width: 733px">
+                                                                                                                                 @if (Model.StateList != null)
+                                                                                         {
+                                                                            @Html.DropDownList("DDLCategory", Model.StateList, "--Select category--", new { @style = "width:250px;height:25px;font:13px;" })
+                                                                                         }
+                    </td>
+
+            </tr>
+            <tr>
+                <th align="right" width="20%">
+                    <b><font style="color: red">*</font></b><strong>&nbsp;Subject title :</strong></th>
+                <td align="left" style="width: 733px" id="tdtitle" runat="server">
+                      @Html.TextBox("txtSubjectTitle", null, new { @class = "textfield", MaxLength = "50", style = "width:280px", autocomplete = "off" })
+                    </td>
+            </tr>
+            <tr>
+                <th align="right" width="20%">
+                    <b><font style="color: red">*</font></b><strong>&nbsp;Subject text : </strong></th>
+                <td align="left" style="width: 733px" id="tdsub" runat="server">
+ @Html.Obout(new Obout.Mvc.HTMLEditor.Editor("txtSubjectText") { ShowQuickFormat = false, Height = 400, Template = "example", Submit = false, Content = (string)ViewData["txtDescription"], ModeSwitch = false, ShowWaitMessage = true, NoDrop = true, DefaultContextMenu = false })
+                </td>
+            </tr>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" id="tblErrResp" runat="server" style="display:none">
+              <tr class="white_color" align="center">
+                        <td id="tdErrcat" height="30px" style="display: none;">
+                            <span id="lblErrcat" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdErrtitle" height="30px" style="display: none;">
+                            <span id="lblErrtitle" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdErrsub" height="30px" style="display: none;">
+                            <span id="lblErrsub" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                   
+
+        </table>
+
+                                                                                               
+        
+                   </div>
+
+                  </div>
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return validate();" />
+                                                          &nbsp;
+                                           <input value="Cancel" type="button" class="button" style="width: 60px;" id="btnclose" onclick="return cancel();"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                  </div>
+    </div>
+    }
+</body>
+</html>

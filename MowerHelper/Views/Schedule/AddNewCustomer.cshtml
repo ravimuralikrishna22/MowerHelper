@@ -1,0 +1,1012 @@
+﻿@*@model MowerHelper.Models.BLL.Providers.Reg_ProvidersDetailInfo*@
+@model MowerHelper.Models.BLL.Patients.PatientRegistration
+@using MowerHelper.Models.Classes
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    @*<style type="text/css">
+        .confirmDialogreg
+        {
+            background: url("../images/bg-button-green.gif") repeat-x scroll left top #459300 !important;
+            border: 1px solid #459300 !important;
+            border-radius: 4px;
+            color: #FFFFFF !important;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Verdana,Arial,sans-serif;
+            font-size: 11px !important;
+            padding: 4px 7px !important;
+        }
+    </style>*@
+    
+@*<head>
+   
+</head>*@
+<body>
+      @using (Ajax.BeginForm("AddNewCustomer", "Schedule", new AjaxOptions
+      {
+          InsertionMode = InsertionMode.Replace,
+          HttpMethod = "POST",
+          OnSuccess = "updateSuccess12",
+          OnComplete = "SessionExpireFail"
+
+      }, new { @id = "updateCarForm1" }))
+      {
+        <input type="hidden" id="hdngender" name="hdngender" />
+           <input type="hidden" id="HdnInd" name="HdnInd" />
+                    <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                        <tr>
+                            <td width="100%" valign="top">
+
+                                <table cellspacing="0" cellpadding="0" width="100%" border="0" class="border_style">
+                                    <tr height="25px">
+                                        <td align="left" colspan="2" class="tr_bgcolor">
+                                            &nbsp;&nbsp;<strong>Personal / Contact information</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style=" vertical-align:top;" width="57%">
+                                            <table style="width:100%;" cellspacing="1" cellpadding="6" border="0" class="border_style">
+                                                     <tr class="white_color">
+                                        <td align="right" width="25%">
+                                            <font color="red"><b>*</b></font><strong>Name :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%" id="tdname" runat="server">
+                                            @{string[] PreArray = { " ", "Dr", "Miss", "Mr", "Mrs", "Ms" };}
+                                            @Html.DropDownList("Prefix", new SelectList(PreArray, null), new { @style = "width:56px;height:22px;font-size:13px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                            <input type="text" id="FirstName" name="FirstName" placeholder="First Name" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" class="textfield" maxlength="50" style="width: 120px;" />
+                                            <input type="text" id="MI" name="MI" placeholder="MI" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" class="textfield" maxlength="1" style="width: 25px;" />
+                                            <input type="text" id="LastName" name="LastName" placeholder="Last Name" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" class="textfield" maxlength="50" style="width: 120px;" />
+                                            @{string[] PreArray1 = { " ", "I", "II", "III", "IV", "Jr", "Sr" };}
+                                            @Html.DropDownList("Suffix", new SelectList(PreArray1, null), new { @style = "width:52px;height:22px;font-size:13px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                            <br />
+                                        </td>
+                                    </tr>
+                                    <tr class="nav_blue_color">
+                                        <td style="text-align:right;" width="25%">
+                                            <strong>Email :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%" id="tdemail"><input type="text" id="PatientEmail" name="PatientEmail" autocomplete="off" style="width: 270px" maxlength="100" class="textfield" onkeypress="return fnsetfocus(event,'ImgBtnNext');" />
+                                        </td>
+                                    </tr>
+                                                 @if (clsWebConfigsettings.GetConfigSettingsValue("ShowClientDriversLicense").ToUpper() == "YES")
+                                                 {
+                                    <tr class="white_color">
+                                        <td align="right" width="25%">
+                                            <strong>Driver's license number :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%">
+                                            <input type="text" id="DrivingLicenceNo" name="DrivingLicenceNo" class="textfield" maxlength="50" style="width: 185px;" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" />
+
+                                        </td>
+                                    </tr>
+                                                 }
+                                    <tr class="nav_blue_color">
+                                        <td style="text-align:right;" width="25%">
+                                            <font color="red"><b>&nbsp;*</b></font><strong>Cell phone :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%">
+                                            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                <tr class="nav_blue_color">
+                                                    <td width="90%" id="tdmobile" runat="server"><input type="text" id="MobilePhone1" name="MobilePhone1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px" maxlength="3" class="textfield" />-
+                                                                                        <input type="text" id="MobilePhone2" autocomplete="off" name="MobilePhone2" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px" maxlength="3" class="textfield" />-
+                                                                                        <input type="text" id="MobilePhone3" autocomplete="off" name="MobilePhone3" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 35px" maxlength="4" class="textfield" />&nbsp;
+                                                    </td>
+
+                                                    <td width="10%" align="left" style="display:none;">
+                                                        @Html.RadioButton("RbCellPhoneLeaveMsg", true, true, new { @title = "Primary phone contact", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr class="white_color">
+                                        <td style="text-align:right;" width="25%">
+                                            @Html.DropDownList("ddlphone", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="Home phone", Value = "0" },
+                                                               new SelectListItem{ Text="Work phone", Value = "1" }
+                                                              
+                                                              },
+                                                             new { style = "font-family:arial;font-size:13px;height:25px;width:120px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                        </td>
+                                        <td align="left" width="70%">
+                                            <table width="100%" cellspacing="0" cellpadding="0">
+                                                <tr class="white_color">
+                                                    <td width="90%" id="tdhome">
+                                                                                       <input type="text" id="HomePhone1" name="HomePhone1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px;" maxlength="3" class="textfield" /><span id="spnhomephn1">-</span>
+                                                        <input type="text" id="WorkPhone1" name="WorkPhone1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px; display: none;" maxlength="3" class="textfield" /><span id="spnworkphn1" style="display: none;">-</span>
+                                                        <input type="text" id="HomePhone2" name="HomePhone2" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px;" maxlength="3" class="textfield" /><span id="spnhomephn2">-</span>
+                                                        <input type="text" id="WorkPhone2" name="WorkPhone2" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px; display: none;" maxlength="3" class="textfield" /><span id="spnworkphn2" style="display: none;">-</span>
+                                                        <input type="text" id="HomePhone3" name="HomePhone3" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 35px;" maxlength="4" class="textfield" />
+                                                        <input type="text" id="WorkPhone3" name="WorkPhone3" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 35px; display: none;" maxlength="4" class="textfield" />
+
+                                                    </td>
+                                                    <td width="10%" align="left" style="display:none;">
+                                                        @Html.RadioButton("rbHomePhoneLeaveMsg", true, false, new { @title = "Primary phone contact", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                            </table>
+
+                                        </td>
+                                                                   <td style=" vertical-align:top;" width="60%">
+                                            <table style="width:100%;" cellspacing="1" cellpadding="6" border="0" class="border_style">
+                                                   <tr class="white_color">
+                                        <td style="text-align:right;"  width="25%">
+                                            @*<font color="red"><b>&nbsp;</b></font>*@
+                                            <strong>Address 1 :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%" id="tdaddress1">
+                                                                            <input type="text" id="Address1" name="Address1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 270px;" maxlength="50" class="textfield" />
+
+                                        </td>
+                                    </tr>
+                                    <tr class="nav_blue_color">
+                                        <td style="text-align:right;" width="25%">
+                                            <strong>Address 2 :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%"><input type="text" id="Address2" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" name="Address2" style="width: 270px;" maxlength="50" class="textfield" />
+                                        </td>
+                                    </tr>
+                                           @*@Html.Partial("_CitiesStates", null, new ViewDataDictionary { { "Zip", Model.Zip }, { "State_ID", Model.State_ID }, { "City_ID", Model.City_ID }, { "Statename", Model.Statename }, { "Cityname", Model.Cityname } })*@
+                                                @Html.Partial("_CitiesStates")
+                               @*     <tr class="white_color">
+                                        <td style="text-align:right;">&nbsp;<font color="red"><b>*</b></font><strong>Zip code :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%" id="tdzip" runat="server"> @Html.TextBox("txtZip", (string)ViewBag.Zip, new { @class = "textfield", MaxLength = "5", style = "width:50px;", autocomplete = "off" })
+                                        </td>
+                                    </tr>
+                                    <tr class="nav_blue_color">
+                                        <td style="text-align:right;">&nbsp;<font color="red"><b>*</b></font><strong>State :&nbsp;</strong>
+                                        </td>
+                                        
+                                                                            @if (Model.StateList != null)
+                                                                            {
+                                        <td align="left" width="70%" id="tdstate" runat="server"> @Html.DropDownList("DDState", Model.StateList, "--Select State--", new { @style = "width:270px;height:25px;font:13px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                         
+                                        </td>   }
+                                    </tr>
+                                    <tr class="white_color">
+                                        <td style="text-align:right;">&nbsp;<font color="red"><b>*</b></font><strong>City :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%" id="tdcity" runat="server"> @Html.DropDownList("DDCity", Model.CityList, new { @style = "width:270px;height:25px;font:13px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+
+                                        </td>
+                                    </tr>*@
+                                
+
+                                            </table>
+
+                                        </td>
+                                    </tr>
+                               
+
+
+
+                                </table>
+                            </td>
+                            
+                        </tr>
+                    </table>
+                    <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain" runat="server"
+                        style="display: none;">
+                        <tr class="white_color" align="center">
+                            <td id="tdlblname" height="30px" style="display: none;">
+                                <label id="lblfirstname" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlbllastname" height="30px" style="display: none;">
+                                <label id="lbllastname" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblssn" height="30px" style="display: none;">
+                                <label id="lblssn" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlbldob" height="30px" style="display: none;">
+                                <label id="lbldob" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlbladdress" height="30px" style="display: none;">
+                                <label id="lbladdress" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblzip" height="30px" runat="server" style="display: none;">
+                                <label id="lblzip" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblstate" height="30px" style="display: none;">
+                                <label id="lblstate" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblcity" height="30px" style="display: none;">
+                                <label id="lblcity" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblemail" height="30px" style="display: none;">
+                                <label id="lblemail" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblhome" height="30px" style="display: none;">
+                                <label id="lblhome" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblmobile" height="30px" style="display: none;">
+                                <label id="lblmobile" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblwork" height="30px" style="display: none;">
+                                <label id="lblwork" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblcontact" height="30px" style="display: none;">
+                                <label id="lblcontact" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblcp" height="30px" style="display: none;">
+                                <label id="lblcp" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                    </table>
+               
+            <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+                <tr class="background_color">
+                    <td align="right" colspan="2" style="padding-bottom: 5px; padding-right: 10px; padding-top: 10px;">
+                                              @*  @{
+                                                                            string id = ViewBag.id;
+                        }*@
+                        <input id="ImgBtnNext" name="ImgBtnNext" type="submit" class="button" value="Register" onclick="return validate();" />&nbsp;
+@*                        @Html.ActionLink("Cancel ", "../ClientReg/Conformation", new { id = id },
+                                                  new { @style = "background: url('~/../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog", @title = "Click here to stop registration" })*@
+                        <input type="button" name="btncancel" value="Cancel" id="btncancel" class="chnewcustomer button"/>
+                    </td>
+                </tr>
+            </table>@*
+             <div id="dialog-confirm34" title="Mower Helper-Find an Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to stop registration?
+            </p>
+            
+        </div>*@
+    }
+ 
+<script type="Text/JavaScript">
+    $(document).ready(function () {   
+        $("#trCountry").hide();
+    });
+    //function ValidateEmail(ctrl)
+    //{
+    //    if (document.layers || document.getElementById || document.all) {
+    //        var str = ctrl.value
+
+    //        var filter = /^([\w-]+(?:\.[\w-]+)*)@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
+    //        if (filter.test(str))
+    //            testresults = true
+    //        else
+    //            testresults = false
+
+    //        if (testresults == true) {
+    //            var sindex = str.indexOf("@@");
+    //            var strlength = str.length;
+    //            var mailstr = str.substring(sindex, strlength);
+    //            var eindex = mailstr.indexOf(".");
+    //            if (eindex < 4)
+    //                testresults = false
+    //            else
+    //                testresults = true
+    //        }
+
+    //        return (testresults)
+    //    }
+    //    else
+    //        return true;
+    //}
+
+    function clearalerts() {
+        document.getElementById('tdname').bgColor = 'White';
+        document.getElementById('tblmain').style.display = 'none';
+        document.getElementById('tdlblname').style.display = 'none';
+        document.getElementById('lblfirstname').style.display = 'none';
+        document.getElementById('tdlbllastname').style.display = 'none';
+        document.getElementById('lbllastname').style.display = 'none';
+        document.getElementById('tdaddress1').bgColor = 'White';
+        document.getElementById('tdlbladdress').style.display = 'none';
+        document.getElementById('lbladdress').style.display = 'none';
+        document.getElementById('tdzip').bgColor = 'White';
+        document.getElementById('tdlblzip').style.display = 'none';
+        document.getElementById('lblzip').style.display = 'none';
+        document.getElementById('tdstate').bgColor = 'White';
+        document.getElementById('tdlblstate').style.display = 'none';
+        document.getElementById('lblstate').style.display = 'none';
+        document.getElementById('tdcity').bgColor = 'White';
+        document.getElementById('tdlblcity').style.display = 'none';
+        document.getElementById('lblcity').style.display = 'none';
+        document.getElementById('tdemail').bgColor = 'White';
+        document.getElementById('tdlblemail').style.display = 'none';
+        document.getElementById('lblemail').style.display = 'none';
+        document.getElementById('tdmobile').bgColor = 'White';
+        document.getElementById('tdlblmobile').style.display = 'none';
+        document.getElementById('lblmobile').style.display = 'none';
+        document.getElementById('tdlblhome').style.display = 'none';
+        document.getElementById('lblhome').style.display = 'none';
+        document.getElementById('tdhome').bgColor = 'White';
+
+        document.getElementById('tdlblwork').style.display = 'none';
+        document.getElementById('lblwork').style.display = 'none';
+
+    }
+    function validate()
+    {
+        var global_variable = "";
+        var strfirstname = trim(document.getElementById('FirstName').value);
+        document.getElementById('FirstName').value = strfirstname;
+        if (document.getElementById('FirstName').value == '' || document.getElementById('FirstName').value == 'First Name') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter first name");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblname').style.display = '';
+            document.getElementById('tdlblname').bgColor = 'Orange';
+            document.getElementById('lblfirstname').style.display = '';
+            document.getElementById('lblfirstname').innerHTML = 'Please enter first name';
+            document.getElementById('tdname').bgColor = 'Orange';
+            document.getElementById('FirstName').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdname').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblname').style.display = 'none';
+            document.getElementById('lblfirstname').style.display = 'none';
+        }
+
+        if (document.getElementById('MI').value == 'MI') {
+            clearalerts();
+            document.getElementById('MI').value = '';
+        }
+
+        var strlastname = trim(document.getElementById('LastName').value);
+        document.getElementById('LastName').value = strlastname;
+        if (document.getElementById('LastName').value == '' || document.getElementById('LastName').value == 'Last Name') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter last name");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlbllastname').style.display = '';
+            document.getElementById('tdlbllastname').bgColor = 'Orange';
+            document.getElementById('lbllastname').style.display = '';
+            document.getElementById('lbllastname').innerHTML = 'Please enter last name';
+            document.getElementById('tdname').bgColor = 'Orange';
+            document.getElementById('LastName').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdname').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlbllastname').style.display = 'none';
+            document.getElementById('lbllastname').style.display = 'none';
+        }
+
+        var stremail = trim(document.getElementById('PatientEmail').value);
+        document.getElementById('PatientEmail').value = stremail;
+
+
+        if (document.getElementById('PatientEmail').value != '') {
+            clearalerts();
+            if (ValidateEmail(document.getElementById('PatientEmail')) == 0) {
+                //Glb_ShowAlert("Please enter valid email");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblemail').style.display = '';
+                document.getElementById('tdlblemail').bgColor = 'Orange';
+                document.getElementById('lblemail').style.display = '';
+                document.getElementById('lblemail').innerHTML = 'Please enter valid email';
+                document.getElementById('tdemail').bgColor = 'Orange';
+                //                    ValidateAlert('tblmain','tdlblemail','lblemail','tdemail',
+                document.getElementById('PatientEmail').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdemail').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblemail').style.display = 'none';
+                document.getElementById('lblemail').style.display = 'none';
+            }
+        }
+
+        //if (document.getElementById('txtLicense').value == 0) {
+        //    global_variable += "Driver's Licence Number" + ",";
+        //}
+
+        // Contact Person Name
+        if (document.getElementById('MobilePhone1').value == "" && document.getElementById('MobilePhone2').value == "" && document.getElementById('MobilePhone3').value == "") {
+            clearalerts();
+            //Glb_ShowAlert("Please enter atleast one phone number");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblmobile').style.display = '';
+            document.getElementById('tdlblmobile').bgColor = 'Orange';
+            document.getElementById('lblmobile').style.display = '';
+            document.getElementById('lblmobile').innerHTML = 'Please enter cell phone number';
+            document.getElementById('tdmobile').bgColor = 'Orange';
+            document.getElementById('MobilePhone1').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdmobile').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblmobile').style.display = 'none';
+            document.getElementById('lblmobile').style.display = 'none';
+        }
+
+        if (document.getElementById('MobilePhone1').value != '' || document.getElementById('MobilePhone2').value != '' || document.getElementById('MobilePhone3').value != '') {
+            clearalerts();
+            if (IsValidPhone(document.getElementById('MobilePhone1').value + document.getElementById('MobilePhone2').value + document.getElementById('MobilePhone3').value) == 'false') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter valid Cell phone number");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblmobile').style.display = '';
+                document.getElementById('tdlblmobile').bgColor = 'Orange';
+                document.getElementById('lblmobile').style.display = '';
+                document.getElementById('lblmobile').innerHTML = 'Please enter valid Cell phone number';
+                document.getElementById('tdmobile').bgColor = 'Orange';
+                document.getElementById('MobilePhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdmobile').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblmobile').style.display = 'none';
+                document.getElementById('lblmobile').style.display = 'none';
+            }
+        }
+        if (document.getElementById('MobilePhone1').value != "" || document.getElementById('MobilePhone2').value != "" || document.getElementById('MobilePhone3').value != "") {
+            clearalerts();
+            if (fnStringFieldValidate(document.getElementById('MobilePhone1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('MobilePhone2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('WorkPhone3'), "0123456789") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid Cell phone number!!! Cell phone number must be in numeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblmobile').style.display = '';
+                document.getElementById('tdlblmobile').bgColor = 'Orange';
+                document.getElementById('lblmobile').style.display = '';
+                document.getElementById('lblmobile').innerHTML = 'Invalid Cell phone number!!! Cell phone number must be in numeric only.';
+                document.getElementById('tdmobile').bgColor = 'Orange';
+                document.getElementById('MobilePhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdmobile').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblmobile').style.display = 'none';
+                document.getElementById('lblmobile').style.display = 'none';
+            }
+
+        }
+
+        if (document.getElementById('HomePhone1').value != '' || document.getElementById('HomePhone2').value != '' || document.getElementById('HomePhone3').value != '') {
+            clearalerts();
+            if (IsValidPhone(document.getElementById('HomePhone1').value + document.getElementById('HomePhone2').value + document.getElementById('HomePhone3').value) == 'false') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter valid home phone number")
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblhome').style.display = '';
+                document.getElementById('tdlblhome').bgColor = 'Orange';
+                document.getElementById('lblhome').style.display = '';
+                document.getElementById('lblhome').innerHTML = 'Please enter valid home phone number';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('HomePhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblhome').style.display = 'none';
+                document.getElementById('lblhome').style.display = 'none';
+            }
+        }
+
+        if (document.getElementById('rbHomePhoneLeaveMsg').checked == true && document.getElementById('ddlphone').value == '0') {
+            clearalerts();
+            if (document.getElementById('HomePhone1').value == "" || document.getElementById('HomePhone2').value == "" || document.getElementById('HomePhone3').value == "") {
+                clearalerts();
+                //Glb_ShowAlert("Please enter home phone number");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblhome').style.display = '';
+                document.getElementById('tdlblhome').bgColor = 'Orange';
+                document.getElementById('lblhome').style.display = '';
+                document.getElementById('lblhome').innerHTML = 'Please enter home phone number because home phone number is selected as primary';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('HomePhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblhome').style.display = 'none';
+                document.getElementById('lblhome').style.display = 'none';
+            }
+        }
+
+
+        //	 				if (document.frmPatientDetails.txtHomePhone1.value!="" || document.frmPatientDetails.txtHomePhone2.value!="" || document.frmPatientDetails.txtHomePhone3.value!="" || document.frmPatientDetails.txtHPExtention.value!="")
+        if (document.getElementById('HomePhone1').value != "" || document.getElementById('HomePhone2').value != "" || document.getElementById('HomePhone3').value != "") {
+            clearalerts();
+            //	 				if(fnStringFieldValidate(frmPatientDetails.txtHomePhone1,"0123456789")==0 || fnStringFieldValidate(frmPatientDetails.txtHomePhone2,"0123456789")==0 || fnStringFieldValidate(frmPatientDetails.txtHomePhone3,"0123456789")==0 || fnStringFieldValidate(frmPatientDetails.txtHPExtention,"0123456789")==0)
+            if (fnStringFieldValidate(document.getElementById('HomePhone1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('HomePhone2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('HomePhone3'), "0123456789") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid home phone number!!! home phone number must be in numeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblhome').style.display = '';
+                document.getElementById('tdlblhome').bgColor = 'Orange';
+                document.getElementById('lblhome').style.display = '';
+                document.getElementById('lblhome').innerHTML = 'Invalid home phone number!!! home phone number must be in numeric only.';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('HomePhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblhome').style.display = 'none';
+                document.getElementById('lblhome').style.display = 'none';
+            }
+
+        }
+        //Work Phone Validations	
+        if (document.getElementById('WorkPhone1').value != '' || document.getElementById('WorkPhone2').value != '' || document.getElementById('WorkPhone3').value != '') {
+            clearalerts();
+            if (IsValidPhone(document.getElementById('WorkPhone1').value + document.getElementById('WorkPhone2').value + document.getElementById('WorkPhone3').value) == 'false') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter valid work phone number")
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblwork').style.display = '';
+                document.getElementById('tdlblwork').bgColor = 'Orange';
+                document.getElementById('lblwork').style.display = '';
+                document.getElementById('lblwork').innerHTML = 'Please enter valid work phone number';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('WorkPhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblwork').style.display = 'none';
+                document.getElementById('lblwork').style.display = 'none';
+            }
+        }
+
+
+
+
+
+        if (document.getElementById('WorkPhone1').value != "" || document.getElementById('WorkPhone2').value != "") {
+            clearalerts();
+            if (fnStringFieldValidate(document.getElementById('WorkPhone1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('WorkPhone2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('WorkPhone3'), "0123456789") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid work phone number!!! work phone number must be in numeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblwork').style.display = '';
+                document.getElementById('tdlblwork').bgColor = 'Orange';
+                document.getElementById('lblwork').style.display = '';
+                document.getElementById('lblwork').innerHTML = 'Invalid work phone number!!! work phone number must be in numeric only.';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('WorkPhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblwork').style.display = 'none';
+                document.getElementById('lblwork').style.display = 'none';
+            }
+
+        }
+
+        if (document.getElementById('txtZip').value == '') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter zip code")
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblzip').style.display = '';
+            document.getElementById('tdlblzip').bgColor = 'Orange';
+            document.getElementById('lblzip').style.display = '';
+            document.getElementById('lblzip').innerHTML = 'Please enter zip code';
+            document.getElementById('tdzip').bgColor = 'Orange';
+            document.getElementById('txtZip').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdzip').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblzip').style.display = 'none';
+            document.getElementById('lblzip').style.display = 'none';
+        }
+        if (document.getElementById('txtZip').value != '') {
+            clearalerts();
+            if (document.getElementById('txtZip').value.length != 5) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid zip code");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblzip').style.display = '';
+                document.getElementById('tdlblzip').bgColor = 'Orange';
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Invalid zip code';
+                document.getElementById('tdzip').bgColor = 'Orange';
+                document.getElementById('txtZip').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblzip').style.display = 'none';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+            if (fnStringFieldValidate(document.getElementById('txtZip'), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid zip code!!! zip code must be in alphanumeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblzip').style.display = '';
+                document.getElementById('tdlblzip').bgColor = 'Orange';
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Invalid zip code!!! zip code must be in alphanumeric only.';
+                document.getElementById('tdzip').bgColor = 'Orange';
+                document.getElementById('txtZip').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblzip').style.display = 'none';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+        }
+        //if (document.getElementById('DDLcountry').selectedIndex == 0) {
+        //    clearalerts();
+        //    document.getElementById('lblcountry').style.display = '';
+        //    document.getElementById('lblcountry').innerHTML = 'Please select country';
+        //    document.getElementById('tdcountry').bgColor = "orange";
+        //    document.getElementById('DDLcountry').focus();
+
+        //    return false;
+        //}
+        //else {
+        //    document.getElementById('tdcountry').bgColor = "White";
+        //    document.getElementById('lblcountry').style.display = 'none';
+        //}
+        if (document.getElementById('DDState').selectedIndex == 0) {
+            clearalerts();
+            //Glb_ShowAlert("Please select state")
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblstate').style.display = '';
+            document.getElementById('tdlblstate').bgColor = 'Orange';
+            document.getElementById('lblstate').style.display = '';
+            document.getElementById('lblstate').innerHTML = 'Please select state';
+            document.getElementById('tdstate').bgColor = 'Orange';
+            document.getElementById('DDState').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdstate').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblstate').style.display = 'none';
+            document.getElementById('lblstate').style.display = 'none';
+        }
+        if (document.getElementById('DDCity').selectedIndex == 0) {
+            clearalerts();
+            //Glb_ShowAlert("Please select city")
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblcity').style.display = '';
+            document.getElementById('tdlblcity').bgColor = 'Orange';
+            document.getElementById('lblcity').style.display = '';
+            document.getElementById('lblcity').innerHTML = 'Please select city';
+            document.getElementById('tdcity').bgColor = 'Orange';
+            document.getElementById('DDCity').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdcity').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblcity').style.display = 'none';
+            document.getElementById('lblcity').style.display = 'none';
+        }
+        // $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //document.getElementById("ImgBtnNext").disabled = 'true';
+        // document.body.style.cursor = 'wait';
+    }
+</script>
+
+
+<script type="text/javascript">
+    window.history.forward();
+    function DisableBackButton() {
+        window.history.forward(1);
+    }
+    window.onload = DisableBackButton;
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ddlphone').change(function () {
+            if (document.getElementById('ddlphone').value == '0') {
+                clearalerts();
+                document.getElementById('HomePhone1').style.display = '';
+                document.getElementById('HomePhone2').style.display = '';
+                document.getElementById('HomePhone3').style.display = '';
+                document.getElementById('spnhomephn1').style.display = '';
+                document.getElementById('spnhomephn2').style.display = '';
+                document.getElementById('WorkPhone1').style.display = 'none';
+                document.getElementById('WorkPhone2').style.display = 'none';
+                document.getElementById('WorkPhone3').style.display = 'none';
+                document.getElementById('spnworkphn1').style.display = 'none';
+                document.getElementById('spnworkphn2').style.display = 'none';
+                document.getElementById('WorkPhone1').value = '';
+                document.getElementById('WorkPhone2').value = '';
+                document.getElementById('WorkPhone3').value = '';
+            }
+            else if (document.getElementById('ddlphone').value == '1') {
+                clearalerts();
+                document.getElementById('HomePhone1').style.display = 'none';
+                document.getElementById('HomePhone2').style.display = 'none';
+                document.getElementById('HomePhone3').style.display = 'none';
+                document.getElementById('spnhomephn1').style.display = 'none';
+                document.getElementById('spnhomephn2').style.display = 'none';
+                document.getElementById('WorkPhone1').style.display = '';
+                document.getElementById('WorkPhone2').style.display = '';
+                document.getElementById('WorkPhone3').style.display = '';
+                document.getElementById('spnworkphn1').style.display = '';
+                document.getElementById('spnworkphn2').style.display = '';
+                document.getElementById('HomePhone1').value = '';
+                document.getElementById('HomePhone2').value = '';
+                document.getElementById('HomePhone3').value = '';
+            }
+        });
+        //$('#rbtninsuryes').change(function () {
+        //    if (document.getElementById('rbtninsuryes').checked == true) {
+        //        document.getElementById('rbtninsurno').checked = false;
+        //    }
+        //});
+        //$('#rbtninsurno').change(function () {
+        //    if (document.getElementById('rbtninsurno').checked == true) {
+        //        document.getElementById('rbtninsuryes').checked = false;
+        //    }
+        //});
+        document.getElementById('hdngender').value = "Male";
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#MobilePhone1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#MobilePhone2").focus();
+            }
+        });
+        $("#MobilePhone2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#MobilePhone3").focus();
+            }
+        });
+        $("#MobilePhone3").keyup(function () {
+            if ($(this).val().length == 4) {
+                $("#chkMPLeaveMSG").focus();
+            }
+        });
+
+        $("#HomePhone1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#HomePhone2").focus();
+            }
+        });
+        $("#HomePhone2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#HomePhone3").focus();
+            }
+        });
+
+
+        $("#WorkPhone1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#WorkPhone2").focus();
+            }
+        });
+        $("#WorkPhone2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#WorkPhone3").focus();
+            }
+        });
+
+
+        $("#txtCP1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtCP2").focus();
+            }
+        });
+        $("#txtCP2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtCP3").focus();
+            }
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+
+        $('#txtCP1').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+        $('#txtCP2').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+        $('#txtCP3').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+        $('#txtZip').keypress(
+          function (e) {
+              //if (checkNumeric(event) == false) { return false; }
+              var code = e.keyCode ? e.keyCode : e.which;
+              var pressedKey = String.fromCharCode(code);
+              if (pressedKey.match(/[a-zA-Z0-9]/g)) {
+                  return true;
+              }
+              else {
+                  e.preventDefault(); // If it is not then prevent the event from happening.
+              }
+          }
+    );
+
+
+
+        $('#MobilePhone1').keypress(
+        function (event) {
+            if (checkNumeric(event) == false) { return false; }
+        }
+    );
+        $('#MobilePhone2').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#MobilePhone3').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+
+        $('#HomePhone1').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#HomePhone2').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#HomePhone3').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+        $('#WorkPhone1').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#WorkPhone2').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#WorkPhone3').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+    });
+</script>
+</body>
+    <script type="text/javascript">
+
+        function updateSuccess12(data) {
+              //      alert("1");
+            //        alert(data.Success);
+
+            if (data != '' & data.Success == true) {
+                var custmname = data.Object.Customer_Name;
+                var custmid = data.Object.Customer_Id;
+                //var custmemail = data.Object.Customer_Email;
+                var custmloginid = data.Object.Customer_LoginId;
+                document.getElementById("trpatient").style.display = "none";
+                document.getElementById("trpatient2").style.display = "";
+                document.getElementById("spnproname").innerHTML = custmname;
+                document.getElementById("AddToReference_ID").value = custmid;
+                //document.getElementById("hdncstmid").value = custmid;
+                //document.getElementById("hdncstmloginid").value = custmloginid;
+                document.getElementById("AddToReferenceLogin_ID").value = custmloginid;
+                //document.getElementById("hdncstmemail").value = custmemail;
+                $('#tblappt tr[id="trotherdeatails"]').hide();
+                $('#tblappt tr[id="trotherAddress"]').show();
+                $("#trPlaceofAppointment").show();
+                $("#OtherAddressItemList").val("0");
+                var recordtext = $("#OtherAddressItemList option:selected").text();
+                document.getElementById('hdnselectother').value = recordtext;
+                //document.getElementById("hdnPatId").value = custmid;
+                document.getElementById("Patient_ID").value = custmid;
+                //$('#defaultCoachAddress').attr('checked', false);
+                $('#ChkDefaultCourt').attr('checked', false);
+                document.getElementById("tdcourtlocation").style.display = "";
+                document.getElementById("tdcourtlocation1").style.display = "none";
+                $('#NewCustdiv').dialog('close');
+                //window.location.href = '../Clients/ClientsHome?register=true';
+            }
+            else if (data.ErrorMessage == 'Name already exists in the system. Do you want to create it?') {
+                var obj = confirm(data.ErrorMessage);
+               
+                if (obj == true) {                 
+                    document.body.style.cursor = 'default';
+                    document.getElementById("HdnInd").value = "Y";
+                    $("#updateCarForm1").submit();
+                }
+                else {
+                    document.body.style.cursor = 'default';
+                    document.getElementById("HdnInd").value = "";                  
+                }
+            }
+            else {
+              //  $('#dvLoading').dialog('close');
+
+                   //         alert(data.ErrorMessage);
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblemail').style.display = '';
+                document.getElementById('tdlblemail').bgColor = 'Orange';
+                document.getElementById('lblemail').style.display = '';
+                document.getElementById('lblemail').innerHTML = data.ErrorMessage;
+                document.getElementById('tdemail').bgColor = 'Orange';
+                document.getElementById('PatientEmail').focus();
+                document.body.style.cursor = 'default';
+                document.getElementById('ImgBtnNext').disabled = false;
+                return false;
+            }
+        }
+</script>
+</html>

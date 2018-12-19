@@ -1,0 +1,2490 @@
+﻿@model MowerHelper.Models.BLL.Providers.Provider_ContactInfo
+@using MowerHelper.Models.Classes
+@*@using Obout.Mvc.ComboBox;*@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <style type="text/css">
+        /*.long-states .ob_iCboICBC li {float: left; width: 75px;}
+        .short-states .ob_iCboICBC li{float: left;width: 35px;}
+        * HTML .long-states .ob_iCboICBC li{ -width: 95px; }
+        * HTML .short-states .ob_iCboICBC li{ -width: 25px;}
+        * HTML .ob_iCboICBC li i{-visibility: hidden;}*/
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .ui-datepicker
+        {
+            background: #AADDFF;
+            border: 1px solid #555;
+            color: #000000;
+        }
+
+        .Highlighted a
+        {
+            background-color: Green !important;
+            background-image: none !important;
+            color: White !important;
+            font-weight: bold !important;
+            font-size: 10pt;
+        }
+
+        .ui-widget-header
+        {
+            font-size: 15px;
+            height: 25px;
+        }
+        /*.divLoad .ui-dialog-titlebar{display:none;}*/
+    </style>
+    @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    <style type="text/css">
+        .Vtitle
+        {
+            width: 350px;
+        }
+
+        .Vdescription
+        {
+            width: 650px;
+        }
+
+        .dvLoading .ui-dialog-titlebar
+        {
+            display: none;
+        }
+    </style>
+    @*  <style type="text/css">
+     .statement-nav {width:673px;border-bottom:1px solid #cfdede;float:left;padding:0 0 4px 0;}
+.statement-nav img.bookmarks {float:left;margin:2px 0 0 40px;}
+.statement-nav ul {margin:0;padding:0;list-style:none;float:right;width:502px;}
+.statement-nav ul li {list-style:none;padding-left:3px;float:left;}
+.statement-nav ul li a {font:bold 13px Arial;text-transform:uppercase;padding:7px 28px 6px 28px;background:url(../images/bg-article-library-nav.gif) repeat-x 0 0;color:#ffffff!important;text-decoration:none!important;}
+.statement-nav ul li a, x:-moz-any-link {padding:7px 28px 5px 28px;}
+.statement-nav ul li a:hover, .statement-nav ul li a.current {color:#000000!important;background:none repeat scroll 0 0 #cfdede;}
+.statement-nav1 {width:100%;border-bottom:1px solid #cfdede;float:left;padding:0 0 4px 0;}
+.statement-nav1 img.bookmarks {float:left;margin:2px 0 0 40px;}
+.statement-nav1 ul {margin:0;padding:0;list-style:none;float:right;width:502px;}
+.statement-nav1 ul li {list-style:none;padding-left:3px;float:left;}
+.statement-nav1 ul li a {font:bold 13px Arial;text-transform:uppercase;padding:7px 28px 6px 28px;background:url(../images/bg-article-library-nav.gif) repeat-x 0 0;color:#ffffff!important;text-decoration:none!important;}
+.statement-nav1 ul li a, x:-moz-any-link {padding:7px 28px 5px 28px;}
+.statement-nav1 ul li a:hover, .statement-nav1 ul li a.current {color:#000000!important;background:none repeat scroll 0 0 #cfdede;}
+#content .profile_yellow_bg		{ background:#fff url(../Images/profile_yellow_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .right_partbg 	{  margin:0; padding:20px 0 0 0; float:left; width:271px;}
+.right_headingbg 		{ width:195px; height:31px; background:url(../Images/right_headingbg.png) no-repeat; font:italic 16px Georgia; color:#fff; padding:8px 0 0 60px;}
+.right_text_part 		{ padding:0 10px 0 15px; color:#b2d9ff;}
+.right_text_part p 		{ color:#333; line-height:18px}
+#content .center_right_profile .right_text_part p 	{ color:#B2D9FF; line-height:18px}
+#content .center_right_profile .right_partbg 		{ background:#02437b url(../Images/right_bg.png) repeat-x; margin:0; padding:20px 0 0 0; float:left; width:270px;}
+
+.profile_img 		{ margin:0; padding:0;}
+.profile_img img 	{ border: 1px solid #000; border-radius:4px; height:130px; padding:1px; width:120px; margin:0 0 10px 52px;}
+
+.profile_img1 		{ margin:15px 0 0 0; padding:0;}
+.profile_img1 img 	{ border: 1px solid #000; border-radius:4px; height:130px; padding:1px; width:120px; margin:0 15px 0 0; float:left;}
+#content { width:996px; margin:-31px 0 0 0; padding:0; position:relative;}
+
+#content .center_right			{ background:#fff url(../Images/center_right.png) repeat-y right top; margin:0 0 0 15px; float:left;}
+#content .center_right_profile	{ background:#fff url(../Images/center_right_profile.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_blue_bg		{ background:#fff url(../Images/profile_blue_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_gray_bg		{ background:#fff url(../Images/profile_gray_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_greenbg		{ background:#fff url(../Images/profile_greenbg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_lightblue_bg	{ background:#fff url(../Images/profile_lightblue_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_yellow_bg		{ background:#fff url(../Images/profile_yellow_bg.jpg) repeat-y right top; margin:0; width:996px;}
+
+#content .center_right_profile h4 {color: #B2D9FF; font: italic 14px Georgia,"Times New Roman",Times,serif; margin: 0 0 5px;}
+
+
+
+#content .left_nev 									{ float:left; margin:25px 0 0 0; padding:0; width:186px;}
+.left_nev ul 										{ font:italic 17px Georgia, "Times New Roman", Times, serif; text-align:right; margin:0; padding:0;}
+#navigation-block 									{ position:relative; text-align:right;}
+#hide 												{ position:absolute; top:30px; left:-190px;}
+ul#sliding-navigation li.sliding-element h3, ul#sliding-navigation li.sliding-element a { display: block; width:141px; margin: 0;}
+ul#sliding-navigation li.sliding-element a 			{ color:#333; background:url(../Images/nav_arrow.png) no-repeat right 10px; border-bottom:1px solid #c7d0d5; 
+													  padding:10px 30px 10px 0;}
+ul#sliding-navigation li.sliding-element a:hover	{ color: #046EC6; background: url(../Images/nav_arrow1.png) no-repeat right 10px; }
+ul#sliding-navigation li.sliding-element a.on 		{ color: #046EC6; background: url(../Images/nav_arrow1.png) no-repeat right 10px; }
+
+#content .center_part 	{ width:500px; float:left; margin:0 0 30px 0; padding:25px 10px 10px 14px; background:#fff; min-height:397px;}
+#content .center_part1 	{ width:771px; float:left; margin:0 0 30px 15px; padding:25px 10px 10px 14px; background:#fff; min-height:397px;}
+.center_part p a 		{ color:#333; font:bold 12px Arial, Helvetica, sans-serif;}
+.center_part p a:hover 	{ text-decoration:underline; color:#046EC6;}
+
+.more_arrow 		{ margin:0; padding:0 0 0 26px; background:url(../Images/more_arrow.png) no-repeat; float:right;}
+.more_arrow a 		{ color:#ff7000 !important; font:italic 15px Georgia, "Times New Roman", Times, serif !important;}
+.more_arrow a:hover { color:#333 !important;}
+
+#content .right_partbg 	{  margin:0; padding:20px 0 0 0; float:left; width:271px;}
+.right_headingbg 		{ width:195px; height:31px; background:url(../Images/right_headingbg.png) no-repeat; font:italic 16px Georgia; color:#fff; padding:8px 0 0 60px;}
+.right_text_part 		{ padding:0 10px 0 15px; color:#b2d9ff;}
+.right_text_part p 		{ color:#333; line-height:18px}
+#content .center_right_profile .right_text_part p 	{ color:#B2D9FF; line-height:18px}
+#content .center_right_profile .right_partbg 		{ background:#02437b url(../Images/right_bg.png) repeat-x; margin:0; padding:20px 0 0 0; float:left; width:270px;}
+.text-center   { text-align:center; }
+.iner_bg		{ background:url(../Images/tr.png) repeat; border-top:dashed 1px #3785c7; margin:15px 0 0 0; padding:10px; opacity: 0.8; border-radius:0 0 4px 4px;}
+.content_ul1 			{ font:bold 12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#fff }
+.content_ul1 li			{ background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; }
+.content_ul1 li a 		{ color:#333;}
+.content_ul1 li a:hover { color:#1B81C8; text-decoration:underline;}
+.follow_us p 			{ color:#333; margin:0 0 10px 0; text-align:center !important;}
+
+#content .center_right_profile .content_ul1 			{ font:bold 12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#fff }
+#content .center_right_profile .content_ul1 li 			{ background:url(../Images/small_arrow.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #B2D9FF; }
+#content .center_right_profile .content_ul1 li a 		{ color:#fff;}
+#content .center_right_profile .content_ul1 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+.previes		{ background:url(../Images/Featured_bg2.jpg) repeat-x; border-radius:4px; cursor:pointer; margin:0 0 10px 0; padding:5px 8px; font:bold 13px Arial; 
+				 box-shadow:3px 3px 4px #ccc; opacity: 0.9; color:#fff; float:left;}
+.previes:hover	{ color:#fff; text-decoration:underline;}
+.content_ul4 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#666; }
+.content_ul4 li 		{ background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; }
+.content_ul4 li a 		{ color:#333;}
+.content_ul4 li a:hover { color:#1B81C8; text-decoration:underline;}
+
+#content .center_right_profile .content_ul4 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:rgba(179, 218, 255, 0.47); }
+#content .center_right_profile .content_ul4 li 			{ background:url(../Images/small_arrow.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #ccc; }
+#content .center_right_profile .content_ul4 li a 		{ color:#fff; opacity:0.6;}
+#content .center_right_profile .content_ul4 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+.content_ul2 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#666; }
+.content_ul2 li 		{background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; float:left; width:44px; margin:0 7px 0 0 }
+.content_ul2 li a 		{ color:#fff;}
+.content_ul2 li a:hover { color:#B2D9FF; text-decoration:underline;}
+
+#content .center_right_profile .content_ul2 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:rgba(179, 218, 255, 0.47); }
+#content .center_right_profile .content_ul2 li 			{ padding:4px 15px; border-bottom:1px dotted hsl(0, 0%, 80%); float:left; width:44px; margin:0 7px 0 0 }
+#content .center_right_profile .content_ul2 li a 		{ color:#fff; opacity:0.6;}
+#content .center_right_profile .content_ul2 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+ </style>*@
+</head>
+<body>
+    @{Html.RenderAction("Topsection", "Tools");}
+    @using (Html.BeginForm("EditIdentifyingInfo", "Directory", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        @Html.Hidden("strimage", (string)Model.ProviderImage)
+        @Html.Hidden("ExistedLogo", (string)ViewBag.ExistedLogo)
+        @Html.Hidden("ExistedExtn", (string)ViewBag.ExistedExtn)
+        @Html.Hidden("strEleimage", (string)Model.ElctricianCustmiseImage)
+        @Html.Hidden("ExistedEleLogo", (string)ViewBag.ExistedEleLogo)
+        @Html.Hidden("ExistedEleExtn", (string)ViewBag.ExistedEleExtn)
+        @Html.Hidden("strDriverimage", (string)Model.DriverCustomiseImage)
+        @Html.Hidden("ExistedDriverLogo", (string)ViewBag.ExistedDriverLogo)
+        @Html.Hidden("ExistedDriverExtn", (string)ViewBag.ExistedDriverExtn)
+        @Html.Hidden("strElename", (string)Model.ElectricianImage)
+        @Html.Hidden("strDrivername", (string)Model.DriverImage)
+        //if (ViewBag.outmsg == "Y")
+        //{
+        @*<table id="tblOutMsg" width="100%" cellspacing="0" cellpadding="0">
+            <tr align="Center">
+                <td align="Center">
+                    <span id="lblOutMsg" class="errormsg" style="color: Red; font-weight: bold;">Email already exists in the system.</span>
+                </td>
+            </tr>
+        </table>*@
+       // }
+@*        if (ViewBag.Imagetype == "I")
+        {
+    <table id="Table3" width="100%" cellspacing="0" cellpadding="0" >
+        <tr align="Center">
+            <td align="Center">
+                <span ID="Span3" class="errormsg" style="color:Red;font-weight:bold;">Invalid Logo!!! The format of the photo selected is not of type image.</span>
+            </td>
+        </tr>
+    </table>
+        }*@
+        <input type="hidden" id="HdnRoleid" name="HdnRoleid" value="@Session["Roleid"]" />
+        <input type="hidden" id="Hdndate" name="Hdndate" value="@Model.licenseexpirydate" />
+        <input type="hidden" id="hdnproid" name="hdnproid" value="@Session["Provider_ID"] == null ? Convert.ToInt32(@Session["Prov_Id"]) : Convert.ToInt32(@Session["Provider_Id"])" />
+        <div id="main-content">
+            @*<table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr class="background_color">
+                <td align="left" valign="top" width="100%">*@
+            <table width="100%" cellpadding="0" cellspacing="0">
+                @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                {
+                    <tr id="trtabs">
+                        <td width="100%" class="navigation">
+                            <div class="admin-tab">
+                                <a class="admin-link" id="aprovider" href="ViewIdentifyingInfo">
+                                    @if (Session["Roleid"].ToString() == "1")
+                                    {
+                                        <span>@Session["Elebusenessnm"].ToString()</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Mower Helper Info</span>
+                                    }
+                                </a>
+                            </div>
+                            @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                            {
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" id="acontent" href="ViewElectricianAdvancedSearch"><span>Content Settings</span> </a>
+                                </div>
+@*    <div class="admin-tab">
+                                    <a class="inadmin-link" id="avideo" href="VideoAudioFiles"><span>Video/Audio Files</span> </a>
+                                </div>*@
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" id="adocument" href="ViewElectricianDocumentInfo"><span>Certificates & Youtube Video Files</span> </a>
+                                </div>
+                            }
+@* <div class="admin-tab">
+                                    <a class="inadmin-link" id="aproviderschedule" href="ProviderSchedule"><span>Schedule Settings</span> </a>
+                                </div>*@
+@*<div class="admin-tab">
+                                    <a class="inadmin-link" id="astatistic" href="Sitestatistics"><span>Site Statistics</span> </a>
+                                </div>*@
+                        </td>
+                    </tr>
+                }
+                <tr class="background_color">
+                    <td id="tdtabs" width="100%">
+                        <div class="content-box">
+                            <div class="content-box-header" id="tblContact">
+                                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                        <td width="40%" align="left">
+                                            <h3 style="cursor: s-resize;">Mower helper information</h3>
+                                        </td>
+                                        @if (ViewBag.outmsg == "Y")
+                                         {
+                                           <td align="left">                                              
+                                               <span id="lblOutMsg" class="errormsg" style="color: Red; font-weight: bold; font-size:medium;float:initial;" >Email already exists in the system.</span>                      
+                                           </td>
+                                        }
+                                        @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                                        {
+                                            <td width="20%" style="text-align: right;">
+                                                <input type="submit" value="Profile Preview" title="Profile Preview" class="button" id="btnimgPreview" name="btnimgPreview" />&nbsp;
+                                          &nbsp;
+                                            </td>
+                                        }
+
+                                    </tr>
+                                </table>
+
+                            </div>
+                            <div class="content-box-content">
+
+                                @*  <table id="tblProviderContactInfo" align="Center" borderwidth="0" cellspacing="1"
+                                            width="100%" cellpadding="0" class="border_style">
+                                            <tr width="100%">
+                                                <td width="100%" valign="Top">*@
+                                <table  align="Center" borderwidth="0" cellspacing="1" width="100%" cellpadding="0"
+                                    class="border_style">
+                                    <tr>
+                                        <td valign="top" width="55%">
+                                            <table id="table2" width="100%" class="border_style" cellpadding="6" cellspacing="1">
+                                                <tr class="tr_bgcolor">
+                                                    <td colspan="2">
+                                                        <strong>&nbsp;Personal information</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr class="nav_blue_color">
+                                                    <td align="right">
+                                                        <span id="Label41">
+                                                            <font color="red">*</font><b>Mower helper business name :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="70%" id="tdpracticemain">
+
+                                                        @Html.TextBox("txtPracticeName", (string)@Model.PracticeName, new { @class = "textfield", MaxLength = "50", style = "width:180px", autocomplete = "off" })
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="white_color">
+                                                    <td align="right">
+                                                        <span id="Label4">
+                                                            <b><font color="red"><b>*</b></font>Name :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="65%" id="tdname">
+                                                        @* @{string[] TitleArray = { " ", "Dr", "Miss", "Mr", "Mrs", "Ms" };}
+                                                                            @Html.DropDownList("DDPrefix", new SelectList(TitleArray, (string)ViewBag.Prefix), new { @style = "width:60px;height:22px;font-size:13px;" })
+                                                                           
+                                                                            &nbsp;*@
+                                                        @Html.TextBox("txtFName", (string)@Model.Firstname, new { @class = "textfield", MaxLength = "30", style = "width:150px;", autocomplete = "off" })
+
+                                                        &nbsp;@Html.TextBox("txtMName", (string)@Model.MiddleInitial, new { @class = "textfield", MaxLength = "1", style = "width:15px;", autocomplete = "off" })
+
+                                                        &nbsp;@Html.TextBox("txtLName", (string)@Model.LastName, new { @class = "textfield", MaxLength = "30", style = "width:150px;", autocomplete = "off" })
+
+                                                        <br />
+
+                                                    </td>
+                                                </tr>
+                                                @* <tr class="nav_blue_color">
+                                                                        <td align="right">
+                                                                            <span ID="Label49">
+										<b><font color="red"><b>*</b></font>Gender :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td width="65%" id="tdgendermain">
+                                                                            @{string[] Gender = { "--select-- ", "Male", "Female" };}
+                                                                            @Html.DropDownList("ddlGender", new SelectList(Gender, (string)ViewBag.Gender), new { @style = "width:100px;height:22px;font-size:13px;" })
+                                                                          
+                                                                        </td>
+                                                                    </tr>
+                                                                                           <tr class="white_color">
+                                                                            <td align="right">
+                                                                                <span ID="Label461">
+										<b>Credentials :&nbsp;</b></span>
+                                                                            </td>
+                                                                            <td width="65%" id="tdcredentialsmain">
+                                                                            @{ string emptytext1 = null;}
+                                                                            @if ((string)ViewBag.Credentials != null)
+                                                                            {
+                                                                                emptytext1 = String.Empty;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                emptytext1 = "Select Credentials...";
+                                                                            }
+                                                                             @Html.Obout(new ComboBox("cbo2") { @Width = 400, Height = 200, FolderStyle=ViewData["cbo2_Folderstyle"].ToString(), EmptyText = emptytext1, AllowEdit = false, SelectionMode = ComboBoxSelectionMode.Multiple, AutoPostBack = false, CssSettings = new ComboBoxCssSettings() { @ItemsContainer = "ob_iCboIC long-states" }, ClientSideEvents = new ComboBoxClientSideEvents() { @OnClose = "cbo2_Close" } })
+                                                                           <br />  <font color="blue">To select multiple items use Ctrl key on PC or Shift key on Mac</font>
+                                                                            </td>
+                                                                        </tr>*@
+                                                <tr class="nav_blue_color">
+                                                    <td align="Right" id="tdimagemain">
+                                                        <table id="Table1" align="right">
+                                                            <tr class="nav_blue_color">
+                                                                @if (ViewBag.image == "Y")
+                                                                {
+                                                                    <td id="tdimage">
+                                                                        <img alt="" id="providerimage" height="100"  width="80" src="@ViewBag.providerimage"  />
+                                                                        <br />
+                                                                        <span id="imagename" visible="false"></span>
+                                                                        <br />
+                                                                        <a id="removeLogo" style="cursor: pointer;" onclick="return RemoveImage();">Remove image</a>
+                                                                    </td>
+                                                                }
+                                                                <td align="Right">
+                                                                    <b>Picture :&nbsp;</b>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="65%" id="tdformatmain">
+                                                        <input id="flLogo" type="file" name="flLogo" onchange="return ClearImage();" />
+                                                        <a id="lnkClear" style="display: none; cursor: pointer;" onclick="return RemoveMozila();">Clear image</a>
+                                                    </td>
+                                                </tr>
+                                              @if(clsWebConfigsettings.GetConfigSettingsValue("Show_license").ToUpper() == "YES"){
+                                                <tr class="white_color" id="_license">
+                                                    <td align="right">
+                                                       
+                                                        <span id="Label5">
+                                                            <b><font color="red"><b>*</b></font>License number :&nbsp;</b></span>
+                                                       
+                                                    </td>
+                                                    <td width="65%" id="tdlicensemain">
+                                                       
+                                                        @Html.TextBox("txtLicense", (string)Model.LicenseNo, new { @class = "textfield", style = "width:150px;", autocomplete = "off" })
+                                                        &nbsp;
+                                                                            @if (Model.IsLicenseVerified == "Y")
+                                                                            {
+                                                                                <span id="lblislicense" style="color: Green; font-weight: bold;">
+                                                                                   License verified</span>
+                                                                            }
+                                                                            else if (Model.IsLicenseVerified == "Y")
+                                                                            {
+                                                                                <span id="Span1" style="color: Red; font-weight: bold;">
+                                                                                   License verified</span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span id="Span2" style="color: Red; font-weight: bold;">
+                                                                                    License not verified </span>
+                                                                            }
+                                                        @if (ViewBag.licensemsg != null)
+                                                        {
+                                                            <img src="~/Images/help2.png" id="imglicensemsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.licensemsg' ,280);" />
+                                                        }
+                                                        <br />
+                                                        <br />
+                                                        <font color="blue">Enter ‘xxxx’ if you have no license number</font>
+                                                         
+                                                    </td>
+                                                </tr>
+                                              }
+                                             
+                                                @if (HttpContext.Current.Session["RoleID"].ToString() == "1")
+                                                {
+                                                    <tr class="nav_blue_color" id="trlicenses">
+                                                        <td align="right">
+                                                            <strong>Is license verified :</strong>&nbsp;
+                                                        </td>
+                                                        <td width="65%" align="left">
+                                                            @{ bool license;}
+                                                            @if (Model.IsLicenseVerified == "Y")
+                                                            {
+                                                                license = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                license = false;
+                                                            }
+                                                            @Html.CheckBox("chkIsLicense", license)
+                                                            @*<asp:CheckBox ID="chkIsLicense"></asp:CheckBox>*@
+                                                            <span id="lblEditLicense"></span>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                    
+                                                <tr id="trlicense">
+                                                    <td align="right">
+                                                         
+                                                        <span id="Label7">
+                                                            <b>License expiry date :&nbsp;</b></span>
+                                                              
+                                                    </td>
+                                                    <td width="65%" id="tdexpiremain">
+                                                       
+                                                        @if (HttpContext.Current.Session["RoleID"].ToString() == "4")
+                                                        {
+                                                            <span id="lblexpirydate1">@Model.licenseexpirydate</span>
+                                                        }
+                                                        @if (HttpContext.Current.Session["RoleID"].ToString() == "1")
+                                                        {
+                                                            @Html.TextBox("txtexpirydate", ((string)Model.licenseexpirydate != null ? (string)Model.licenseexpirydate : "mm/dd/yyyy"), new { @class = "textfield", MaxLength = "10", style = "width:82px;", onfocus = "return ClearDate('txtexpirydate');" })
+                                                        }
+@*<input id="txtexpirydate" value="mm/dd/yyyy" onfocus="return ClearDate('txtexpirydate');"
+                                                                                class="textfield" style="width: 90px;display:none;" /&nbsp;*@
+@*  <obout:calendar id="btnexpiryDate"  skinid="orbitzCALDOB" textboxid="txtexpirydate" />*@
+                                                            
+                                                    </td>
+                                                </tr>
+                                   
+                                                <tr id="tr">
+                                                    @*  <td style="height: 15px" align="right" width="40%">
+                            <a id="FileName" href="#"></a>&nbsp;&nbsp; &nbsp;&nbsp;<span
+                                id="LabelAttach" style="font-weight:bold;">Electrician license :</span> &nbsp;
+                        </td>*@
+                                                    <td align="Right" id="tdElectricianimage">
+                                                        <table id="Tableele1" align="right">
+                                                            <tr class="nav_blue_color">
+                                                                 @if (ViewBag.Eleimage == "Y")
+                                                                 {
+                                                                     <td id="tdEleimage">
+                                                                   
+                                                                      @if (!string.IsNullOrEmpty(Model.ElectricianImage))
+                                                                      {
+                                                                        <img alt="" id="Electricianimage" height="100"  width="80" src="@Model.ElectricianImage"  />
+                                                                      }
+                                                                      else
+                                                                      {
+                                                                          <strong>@Model.ElectricianImage</strong>
+                                                                      }
+                                                                        <br />
+                                                                        <a id="removeeleLogo" style="cursor: pointer;" onclick="return RemoveeleImage();">Remove </a>
+                                                                            
+                                                                    </td>
+                                                                 }
+                                                                <td align="Right" id="li">
+                                                                    
+                                                                    <b>Mower helper license :&nbsp;</b>
+                                                                        
+                                                                </td>
+                                                               
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="height: 15px" width="60%" align="Left"  >
+                                                        
+                                                            
+                                                        <table cellspacing="1" cellpadding="1" id="tblFiles" width="100%" border="0">
+                                                            <tr id="attachcheck">
+                                                                   
+                                                                      
+                                                                <td id="tduploadmain">
+                                                                  
+                                                                    <div id="inputsPlace">
+                                                                        <div id="div1">
+                                                                            <input type="checkbox" id="check1" style="display: none;" /><input type="file" id="myElectricianFile1" name="myElectricianFile1"
+                                                                                style="margin-left: 0px; background-color: White;" />&nbsp;&nbsp; @if (ViewBag.Electmsg != null)
+                                                                                                                                                  {
+                                                                                    <img src="~/Images/help2.png" id="imgElelicensemsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.Electmsg' ,320);" />
+                                                                                                                                                  }
+                                                                        </div>
+                                                                    </div>
+                                                                          
+                                                                </td>
+                                                              
+                                                               
+                                                            </tr>
+                                                            <tr>
+                                                               
+                                                                    
+                                                                <td id="liFile">(Maximum file size : 10mb)
+                                                                </td>
+                                                             
+                                                            </tr>
+                                                        </table> 
+                                                                  
+                                                  
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    @*<td style="height: 15px" align="right" width="40%">
+                            <a id="DriverFileName" href="#"></a>&nbsp;&nbsp; &nbsp;&nbsp;<span
+                                id="DriverAttach" style="font-weight:bold;">Driver license :</span> &nbsp;
+                        </td>*@
+                                                    <td align="Right" id="tdDriverimage">
+                                                        <table id="TableDriver" align="right">
+                                                            <tr class="nav_blue_color">
+                                                                @if (ViewBag.DriverimageInd == "Y")
+                                                                {
+                                                                    <td id="tddriverimage">
+                                                                       @if (!string.IsNullOrEmpty(ViewBag.providerDriverimage))
+                                                                       {
+                                                                        <img alt="" id="driverimage" height="100"  width="80" src="@ViewBag.providerDriverimage"  />
+                                                                       }
+                                                                       else
+                                                                       {
+                                                                          <strong>@ViewBag.providerDriverimagepdf</strong>
+                                                                       }
+                                                                        <br />
+                                                                        <a id="removeDriverLogo" style="cursor: pointer;" onclick="return RemovedriverImage();">Remove </a>
+                                                                    </td>
+                                                                }
+                                                                <td align="Right">
+                                                                    <b>Driver license :&nbsp;</b>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td style="height: 15px" width="60%" align="Left" >
+                                                        <table cellspacing="1" cellpadding="1" id="drivertblFiles" width="100%" border="0">
+                                                            <tr id="Driverattachcheck">
+                                                                <td id="Drivertduploadmain">
+                                                                    <div id="DriverinputsPlace">
+                                                                        <div id="divDriver">
+                                                                            <input type="file" id="myDriverFile" name="myDriverFile"
+                                                                                style="margin-left: 0px; background-color: White;" />&nbsp;&nbsp;
+                                                @if (ViewBag.Drivermsg != null)
+                                                {
+                                                    <img src="~/Images/help2.png" id="imgDriverlicensemsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.Drivermsg' ,320);" />
+                                                }
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>(Maximum file size : 10mb)
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                @*  <tr id="trcert">
+                                                                        <td align="right">
+                                                                            <span ID="Label9">
+										    <b>Certification(s) :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td width="65%">
+                                                                            @Html.TextBox("txtCertification", (string)ViewBag.certification, new { @class = "textfield", MaxLength = "100", style = "width:250px;", autocomplete = "off" })
+                                                                           
+                                                                        </td>
+                                                                    </tr>*@
+                                                <tr id="trwebsite" style="display: none">
+                                                    <td align="right">
+                                                        <span id="lblWeb"><b>Your website link :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="65%">
+                                                        @Html.TextBox("txtWebsite", (string)Model.Website, new { @class = "textfield", MaxLength = "100", style = "width:250px;", autocomplete = "off" })
+
+                                                    </td>
+                                                </tr>
+                                                <tr id="trfacebook" style="display: none">
+                                                    <td align="right">
+                                                        <strong>Facebook url :&nbsp;</strong>
+                                                    </td>
+                                                    <td width="65%" align="left" id="tdfburlmain">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr class="nav_blue_color">
+                                                                <td align="left" width="70%">
+                                                                    @Html.TextBox("txtfacebookurl", (string)Model.facebookurl, new { @class = "textfield", style = "width:250px;", autocomplete = "off" }) &nbsp;
+                                                                </td>
+                                                                <td align="left" width="30%">
+
+                                                                    <a href="#" id="afbimg" title="Click here to view help image">
+                                                                        <img src="~/Images/help2.png" id="Img2" /></a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                @* <tr id="trfacebook">
+                                                                        <td align="right">
+                                                                            <strong>Facebook link :&nbsp;</strong>
+                                                                        </td>
+                                                                        <td width="65%">
+                                                                           
+                                                                            @Html.TextBox("txtfacebookurl", (string)ViewBag.facebookurl, new { @class = "textfield", style = "width:250px;", autocomplete = "off" })
+                                                                      
+                                                                        </td>
+                                                                    </tr>*@
+                                                <tr class="white_color" style="height: 45px; display: none">
+                                                    <td align="right">
+                                                        <strong>
+                                                            <strong>Facebook comments :&nbsp;</strong>
+                                                        </strong>
+                                                    </td>
+                                                    <td width="65%" align="left">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr class="white_color">
+                                                                <td align="left" width="30%">
+                                                                    @{ bool Yes4;
+                                                                       bool No4;
+                                                                    }
+                                                                    @if (ViewBag.fbcomments == "Yes")
+                                                                    {
+                                                                        Yes4 = true;
+                                                                        No4 = false;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        Yes4 = false;
+                                                                        No4 = true;
+                                                                    }
+                                                                    @Html.RadioButton("rdfbcommentsYes", Yes4, Yes4, new { @onclick = "return rdfbcommentsYescheck();" })&nbsp;Yes
+                                                                                                    @Html.RadioButton("rdfbcommentsNo", No4, No4, new { @onclick = "return rdfbcommentsNocheck();" })&nbsp;No
+                                                                </td>
+                                                                <td align="left" width="70%">
+                                                                    @if (ViewBag.fbcommentsmsg != null)
+                                                                    {
+                                                                        <img src="~/Images/help2.png" id="imgfbcommentsmsg" onmouseout="hideddrivetip()"
+                                                                                                    onmouseover="ddrivetip('@ViewBag.fbcommentsmsg' ,320);" />
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr id="trtwitter" style="display: none">
+                                                    <td align="right">
+                                                        <strong>Twitter url :&nbsp;</strong>
+                                                    </td>
+                                                    <td width="65%" height="30px">
+
+                                                        @Html.TextBox("txttwitterurl", (string)Model.twitterurl, new { @class = "textfield", style = "width:250px;", autocomplete = "off" })
+
+                                                    </td>
+                                                </tr>
+
+
+                                            </table>
+                                        </td>
+                                        <td valign="top" width="45%">
+                                            <table id="Table2" width="100%" class="border_style" cellpadding="6" cellspacing="1">
+                                                <tr class="tr_bgcolor" height="25">
+                                                    <td colspan="2">
+                                                        <strong>&nbsp;Contact information</strong>
+                                                    </td>
+                                                </tr>
+                                                <tr class="nav_blue_color">
+                                                    <td align="right">
+                                                        <span id="Label18"><b>Work phone :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="75%" id="tdworkmain">
+                                                  
+                                                       @Html.TextBox("txtContWPhone1",!string.IsNullOrEmpty(Model.WorkPhone) && Model.WorkPhone!="--" ? Model.WorkPhone.Substring(0, 3):"", new { @class = "textfield", MaxLength = "3", style = "width:30px;", onkeypress = "return AlphaNumbers(event);", autocomplete = "off", type = "tel" })
+                                                        -
+                                                                            @Html.TextBox("txtContWPhone2", !string.IsNullOrEmpty(Model.WorkPhone)&& Model.WorkPhone!="--"?Model.WorkPhone.Substring(4, 3):"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off",
+                                                                           type = "tel"
+                                                                       })
+                                                        -
+                                                                            @Html.TextBox("txtContWPhone3", !string.IsNullOrEmpty(Model.WorkPhone)&& Model.WorkPhone!="--"?Model.WorkPhone.Substring(8, 4):"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "4",
+                                                                           style = "width:40px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off",
+                                                                           type = "tel"
+                                                                       })
+                                                       
+                                                        @*&nbsp;&nbsp;<strong>Extension&nbsp;:</strong>&nbsp;
+                                                                            @Html.TextBox("txtContWPExtn1", (string)ViewBag.WExtn, new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "5",
+                                                                           style = "width:50px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off"
+                                                                       })
+                                                                          &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                            @{ bool ContWLMsg;}
+                                                                           @if (ViewBag.ContWLMsg == "Yes")
+                                                                           {
+                                                                               ContWLMsg = true;
+                                                                           }
+                                                                           else
+                                                                           {
+                                                                               ContWLMsg = false;
+                                                                           }
+                                                                            @Html.CheckBox("ChkLeaveWMsg", ContWLMsg)
+                                                                            &nbsp;<strong>Ok to leave message</strong>*@
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color">
+                                                    <td align="Right">
+                                                        @* <img src="~/Images/p.png" id="Img3" style="position: absolute" onmouseover="ddrivetip('Cell phone is not shown in your public profile',300)"
+                                                                                onmouseout="hideddrivetip()" />
+                                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*@
+                                                        @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                                                        {
+                                                            <img src="~/Images/p.png" id="ImageButton1"
+                                                                onmouseover="ddrivetip('Your Cell phone will not be shown in the public profile. It will be used to send messages (either you created or system created) to your clients.',300)" onmouseout="hideddrivetip()" style="position: absolute" />
+                                                        }<font color="red"><b>*</b></font> <span id="Label17"><b>Cell phone :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="75%" id="tdcellmain">
+                                                        @Html.TextBox("txtContCPhone1", (string)Model.CellPhone.Substring(0, 3), new
+                                                   {
+                                                       @class = "textfield",
+                                                       MaxLength = "3",
+                                                       style = "width:30px;",
+                                                       onkeypress = "return AlphaNumbers(event);",
+                                                       autocomplete = "off",
+                                                       type = "tel"
+                                                   })
+                                                        -
+                                                                            @Html.TextBox("txtContCPhone2", (string)Model.CellPhone.Substring(3, 3), new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off",
+                                                                           type = "tel"
+                                                                       })
+                                                        -
+                                                                           @Html.TextBox("txtContCPhone3", (string)Model.CellPhone.Substring(6, 4), new
+                                                                      {
+                                                                          @class = "textfield",
+                                                                          MaxLength = "4",
+                                                                          style = "width:40px;",
+                                                                          onkeypress = "return AlphaNumbers(event);",
+                                                                          autocomplete = "off",
+                                                                          type = "tel"
+                                                                      })
+                                                        @*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                              @{ bool StrContCLMsg = false;
+                                                                                 bool StrConMToText = false;
+                                                                                 }
+                                                                               @if (ViewBag.StrContCLMsg != null)
+                                                                               {
+                                                                                   if (ViewBag.StrContCLMsg.ToString() == "Yes")
+                                                                                   {
+                                                                                       StrContCLMsg = true;
+                                                                                   }
+                                                                                   else
+                                                                                   {
+                                                                                       StrContCLMsg = false;
+
+                                                                                   }
+                                                                               }
+                                                                             @Html.CheckBox("ChkLeaveCMsg", StrContCLMsg)
+                                                                            &nbsp;<strong>Ok to leave voice
+                                                                                mail</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                 @if (ViewBag.StrConMToText != null)
+                                                                                 {
+                                                                                     if (ViewBag.StrConMToText.ToString() == "Yes")
+                                                                                     {
+                                                                                         StrConMToText = true;
+                                                                                     }
+                                                                                     else
+                                                                                     {
+                                                                                         StrConMToText = false;
+                                                                                     }
+                                                                                 } @Html.CheckBox("Chktext", StrConMToText)
+                                                                            &nbsp;<strong>Ok to text</strong>&nbsp;&nbsp;*@
+                                                    </td>
+                                                </tr>
+                                                <tr class="nav_blue_color">
+                                                    <td align="right">
+                                                        <span id="Label24"><b>Fax :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="75%" id="tdfaxmain">
+                                                        @Html.TextBox("txtContFax1",!string.IsNullOrEmpty(Model.Fax) ?Model.Fax.Substring(0, 3):"", new
+                                                   {
+                                                       @class = "textfield",
+                                                       MaxLength = "3",
+                                                       style = "width:30px;",
+                                                       onkeypress = "return AlphaNumbers(event);",
+                                                       autocomplete = "off",
+                                                       type = "tel"
+                                                   })
+                                                        -
+                                                                            @Html.TextBox("txtContFax2", !string.IsNullOrEmpty(Model.Fax) ?Model.Fax.Substring(4, 3):"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off",
+                                                                           type = "tel"
+                                                                       })
+                                                        -
+                                                                           @Html.TextBox("txtContFax3", !string.IsNullOrEmpty(Model.Fax) ?Model.Fax.Substring(8, 4):"", new
+                                                                      {
+                                                                          @class = "textfield",
+                                                                          MaxLength = "4",
+                                                                          style = "width:40px;",
+                                                                          onkeypress = "return AlphaNumbers(event);",
+                                                                          autocomplete = "off",
+                                                                          type = "tel"
+                                                                      })
+
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color">
+                                                    <td align="right">
+                                                        @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                                                        {
+                                                            <img src="~/Images/p.png" id="Img7" style="position: absolute" onmouseover="ddrivetip('Your email address will not be shown in the public profile. It is for us to communicate with you and send you appointment request alerts, invoice/receipts.',300)"
+                                                                onmouseout="hideddrivetip()" />
+                                                        }
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    <span id="Label26"><b><font color="red">*</font> Email :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="75%" id="tdemailmain">
+                                                        @Html.TextBox("txtContEmail", (string)Model.Email, new { @class = "textfield", MaxLength = "100", style = "width:270px;", autocomplete = "off" })
+
+                                                    </td>
+                                                </tr>
+                                                <tr class="nav_blue_color">
+                                                    <td align="right">
+                                                        <span id="Label6"><font color="red">*</font><b>Address 1 :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="75%" id="tdaddress1main">
+                                                        @Html.TextBox("txtContAddress1", (string)Model.Address1, new { @class = "textfield", MaxLength = "100", style = "width:270px;", autocomplete = "off" })
+
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color">
+                                                    <td align="right">
+                                                        <span id="Label8"><b>Address 2 :&nbsp;</b></span>
+                                                    </td>
+                                                    <td width="75%" id="tdaddress2main">
+                                                        @Html.TextBox("txtContAddress2", (string)Model.Address2, new { @class = "textfield", MaxLength = "100", style = "width:270px;", autocomplete = "off" })
+
+                                                    </td>
+                                                </tr>
+                                                     @Html.Partial("_CitiesStates", null, new ViewDataDictionary { { "Zip", Model.Zip} , { "State_ID", Model.State_ID},{ "City_ID", Model.City_ID} , { "Statename", Model.StateName},{ "Cityname", Model.CityName}})
+
+
+                                            </table>
+                                            @*<table id="Table6" width="100%" class="border_style" cellpadding="6" cellspacing="1"
+                                                                    height="25">
+                                                                    <tr class="tr_bgcolor" height="25px">
+                                                                        <td class="tr_bgcolor" colspan="2">
+                                                                            <strong>&nbsp;Secondary office information</strong>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr id="tbladdress2" class="nav_blue_color">
+                                                                        <td align="Right">
+                                                                            <span ID="lbladress"><b>Do you have secondary office :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td width="50%">
+                                                                           @{
+                                                                            bool str = false;
+                                                                            bool str1 = false;
+                                                                             }
+                                                                           @if (ViewBag.Secondary != null)
+                                                                           {
+                                                                               if (ViewBag.Secondary.ToString() == "Yes")
+                                                                               {
+                                                                                   str = true;
+                                                                                   str1 = false;
+                                                                               }
+                                                                               else
+                                                                               {
+                                                                                   str = false;
+                                                                                   str1 = true;
+                                                                               }
+                                                                           }
+                                                                            @Html.RadioButton("rbtnyes", "Yes", str, new { @GroupName = "grpoffice", onclick = "return rbtncheck();" }) &nbsp;Yes&nbsp;
+                                                                            @Html.RadioButton("rbtnno", "No", str1, new { @GroupName = "grpoffice", onclick = "return rbtncheck1();" })&nbsp;No
+                                                                            
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="white_color" id="trsecondaryadd1">
+                                                                        <td align="right">
+                                                                            <span ID="lbladdress1"><font color="red">*</font><b>Address 1 :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td width="50%" id="tdsecadd1main">
+                                                                            @Html.TextBox("txtsecondaryadd1", (string)ViewBag.Address3, new { @class = "textfield", MaxLength = "100", style = "width:270px;", autocomplete = "off" })
+                                                                           
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="nav_blue_color" id="trsecondaryadd2">
+                                                                        <td align="right">
+                                                                            <span ID="lbladdress2"><b>Address 2 :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td width="50%">
+                                                                            @Html.TextBox("txtsecondaryadd2", (string)ViewBag.Address4, new { @class = "textfield", MaxLength = "100", style = "width:270px;", autocomplete = "off" })
+                                                                            
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="white_color" id="trsecondaryadd3">
+                                                                        <td align="right">
+                                                                            <span ID="lblsecondaryzip"><b><font color="red">*</font>Zip code :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td width="50%" id="tdseczipmain">
+                                                                           
+                                                                         
+                                                                                        @Html.TextBox("txtsecondaryzip", (string)ViewBag.Zip1, new { @class = "textfield", MaxLength = "5", style = "width:50px;", onkeydown = "return checkValidNumeric1(event);", autocomplete = "off" })
+                                                                                        
+                                                                                  
+                                                                           
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="nav_blue_color" id="trsecondaryadd4">
+                                                                        <td align="right">
+                                                                            <span ID="lblsecondarystate"><b><font color="red">*</font>State :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td width="50%" id="tdsecstatemain">
+                                                                            @if (Model.StateList != null)
+                                                                            {
+                                                                            @Html.DropDownList("DropDownList1", Model.StateList, "--Select State--", new { @style = "width:270px;height:25px;font-size:13px;" })
+                                                                            }
+                                                                          
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="white_color" id="trsecondaryadd5">
+                                                                        <td align="right">
+                                                                            <span ID="lblsecondarycity"><b><font color="red">*</font>City :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td width="50%" id="tdseccitymain">
+                                                                            @Html.DropDownList("DropDownList2", Model.CityList, new { @style = "width:270px;height:25px;font-size:13px;" })
+                                                                            
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>*@
+
+
+                                        </td>
+                                    </tr>
+                                    <tr align="Center" width="100%" id="tblmain" style="display: none;">
+                                        <td colspan="2">
+                                            <table cellpadding="0" cellspacing="0" border="0" width="100%" align="center">
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdpractice" height="30px" style="display: none;">
+                                                        <span id="lblpractice" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdfirstname" height="30px" style="display: none;">
+                                                        <span id="lblfirstname" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdmiddlename" height="30px" style="display: none;">
+                                                        <span id="lblmiddlename" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdlastname" height="30px" style="display: none;">
+                                                        <span id="lbllastname" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdgender" height="30px" style="display: none;">
+                                                        <span id="lblgender" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdcre" height="30px" style="display: none;">
+                                                        <span id="lblcre" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tderrorimage" height="30px" style="display: none;">
+                                                        <span id="lblerrorimage" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdlicense" height="30px" style="display: none;">
+                                                        <span id="lbllicense" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdfburl" height="30px" style="display: none;">
+                                                        <span id="lblfburl" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdexpire" height="30px" style="display: none;">
+                                                        <span id="lblexpire" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdworkphone" height="30px" style="display: none;">
+                                                        <span id="lblworkphone" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdcellphone" height="30px" style="display: none;">
+                                                        <span id="lblcellphone" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdfax" height="30px" style="display: none;">
+                                                        <span id="lblfax" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdemail" height="30px" style="display: none;">
+                                                        <span id="lblemail" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdaddress1" height="30px" style="display: none;">
+                                                        <span id="Label1" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdaddress2" height="30px" style="display: none;">
+                                                        <span id="Label2" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                 <tr class="white_color" align="center">
+                            <td id="tdlblzip" height="30px" runat="server" style="display: none;">
+                                <label id="lblzip" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                                                 <tr class="white_color" align="center">
+                            <td id="tdlblstate" height="30px" style="display: none;">
+                                <label id="lblstate" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                                                 <tr class="white_color" align="center">
+                            <td id="tdlblcity" height="30px" style="display: none;">
+                                <label id="lblcity" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                                                @* <tr class="white_color" align="center">
+                                                                        <td id="tdsecadd1" height="30px" style="display: none;">
+                                                                            <span id="lblsecadd1" style="font-weight: bold; color: Black"></span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="white_color" align="center">
+                                                                        <td id="tdseczip" height="30px" style="display: none;">
+                                                                            <span id="lblseczip" style="font-weight: bold; color: Black"></span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="white_color" align="center">
+                                                                        <td id="tdsecstate" height="30px" style="display: none;">
+                                                                            <span id="lblsecstate" style="font-weight: bold; color: Black"></span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="white_color" align="center">
+                                                                        <td id="tdseccity" height="30px" style="display: none;">
+                                                                            <span id="lblseccity" style="font-weight: bold; color: Black"></span>
+                                                                        </td>
+                                                                    </tr>*@
+                                                @*<tr class="white_color" align="center">
+                                                                        <td id="tdcredentials" height="30px" runat="server" style="display: none;">
+                                                                            <span id="lblcredentials" style="font-weight: bold; color: Black"></span>
+                                                                        </td>
+                                                                    </tr>*@
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdformat" height="30px" runat="server" style="display: none;">
+                                                        <span id="lblformat" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                                @*</td>
+                                            </tr>
+                                        </table>*@
+
+                            </div>
+                        </div>
+                        <table id="TdlDownEditCancelBtn" width="98%">
+                            <tr class="background_color">
+                                <td align="Right" class="background_color">
+                                    @*<input id="HidCredentials" type="hidden" />
+                                            <input type="hidden" id="hdnStyle" />
+                                            <input type="hidden" id="CredentialsRelated_Ind" />*@
+                                    @if (Session["Roleid"].ToString() == "4")
+                                    {
+                                        <input type="submit" value="Save" title="Save" onclick="return BtnSubmit2(15);" class="button" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="Save" title="Save" onclick="return BtnSubmit2(1);" class="button" />
+                                    }
+
+
+                                    @Html.ActionLink("Cancel", "ViewIdentifyingInfo", null, new { @class = "button", Style = "width:34px;height:14px;" })
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            @* </td>
+            </tr>
+        </table>*@
+        </div>
+        <div id="viewfbimg" title="Facebook url help"></div>
+        <div id="imgPreview" title="Profile Preview"></div>
+        
+        <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+            <img src="../Images/ajax-loader2.gif" alt="Processing" />
+        </div>
+    }
+    @{Html.RenderAction("Bottomsections", "Tools");}
+    @*     <div id="divLoad" style="display:none; text-align:center; vertical-align:middle">
+         <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").addClass("active");
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").removeClass();
+        });
+    </script>
+</body>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //if (document.getElementById('rbtnno').checked == true) {
+        //    document.getElementById('trsecondaryadd1').style.display = 'none';
+        //    document.getElementById('trsecondaryadd2').style.display = 'none';
+        //    document.getElementById('trsecondaryadd3').style.display = 'none';
+        //    document.getElementById('trsecondaryadd4').style.display = 'none';
+        //    document.getElementById('trsecondaryadd5').style.display = 'none';
+        //}
+        //else if (document.getElementById('rbtnyes').checked == true) {
+        //    document.getElementById('trsecondaryadd1').style.display = '';
+        //    document.getElementById('trsecondaryadd2').style.display = '';
+        //    document.getElementById('trsecondaryadd3').style.display = '';
+        //    document.getElementById('trsecondaryadd4').style.display = '';
+        //    document.getElementById('trsecondaryadd5').style.display = '';
+        //}
+       
+        //$("#txtsecondaryzip").keyup(function () {
+        //    if ($(this).val().length == 5) {
+        //        $("#DropDownList1").focus();
+        //    }
+        //});
+    
+     
+
+
+      
+
+     
+
+    });
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#trCountry").hide();
+    });
+    function clearalerts() {
+      
+        // ValidateAlertClear('tblmain', 'lblzip', 'tdzip', 'tdzipmain', 'white');
+        document.getElementById('tblmain').style.display = 'none';
+        document.getElementById('tdzip').bgColor = 'White';
+        document.getElementById('tdlblzip').style.display = 'none';
+        document.getElementById('lblzip').style.display = 'none';
+        document.getElementById('tdstate').bgColor = 'White';
+        document.getElementById('tdlblstate').style.display = 'none';
+        document.getElementById('lblstate').style.display = 'none';
+        document.getElementById('tdcity').bgColor = 'White';
+        document.getElementById('tdlblcity').style.display = 'none';
+        document.getElementById('lblcity').style.display = 'none';
+        // document.getElementById('tdcontactname').bgColor = 'White';
+        // document.getElementById('tdlblcontact').style.display = 'none';
+        //document.getElementById('lblcontact').style.display = 'none';
+        //document.getElementById('tdcp').bgColor = 'White';
+        //document.getElementById('tdlblcp').style.display = 'none';
+        //document.getElementById('lblcp').style.display = 'none';
+   //************************************************************************************************
+        ValidateAlertClear('tblmain', 'lblpractice', 'tdpractice', 'tdpracticemain', 'white');
+        ValidateAlertClear('tblmain', 'lblfirstname', 'tdfirstname', 'tdname', 'white');
+        ValidateAlertClear('tblmain', 'lblmiddlename', 'tdmiddlename', 'tdname', 'white');
+        ValidateAlertClear('tblmain', 'lbllastname', 'tdlastname', 'tdname', 'white');
+        //   ValidateAlertClear('tblmain', 'lblgender', 'tdgender', 'tdgender', 'white');
+        //  ValidateAlertClear('tblmain', 'lblcre', 'tdcre', 'tdcre', 'white');
+      //  ValidateAlertClear('tblmain', 'lbllicense', 'tdlicense', 'tdlicensemain', 'white');
+       // ValidateAlertClear('tblmain', 'lblfburl', 'tdfburl', 'tdfburlmain', 'white');
+       // ValidateAlertClear('tblmain', 'lblerrorimage', 'tderrorimage', 'tdformatmain', 'white');
+       // ValidateAlertClear('tblmain', 'lblerrorimage', 'tderrorimage', 'tduploadmain', 'white');
+       // ValidateAlertClear('tblmain', 'lblerrorimage', 'tderrorimage', 'Drivertduploadmain', 'white');
+       // ValidateAlertClear('tblmain', 'lblworkphone', 'tdworkphone', 'tdworkmain', 'white');
+        ValidateAlertClear('tblmain', 'lblcellphone', 'tdcellphone', 'tdcellmain', 'white');
+      //  ValidateAlertClear('tblmain', 'lblfax', 'tdfax', 'tdfaxmain', 'white');
+        ValidateAlertClear('tblmain', 'lblemail', 'tdemail', 'tdemailmain', 'white');
+        ValidateAlertClear('tblmain', 'Label1', 'tdaddress1', 'tdaddress1main', 'white');
+       // ValidateAlertClear('tblmain', 'Label2', 'tdaddress2', 'tdaddress2main', 'white');
+       // ValidateAlertClear('tblmain', 'lblemail', 'tdemail', 'tdemailmain', 'white');
+        //ValidateAlertClear('tblmain', 'lblzip', 'tdzip', 'tdzipmain', 'white');
+        //ValidateAlertClear('tblmain', 'lblstate', 'tdstate', 'tdstatemain', 'white');
+        //ValidateAlertClear('tblmain', 'lblcity', 'tdcity', 'tdcitymain', 'white');
+        //  ValidateAlertClear('tblmain', 'lblsecadd1', 'tdsecadd1', 'tdsecadd1main', 'white');
+        //  ValidateAlertClear('tblmain', 'lblseczip', 'tdseczip', 'tdseczipmain', 'white');
+        //  ValidateAlertClear('tblmain', 'lblseccity', 'tdsecstate', 'tdsecstatemain', 'white');
+        //   ValidateAlertClear('tblmain', 'lblseccity', 'tdseccity', 'tdseccitymain', 'white');
+        //  ValidateAlertClear('tblmain', 'lblformat', 'tdformat', 'tdformatmain', 'white');
+    }
+
+    function BtnSubmit2(Roleid) {
+      
+        if (Roleid == 1 || Roleid == 31) {
+            ValidateAlertClear('tblmain', 'lblexpire', 'tdexpire', 'tdexpiremain', 'white');
+        }
+        var strpracticename = trim(document.getElementById('txtPracticeName').value);
+        document.getElementById('txtPracticeName').value = strpracticename;
+        if (strpracticename.length == '0') {
+            clearalerts();
+            //Glb_ShowAlert('Please enter practice name');
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lblpractice').innerHTML = "Please enter mower helper business name";
+            document.getElementById('tdpractice').style.display = '';
+            document.getElementById('tdpractice').bgColor = "orange";
+            document.getElementById('tdpracticemain').bgColor = "orange";
+            document.getElementById('txtPracticeName').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblpractice', 'tdpractice', 'tdpracticemain', 'white');
+        }
+        //if (MyChars(document.getElementById('txtPracticeName')) == "SpaceError") {
+        //    clearalerts();
+        //    //Glb_ShowAlert("Enter practice name without spaces");
+        //    document.getElementById('tblmain').style.display = '';
+        //    document.getElementById('lblpractice').innerHTML = "Please enter mower helper business name without spaces";
+        //    document.getElementById('tdpractice').style.display = '';
+        //    document.getElementById('tdpractice').bgColor = "orange";
+        //    document.getElementById('tdpracticemain').bgColor = "orange";
+        //    document.getElementById('txtPracticeName').focus();
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lblpractice', 'tdpractice', 'tdpracticemain', 'white');
+        //}
+        var strfirstname = trim(document.getElementById('txtFName').value);
+        document.getElementById('txtFName').value = strfirstname;
+        if (document.getElementById('txtFName').value == '') {
+            clearalerts();
+            //Glb_ShowAlert('Please enter first name');
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lblfirstname').innerHTML = "Please enter first name";
+            document.getElementById('tdfirstname').style.display = '';
+            document.getElementById('tdfirstname').bgColor = "orange";
+            document.getElementById('tdname').bgColor = "orange";
+            document.getElementById('txtFName').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblfirstname', 'tdfirstname', 'tdname', 'white');
+        }
+        if (fnCheckSpecialChars(document.getElementById('txtFName')) == 0) {
+            clearalerts();
+            //Glb_ShowAlert("Please enter first name correctly, there shouldn't be any special characters");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lblfirstname').innerHTML = "Please enter first name correctly, there shouldn't be any special characters";
+            document.getElementById('tdfirstname').style.display = '';
+            document.getElementById('tdfirstname').bgColor = "orange";
+            document.getElementById('tdname').bgColor = "orange";
+            document.getElementById('txtFName').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblfirstname', 'tdfirstname', 'tdname', 'white');
+        }
+        if (MyChars(document.getElementById('txtFName')) == "SpaceError") {
+            clearalerts();
+            //Glb_ShowAlert("Please enter first name with out space");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lblfirstname').innerHTML = "Please enter first name with out space";
+            document.getElementById('tdfirstname').style.display = '';
+            document.getElementById('tdfirstname').bgColor = "orange";
+            document.getElementById('tdname').bgColor = "orange";
+            document.getElementById('txtFName').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblfirstname', 'tdfirstname', 'tdname', 'white');
+        }
+        var strmiddlename = trim(document.getElementById('txtMName').value);
+        document.getElementById('txtMName').value = strmiddlename;
+        if (document.getElementById('txtMName').value != 0) {
+            clearalerts();
+            if (fnCheckSpecialChars(document.getElementById('txtMName')) == 0) {
+                clearalerts();
+                //var StrMsg = Glb_ShowAlert("Please enter middle initial correctly, there shouldn't be any special characters");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblmiddlename').innerHTML = "Please enter middle initial correctly, there shouldn't be any special characters";
+                document.getElementById('tdmiddlename').style.display = '';
+                document.getElementById('tdmiddlename').bgColor = "orange";
+                document.getElementById('tdname').bgColor = "orange";
+                document.getElementById('txtMName').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblmiddlename', 'tdmiddlename', 'tdname', 'white');
+            }
+        }
+
+        if (MyChars(document.getElementById('txtMName')) == 'SpaceError') {
+            clearalerts();
+            //Glb_ShowAlert('Please enter middle initial without spaces');
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lblmiddlename').innerHTML = "Please enter middle initial without spaces";
+            document.getElementById('tdmiddlename').style.display = '';
+            document.getElementById('tdmiddlename').bgColor = "orange";
+            document.getElementById('tdname').bgColor = "orange";
+            document.getElementById('txtMName').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblmiddlename', 'tdmiddlename', 'tdname', 'white');
+        }
+        var strlastname = trim(document.getElementById('txtLName').value);
+        document.getElementById('txtLName').value = strlastname;
+        if (document.getElementById('txtLName').value == '') {
+            clearalerts();
+            //Glb_ShowAlert('Please enter last name');
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lbllastname').innerHTML = "Please enter last name";
+            document.getElementById('tdlastname').style.display = '';
+            document.getElementById('tdlastname').bgColor = "orange";
+            document.getElementById('tdname').bgColor = "orange";
+            document.getElementById('txtLName').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lbllastname', 'tdlastname', 'tdname', 'white');
+        }
+        if (fnCheckSpecialChars(document.getElementById('txtLName')) == 0) {
+            clearalerts();
+            //Glb_ShowAlert("Please enter last name correctly, there shouldn't be any special characters");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lbllastname').innerHTML = "Please enter last name correctly, there shouldn't be any special characters";
+            document.getElementById('tdlastname').style.display = '';
+            document.getElementById('tdlastname').bgColor = "orange";
+            document.getElementById('tdname').bgColor = "orange";
+            document.getElementById('txtLName').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lbllastname', 'tdlastname', 'tdname', 'white');
+        }
+        if (MyChars(document.getElementById('txtLName')) == "SpaceError") {
+            clearalerts();
+            //Glb_ShowAlert("Please enter last name with out space");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lbllastname').innerHTML = "Please enter last name with out space";
+            document.getElementById('tdlastname').style.display = '';
+            document.getElementById('tdlastname').bgColor = "orange";
+            document.getElementById('tdname').bgColor = "orange";
+            document.getElementById('txtLName').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lbllastname', 'tdlastname', 'tdname', 'white');
+        }
+        //if (document.getElementById('ddlGender').selectedIndex == 0) {
+        //    clearalerts();
+        //    document.getElementById('tblmain').style.display = '';
+        //    document.getElementById('lblgender').innerHTML = 'Please select gender';
+        //    document.getElementById('tdgender').style.display = '';
+        //    document.getElementById('tdgendermain').bgColor = "orange";
+        //    document.getElementById('tdgender').bgColor = "orange";
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lblgender', 'tdgender', 'tdgender', 'white');
+
+        //}
+
+        //if (document.getElementById('ddlGender').selectedIndex == 1) {
+        //    clearalerts();
+        //    if (document.getElementById('DDPrefix').selectedIndex == 4 || document.getElementById('DDPrefix').selectedIndex == 5 || document.getElementById('DDPrefix').selectedIndex == 2) {
+        //        clearalerts();
+        //        //Glb_ShowAlert("Please select proper gender");
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblgender').innerHTML = "Please select proper gender";
+        //        document.getElementById('tdgender').style.display = '';
+        //        document.getElementById('tdgender').bgColor = "orange";
+        //        document.getElementById('tdgendermain').bgColor = "orange";
+        //        return false;
+        //    }
+        //    else {
+
+        //        ValidateAlertClear('tblmain', 'lblgender', 'tdgender', 'tdgender', 'white');
+        //    }
+
+        //}
+        //else if (document.getElementById('ddlGender').selectedIndex == 2) {
+        //    clearalerts();
+        //    if (document.getElementById('DDPrefix').selectedIndex == 3) {
+        //        clearalerts();
+        //        //Glb_ShowAlert("Please select proper gender");
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblgender').innerHTML = "Please select proper gender";
+        //        document.getElementById('tdgender').style.display = '';
+        //        document.getElementById('tdgender').bgColor = "orange";
+        //        document.getElementById('tdgendermain').bgColor = "orange";
+        //        return false;
+        //    }
+        //    else {
+        //        ValidateAlertClear('tblmain', 'lblgender', 'tdgender', 'tdgendermain', 'white');
+        //    }
+
+        //}
+
+
+        //var selcre;
+        //selcre = document.getElementById('cbo2_SelectedText').value;
+        //var rel = new Array();
+        ////alert(selcre);
+        //rel = selcre.split(",");
+        //if (rel.length > 3) {
+        //    clearalerts();
+        //    document.getElementById('tblmain').style.display = '';
+        //    document.getElementById('lblcre').innerHTML = 'Please select maximum 3 credentials.';
+        //    document.getElementById('tdcre').style.display = '';
+        //    document.getElementById('tdcredentialsmain').bgColor = "orange";
+        //    document.getElementById('tdcre').bgColor = "orange";
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lblcre', 'tdcre', 'tdcredentialsmain', 'F0F6FF');
+
+        //}
+
+
+        //if (document.getElementById('flLogo').value != "") {
+        //    clearalerts();
+        //    var strFilePath = document.getElementById('flLogo').value;
+        //    var Files1 = new Array();
+        //    var Files = new Array();
+        //    Files = strFilePath.split('\\');
+        //    var strFileName = Files[parseInt(Files.length) - 1];
+        //    var strreverse = revString(strFileName);
+        //    var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+
+        //    if (strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TIFF" || strExtn.toUpperCase() == "PNG") {
+        //        clearalerts();
+        //        if (document.getElementById('providerimage') != undefined || document.getElementById('providerimage') != null) {
+        //            clearalerts();
+        //        }
+        //        ValidateAlertClear('tblmain', 'lblerrorimage', 'tderrorimage', 'tdformatmain', 'F0F6FF');
+        //    }
+        //    else {
+        //        clearalerts();
+        //        //Glb_ShowAlert("Please enter license number  without spaces");
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblerrorimage').innerHTML = "Invalid logo!!! the format of the photo selected is not of type image.";
+        //        document.getElementById('tderrorimage').style.display = '';
+        //        document.getElementById('tderrorimage').bgColor = "orange";
+        //        document.getElementById('tdformatmain').bgColor = "orange";
+        //        document.getElementById('flLogo').focus();
+        //        return false;
+        //    }
+
+        //}
+    @*    if ('@ViewBag.Show_license' == "Y") {
+            var strlicense = trim(document.getElementById('txtLicense').value);
+            document.getElementById('txtLicense').value = strlicense;
+            if (document.getElementById('txtLicense').value == "") {
+                clearalerts();
+                //Glb_ShowAlert("Please enter license number");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lbllicense').innerHTML = "Please enter license number";
+                document.getElementById('tdlicense').style.display = '';
+                document.getElementById('tdlicense').bgColor = "orange";
+                document.getElementById('tdlicensemain').bgColor = "orange";
+                document.getElementById('txtLicense').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lbllicense', 'tdlicense', 'tdlicensemain', 'white');
+            }
+        } *@
+        //if (MyChars(document.getElementById('txtLicense')) == "SpaceError") {
+        //    clearalerts();
+        //    //Glb_ShowAlert("Please enter license number  without spaces");
+        //    document.getElementById('tblmain').style.display = '';
+        //    document.getElementById('lbllicense').innerHTML = "Please enter license number  without spaces";
+        //    document.getElementById('tdlicense').style.display = '';
+        //    document.getElementById('tdlicense').bgColor = "orange";
+        //    document.getElementById('tdlicensemain').bgColor = "orange";
+        //    document.getElementById('txtLicense').focus();
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lbllicense', 'tdlicense', 'tdlicensemain', 'white');
+        //}
+        //if (fnCheckSpecialChars(document.getElementById('txtLicense')) == 0) {
+        //    clearalerts();
+        //    //var StrMsg = Glb_ShowAlert("Please enter license number correctly, there shouldn't be any special characters");
+        //    document.getElementById('tblmain').style.display = '';
+        //    document.getElementById('lbllicense').innerHTML = "Please enter license number correctly, there shouldn't be any special characters";
+        //    document.getElementById('tdlicense').style.display = '';
+        //    document.getElementById('tdlicense').bgColor = "orange";
+        //    document.getElementById('tdlicensemain').bgColor = "orange";
+        //    document.getElementById('txtLicense').focus();
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lbllicense', 'tdlicense', 'tdlicensemain', 'white');
+        //}
+        //var fburl1 = trim(document.getElementById('txtfacebookurl').value);
+        //if (fburl1 == '' && document.getElementById('rdfbcommentsYes').checked == true) {
+        //    clearalerts();
+        //    document.getElementById('tblmain').style.display = '';
+        //    document.getElementById('lblfburl').innerHTML = "Please enter facebook url inorder to show facbook comments on your public profile or select facebook comments as No.";
+        //    document.getElementById('tdfburl').style.display = '';
+        //    document.getElementById('tdfburl').bgColor = "orange";
+        //    document.getElementById('tdfburlmain').bgColor = "orange";
+        //    document.getElementById('txtfacebookurl').focus();
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lblfburl', 'tdfburl', 'tdfburlmain', 'white');
+        //}
+        if (Roleid == 1 || Roleid == 31) {
+            clearalerts();
+            //                if (document.getElementById('txtexpirydate').value != '' && document.getElementById('txtexpirydate').value != 'mm/dd/yyyy') {
+            //                    if (CheckValidDate(document.getElementById('txtexpirydate')) == 0) {
+
+            //                        return false;
+            //                    }
+            //                }
+            //if (document.getElementById('txtexpirydate').value != '' && document.getElementById('txtexpirydate').value != 'mm/dd/yyyy') {
+            //    clearalerts();
+            //    var Dateid = document.getElementById('txtexpirydate').value;
+            //    var Dat = Dateid.split("/");
+            //    var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1])
+            //    var yearid = Dat[2];
+            //    var Monthid = Dat[0];
+            //    var MyId = Dat[1];
+            //    var CurDt = new Date()
+            //    var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+            //    var matchArray = Dateid.match(DatePat);
+
+            //    if (matchArray == null) {
+            //        clearalerts();
+            //        //                        Glb_ShowAlert('Invalid license expiry date format!!! should be like mm/dd/yyyy');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblexpire').innerHTML = "Invalid license expiry date format!!! should be like mm/dd/yyyy";
+            //        document.getElementById('tdexpire').style.display = '';
+            //        document.getElementById('tdexpire').bgColor = "orange";
+            //        document.getElementById('tdexpiremain').bgColor = "orange";
+            //        document.getElementById('txtexpirydate').focus();
+            //        return false;
+            //    }
+            //    if (yearid < 1900) {
+            //        clearalerts();
+            //        //                        Glb_ShowAlert('Invalid license expiry date!!! year should be greater than 1900');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblexpire').innerHTML = "Invalid license expiry date!!! year should be greater than 1900";
+            //        document.getElementById('tdexpire').style.display = '';
+            //        document.getElementById('tdexpire').bgColor = "orange";
+            //        document.getElementById('tdexpiremain').bgColor = "orange";
+            //        document.getElementById('txtexpirydate').focus();
+            //        return false
+            //    }
+            //    if (Monthid > 12 || Monthid == 0) {
+            //        clearalerts();
+            //        //                        Glb_ShowAlert('Invalid license expiry date!!! month should be entered in between 1 to 12');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblexpire').innerHTML = "Invalid license expiry date!!! month should be entered in between 1 to 12";
+            //        document.getElementById('tdexpire').style.display = '';
+            //        document.getElementById('tdexpire').bgColor = "orange";
+            //        document.getElementById('tdexpiremain').bgColor = "orange";
+            //        document.getElementById('txtexpirydate').focus();
+            //        return false
+            //    }
+            //    if (MyId > 31 || MyId == 0) {
+            //        clearalerts();
+            //        //                        Glb_ShowAlert('Invalid license expiry date!!! date should be entered in between 1 to 31');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblexpire').innerHTML = "Invalid license expiry date!!! date should be entered in between 1 to 31";
+            //        document.getElementById('tdexpire').style.display = '';
+            //        document.getElementById('tdexpire').bgColor = "orange";
+            //        document.getElementById('tdexpiremain').bgColor = "orange";
+            //        document.getElementById('txtexpirydate').focus();
+            //        return false
+            //    }
+            //    if (myDat < CurDt) {
+            //        clearalerts();
+            //        //                        Glb_ShowAlert('Invalid license expiry date!!! should not be less than or equal to current date');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblexpire').innerHTML = "Invalid license expiry date!!! should not be less than or equal to current date";
+            //        document.getElementById('tdexpire').style.display = '';
+            //        document.getElementById('tdexpire').bgColor = "orange";
+            //        document.getElementById('tdexpiremain').bgColor = "orange";
+            //        document.getElementById('txtexpirydate').focus();
+            //        return false;
+            //    }
+            //    else {
+            //        ValidateAlertClear('tblmain', 'lblexpire', 'tdexpire', 'tdexpiremain', 'white');
+            //    }
+            //}
+        }
+        //if (document.getElementById('myElectricianFile1').value != "") {
+        //    clearalerts();
+        //    var strFilePath = document.getElementById('myElectricianFile1').value;
+        //    var Files1 = new Array();
+        //    var Files = new Array();
+        //    Files = strFilePath.split('\\');
+        //    var strFileName = Files[parseInt(Files.length) - 1];
+        //    var strreverse = revString(strFileName);
+        //    var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+        //    //alert(strExtn);
+        //    if (strExtn.toUpperCase() == "PDF" || strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TIFF" || strExtn.toUpperCase() == "PNG") {
+        //        clearalerts();
+        //        if (document.getElementById('Electricianimage') != undefined || document.getElementById('Electricianimage') != null) {
+        //            clearalerts();
+        //        }
+        //        ValidateAlertClear('tblmain', 'lblerrorimage', 'tderrorimage', 'tduploadmain', 'F0F6FF');
+        //    }
+        //    else {
+        //        clearalerts();
+        //        //Glb_ShowAlert("Please enter license number  without spaces");
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblerrorimage').innerHTML = "Invalid electrician license!!! the format of the license should be pdf,gif,jpg,bmp,tif,tiff,png format only.";
+        //        document.getElementById('tderrorimage').style.display = '';
+        //        document.getElementById('tderrorimage').bgColor = "orange";
+        //        document.getElementById('tduploadmain').bgColor = "orange";
+        //        document.getElementById('myElectricianFile1').focus();
+        //        return false;
+        //    }
+
+        //}
+        //if (document.getElementById('myDriverFile').value != "") {
+        //    clearalerts();
+        //    var strFilePath = document.getElementById('myDriverFile').value;
+        //    var Files1 = new Array();
+        //    var Files = new Array();
+        //    Files = strFilePath.split('\\');
+        //    var strFileName = Files[parseInt(Files.length) - 1];
+        //    var strreverse = revString(strFileName);
+        //    var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+        //    //alert(strExtn);
+        //    if (strExtn.toUpperCase() == "PDF" || strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TIFF" || strExtn.toUpperCase() == "PNG") {
+        //        clearalerts();
+        //        if (document.getElementById('driverimage') != undefined || document.getElementById('driverimage') != null) {
+        //            clearalerts();
+        //        }
+        //        ValidateAlertClear('tblmain', 'lblerrorimage', 'tderrorimage', 'Drivertduploadmain', 'F0F6FF');
+        //    }
+        //    else {
+        //        clearalerts();
+        //        //Glb_ShowAlert("Please enter license number  without spaces");
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblerrorimage').innerHTML = "Invalid driver license!!! the format of the license should be pdf,gif,jpg,bmp,tif,tiff,png format only.";
+        //        document.getElementById('tderrorimage').style.display = '';
+        //        document.getElementById('tderrorimage').bgColor = "orange";
+        //        document.getElementById('Drivertduploadmain').bgColor = "orange";
+        //        document.getElementById('myDriverFile').focus();
+        //        return false;
+        //    }
+
+        //}
+        // work phone validation
+        //if (document.getElementById('txtContWPhone1').value == '' && document.getElementById('txtContWPhone2').value == '' && document.getElementById('txtContWPhone3').value == '') {
+        //    clearalerts();
+        //    //Glb_ShowAlert("Please enter phone");
+        //    document.getElementById('tblmain').style.display = '';
+        //    document.getElementById('lblworkphone').innerHTML = "Please enter phone";
+        //    document.getElementById('tdworkphone').style.display = '';
+        //    document.getElementById('tdworkphone').bgColor = "orange";
+        //    document.getElementById('tdworkmain').bgColor = "orange";
+        //    document.getElementById('txtContWPhone1').focus();
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lblworkphone', 'tdworkphone', 'tdworkmain', 'white');
+        //}
+        if (document.getElementById('txtContWPhone1').value != '' || document.getElementById('txtContWPhone2').value != '' || document.getElementById('txtContWPhone3').value != '') {
+            clearalerts();
+            if (IsValidPhone(document.getElementById('txtContWPhone1').value + document.getElementById('txtContWPhone2').value + document.getElementById('txtContWPhone3').value) == 'false') {
+                clearalerts();
+                //Glb_ShowAlert('Please enter valid phone');
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblworkphone').innerHTML = "Please enter valid work phone";
+                document.getElementById('tdworkphone').style.display = '';
+                document.getElementById('tdworkphone').bgColor = "orange";
+                document.getElementById('tdworkmain').bgColor = "orange";
+                document.getElementById('txtContWPhone1').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblworkphone', 'tdworkphone', 'tdworkmain', 'white');
+            }
+        }
+
+        //if (document.getElementById('txtContWPExtn1').value != '') {
+        //    clearalerts();
+        //    if (document.getElementById('txtContWPhone1').value == '' || document.getElementById('txtContWPhone2').value == '' || document.getElementById('txtContWPhone3').value == '') {
+        //        clearalerts();
+        //        //Glb_ShowAlert('Extn is invalid with out phone, please enter phone');
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblworkphone').innerHTML = "Extn is invalid with out phone, please enter phone";
+        //        document.getElementById('tdworkphone').style.display = '';
+        //        document.getElementById('tdworkphone').bgColor = "orange";
+        //        document.getElementById('tdworkmain').bgColor = "orange";
+        //        document.getElementById('txtContWPhone1').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ValidateAlertClear('tblmain', 'lblworkphone', 'tdworkphone', 'tdworkmain', 'white');
+        //    }
+        //}
+        //if (document.getElementById('txtContWPExtn1').value != '') {
+        //    clearalerts();
+        //    if (document.getElementById('txtContWPhone1').value != '' || document.getElementById('txtContWPhone2').value != '' || document.getElementById('txtContWPhone3').value != '') {
+        //        clearalerts();
+        //        if (IsValidPhone(document.getElementById('txtContWPhone1').value + document.getElementById('txtContWPhone2').value + document.getElementById('txtContWPhone3').value) == 'false') {
+        //            clearalerts();
+        //            //Glb_ShowAlert('Please enter valid phone');
+        //            document.getElementById('tblmain').style.display = '';
+        //            document.getElementById('lblworkphone').innerHTML = "Please enter valid phone";
+        //            document.getElementById('tdworkphone').style.display = '';
+        //            document.getElementById('tdworkphone').bgColor = "orange";
+        //            document.getElementById('tdworkmain').bgColor = "orange";
+        //            document.getElementById('txtContWPhone1').focus();
+        //            return false;
+        //        }
+        //        else {
+        //            ValidateAlertClear('tblmain', 'lblworkphone', 'tdworkphone', 'tdworkmain', 'white');
+        //        }
+        //    }
+        //}
+
+        //if (document.getElementById('txtContWPhone1').value != "" || document.getElementById('txtContWPhone2').value != "" || document.getElementById('txtContWPhone3').value != "") {
+        //    clearalerts();
+        //    if (fnStringFieldValidate(document.getElementById('txtContWPhone1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtContWPhone2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtContWPhone3'), "0123456789") == 0) {
+        //        clearalerts();
+        //        //Glb_ShowAlert("Invalid phone number!!! phone number must be in numeric only.");
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblworkphone').innerHTML = "Invalid work phone number!!!work phone number must be in numeric only.";
+        //        document.getElementById('tdworkphone').style.display = '';
+        //        document.getElementById('tdworkphone').bgColor = "orange";
+        //        document.getElementById('tdworkmain').bgColor = "orange";
+        //        document.getElementById('txtContWPhone1').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ValidateAlertClear('tblmain', 'lblworkphone', 'tdworkphone', 'tdworkmain', 'white');
+        //    }
+        //}
+        //if ((document.getElementById('Chktext').checked == true) || (document.getElementById('ChkLeaveCMsg').checked == true)) {
+        //    clearalerts();
+        //    if (document.getElementById('txtContCPhone1').value == '' && document.getElementById('txtContCPhone2').value == '' && document.getElementById('txtContCPhone3').value == '') {
+        //        clearalerts();
+        //        //Glb_ShowAlert("Please enter cell phone");
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblcellphone').innerHTML = "Please enter cell phone";
+        //        document.getElementById('tdcellphone').style.display = '';
+        //        document.getElementById('tdcellphone').bgColor = "orange";
+        //        document.getElementById('tdcellmain').bgColor = "orange";
+        //        document.getElementById('txtContCPhone1').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ValidateAlertClear('tblmain', 'lblcellphone', 'tdcellphone', 'tdcellmain', 'white');
+        //    }
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lblcellphone', 'tdcellphone', 'tdcellmain', 'white');
+        //}
+        if (document.getElementById('txtContCPhone1').value == '' && document.getElementById('txtContCPhone2').value == '' && document.getElementById('txtContCPhone3').value == '') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter cell phone");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lblcellphone').innerHTML = "Please enter cell phone";
+            document.getElementById('tdcellphone').style.display = '';
+            document.getElementById('tdcellphone').bgColor = "orange";
+            document.getElementById('tdcellmain').bgColor = "orange";
+            document.getElementById('txtContCPhone1').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblcellphone', 'tdcellphone', 'tdcellmain', 'white');
+        }
+        if (document.getElementById('txtContCPhone1').value != '' || document.getElementById('txtContCPhone2').value != '' || document.getElementById('txtContCPhone3').value != '') {
+            clearalerts();
+            if (IsValidPhone(document.getElementById('txtContCPhone1').value + document.getElementById('txtContCPhone2').value + document.getElementById('txtContCPhone3').value) == 'false') {
+                clearalerts();
+                //Glb_ShowAlert('Please enter valid cell phone number');
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblcellphone').innerHTML = "Please enter valid cell phone number";
+                document.getElementById('tdcellphone').style.display = '';
+                document.getElementById('tdcellphone').bgColor = "orange";
+                document.getElementById('tdcellmain').bgColor = "orange";
+                document.getElementById('txtContCPhone1').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblcellphone', 'tdcellphone', 'tdcellmain', 'white');
+            }
+        }
+        if (document.getElementById('txtContCPhone1').value != '' || document.getElementById('txtContCPhone2').value != '' || document.getElementById('txtContCPhone3').value != '') {
+            clearalerts();
+            if (fnStringFieldValidate(document.getElementById('txtContCPhone1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtContCPhone2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtContCPhone3'), "0123456789") == 0) {
+                clearalerts();
+                //Glb_ShowAlert('Invalid cell phone number!!! cell phone number must be in numeric only');
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblcellphone').innerHTML = "Invalid cell phone number!!! cell phone number must be in numeric only";
+                document.getElementById('tdcellphone').style.display = '';
+                document.getElementById('tdcellphone').bgColor = "orange";
+                document.getElementById('tdcellmain').bgColor = "orange";
+                document.getElementById('txtContCPhone1').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblcellphone', 'tdcellphone', 'tdcellmain', 'white');
+            }
+        }
+        //if (document.getElementById('txtContFax1').value != '' || document.getElementById('txtContFax2').value != '' || document.getElementById('txtContFax3').value != '') {
+        //    clearalerts();
+        //    if (IsValidPhone(document.getElementById('txtContFax1').value + document.getElementById('txtContFax2').value + document.getElementById('txtContFax3').value) == 'false') {
+        //        clearalerts();
+        //        //Glb_ShowAlert('Please enter valid fax number');
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblfax').innerHTML = "Please enter valid fax number";
+        //        document.getElementById('tdfax').style.display = '';
+        //        document.getElementById('tdfax').bgColor = "orange";
+        //        document.getElementById('tdfaxmain').bgColor = "orange";
+        //        document.getElementById('txtContFax1').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ValidateAlertClear('tblmain', 'lblfax', 'tdfax', 'tdfaxmain', 'white');
+        //    }
+        //}
+        //if (document.getElementById('txtContFax1').value != "" || document.getElementById('txtContFax2').value != "" || document.getElementById('txtContFax3').value != "") {
+        //    clearalerts();
+        //    if (fnStringFieldValidate(document.getElementById('txtContFax1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtContFax2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtContFax3'), "0123456789") == 0) {
+        //        clearalerts();
+        //        //Glb_ShowAlert('Invalid fax number.!!! fax number. must be in numeric only');
+        //        document.getElementById('tblmain').style.display = '';
+        //        document.getElementById('lblfax').innerHTML = "Invalid fax number.!!! fax number. must be in numeric only";
+        //        document.getElementById('tdfax').style.display = '';
+        //        document.getElementById('tdfax').bgColor = "orange";
+        //        document.getElementById('tdfaxmain').bgColor = "orange";
+        //        document.getElementById('txtContFax1').focus();
+        //        return false;
+        //    }
+        //    else {
+        //        ValidateAlertClear('tblmain', 'lblfax', 'tdfax', 'tdfaxmain', 'white');
+        //    }
+        //}
+        var stremail = trim(document.getElementById('txtContEmail').value);
+        document.getElementById('txtContEmail').value = stremail;
+        if (document.getElementById('txtContEmail').value == '') {
+            clearalerts();
+            //Glb_ShowAlert("Enter email")
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lblemail').innerHTML = "Please enter email";
+            document.getElementById('tdemail').style.display = '';
+            document.getElementById('tdemail').bgColor = "orange";
+            document.getElementById('tdemailmain').bgColor = "orange";
+            document.getElementById('txtContEmail').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblemail', 'tdemail', 'tdemailmain', 'white');
+        }
+        if (document.getElementById('txtContEmail').value != '') {
+            clearalerts();
+            if (ValidateEmail(document.getElementById('txtContEmail')) == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Please enter valid email")
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblemail').innerHTML = "Please enter valid email";
+                document.getElementById('tdemail').style.display = '';
+                document.getElementById('tdemail').bgColor = "orange";
+                document.getElementById('tdemailmain').bgColor = "orange";
+                document.getElementById('txtContEmail').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblemail', 'tdemail', 'tdemailmain', 'white');
+            }
+        }
+        var straddress1 = trim(document.getElementById('txtContAddress1').value);
+        document.getElementById('txtContAddress1').value = straddress1;
+        if (document.getElementById('txtContAddress1').value == '') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter address1");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('Label1').innerHTML = "Please enter address1";
+            document.getElementById('tdaddress1').style.display = '';
+            document.getElementById('tdaddress1').bgColor = "orange";
+            document.getElementById('tdaddress1main').bgColor = "orange";
+            document.getElementById('txtContAddress1').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'Label1', 'tdaddress1', 'tdaddress1main', 'white');
+        }
+        //if (MyChars(document.getElementById('txtContAddress1')) == 'SpaceError') {
+        //    clearalerts();
+        //    //Glb_ShowAlert('Please enter address1 without spaces first');
+        //    document.getElementById('tblmain').style.display = '';
+        //    document.getElementById('Label1').innerHTML = "Please enter address1 without spaces first";
+        //    document.getElementById('tdaddress1').style.display = '';
+        //    document.getElementById('tdaddress1').bgColor = "orange";
+        //    document.getElementById('tdaddress1main').bgColor = "orange";
+        //    document.getElementById('txtContAddress1').focus();
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'Label1', 'tdaddress1', 'tdaddress1main', 'white');
+        //}
+        var straddress2 = trim(document.getElementById('txtContAddress2').value);
+        document.getElementById('txtContAddress2').value = straddress2;
+        if (document.getElementById('txtContAddress2').value != '') {
+            clearalerts();
+            //if (MyChars(document.getElementById('txtContAddress2')) == 'SpaceError') {
+            //    clearalerts();
+            //    //Glb_ShowAlert('Please enter address2 without spaces first');
+            //    document.getElementById('tblmain').style.display = '';
+            //    document.getElementById('Label2').innerHTML = "Please enter address2 without spaces first";
+            //    document.getElementById('tdaddress2').style.display = '';
+            //    document.getElementById('tdaddress2').bgColor = "orange";
+            //    document.getElementById('tdaddress2main').bgColor = "orange";
+            //    document.getElementById('txtContAddress2').focus();
+            //    return false;
+            //}
+            //else {
+            //    ValidateAlertClear('tblmain', 'Label2', 'tdaddress2', 'tdaddress2main', 'white');
+            //}
+            if (document.getElementById('txtContEmail').value == '') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter email");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblemail').innerHTML = "Please enter email";
+                document.getElementById('tdemail').style.display = '';
+                document.getElementById('tdemail').bgColor = "orange";
+                document.getElementById('tdemailmain').bgColor = "orange";
+                document.getElementById('txtContEmail').focus();
+                return false;
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblemail', 'tdemail', 'tdemailmain', 'white');
+            }
+            if (document.getElementById('txtContEmail').value != '') {
+                clearalerts();
+                if (ValidateEmail(document.getElementById('txtContEmail')) == 0) {
+                    clearalerts();
+                    //Glb_ShowAlert("Please enter valid email")
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lblemail').innerHTML = "Please enter valid email";
+                    document.getElementById('tdemail').style.display = '';
+                    document.getElementById('tdemail').bgColor = "orange";
+                    document.getElementById('tdemailmain').bgColor = "orange";
+                    document.getElementById('txtContEmail').focus();
+                    return false;
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lblemail', 'tdemail', 'tdemailmain', 'white');
+                }
+            }
+
+        }
+
+        if (document.getElementById('txtZip').value == '') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter zip code")
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblzip').style.display = '';
+            document.getElementById('tdlblzip').bgColor = 'Orange';
+            document.getElementById('lblzip').style.display = '';
+            document.getElementById('lblzip').innerHTML = 'Please enter zip code';
+            document.getElementById('tdzip').bgColor = 'Orange';
+            document.getElementById('txtZip').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdzip').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblzip').style.display = 'none';
+            document.getElementById('lblzip').style.display = 'none';
+        }
+        if (document.getElementById('txtZip').value != '') {
+            clearalerts();
+            if (document.getElementById('txtZip').value.length != 5) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid zip code");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblzip').style.display = '';
+                document.getElementById('tdlblzip').bgColor = 'Orange';
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Invalid zip code';
+                document.getElementById('tdzip').bgColor = 'Orange';
+                document.getElementById('txtZip').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblzip').style.display = 'none';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+            if (fnStringFieldValidate(document.getElementById('txtZip'), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid zip code!!! zip code must be in alphanumeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblzip').style.display = '';
+                document.getElementById('tdlblzip').bgColor = 'Orange';
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Invalid zip code!!! zip code must be in alphanumeric only.';
+                document.getElementById('tdzip').bgColor = 'Orange';
+                document.getElementById('txtZip').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblzip').style.display = 'none';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+            }
+
+            if (document.getElementById('DDState').selectedIndex == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Please select state")
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblstate').style.display = '';
+                document.getElementById('tdlblstate').bgColor = 'Orange';
+                document.getElementById('lblstate').style.display = '';
+                document.getElementById('lblstate').innerHTML = 'Please select state';
+                document.getElementById('tdstate').bgColor = 'Orange';
+                document.getElementById('DDState').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdstate').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblstate').style.display = 'none';
+                document.getElementById('lblstate').style.display = 'none';
+            }
+            if (document.getElementById('DDCity').selectedIndex == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Please select city")
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblcity').style.display = '';
+                document.getElementById('tdlblcity').bgColor = 'Orange';
+                document.getElementById('lblcity').style.display = '';
+                document.getElementById('lblcity').innerHTML = 'Please select city';
+                document.getElementById('tdcity').bgColor = 'Orange';
+                document.getElementById('DDCity').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdcity').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblcity').style.display = 'none';
+                document.getElementById('lblcity').style.display = 'none';
+            }
+
+            // alert(rdaddresslist.SelectedValue)
+
+            //if (document.getElementById('rbtnyes').checked == true) {
+            //    clearalerts();
+            //    var str_Address2;
+            //    str_Address2 = trim(document.getElementById('txtsecondaryadd1').value);
+            //    document.getElementById('txtsecondaryadd1').value = str_Address2;
+            //    if (str_Address2 == '') {
+            //        clearalerts();
+            //        //Glb_ShowAlert('Please enter address 1 in secondary address information');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblsecadd1').innerHTML = "Please enter address 1 in secondary address information";
+            //        document.getElementById('tdsecadd1').style.display = '';
+            //        document.getElementById('tdsecadd1').bgColor = "orange";
+            //        document.getElementById('tdsecadd1main').bgColor = "orange";
+            //        document.getElementById('txtsecondaryadd1').focus();
+            //        return false;
+            //    }
+            //    else {
+            //        ValidateAlertClear('tblmain', 'lblsecadd1', 'tdsecadd1', 'tdsecadd1main', 'white');
+            //    }
+            //    if (document.getElementById('txtsecondaryzip').value == '') {
+            //        clearalerts();
+            //        //Glb_ShowAlert('Please enter zip in secondary address information');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblseczip').innerHTML = "Please enter zip in secondary address information";
+            //        document.getElementById('tdseczip').style.display = '';
+            //        document.getElementById('tdseczip').bgColor = "orange";
+            //        document.getElementById('tdseczipmain').bgColor = "orange";
+            //        document.getElementById('txtsecondaryzip').focus();
+            //        return false;
+            //    }
+            //    else {
+            //        ValidateAlertClear('tblmain', 'lblseczip', 'tdseczip', 'tdseczipmain', 'white');
+            //    }
+            //    if (document.getElementById('txtsecondaryzip').value != '') {
+            //        clearalerts();
+            //        if (document.getElementById('txtsecondaryzip').value.length != 5) {
+            //            //Glb_ShowAlert('Please enter valid zip in secondary address information');
+            //            document.getElementById('tblmain').style.display = '';
+            //            document.getElementById('lblseczip').innerHTML = "Please enter valid zip in secondary address information";
+            //            document.getElementById('tdseczip').style.display = '';
+            //            document.getElementById('tdseczip').bgColor = "orange";
+            //            document.getElementById('tdseczipmain').bgColor = "orange";
+            //            document.getElementById('txtsecondaryzip').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblmain', 'lblseczip', 'tdseczip', 'tdseczipmain', 'white');
+            //        }
+            //        if (fnStringFieldValidate(document.getElementById('txtsecondaryzip'), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 0) {
+            //            clearalerts();
+            //            //Glb_ShowAlert('Invalid zip code!!! zip code must be in alphanumeric only.');
+            //            document.getElementById('tblmain').style.display = '';
+            //            document.getElementById('lblseczip').innerHTML = "Invalid zip code!!! zip code must be in alphanumeric only.";
+            //            document.getElementById('tdseczip').style.display = '';
+            //            document.getElementById('tdseczip').bgColor = "orange";
+            //            document.getElementById('tdseczipmain').bgColor = "orange";
+            //            document.getElementById('txtsecondaryzip').focus();
+            //            return false;
+            //        }
+            //        else {
+            //            ValidateAlertClear('tblmain', 'lblseczip', 'tdseczip', 'tdseczipmain', 'white');
+            //        }
+            //    }
+
+            //    if (document.getElementById('DropDownList1').selectedIndex == 0) {
+            //        clearalerts();
+            //        //Glb_ShowAlert('Please select state in secondary address information');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblsecstate').innerHTML = "Please select state in secondary address information";
+            //        document.getElementById('tdsecstate').style.display = '';
+            //        document.getElementById('tdsecstate').bgColor = "orange";
+            //        document.getElementById('tdsecstatemain').bgColor = "orange";
+            //        document.getElementById('DropDownList1').focus();
+            //        return false;
+            //        Controls = Controls + 'State' + '<br>'
+            //    }
+            //    else {
+            //        ValidateAlertClear('tblmain', 'lblseccity', 'tdsecstate', 'tdsecstatemain', 'white');
+            //    }
+
+            //    if (document.getElementById('DropDownList2').selectedIndex == 0) {
+            //        clearalerts();
+            //        //Glb_ShowAlert('Please select city in secondary address information');
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblseccity').innerHTML = "Please select city in secondary address information";
+            //        document.getElementById('tdseccity').style.display = '';
+            //        document.getElementById('tdseccity').bgColor = "orange";
+            //        document.getElementById('tdseccitymain').bgColor = "orange";
+            //        document.getElementById('DropDownList2').focus();
+            //        return false;
+            //    }
+            //    else {
+            //        ValidateAlertClear('tblmain', 'lblseccity', 'tdseccity', 'tdseccitymain', 'white');
+            //    }
+            //}
+
+            //$('#divLoad').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //return true;
+        
+    }
+</script>
+<script type="text/javascript">
+    //function rbtncheck() {
+    //    //alert("1");
+    //    document.getElementById('rbtnyes').checked = true;
+    //    document.getElementById('rbtnno').checked = false;
+    //    if (document.getElementById('rbtnyes').checked == true) {
+
+    //        //alert("2");
+    //        document.getElementById('trsecondaryadd1').style.display = '';
+    //        document.getElementById('trsecondaryadd2').style.display = '';
+    //        document.getElementById('trsecondaryadd3').style.display = '';
+    //        document.getElementById('trsecondaryadd4').style.display = '';
+    //        document.getElementById('trsecondaryadd5').style.display = '';
+    //        //return false;
+    //    }
+
+    //}
+    //function rbtncheck1() {
+    //    document.getElementById('rbtnno').checked = true;
+    //    document.getElementById('rbtnyes').checked = false;
+    //    if (document.getElementById('rbtnno').checked == true) {
+
+    //        //alert("3");
+    //        document.getElementById('trsecondaryadd1').style.display = 'none';
+    //        document.getElementById('trsecondaryadd2').style.display = 'none';
+    //        document.getElementById('trsecondaryadd3').style.display = 'none';
+    //        document.getElementById('trsecondaryadd4').style.display = 'none';
+    //        document.getElementById('trsecondaryadd5').style.display = 'none';
+    //        //return false;
+    //    }
+    //}
+    $(function () {
+        $("#txtContWPhone1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtContWPhone2").focus();
+            }
+        });
+        $("#txtContWPhone2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtContWPhone3").focus();
+            }
+        });
+        //$("#txtContWPhone3").keyup(function () {
+        //    if ($(this).val().length == 4) {
+        //        $("#txtContWPExtn1").focus();
+        //    }
+        //});
+        //$("#txtContWPExtn1").keyup(function () {
+        //    if ($(this).val().length == 5) {
+        //        $("#ChkLeaveWMsg").focus();
+        //    }
+        //});
+        $("#txtContCPhone1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtContCPhone2").focus();
+            }
+        });
+        $("#txtContCPhone2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtContCPhone3").focus();
+            }
+        });
+        $("#txtContCPhone3").keyup(function () {
+            if ($(this).val().length == 4) {
+                $("#ChkLeaveCMsg").focus();
+            }
+        });
+
+        $("#txtContFax1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtContFax2").focus();
+            }
+        });
+        $("#txtContFax2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtContFax3").focus();
+            }
+        });
+        $("#txtContFax3").keyup(function () {
+            if ($(this).val().length == 4) {
+                $("#txtContEmail").focus();
+            }
+        });
+    });
+    function rdfbcommentsYescheck() {
+        var fburl = trim(document.getElementById('txtfacebookurl').value);
+        if (fburl != '' && fburl != null) {
+            if (document.getElementById("rdfbcommentsYes").checked == true) {
+                document.getElementById("rdfbcommentsNo").checked = false;
+                ValidateAlertClear('tblmain', 'lblfburl', 'tdfburl', 'tdfburlmain', 'white');
+            }
+        }
+        else {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('lblfburl').innerHTML = "Please enter facebook url inorder to show facbook comments on your public profile.";
+            document.getElementById('tdfburl').style.display = '';
+            document.getElementById('tdfburl').bgColor = "orange";
+            document.getElementById('tdfburlmain').bgColor = "orange";
+            document.getElementById('txtfacebookurl').focus();
+            return false;
+        }
+
+    }
+    function rdfbcommentsNocheck() {
+        if (document.getElementById("rdfbcommentsNo").checked == true) {
+            document.getElementById("rdfbcommentsYes").checked = false;
+            ValidateAlertClear('tblmain', 'lblfburl', 'tdfburl', 'tdfburlmain', 'white');
+        }
+    }
+</script>
+<script type="text/javascript">
+    function ClearImage() {
+        if (document.getElementById('flLogo').value != 0) {
+            //alert('2');
+
+            document.getElementById('lnkClear').style.display = '';
+        }
+    }
+    function RemoveMozila() {
+        // alert('5');
+        var who = document.getElementById("flLogo");
+        who.value = "";
+        var who2 = who.cloneNode(false);
+        who2.onchange = who.onchange;
+        who.parentNode.replaceChild(who2, who);
+        document.getElementById('lnkClear').style.display = 'none';
+    }
+    function RemoveImage() {
+        var who = document.getElementById("providerimage");
+        document.getElementById("tdimage").style.display = 'none';
+       // document.getElementById('strimage').value = '';
+        document.getElementById('ExistedLogo').value = '';
+        document.getElementById('ExistedExtn').value = '';
+    }
+    function RemoveeleImage() {
+        document.getElementById("tdEleimage").style.display = 'none';
+       // document.getElementById('strEleimage').value = '';
+        document.getElementById('ExistedEleLogo').value = '';
+        document.getElementById('ExistedEleExtn').value = '';
+    }
+    function RemovedriverImage() {
+        document.getElementById("tddriverimage").style.display = 'none';
+      //  document.getElementById('strDriverimage').value = '';
+        document.getElementById('ExistedDriverLogo').value = '';
+        document.getElementById('ExistedDriverExtn').value = '';
+    }
+</script>
+<script type="text/javascript">
+
+    $(function () {
+        if ($('#HdnRoleid').val() == '1') {
+            $("#txtexpirydate,#txtEndDateforDaily,#txtEndDateforWeek").datepicker({
+                dateFormat: 'mm/dd/yy',
+                changeMonth: true,
+                changeYear: true,
+                //                showCurrentAtPos: 1,
+                showWeeks: true,
+                inline: true,
+                numberOfMonths: [1, 1],
+                yearRange: "1950:2020",
+                showOn: "button",
+                buttonImage: "../Images/calender.gif",
+                buttonImageOnly: true
+
+            });
+         
+            $("#trlicense").addClass("white_color");
+            // $("#trcert").addClass("nav_blue_color");
+            $("#trwebsite").addClass("white_color");
+            $("#trfacebook").addClass("nav_blue_color");
+            $("#trtwitter").addClass("nav_blue_color");
+
+        }
+        else {
+            $("#trlicense").addClass("nav_blue_color");
+            //  $("#trcert").addClass("white_color");
+            $("#trwebsite").addClass("white_color");
+            $("#trfacebook").addClass("nav_blue_color");
+            $("#trtwitter").addClass("nav_blue_color");
+        }
+
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('#Img2').mouseover(function () {
+        //    document.getElementById("divCvv").style.zIndex = '1005';
+        //    document.getElementById("divCvv").style.left = '550px';
+        //    document.getElementById("divCvv").style.top = '120px';
+        //    document.getElementById("divCvv").style.position = 'absolute';
+        //    document.getElementById("divCvv").style.display = '';
+        //});
+        //$('#Img2').mouseout(function () {
+
+        //    document.getElementById('divCvv').style.display = 'none';
+        //});
+        //$('#viewfbimg').dialog({
+        //    autoOpen: false,
+        //    width: 1000,
+        //    resizable: false,
+        //    modal: true,
+        //    position: ['middle', 40]
+        //});
+        $("#afbimg").click(function () {
+
+            //var dialogDiv = $('#viewfbimg');
+            var viewUrl = 'Showfbhelp';
+            Displaydialog('viewfbimg', viewUrl, 'auto', 1000, 'dvLoading', null, null);
+            //$.get(viewUrl, function (data) {
+            //    dialogDiv.html(data);
+            //    dialogDiv.dialog('open');
+            //});
+            //return false;
+        });
+    });
+</script>
+<script type="text/javascript">
+
+    $(function () {
+        $.ajaxSetup({ cache: false });
+        //$('#imgPreview').dialog({
+        //    autoOpen: false,
+        //    width: 1000,
+        //    //                      height: 400,
+        //    resizable: false,
+        //    modal: true
+        //});
+
+        $("#btnimgPreview").click(function () {
+            //linkObj = $(this);
+            //var dialogDiv = $('#imgPreview');
+            //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            // var viewUrl = linkObj.attr('href');
+            var viewUrl = '../Directory/ProfilePreview/?randomnumber=' + '@Model.Random_number';
+            Displaydialog('imgPreview', viewUrl, 'auto', 1000, 'dvLoading', null, null);
+            //$.get(viewUrl, function (data) {
+            //    dialogDiv.html(data);
+            //    $('#dvLoading').dialog('destroy');
+            //    dialogDiv.dialog('open');
+            //});
+            //return false;
+        });
+
+    });
+    $(document).ready(function () {
+        $(".closeprivew").live("click", function (e) {
+            var dialogDiv = $('#imgPreview');
+            dialogDiv.dialog('close');
+        });
+    });
+    $(document).ready(function () {
+      @*  var showele = '@ViewBag.ShowElectricians';*@
+            var tdschedule1 = document.getElementById('tdtabs');
+            if ('@clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper()' == "YES") {
+                tdschedule1.className = "tab-background";
+            }
+            else {
+                tdschedule1.className = "";
+            }
+        });
+   
+    if ('@clsWebConfigsettings.GetConfigSettingsValue("Show_license").ToUpper()' == "YES") {
+       
+        $("#_license").show(); $("#trlicense").show();
+        $("#tr").show();
+        
+    }
+    else {
+        $("#_license").hide(); $("#trlicense").hide();
+        $("#tr").hide(); 
+    }
+</script>
+</html>

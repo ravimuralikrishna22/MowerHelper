@@ -1,0 +1,111 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+   
+</head>
+<body>
+ @using (Ajax.BeginForm("SubmitPublicVideolist", "Admin", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "GET",
+            UpdateTargetId = "searchResults"
+           
+           
+        }, new { @id = "updateCarForm" }))
+   {
+
+                
+                <div class="content-box">
+               <input type="hidden" id="hdnmedia" name="hdnmedia" value="@ViewBag.media" />
+ <input type="hidden" id="hdndelmeid" name="hdndelmeid" value="@ViewBag.delmeid" />
+                <div class="content-box-content">
+                    <table id="Table3" cellspacing="0" runat="server" visible="true" cellpadding="0"
+                        width="100%" align="center" border="0">
+                    
+                        <tr class="white_color">
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>
+                                           
+                                                    &nbsp;&nbsp;&nbsp;<b>Title :</b>&nbsp;
+                                                    <input type="text" id="txtTitle1" name="txtTitle1" class="textfield" autocomplete="off" style=" width:180px;"  />
+                                                    
+                                                    
+                                                  
+                                        </td>
+                                        <td>
+                                            &nbsp;&nbsp;
+                                         <input type="submit" id="imgbtnUsubmit" name="imgbtnUsubmit" class="button" value="Search" />
+                                               &nbsp;
+                                                         
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                      
+                    </table>
+                      <table id="searchResults" width="100%" align="center">
+        
+        </table>
+                    <table class="border_style" cellpadding="1" cellspacing="1" width="100%" align="center">
+                        <tr class="nav_blue_color">
+                        
+                            <td>
+                               <div id="container-grid">
+                                     @{
+                                              WebGrid totgrid = new WebGrid(rowsPerPage:10, ajaxUpdateContainerId: "container-grid");}
+                                            @{WebGrid grid = totgrid.Bind(Model, rowCount: Convert.ToInt32(ViewBag.totalrec), autoSortAndPage: false);
+                              
+                                   if (grid.TotalRowCount != 0)
+        {
+     
+@grid.GetHtml(htmlAttributes: new { id = "grid" },
+                              tableStyle: "gridTable", headerStyle: "gridHead", footerStyle: "gridFooter", rowStyle: "gridRowmax", alternatingRowStyle: "gridAltRowmax", selectedRowStyle: "select",
+        columns:
+        grid.Columns(
+               grid.Column("Sino", "#", style: "width: 700px;", canSort: false),
+         grid.Column("Title", "Title", canSort: false, format: @<text><a  href="#"    id="asid @item.Sino" onclick="return selected('@item.Title','@item.PublicVideo_ID');">@item.Title</a></text>),
+                   grid.Column("Video_Description", "Description name", canSort: false)
+
+                            )
+
+                            )
+}
+else{
+                                        <table cellspacing="0" id="tblnorecords" runat="server" cellpadding="0" width="100%" border="0" align="center">
+     <tr class="white_color" runat="server">
+                <td align="center" height="25px" valign="middle" width="100%">
+                  <label id="" style="font-weight:bold; font-size:13px;">No Videos found.</label>
+                   </td>
+        </tr>
+     </table>
+                                       
+                                   }
+}
+</div>
+                            </td>
+                            
+                        </tr>
+                       
+                       
+                    </table>
+                    <table style="width:100%" >
+                         <tr style="width:100%" >
+                        <td align="right" style="padding-top:5px; padding-bottom:5px; padding-right:2px;">
+                         <input type="submit" id="btnmediaclose" name="btnmediaclose" class="mediaclose button" value="Close" />
+                        </td>
+                        </tr>
+                    </table>
+                    </div></div>
+ }
+   
+</body>
+</html>

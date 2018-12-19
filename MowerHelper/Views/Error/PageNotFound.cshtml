@@ -1,0 +1,35 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <link href="~/Content/common.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript">
+        window.history.forward(-1);
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        @{Html.RenderAction("_Reg_New_Top_Section", "Public", null);}
+       
+              <div id="flt02">
+            <div id="bodycon">
+                <div id="contentpannel" class="padding-top">
+                   <div style="height: 450px; margin-top: 110px;margin-left:20px;margin-right:20px;">
+                       <p style="font-family: Arial; font-weight: bold; font-size: 16px; text-align: justify;line-height:25px;">
+                          Oops... it seems we ran into a problem or you are trying to access a page that is not present.
+                          Please @Html.ActionLink("Click here", "Index", "Home",null, new { @target = "_parent" }) to go to the home page. To provide better service, we log our website visitors details such as IP address : @ViewBag.ipaddress
+
+                        </p>
+                    </div>
+                </div>
+                @{Html.RenderAction("_New_bottom_section", "Public", null);}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

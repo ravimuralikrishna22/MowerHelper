@@ -1,0 +1,709 @@
+﻿  @using MowerHelper.Models.Classes
+@{
+    Layout = null;
+  
+}
+@* @{
+           MowerHelper.Models.Classes.clsWebConfigsettings clsweb = new MowerHelper.Models.Classes.clsWebConfigsettings();
+      }*@
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+   @Styles.Render("~/Content/common")
+        @Styles.Render("~/Content/themes/base/jqueryCSS")
+    @Scripts.Render("~/Scripts/Thscripts")
+    @Scripts.Render("~/ThScripts/Thjquerycripts")
+    @Scripts.Render("~/Scripts/PublicPagesScript")
+    <style type="text/css">
+.dvLoading .ui-dialog-titlebar{display:none;}
+</style>
+    <script src="http://www.google.com/jsapi?key=AIzaSyCgKM4MCuYrILJ8CFPR-a5xXelNuobdK50"
+        type="text/javascript"></script>
+    <script type="text/javascript">
+        if (getcookie('City') == null) {
+            if (google.loader.ClientLocation) {
+                visitor_lat = google.loader.ClientLocation.latitude; createcookie("Latitude", visitor_lat, 1);
+                visitor_lon = google.loader.ClientLocation.longitude; createcookie("Longitude", visitor_lon, 1);
+                visitor_city = google.loader.ClientLocation.address.city; createcookie("City", visitor_city, 1);
+                visitor_region = google.loader.ClientLocation.address.region; createcookie("State", visitor_region, 1);
+                visitor_country = google.loader.ClientLocation.address.country; createcookie("Country", visitor_country, 1);
+                visitor_countrycode = google.loader.ClientLocation.address.country_code; createcookie("Countrycode", visitor_countrycode, 1);
+            }
+        }
+
+        function createcookie(name, val, days) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + days);
+            document.cookie = name + "=" + escape(val) + "; path=/";
+        }
+        function getcookie(name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + name.length + 1; c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+                else {
+                    return null;
+                }
+            }
+            else {
+                return null;
+            }
+        }
+       
+        function cancel() {
+            //alert(content);
+            //  alert('Your request will be processed soon.');
+            window.location.href = "index";
+        }
+        function chkContactus() {
+            if (document.getElementById('txtSubject').value == '') {
+                alert("Please enter subject");
+                document.getElementById('txtSubject').focus();
+                return false;
+            }
+
+            //if (document.getElementById('txtSubject').value != '') {
+            //    if (MyChars(document.getElementById('txtSubject')) == "SpaceError") {
+            //        alert("Please enter subject with out space");
+            //        document.getElementById('txtSubject').focus();
+            //        return false;
+            //    }
+            //}
+
+            if (document.getElementById('txtName').value == '') {
+                alert('Enter first name!');
+                document.getElementById('txtName').focus();
+                return false;
+            }
+
+            if (fnCheckSpecialChars(document.getElementById('txtName')) == 0) {
+                alert("Please enter first name correctly, there shouldn't be any special characters");
+                document.getElementById('txtName').focus();
+                return false;
+            }
+
+            if (MyChars(document.getElementById('txtName')) == "NumError") {
+                alert("Please enter first name in alphabets");
+                document.getElementById('txtName').focus();
+                return false;
+            }
+
+            if (MyChars(document.getElementById('txtName')) == "SpaceError") {
+                alert("Please enter first name with out space");
+                document.getElementById('txtName').focus();
+                return false;
+            }
+
+            if (document.getElementById('txtLastName').value == '') {
+                alert('Enter last name!');
+                document.getElementById('txtLastName').focus();
+                return false;
+            }
+
+            if (fnCheckSpecialChars(document.getElementById('txtLastName')) == 0) {
+                alert("Please enter last name correctly, <br> there shouldn't be any special characters");
+                document.getElementById('txtLastName').focus();
+                return false;
+            }
+
+            if (MyChars(document.getElementById('txtLastName')) == "NumError") {
+                alert("Please enter last name  <br> in  alphabets");
+                document.getElementById('txtLastName').focus();
+                return false;
+            }
+
+            if (MyChars(document.getElementById('txtLastName')) == "SpaceError") {
+                alert("Please enter last name <br> with out space");
+                document.getElementById('txtLastName').focus();
+                return false;
+            }
+
+            if (document.getElementById('txtEmail').value == '') {
+                alert("Please enter your email id");
+                document.getElementById('txtEmail').focus();
+                return false;
+            }
+            if (document.getElementById('txtEmail').value != '') {
+                if (ValidateEmail(document.getElementById('txtEmail')) == 0) {
+                    alert("Please enter valid email id");
+                    document.getElementById('txtEmail').focus();
+                    return false;
+                }
+            }
+
+            if (document.getElementById('txtphone1').value != '' || document.getElementById('txtphone2').value != '' || document.getElementById('txtphone3').value != '') {
+                if (IsValidPhone(document.getElementById('txtphone1').value + document.getElementById('txtphone2').value + document.getElementById('txtphone3').value) == 'false') {
+                    alert("Enter valid phone number");
+                    document.getElementById('txtphone1').focus();
+                    return false;
+                }
+            }
+
+            if (document.getElementById('txtMessage').value == '') {
+                alert("Enter message");
+                document.getElementById('txtMessage').focus();
+                return false;
+            }
+
+            if (document.getElementById('txtMessage').value != '') {
+                if (MyChars(document.getElementById('txtMessage')) == "SpaceError") {
+                    alert("Enter message");
+                    document.getElementById('txtMessage').focus();
+                    return false;
+                }
+
+                var str_Msg;
+                str_Msg = trim(document.getElementById('txtMessage').value);
+                if (str_Msg.length > 500) {
+                    alert("Please enter at most 500 characters in the message field");
+                    document.getElementById('txtMessage').focus();
+                    return false;
+                }
+            }
+
+            if (document.getElementById('txtimgKey').value == '') {
+                alert("Enter verification code");
+                document.getElementById('txtimgKey').focus();
+                return false;
+            }
+            
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            return true;
+        }
+
+        function AlphaNumbers(e) //use this function like this (ex. onkeypress="return AlphaNumbers(event);")
+        {
+            //alert("2");
+            var keynum;
+            var keychar;
+            var numcheck;
+
+            if (window.event) // IE
+            {
+                keynum = e.keyCode;
+                if ((keynum >= 48 && keynum <= 57) || keynum == 13) {
+                    e.keyCode = e.keyCode;
+                }
+                else {
+                    e.keyCode = 0;
+                    return false;
+                }
+                return true;
+            }
+            else if (e.which) // Netscape/Firefox/Opera
+            {
+                keynum = e.which;
+                keychar = String.fromCharCode(keynum);
+                if (keynum != 8) {
+                    numcheck = /\d/;  // here d/  for number only. w/ for char and number                 
+                    return numcheck.test(keychar);
+                }
+                else
+                    return true;
+            }
+        }
+        function chksubject() {
+            var strchksubject = document.getElementById('txtSubject').value;
+            strchksubject = strchksubject.replace(/^\s+/, '');
+            document.getElementById('txtSubject').value = strchksubject;
+        }
+        function chkname() {
+            var strchkname = document.getElementById('txtName').value;
+            strchkname = strchkname.replace(/^\s+/, '');
+            document.getElementById('txtName').value = strchkname;
+        }
+        function chklname() {
+            var strchklname = document.getElementById('txtLastName').value;
+            strchklname = strchklname.replace(/^\s+/, '');
+            document.getElementById('txtLastName').value = strchklname;
+        }
+        function chkemail() {
+            var strchkemail = document.getElementById('txtEmail').value;
+            strchkemail = strchkemail.replace(/^\s+/, '');
+            document.getElementById('txtEmail').value = strchkemail;
+        }
+        function chkmessage() {
+            var strchkmessage = document.getElementById('txtMessage').value;
+            strchkmessage = strchkmessage.replace(/^\s+/, '');
+            document.getElementById('txtMessage').value = strchkmessage;
+        }
+        function chkver() {
+            var strchkver = document.getElementById('txtimgKey').value;
+            strchkver = strchkver.replace(/^\s+/, '');
+            document.getElementById('txtimgKey').value = strchkver;
+        }
+        function ValidateEmail(ctrl) {
+            if (document.layers || document.getElementById || document.all) {
+                var str = ctrl.value;
+                var filter = /^([\w-]+(?:\.[\w-]+)*)@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+                if (filter.test(str))
+                    testresults = true;
+                else
+                    testresults = false;
+                if (testresults == true) {
+                    var sindex = str.indexOf("@@");
+                    var strlength = str.length;
+                    var mailstr = str.substring(sindex, strlength);
+                    var eindex = mailstr.indexOf(".");
+                    if (eindex < 4)
+                        testresults = false;
+                    else
+                        testresults = true;
+                }
+
+                return (testresults);
+            }
+            else
+                return true;
+        }
+        $(function () {
+            $("#txtphone1").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtphone2").focus();
+                }
+            });
+            $("#txtphone2").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtphone3").focus();
+                }
+            });
+            $("#txtphone3").keyup(function () {
+                if ($(this).val().length == 4) {
+                    $("#txtMessage").focus();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+          @using (Ajax.BeginForm("contact", "Home", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess"
+
+        }, new { @id = "updateCarForm" }))
+          {
+@Html.AntiForgeryToken()
+              <div id="wrapper">
+                     @Html.Partial("_TopSection")
+            @*      <div id="flttop">
+                      <div id="header01">
+                          <div id="headermain02">
+                              <div id="logopublic">
+                                  <a id="logo_find1" runat="server" title="Home" href="@Url.Action("Index", "Home", null)" style="text-decoration: none;" class="bluemenuPublic">
+                                     Mower Helper-Find an Mower Helper</a></div>
+                              <div id="mainnavcon">
+                                  <div class="mainnav">
+                                      <ul>
+                                   
+                                             @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                          <li class="current_page_item"> @Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                    }
+                                           <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>   
+                                      </ul>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>*@
+                  <div id="flt02">
+                      <div id="bodycon">
+                          <div id="contentpannel">
+                              <div id="leftcon">
+                                  <div class="content" style="padding:0px 0px 15px 20px">
+                                      <div style="padding: 15px 0px 0px; width: 702px; float: left;">
+                                          <header style="padding-bottom: 15px;">
+                                              <span style="font-family:Arial; font:20px georgia; font-size:20px; font-style:italic; font-weight:normal; color:#292929">Contact Us</span>
+                                          </header>
+                            
+                                          @* <h1 style="padding-bottom: 15px;">
+                                Contact Us</h1>*@
+                                      </div>
+                                      @if(ViewBag.contacterror!=null)
+                                      {
+                           
+                                          <div class="error">ViewBag.contacterror</div>
+                                      }
+                           
+                                      <div id="contact-form">
+                                
+                                          <ol>
+                                              <li>
+                                                  <label for="name">
+                                                      <span class="red">*</span>Subject :</label>
+                                                  <input type="text" id="txtSubject" name="txtSubject"  class="text" onkeyup="return chksubject();" maxlength="100"
+                                                         autocomplete="off" style="width:420px;" />
+                                       
+                                              </li>
+                                              <li>
+                                                  <label for="email">
+                                                      <span class="red">*</span>First name :</label>
+                                                  <input type="text" id="txtName" name="txtName"  class="text" onkeyup="return chkname();" maxlength="50"
+                                                         autocomplete="off" />
+                                        
+                                              </li>
+                                              <li>
+                                                  <label for="company">
+                                                      <span class="red">*</span>Last name :</label>
+                                                  <input type="text" id="txtLastName" name="txtLastName"  class="text" onkeyup="return chklname();" maxlength="50"
+                                                         autocomplete="off" />
+                                        
+                                              </li>
+                                              <li>
+                                                  <label for="txtEmail">
+                                                      <span class="red">*</span>Email :</label>
+                                                  <input type="text" id="txtEmail" name="txtEmail" class="text" onkeyup="return chkemail();" maxlength="100"
+                                                         autocomplete="off" style=" width:420px;" />
+                                       
+                                              </li>
+                                              <li>
+                                                  <label for="subject">
+                                                      &nbsp;Phone :
+                                                  </label>
+                                                  <input type="text" id="txtphone1" name="txtphone1"  class="text" autocomplete="off" onkeypress="return AlphaNumbers(event);"
+                                                         maxlength="3" style="width: 30px;" />
+                                                  <input type="text" id="txtphone2" name="txtphone2" class="text" autocomplete="off" onkeypress="return AlphaNumbers(event);"
+                                                         maxlength="3" style="width: 30px;" />
+                                                  <input type="text" id="txtphone3" name="txtphone3"  class="text"  autocomplete="off" onkeypress="return AlphaNumbers(event);"
+                                                         maxlength="4" style="width: 40px;" />
+                                       
+                                              </li>
+                                              <li>
+                                                  <label for="message">
+                                                      <span class="red">*</span>Message :
+                                                  </label>
+                                                  <textarea id="txtMessage" name="txtMessage" class="text" rows="2" cols="2" maxlength="500" style="width:420px;"></textarea>
+                                                  <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Maximum length 500 characters)<br />
+                                      <br />
+                                              </li>
+                                              <li>
+                                                  <label for="company" style="width:110px !important;">
+                                                      <span class="red">*</span>verification code : </label>&nbsp;
+                                                  <input type="text" class="text" id="txtimgKey" name="txtimgKey" maxlength="6" style="width: 100px;" autocomplete="off" />
+                                                  <img style="padding-left:20px;width: 110px;" src="@Url.Action("ShowCaptchaImage","Home")" />
+                                              </li>
+                                              <li class="buttons">
+                                                  <input id="btnSave" value="Submit" type="submit" style="width: 60px;" class="button"
+                                                         onclick="return chkContactus();" />
+                                                  <div class="clr">
+                                                  </div>
+                                              </li>
+                                              <li class="buttons"></li>
+                                              <li class="buttons">
+                                                  <a href="@Url.Action("Index", "Home", null)" class="button" style="height:15px;">Cancel
+                                                  </a>
+                                                  <div class="clr">
+                                                  </div>
+                                              </li>
+                                          </ol>
+                               
+                                      </div>
+                           
+                                  </div>
+                              </div>
+                                                   @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                                    {
+                              <div id="rightcon">
+                                  <div class="rightcon" style="width: 228px; float: left; padding: 5px 0px 18px 10px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   background-image: url(@ViewBag.imgsrc24); background-repeat: no-repeat;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   background-position: left top;">
+                                      <h2>
+                                          Featured Mower Helpers</h2>
+                                  </div>
+                                  <div style="width: 208px; float: left; padding: 0px 15px 0px 15px;">
+                                      @if(ViewBag.FeaturedList !=null)
+                                      {
+                                          foreach(var item in ViewBag.FeaturedList)
+                                          {
+                                            string imgind = null;
+                                              <div id="divline" style="width: 208px; float: left; padding-top: 10px; background-image: url(@ViewBag.lineimg);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          background-repeat: repeat-x; background-position: bottom left; padding-bottom: 10px;">
+                                                  <div style="width: 42px; height:40px; float: left; border: 1px #006600 solid;">
+                                                        @{
+                                        string domain = null;
+                                        //MowerHelper.Models.Classes.clsWebConfigsettings objconfig = new MowerHelper.Models.Classes.clsWebConfigsettings();
+                                        string Requesturl = null;
+                                        if (Request.Url != null){
+                                            Requesturl = Request.Url.ToString();
+                                        }
+                                        var strurl = Requesturl.Split('/');
+                                            }
+                                            @if (clsWebConfigsettings.GetConfigSettingsValue("Islocal") == "Y")
+                    {
+                        if (Requesturl.Contains("localhost:"))
+                        {
+                            domain = strurl[0] + "//" + strurl[2] + "/";
+
+                        }
+                        else if (Requesturl.Contains("vbv"))
+                        {
+                            domain = strurl[0] + "//" + strurl[2] + "/" + strurl[3] + "/";
+
+                        }
+                    }
+                    else
+                    {
+                        domain = clsWebConfigsettings.GetConfigSettingsValue("PublicImageChecklocal");
+                    }
+                                               @if (!DBNull.Value.Equals(item["Picture"]) && item["Picture"] != null)
+                                            {
+                                                
+                                                string str = item["Picture"];
+                                                ViewData["str"] = str;
+                                                ViewBag.strimage = str;
+                                                if (str.Contains(".") == true)
+                                                {
+                                                    string[] str1 = str.Split('.');
+                                                    ViewData["ExistedLogo"] = str1[0];
+                                                    ViewBag.ExistedLogo = str1[0];
+                                                    ViewData["ExistedExtn"] = str1[1];
+                                                    ViewBag.ExistedExtn = str1[1];
+                                                }
+
+                                                string strings = null;
+
+                                                //  strings = "../Attachments/Providers" + "/";
+                                                strings = Path.Combine(Server.MapPath("~/Attachments/Providers"), str);
+                                                if (System.IO.File.Exists(strings))
+                                                {
+                                                   
+                                                    ViewBag.imageavail = "Y";
+                                                    ViewBag.image = "Y";
+                                                    ViewBag.providerimage1 = domain + "Attachments/Providers/" + str;
+                                                   
+
+                                                }
+                                               //else if (Convert.ToString(item["gender"]) == "Male")
+                                               // {
+                                               //     ViewBag.imageavail = "Y";
+                                               //     ViewBag.providerimage1 = domain + "images/male.png";
+                                               //     //ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/male.png&Width=100&Height=80";
+                                               // }
+                                               // else if (Convert.ToString(item["gender"]) == "Female")
+                                               // {
+                                               //     ViewBag.imageavail = "Y";
+                                               //     ViewBag.providerimage1 = domain + "images/female.png";
+                                               //     //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/female.png&Width=100&Height=80";
+                                               // }
+                                                else
+                                                {
+                                                   // imgind = "1";
+                                                    ViewBag.providerimage1 = domain + "images/Coach1.JPG";
+                                                   
+                                                }
+                                               }
+                                             else
+                    {
+                        //if (Convert.ToString(item["gender"]) == "Male")
+                        //{
+                        //    ViewBag.imageavail = "Y";
+                        //    ViewBag.providerimage1 = domain + "images/male.png";
+                        //    //ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/male.png&Width=100&Height=80";
+                        //}
+                        //else if (Convert.ToString(item["gender"]) == "Female")
+                        //{
+                        //    ViewBag.imageavail = "Y";
+                        //    ViewBag.providerimage1 = domain + "images/female.png";
+                        //  //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/female.png&Width=100&Height=80";
+                        //}
+                        //else
+                        //{
+                            ViewBag.providerimage1 = domain + "images/Coach1.JPG";
+                          //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/Coach1.JPG&Width=100&Height=80";
+
+                       // }
+
+
+                    }
+                                                      <img width="42px" height="40px" alt="@item["ProviderName"]" src="@ViewBag.providerimage1" />
+                                    
+                                                  </div>
+                                                  <div style="width: 160px; float: right;">
+                                                      <div class="featured" style="width: 160px; float: left; padding: 0px; margin: 0px;">
+                                                           @{
+                                        string elestate = null;
+                                        string elecity = null;
+                                        elestate = item["l_state"].ToString().Trim().Replace("/ ", "-");
+                                        elestate = elestate.ToString().Trim().Replace(" ", "-");
+                                        elestate = elestate.Replace("/", "-");
+                                        elecity = item["l_City"].ToString().Trim().Replace("/ ", "-");
+                                        elecity = elecity.ToString().Trim().Replace(" ", "-");
+                                        elecity = elecity.Replace("/", "-");
+                                                }
+                                                          @Html.RouteLink((string)item["ProviderName"], "ProviderProfile", new { @randomnumber = item["Random_number"], Therapistname = item["PublicURL"].ToString().Trim().Replace(" ", "-"),state=elestate,city=elecity,zip=item["l_zipcode"] }, new { @title = "see full profile of " + item["ProviderName"] + ", Mower Helper in " + item["l_City"] + ", " + item["l_state"] + " " + item["l_zipcode"] })
+                                                          @* @Html.ActionLink((string)item.ProviderName, null)
+                                       *@
+                                                      </div>
+                                                      <div class="featured" style="width: 160px; float: left; padding-top: 5px;">
+                                                          @item["Address"]
+                                                      </div>
+                                                  </div>
+                                                  <div class="clearme">
+                                                      <img id="imgspace2" src="@ViewBag.speacer" width="1" height="1" /></div>
+                                              </div>
+                           @* @Html.Hidden((string)item.ProviderName)
+                            @Html.Hidden((string)item.Provider_ID)
+                            @Html.Hidden((string)item.CityName)
+                            @Html.Hidden((string)item.StateName)
+                            @Html.Hidden((string)item.Zip)*@
+                          
+                                          }
+                                      }
+                                      else
+                                      {
+                                          <span style="color: Red;">No Featured Electricians Found</span>
+                                      }
+                                  </div>
+                              </div>
+                                                   }
+                              <div class="clearme">
+                                  <img id="imgspace" runat="server" src="~/Images/speacer.gif" /></div>
+                          </div>
+                             @Html.Partial("_Footer")
+                      @*    <div id="footercon">
+            <div id="footerpublic">
+                <div >
+                     @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                            {
+                            <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                         
+                                <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.ShowArticles == "Y")
+                            {
+                                <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.Showforums == "Y")
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                      <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li style="display:none;">
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                    
+                            </ul>
+                            }
+                    </div>
+                            <div class="copy">
+                                Copyright © 2016.Mower Helper-Find an Mower Helper , Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>*@
+                      </div>
+                  </div>
+              </div>
+ <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     @*  <span style="font-weight: bold;">Processing</span>*@
+        <img src="~/Images/Ajax-Processing.gif" alt="Processing"  />
+    </div>
+          }
+</body>
+  <script type="text/javascript">
+
+      function updateSuccess(data) {
+
+          if (data != '' & data.Success == true) {
+              $('#dvLoading').dialog('close');
+             // alert("Your request will be processed soon.");
+              @*   window.location.href = '@Url.RouteUrl("Home")';*@
+              window.location.href = '@Url.Action("acknowledgement", "Home")';
+              // "../Home/Index";
+              return false;
+          }
+          else {
+              $('#dvLoading').dialog('close');
+              if (data != '_Logon_') {
+                  alert(data.ErrorMessage);
+              }
+
+           document.getElementById('txtimgKey').focus();
+
+              return false;
+          }
+      }
+    </script>   
+</html>

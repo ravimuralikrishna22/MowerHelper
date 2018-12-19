@@ -1,0 +1,189 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#txtquantity').keypress(
+        function (event) {
+            if (checkNumeric(event) == false) { return false; }
+        }
+           );
+        });
+        function rdomonthlycheck() {
+            document.getElementById('rdoyearly').checked = false;
+            document.getElementById('rdomonthly').checked = true;
+        }
+        function rdoyearlycheck() {
+            document.getElementById('rdomonthly').checked = false;
+            document.getElementById('rdoyearly').checked = true;
+        }
+        function Validateeleservice() {
+            ClearInlineAlert('lblservicenm', 'tdservicenm', '#FFFFFF');
+            ClearInlineAlert('lblsersesc', 'tdserdesc', '#FFFFFF');
+            ClearInlineAlert('lblmnthamnt', 'tdmntamt', '#FFFFFF');
+            ClearInlineAlert('lblyearlyamnt', 'tdyearamnt', '#FFFFFF');
+            ClearInlineAlert('lblquantity', 'tdquantity', '#FFFFFF');
+            //ClearInlineAlert('lblservfee', 'tdservfee', '#FFFFFF')
+
+            if (document.getElementById('txtservinm').value == "") {
+                //            Glb_ShowAlert("Invalid Charge Info!!! Charge date can not be empty."); 
+                InlineAlert('lblservicenm', 'tdservicenm', 'Please enter service name.')
+                document.getElementById('txtservinm').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblservicenm', 'tdservicenm', '#FFFFFF')
+            }
+            if (document.getElementById('txtquantity').value == "") {
+                //            Glb_ShowAlert("Invalid Charge Info!!! Charge date can not be empty."); 
+                InlineAlert('lblquantity', 'tdquantity', 'Please enter quantity.')
+                document.getElementById('txtquantity').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblquantity', 'tdquantity', '#FFFFFF')
+            }
+            if (document.getElementById('txtNotes').value == "") {
+                InlineAlert('lblsersesc', 'tdserdesc', "Please enter description")
+                document.getElementById('txtNotes').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblsersesc', 'tdserdesc', '#FFFFFF')
+            }
+            if (document.getElementById('txtmnthamnt').value == "") {
+                InlineAlert('lblmnthamnt', 'tdmntamt', "Please enter monthly amount.")
+                document.getElementById('txtmnthamnt').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblmnthamnt', 'tdmntamt', '#FFFFFF')
+            }
+            if (document.getElementById('txtyearlyamnt').value == "") {
+                InlineAlert('lblyearlyamnt', 'tdyearamnt', "Please enter yearly amount.")
+                document.getElementById('txtyearlyamnt').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblyearlyamnt', 'tdyearamnt', '#FFFFFF')
+            }
+            return true;
+        }
+
+    </script>
+</head>
+     @using (Html.BeginForm("AddNewService", "Services", FormMethod.Post, null))
+    {
+<body>
+   <div style="width:100%">
+        <table border="0" cellpadding="6" cellspacing="1" class="border_style" width="100%">
+             <tr class="white_color" id="trservicenm">
+                <td width="20%" align="right">
+                  <font color="red">*</font> <strong>Service name :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdservicenm">
+  @Html.TextBox("txtservinm", null, new { @class = "textfield", @style = "width:200px"})&nbsp;&nbsp;
+    <span id="lblservicenm" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>
+             <tr class="white_color" id="trquantity">
+                <td width="20%" align="right">
+                  <font color="red">*</font> <strong>Quantity :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdquantity">
+  @Html.TextBox("txtquantity", (string)ViewBag.quantity, new { @class = "textfield", @style = "width:100px"})&nbsp;&nbsp;
+    <span id="lblquantity" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>
+            <tr class="white_color" id="trservice">
+                <td width="20%" align="right">
+                  <font color="red">*</font> <strong>Service description :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdserdesc">
+  @Html.TextArea("txtNotes", null, 3, 3, new { @class = "textfield", @style = "width:350px;height:78px;" })&nbsp;&nbsp;(Maximum length 1000 characters)
+    &nbsp&nbsp;<span id="lblsersesc" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>
+            <tr class="white_color" id="trservdetails">
+            <td width="20%" align="right"><font color="red">*</font>  <strong>Service details :&nbsp;</strong></td>
+            <td align="left" id="tdquanty" >
+               <table>
+                   <tr>
+                       <td style="text-align:center;">
+                           <span>Duration</span>
+                       </td>
+                       <td style="text-align:center;"> Price($)</td>
+                   </tr>
+                    <tr>
+
+                       <td>
+                           <table>
+                               <tr>
+                                   <td style="text-align:right;">
+                                       <span>Monthly</span><br />
+                                   </td>
+
+                               </tr>
+                                <tr>
+                                   <td style="text-align:right;">
+                                       <br />
+                                       <span>Yearly</span>
+                                   </td>
+
+                               </tr>
+                           </table>
+
+                       </td>
+                       <td>
+                           <table>
+                               <tr>
+                                   <td style="text-align:left;" id="tdmntamt">
+                                @Html.TextBox("txtmnthamnt", null, new { @class = "textfield", @style = "width:100px",@onkeypress="return checkValidNumeric(txtmnthamnt,8,2,event)" })
+                                       &nbsp; &nbsp;  <span id="lblmnthamnt" style="color: Black; font-weight: bold;"></span>
+                                   </td>
+
+                               </tr>
+                                <tr>
+                                   <td style="text-align:left;" id="tdyearamnt">
+                             @Html.TextBox("txtyearlyamnt", null, new { @class = "textfield", @style = "width:100px",@onkeypress="return checkValidNumeric(txtyearlyamnt,8,2,event)" })
+                                         &nbsp; &nbsp;  <span id="lblyearlyamnt" style="color: Black; font-weight: bold;"></span>
+                                   </td>
+                                    
+                               </tr>
+                           </table>
+
+                       </td>
+                   </tr>
+               </table>
+            <span id="lblqunty"></span>
+            </td>
+            </tr>
+           @* <tr class="white_color">
+                <td width="20%" align="right">
+                    <font color="red">*</font><strong>Service fee :&nbsp;</strong>
+                </td>
+                <td align="left" id="tdservfee">
+                    @Html.TextBox("txtfee", null, new { @class = "textfield", @maxLength = 10, @style = "width:100px", @onkeypress = "return checkValidNumeric(txtfee,8,2,event)" })&nbsp;&nbsp;<span id="lblservfee" style="color: Black; font-weight: bold;"></span>
+                </td>
+            </tr>*@
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tr style="height: 50px">
+                <td align="right">
+                <input type="submit" value="save" class="button" name="btnsave" onclick="return Validateeleservice();"/>
+                    <input type="button" name="btnCancel" class="addservclose button" value="Cancel"  />
+                </td>
+            </tr>
+        </table>
+        </div>
+ 
+</body>
+     }
+</html>

@@ -1,0 +1,80 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+         <title>Mower Helper-Find an Mower Helper</title>
+    @Styles.Render("~/Content/MainCSS")
+      @Styles.Render("~/Content/themes/base/TherpistStyles")
+        @Styles.Render("~/Content/themes/base/autocomplete")
+                 @Scripts.Render("~/Scripts/Thscriptscript")
+    <script type="text/javascript">
+        function redirectaction() {
+            window.location.href = "../AdminFaqs/Help";
+        }
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+              $("#Menu0").removeClass();
+              $("#Menu1").removeClass();
+              $("#Menu2").removeClass();
+              $("#Menu3").addClass("active");
+          });
+    </script>
+</head>
+<body>
+<div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+        <div id="body-wrapper">
+    
+                <div id="main-content">
+        @Html.Partial("_NavigationTool")
+            <table cellspacing="0" cellpadding="0" width="85%" align="center" border="0">
+                
+                <tr class="background_color">
+                    <td>
+                       
+                           
+                        
+                        <div class="content-box">
+                        <div class="content-box-header"><h3>Phone & email support</h3></div>
+                        <div class="content-box-content">
+                        <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                            border="0">
+                            <tr class="white_color">
+                                <th width="50%" align="right">
+                                    <strong>Contact phone number&nbsp;:&nbsp;</strong></th>
+                                <td width="50%">
+                                <label id="lblphno">866-450-3463</label>
+                                    @*<asp:Label ID="lblphno" Text="866-450-3463" runat="server"></asp:Label>*@</td>
+                            </tr>
+                            <tr class="white_color">
+                                <th width="50%" align="right">
+                                   <strong> Contact email address&nbsp;:&nbsp;</strong> </th>
+                                <td width="50%">
+                                <label id="lblemail">info@find-a-therapist.com</label>
+                                   </td>
+                            </tr>
+                        </table></div></div>
+                    </td>
+                </tr>
+                </table>
+                  <table cellspacing="0" cellpadding="0" width="85%" align="center" border="0">
+                <tr style="background:none;">
+                    <td height="45px" align="right">
+                     <input type="submit" id="btncancel1" name="btncancel1" class="button" onclick ="return redirectaction();" value="Cancel" />
+                       
+                    </td>
+                </tr>
+            </table></div>
+    
+        </div>
+  <div>
+             @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+</body>
+</html>

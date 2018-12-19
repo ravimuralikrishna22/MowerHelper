@@ -1,0 +1,1232 @@
+﻿@{
+    Layout = null;
+}
+@*@using Obout.Mvc.ListBox;*@
+@using Obout.Mvc.ComboBox;
+@using Obout.Mvc.HTMLEditor;
+@using System.IO;
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      
+       @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Scripts.Render("~/ThScripts/ThOtherscripts")
+     @Styles.Render("~/Content/themes/base/TherpistStyles")
+   <style type="text/css">
+     .statement-nav {width:673px;border-bottom:1px solid #cfdede;float:left;padding:0 0 4px 0;}
+.statement-nav img.bookmarks {float:left;margin:2px 0 0 40px;}
+.statement-nav ul {margin:0;padding:0;list-style:none;float:right;width:502px;}
+.statement-nav ul li {list-style:none;padding-left:3px;float:left;}
+.statement-nav ul li a {font:bold 13px Arial;text-transform:uppercase;padding:7px 28px 6px 28px;background:url(../images/bg-article-library-nav.gif) repeat-x 0 0;color:#ffffff!important;text-decoration:none!important;}
+.statement-nav ul li a, x:-moz-any-link {padding:7px 28px 5px 28px;}
+.statement-nav ul li a:hover, .statement-nav ul li a.current {color:#000000!important;background:none repeat scroll 0 0 #cfdede;}
+.statement-nav1 {width:100%;border-bottom:1px solid #cfdede;float:left;padding:0 0 4px 0;}
+.statement-nav1 img.bookmarks {float:left;margin:2px 0 0 40px;}
+.statement-nav1 ul {margin:0;padding:0;list-style:none;float:right;width:502px;}
+.statement-nav1 ul li {list-style:none;padding-left:3px;float:left;}
+.statement-nav1 ul li a {font:bold 13px Arial;text-transform:uppercase;padding:7px 28px 6px 28px;background:url(../images/bg-article-library-nav.gif) repeat-x 0 0;color:#ffffff!important;text-decoration:none!important;}
+.statement-nav1 ul li a, x:-moz-any-link {padding:7px 28px 5px 28px;}
+.statement-nav1 ul li a:hover, .statement-nav1 ul li a.current {color:#000000!important;background:none repeat scroll 0 0 #cfdede;}
+#content .profile_yellow_bg		{ background:#fff url(../Images/profile_yellow_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .right_partbg 	{ /*background:#02437b url(../images/right_bg.png) repeat-x;*/ margin:0; padding:20px 0 0 0; float:left; width:271px;}
+.right_headingbg 		{ width:195px; height:31px; background:url(../Images/right_headingbg.png) no-repeat; font:italic 16px Georgia; color:#fff; padding:8px 0 0 60px;}
+.right_text_part 		{ padding:0 10px 0 15px; color:#b2d9ff;}
+.right_text_part p 		{ color:#333; line-height:18px}
+#content .center_right_profile .right_text_part p 	{ color:#B2D9FF; line-height:18px}
+#content .center_right_profile .right_partbg 		{ background:#02437b url(../Images/right_bg.png) repeat-x; margin:0; padding:20px 0 0 0; float:left; width:270px;}
+
+.profile_img 		{ margin:0; padding:0;}
+.profile_img img 	{ border: 1px solid #000; border-radius:4px; height:130px; padding:1px; width:120px; margin:0 0 10px 52px;}
+
+.profile_img1 		{ margin:15px 0 0 0; padding:0;}
+.profile_img1 img 	{ border: 1px solid #000; border-radius:4px; height:130px; padding:1px; width:120px; margin:0 15px 0 0; float:left;}
+#content { width:996px; margin:-31px 0 0 0; padding:0; position:relative;}
+
+#content .center_right			{ background:#fff url(../Images/center_right.png) repeat-y right top; margin:0 0 0 15px; float:left;}
+#content .center_right_profile	{ background:#fff url(../Images/center_right_profile.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_blue_bg		{ background:#fff url(../Images/profile_blue_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_gray_bg		{ background:#fff url(../Images/profile_gray_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_greenbg		{ background:#fff url(../Images/profile_greenbg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_lightblue_bg	{ background:#fff url(../Images/profile_lightblue_bg.jpg) repeat-y right top; margin:0; width:996px;}
+#content .profile_yellow_bg		{ background:#fff url(../Images/profile_yellow_bg.jpg) repeat-y right top; margin:0; width:996px;}
+
+#content .center_right_profile h4 {color: #B2D9FF; font: italic 14px Georgia,"Times New Roman",Times,serif; margin: 0 0 5px;}
+
+
+
+#content .left_nev 									{ float:left; margin:25px 0 0 0; padding:0; width:186px;}
+.left_nev ul 										{ font:italic 17px Georgia, "Times New Roman", Times, serif; text-align:right; margin:0; padding:0;}
+#navigation-block 									{ position:relative; text-align:right;}
+#hide 												{ position:absolute; top:30px; left:-190px;}
+ul#sliding-navigation li.sliding-element h3, ul#sliding-navigation li.sliding-element a { display: block; width:141px; margin: 0;}
+ul#sliding-navigation li.sliding-element a 			{ color:#333; background:url(../Images/nav_arrow.png) no-repeat right 10px; border-bottom:1px solid #c7d0d5; 
+													  padding:10px 30px 10px 0;}
+ul#sliding-navigation li.sliding-element a:hover	{ color: #046EC6; background: url(../Images/nav_arrow1.png) no-repeat right 10px; }
+ul#sliding-navigation li.sliding-element a.on 		{ color: #046EC6; background: url(../Images/nav_arrow1.png) no-repeat right 10px; }
+
+#content .center_part 	{ width:500px; float:left; margin:0 0 30px 0; padding:25px 10px 10px 14px; background:#fff; min-height:397px;}
+#content .center_part1 	{ width:771px; float:left; margin:0 0 30px 15px; padding:25px 10px 10px 14px; background:#fff; min-height:397px;}
+.center_part p a 		{ color:#333; font:bold 12px Arial, Helvetica, sans-serif;}
+.center_part p a:hover 	{ text-decoration:underline; color:#046EC6;}
+
+.more_arrow 		{ margin:0; padding:0 0 0 26px; background:url(../Images/more_arrow.png) no-repeat; float:right;}
+.more_arrow a 		{ color:#ff7000 !important; font:italic 15px Georgia, "Times New Roman", Times, serif !important;}
+.more_arrow a:hover { color:#333 !important;}
+
+#content .right_partbg 	{ /*background:#02437b url(../images/right_bg.png) repeat-x;*/ margin:0; padding:20px 0 0 0; float:left; width:271px;}
+.right_headingbg 		{ width:195px; height:31px; background:url(../Images/right_headingbg.png) no-repeat; font:italic 16px Georgia; color:#fff; padding:8px 0 0 60px;}
+.right_text_part 		{ padding:0 10px 0 15px; color:#b2d9ff;}
+.right_text_part p 		{ color:#333; line-height:18px}
+#content .center_right_profile .right_text_part p 	{ color:#B2D9FF; line-height:18px}
+#content .center_right_profile .right_partbg 		{ background:#02437b url(../Images/right_bg.png) repeat-x; margin:0; padding:20px 0 0 0; float:left; width:270px;}
+.text-center   { text-align:center; }
+.iner_bg		{ background:url(../Images/tr.png) repeat; border-top:dashed 1px #3785c7; margin:15px 0 0 0; padding:10px; opacity: 0.8; border-radius:0 0 4px 4px;}
+.content_ul1 			{ font:bold 12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#fff }
+.content_ul1 li			{ background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; }
+.content_ul1 li a 		{ color:#333;}
+.content_ul1 li a:hover { color:#1B81C8; text-decoration:underline;}
+.follow_us p 			{ color:#333; margin:0 0 10px 0; text-align:center !important;}
+
+#content .center_right_profile .content_ul1 			{ font:bold 12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#fff }
+#content .center_right_profile .content_ul1 li 			{ background:url(../Images/small_arrow.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #B2D9FF; }
+#content .center_right_profile .content_ul1 li a 		{ color:#fff;}
+#content .center_right_profile .content_ul1 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+.previes		{ background:url(../Images/Featured_bg2.jpg) repeat-x; border-radius:4px; cursor:pointer; margin:0 0 10px 0; padding:5px 8px; font:bold 13px Arial; 
+				 box-shadow:3px 3px 4px #ccc; opacity: 0.9; color:#fff; float:left;}
+.previes:hover	{ color:#fff; text-decoration:underline;}
+.content_ul4 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#666; }
+.content_ul4 li 		{ background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; }
+.content_ul4 li a 		{ color:#333;}
+.content_ul4 li a:hover { color:#1B81C8; text-decoration:underline;}
+
+#content .center_right_profile .content_ul4 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:rgba(179, 218, 255, 0.47); }
+#content .center_right_profile .content_ul4 li 			{ background:url(../Images/small_arrow.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #ccc; }
+#content .center_right_profile .content_ul4 li a 		{ color:#fff; opacity:0.6;}
+#content .center_right_profile .content_ul4 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+.content_ul2 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:#666; }
+.content_ul2 li 		{background:url(../Images/small_arrow2.png) no-repeat left 9px; padding:4px 15px; border-bottom:1px dotted #999; float:left; width:44px; margin:0 7px 0 0 }
+.content_ul2 li a 		{ color:#fff;}
+.content_ul2 li a:hover { color:#B2D9FF; text-decoration:underline;}
+
+#content .center_right_profile .content_ul2 			{ font:12px Arial, Helvetica, sans-serif; margin:0; padding:0; color:rgba(179, 218, 255, 0.47); }
+#content .center_right_profile .content_ul2 li 			{ padding:4px 15px; border-bottom:1px dotted hsl(0, 0%, 80%); float:left; width:44px; margin:0 7px 0 0 }
+#content .center_right_profile .content_ul2 li a 		{ color:#fff; opacity:0.6;}
+#content .center_right_profile .content_ul2 li a:hover 	{ color:#B2D9FF; text-decoration:underline;}
+ </style>
+    <script type="text/javascript">
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            //$('#imgPreview').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    //                      height: 400,
+            //    resizable: false,
+            //    modal: true
+            //});
+
+            $("#btnimgPreview").click(function () {
+                //linkObj = $(this);
+                //var dialogDiv = $('#imgPreview');
+                //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                // var viewUrl = linkObj.attr('href');
+                var viewUrl = '../Directory/ProfilePreview/?randomnumber=' + '@ViewBag.Random_number';
+                Displaydialog('imgPreview', viewUrl, 'auto', 1000, 'dvLoading', null, null)
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    $('#dvLoading').dialog('destroy');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            });
+
+        });
+
+    </script>
+</head>
+<body>
+
+    @{Html.RenderAction("Topsection", "Tools");}
+    @using (Html.BeginForm("EditElectricianAdvancedSearch", "Directory"))
+    {
+           <div id="main-content">
+        <input type="hidden" id="hdnproid" name="hdnproid" value="@ViewBag.proid" />
+        <div id="divsetings" style="margin: 0 20px 0 20px; padding: 10px 0 0 0;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr class="background_color">
+                    <td align="left" valign="top" width="100%">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr id="trtabs">
+                                <td width="100%" class="navigation">
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="aprovider" href="ViewIdentifyingInfo">
+                                             @if (Session["Roleid"].ToString()=="1")
+                            {
+                                <span>@Session["Elebusenessnm"].ToString()</span>
+                            }
+                            else{
+                                <span>Mower Helper Info</span>
+                            }
+
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="acontent" href="ViewElectricianAdvancedSearch"><span>Content
+                                            Settings</span> </a>
+                                    </div>
+                                    @*<div class="admin-tab">
+                                        <a class="inadmin-link" id="avideo" href="VideoAudioFiles"><span>Video/Audio Files</span> </a>
+                                    </div>*@
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument" href="ViewElectricianDocumentInfo"><span>Certificates & Youtube Video Files</span> </a>
+                                    </div>
+                                   @* <div class="admin-tab">
+                                        <a class="inadmin-link" id="aproviderschedule" href="ProviderSchedule"><span>Schedule Settings</span> </a>
+                                    </div>*@
+                                    @*<div class="admin-tab">
+                                        <a class="inadmin-link" id="astatistic" href="Sitestatistics"><span>Site Statistics</span> </a>
+                                    </div>*@
+                                </td>
+                            </tr>
+                            <tr class="background_color">
+                                <td id="tdtabs" class="tab-background" width="100%">
+                                    <table id="tdltopEditCancelBtn" width="98%">
+                                        <tr class="background_color">
+                                            <td align="Right" class="background_color" width="70%">
+                                                <input type="hidden" id="hdnPayer" />
+                                                @* <asp:Label ID="lblMessage" Text="URL Name is already exists."  class="errormsg"
+                                                    Visible="False"></asp:Label>*@
+                                            </td>
+                                            <td align="Right" width="20%">
+                                              <input type="submit" value="Profile Preview" title="Profile Preview" class="button"  id="btnimgPreview" name="btnimgPreview"/>&nbsp;
+                                            </td>
+                                            <td align="Right" width="18%">
+                                               
+                                                <input type="submit" value="Save" title="Save" class="button" onclick="return CheackAvailability(15);" />&nbsp;
+                                                @Html.ActionLink("Cancel", "ViewElectricianAdvancedSearch", null, new { @class = "button", Style = "width:34px;height:14px;" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="content-box" style="width: 98%">
+                                        <div class="content-box-header">
+                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td width="100%" align="left">
+                                                        <h3 style="cursor: s-resize;">
+                                                            Content settings</h3>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="content-box-content">
+                                            <table width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style">
+                                                <tr class="white_color">
+                                                    <td width="20%" align="right">
+                                                        <strong>Personal statement :</strong>
+                                                    </td>
+                                                    <td width="80%" align="left" valign="top">
+                                                        @* <%Dim txtdesc As String%>
+                                                    <% If ViewBag.paragraph <> Nothing Then%>
+                                                    <%txtdesc = ViewBag.paragraph%>
+                                                    <%Else%>
+                                                    <%txtdesc = String.Empty%>
+                                                    <%End If%>*@ @* @Html.Obout(new Editor("txtDescription"));*@
+                                                        @Html.Obout(new Obout.Mvc.HTMLEditor.Editor("txtDescription") { ShowQuickFormat = false, Height = 225, Template = "example", Submit = false, Content = (string)ViewData["txtDescription"], ModeSwitch = false, ShowWaitMessage = true, NoDrop = true, DefaultContextMenu = false })
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" cellpadding="0" cellspacing="0" border="0" class="border_style">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="45%" align="center" valign="top">
+                                                            <table width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style">
+                                                                <tbody>
+                                                                    
+                                                                    <tr class="nav_blue_color" style="height: 90px;">
+                                                                        <td width="30%" align="right">
+                                                                            <strong>Payments/condition :</strong>
+                                                                        </td>
+                                                                        <td width="70%" align="left" valign="top" id="tdpaymentmain">
+                                                                            @{string strpayments = null;}
+                                                                            @if (ViewBag.Payments != null & ViewBag.Payments != "")
+                                                                            {
+                                                                                strpayments = (string)ViewBag.Payments;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                strpayments = null;
+                                                                            }
+                                                                            @Html.TextArea("txtPayment", strpayments, 3, 3, new { @class = "textfield", style = "width:350px;height:119px;", maxlength = "500" })
+                                                                            <br />
+                                                                           
+                                                                            (Maximum length upto 500 characters)
+                                                                        </td>
+                                                                    </tr>
+                                                                   <tr class="white_color" style="height: 38px;" visible="false">
+                                                                                        <td align="right" width="30%">
+                                                                                            <strong>Years in service :</strong>&nbsp;
+                                                                                        </td>
+                                                                                        <td style="width: 70%" align="left">
+                                                                                            @Html.Obout(new ComboBox("cboyears") { Width = 80, Height = 300, AllowEdit = false, SelectionMode = ComboBoxSelectionMode.Single, AutoPostBack = false })
+                                                                                        </td>
+                                                                                    </tr>
+                                                                      <tr id="trwebsite">
+                                                                        <td align="right">
+                                                                            <strong>Your website link :</strong>&nbsp;
+                                                                        </td>
+                                                                        <td width="65%" align="left">
+                                                                            @Html.TextBox("txtWebsite", (string)ViewBag.Website, new { @class = "textfield", MaxLength = "100", style = "width:250px;", autocomplete = "off" })
+                                                                          
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr id="trfacebook" >
+                                                    <td align="right">
+                                                                            <strong>Facebook url :&nbsp;</strong>
+                                                                        </td>
+                                                    <td width="65%" align="left" id="tdfburlmain">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr class="nav_blue_color">
+                                                                <td align="left" width="70%"  >
+                                                                  @Html.TextBox("txtfacebookurl", (string)ViewBag.facebookurl, new { @class = "textfield", style = "width:250px;", autocomplete = "off" }) &nbsp;
+                                                                </td>
+                                                                <td align="left" width="30%">
+                                                                  
+                                                                      <a href="#" id="afbimg"  title="Click here to view help image"> <img src="~/Images/help2.png" id="Img2" /></a>                   
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                                    
+                                                                    <tr id="trtwitter">
+                                                                        <td align="right">
+                                                                            <strong>Twitter url :&nbsp;</strong>
+                                                                        </td>
+                                                                        <td width="65%" height="30px" align="left">
+                                                                         
+                                                                            @Html.TextBox("txttwitterurl", (string)ViewBag.twitterurl, new { @class = "textfield", style = "width:250px;", autocomplete = "off" })
+                                                                           
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                        <td width="55%" align="center" valign="top">
+                                                            <table width="100%" cellpadding="0" cellspacing="0" border="0" class="border_style">
+                                                                <tbody>
+                                                                    <tr class="alt-row">
+                                                                        <td>
+                                                                            <table width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style">
+                                                                                <tbody>
+                                                                                  @*  <tr class="nav_blue_color" style="height: 40px;" visible="false">
+                                                                                        <td align="right" width="35%">
+                                                                                            <strong>Years in practice :</strong>&nbsp;
+                                                                                        </td>
+                                                                                        <td style="width: 65%" align="left">
+                                                                                            @Html.Obout(new ComboBox("cboyears") { Width = 80, Height = 300, AllowEdit = false, SelectionMode = ComboBoxSelectionMode.Single, AutoPostBack = false })
+                                                                                        </td>
+                                                                                    </tr>*@
+                                                                                    <tr id="trshowcontact" style="height: 50px;" class="white_color">
+                                                                                        <td align="right" width="35%">
+                                                                                            <strong id="lblcontact"><strong>Show contact form :&nbsp;</strong></strong>
+                                                                                        </td>
+                                                                                        <td width="65%" align="left">
+                                                                                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                                                <tr class="white_color">
+                                                                                                    <td align="left" width="30%">
+                                                                                                        @{
+                                                                            bool Yes;
+                                                                            bool No;
+                                                                                                        }
+                                                                                                        @if (ViewBag.Is_Contact_Info == "Y")
+                                                                                                        {
+                                                                                                            Yes = true;
+                                                                                                            No = false;
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            Yes = false;
+                                                                                                            No = true;
+                                                                                                        }
+                                                                                                        @Html.RadioButton("rdocontactyes", Yes, Yes, new { @onclick = "return rdocontactyescheck();" })&nbsp;Yes
+                                                                                                        @Html.RadioButton("rdocontactno", No, No, new { @onclick = "return rdocontactnocheck();" })&nbsp;No
+                                                                                                    </td>
+                                                                                                    <td align="left" width="70%">
+                                                                                                        @if (ViewBag.showcontact != null)
+                                                                                                        {
+                                                                                                            <img src="~/Images/help2.png" id="Img1" onmouseout="hideddrivetip()" onmouseover="ddrivetip('@ViewBag.showcontact' ,320);" />
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                   
+                                                    @*                                 @if (ViewBag.checkallowpat == "Yes")
+                                                                                     {
+                                                                                    <tr class="white_color" id="trPatShed" style="height: 40px;">
+                                                                                        <td align="right" width="35%">
+                                                                                            <strong id="Label4"><strong>Allow patient self scheduling :&nbsp;</strong></strong>
+                                                                                        </td>
+                                                                                        <td width="65%" align="left">
+                                                                                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                                                <tr class="white_color">
+                                                                                                    <td align="left" width="30%">
+                                                                                                        @{
+                                                                                         bool Yes2;
+                                                                                         bool No2;
+                                                                                                        }
+                                                                                                    @if (ViewBag.IsAcceptselfsched == "Y")
+                                                                                                    {
+                                                                                                        Yes2 = true;
+                                                                                                        No2 = false;
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        Yes2 = false;
+                                                                                                        No2 = true;
+                                                                                                    }
+                                                                                                    @Html.RadioButton("rdoAllowschedulingYes", Yes2, Yes2, new { @onclick = "return rdoAllowschedulingYescheck();" })&nbsp;Yes
+                                                                                                    @Html.RadioButton("rdoAllowschedulingNo", No2, No2, new { @onclick = "return rdoAllowschedulingNocheck();" })&nbsp;No
+                                                                                                    <td align="left" width="70%">
+                                                                                                        @if (ViewBag.allowscheduling != null)
+                                                                                                        {
+                                                                                                            <img src="~/Images/help2.png" id="Imgscheduling" onmouseout="hideddrivetip()"
+                                                                                                        onmouseover="ddrivetip('@ViewBag.allowscheduling' ,320);" />
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                     }*@
+                                                                                    <tr id="trurl" class="nav_blue_color" style="height: 50px;">
+                                                                                        <td width="35%" align="right">
+                                                                                            <strong>Plumber-help profile link :&nbsp;</strong>
+                                                                                        </td>
+                                                                                        <td width="65%" align="left" valign="top">
+                                                                                            <span>http://www.tenniscoachhelp.com/TennisCoaches/@ViewBag.URL/@ViewBag.state/@ViewBag.city/@ViewBag.zip/@ViewBag.Random_number/Profile </span>
+                                                                                            <br />
+                                                                                            <font color="blue">Name defines how the listing page can be accessed from other sites.</font>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr class="white_color" style="height: 50px;" id="trsession1">
+                                                                                        <td width="35%" align="right">
+                                                                                            <strong>Hourly fee range :&nbsp;</strong>
+                                                                                        </td>
+                                                                                        <td width="65%" align="left" valign="middle" id="tdfeemain">
+                                                                                               <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                                                <tr class="white_color">
+                                                                                                    <td align="left" width="60%">
+                                                                                                         From :&nbsp;$&nbsp;@Html.TextBox("txtFromFee", (string)ViewBag.FeeRange_From, new { @style = "width:50px;", onkeypress = "return AlphaNumbers(event);", autocomplete = "off" })
+                                                                                            &nbsp;To :&nbsp;$&nbsp;@Html.TextBox("txtToFee", (string)ViewBag.FeeRange_to, new { @style = "width:50px;", onkeypress = "return AlphaNumbers(event);", autocomplete = "off" })
+                                                                                                    </td>
+                                                                                                    <td align="left" width="40%">
+                                                                                                        @if (ViewBag.hfeerange != null)
+                                                                                                        {
+                                                                                                            <img src="~/Images/help2.png" id="Img1" onmouseout="hideddrivetip()" onmouseover="ddrivetip('@ViewBag.hfeerange' ,320);" />
+                                                                                                        }
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                          
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                     @if (ViewBag.Freeestimate=="Y"){
+                                                                                    <tr class="nav_blue_color" style="height: 45px;">
+                                                                                    <td width="35%" align="right">
+                                                                                        <strong>
+                                                                                            <strong id="Label8">Free estimate  :&nbsp;</strong>
+                                                                                        </strong>
+                                                                                    </td>
+                                                                                    <td width="65%" align="left">
+                                                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                                            <tr class="nav_blue_color">
+                                                                                                <td align="left" width="30%">
+                                                                                                    @{ bool Yes3;
+                                                                                                       bool No3;
+                                                                                                    }
+                                                                                                    @if (ViewBag.freesession == "Yes")
+                                                                                                    {
+                                                                                                        Yes3 = true;
+                                                                                                        No3 = false;
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        Yes3 = false;
+                                                                                                        No3 = true;
+                                                                                                    }
+                                                                                                    @Html.RadioButton("rdfreesessionYes", Yes3, Yes3, new { @onclick = "return rdfreesessionYescheck();" })&nbsp;Yes
+                                                                                                    @Html.RadioButton("rdfreesessionNo", No3, No3, new { @onclick = "return rdfreesessionNocheck();" })&nbsp;No
+                                                                                                </td>
+                                                                                                <td align="left" width="70%">
+                                                                                                    @if (ViewBag.firstfeesession != null)
+                                                                                                    {
+                                                                                                        <img src="~/Images/help2.png" id="imgfirstfreesession" onmouseout="hideddrivetip()"
+                                                                                                    onmouseover="ddrivetip('@ViewBag.firstfeesession' ,320);" />
+                                                                                                    }
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                     }
+                                                                                    @if(ViewBag.Showschedule == "Y")
+                                                                                    {
+                                                                                    <tr class="white_color" style="height: 45px;">
+                                                                                    <td width="35%" align="right">
+                                                                                        <strong>
+                                                                                            <strong id="Label8">Show schedule  :&nbsp;</strong>
+                                                                                        </strong>
+                                                                                    </td>
+                                                                                    <td width="65%" align="left">
+                                                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                                            <tr class="white_color">
+                                                                                                <td align="left" width="30%">
+                                                                                                    @{ bool Yes4;
+                                                                                                       bool No4;
+                                                                                                    }
+                                                                                                    @if (ViewBag.schedule == "Yes")
+                                                                                                    {
+                                                                                                        Yes4 = true;
+                                                                                                        No4 = false;
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        Yes4 = false;
+                                                                                                        No4 = true;
+                                                                                                    }
+                                                                                                    @Html.RadioButton("rdtscheduleYes", Yes4, Yes4, new { @onclick = "return rdtscheduleYescheck();" })&nbsp;Yes
+                                                                                                    @Html.RadioButton("rdtscheduleNo", No4, No4, new { @onclick = "return rdtscheduleNocheck();" })&nbsp;No
+                                                                                                </td>
+                                                                                                <td align="left" width="70%">
+                                                                                                    @if (ViewBag.scheduleicon != null)
+                                                                                                    {
+                                                                                                        <img src="~/Images/help2.png" id="imgfirstfreesession" onmouseout="hideddrivetip()"
+                                                                                                    onmouseover="ddrivetip('@ViewBag.scheduleicon' ,320);" />
+                                                                                                    }
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                    }
+                                                                                     <tr class="white_color" style="height: 45px;">
+                                                                                    <td align="right">
+                                                                                        <strong>
+                                                                                            <strong >Facebook comments :&nbsp;</strong>
+                                                                                        </strong>
+                                                                                    </td>
+                                                                                    <td width="65%" align="left">
+                                                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                                            <tr class="white_color">
+                                                                                                <td align="left" width="30%">
+                                                                                                    @{ bool Yesfb;
+                                                                                                       bool Nofb;
+                                                                                                    }
+                                                                                                    @if (ViewBag.fbcomments == "Yes")
+                                                                                                    {
+                                                                                                        Yesfb = true;
+                                                                                                        Nofb = false;
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        Yesfb = false;
+                                                                                                        Nofb = true;
+                                                                                                    }
+                                                                                                    @Html.RadioButton("rdfbcommentsYes", Yesfb, Yesfb, new { @onclick = "return rdfbcommentsYescheck();" })&nbsp;Yes
+                                                                                                    @Html.RadioButton("rdfbcommentsNo", Nofb, Nofb, new { @onclick = "return rdfbcommentsNocheck();" })&nbsp;No
+                                                                                                </td>
+                                                                                                <td align="left" width="70%">
+                                                                                                    @if (ViewBag.fbcommentsmsg != null)
+                                                                                                    {
+                                                                                                        <img src="~/Images/help2.png" id="imgfbcommentsmsg" onmouseout="hideddrivetip()"
+                                                                                                    onmouseover="ddrivetip('@ViewBag.fbcommentsmsg' ,320);" />
+                                                                                                    }
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    @*<div class="content-box" style="width: 100%;">
+                                        <div class="content-box-header">
+                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td width="100%" align="left">
+                                                        <h3 style="cursor: s-resize;">
+                                                            Search settings
+                                                        </h3>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="content-box-content">
+                                            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                <tr>
+                                                    <td width="50%" valign="top">
+                                                        <table width="100%" cellpadding="6" cellspacing="1" class="border_style">
+                                                            <tbody>
+                                                                <tr class="white_color">
+                                                                    <td width="30%" align="right">
+                                                                        <strong>
+                                                                            <strong id="Label38"> Accept insurance :  </strong>
+                                                                        </strong>
+                                                                    </td>
+                                                                    <td width="70%" align="left">
+                                                                        @{
+                                                                                                        bool Yes4;
+                                                                                                        bool No4;
+                                                                                                        bool No5;
+                                                                        }
+                                                                        @if (ViewBag.IsAcceptInsurance == "Yes")
+                                                                        {
+                                                                            Yes4 = true;
+                                                                            No4 = false;
+                                                                            No5 = false;
+                                                                        }
+                                                                        else if (ViewBag.IsAcceptInsurance == "No")
+                                                                        {
+                                                                            No4 = true;
+                                                                            Yes4 = false;
+                                                                            No5 = false;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            Yes4 = false;
+                                                                            No4 = false;
+                                                                            No5 = true;
+                                                                        }
+                                                                        @Html.RadioButton("ckhAcceptYes", Yes4, Yes4, new { @onclick = "return ckhAcceptYescheck();" })&nbsp;Yes
+                                                                        @Html.RadioButton("ckhAcceptNo", No4, No4, new { @onclick = "return ckhAcceptNocheck();" })&nbsp;No
+                                                                        @Html.RadioButton("ckhAcceptNoPrefer", No5, No5, new { @onclick = "return ckhAcceptNoPrefercheck();" })&nbsp;No
+                                                                        Preference
+                                                                    </td>
+                                                                </tr>
+                                                                <tr id="trInsurance" class="nav_blue_color">
+                                                                    <td align="right" width="35%">
+                                                                        <strong>
+                                                                            <strong id="Label3">
+										Select insurer :  </strong>
+                                                                        </strong>
+                                                                    </td>
+                                                                    <td width="65%" align="left" colspan="2">
+                                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                                            <tr class="nav_blue_color">
+                                                                                <td width="84%" align="left">
+                                                                                    <div id="divnames">
+                                                                                    </div>
+                                                                                    @Html.Obout(new Obout.Mvc.ListBox.ListBox("ListPayer") { Width = 360, AutoPostBack = false, SelectionMode = ListBoxSelectionMode.Multiple, EnableLoadOnDemand = true, Height = 120 })
+                                                                                </td>&nbsp;&nbsp;&nbsp;
+                                                                                <td width="1%">
+                                                                                
+                                                                                </td>
+                                                                                <td width="15%" align="left" valign="bottom">
+                                                                                    <div id="divpayers">
+                                                                                   
+                                                                                        &nbsp;&nbsp;@Html.ActionLink(" ", "PayersList", null, new { @class = "editLink", style = "background:  url('../Images/dots.jpg') no-repeat ; background-position:center;  width:22px;height:24px;cursor:pointer;padding:15px;" })
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" id="trsession">
+                                                                    <td width="35%" align="right">
+                                                                        <strong>
+                                                                            <strong id="Label2">Session services  :  </strong>
+                                                                        </strong>
+                                                                    </td>
+                                                                    <td width="65%" align="left">
+                                                                        @Html.Obout(new Obout.Mvc.ListBox.ListBox("ListSession") { Width = 360, AutoPostBack = false, Height = 120, SelectionMode = ListBoxSelectionMode.Multiple, EnableLoadOnDemand = true })
+                                                                        <br />
+                                                                        <font color="blue">To select multiple items use Ctrl key on PC or Shift key on Mac</font>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" id="trtherapy">
+                                                                    <td width="35%" align="right">
+                                                                        <strong>
+                                                                            <strong id="Label5">Therapeutic approach   :  </strong>
+                                                                        </strong>
+                                                                    </td>
+                                                                    <td width="65%" align="left">
+                                                                        @Html.Obout(new Obout.Mvc.ListBox.ListBox("ListApproach") { Width = 360, AutoPostBack = false, Height = 120, SelectionMode = ListBoxSelectionMode.Multiple, EnableLoadOnDemand = true })
+                                                                        <br />
+                                                                        <font color="blue">To select multiple items use Ctrl key on PC or Shift key on Mac</font>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                    <td width="50%" valign="top">
+                                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="border_style">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="50%" align="center" valign="top">
+                                                                        <table width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style">
+                                                                            <tbody>
+                                                                                <tr class="white_color">
+                                                                                    <td width="35%" align="right">
+                                                                                        <strong>
+                                                                                            <strong id="Label1">Issues    :&nbsp;</strong>
+                                                                                        </strong>
+                                                                                    </td>
+                                                                                    <td width="65%" align="left">
+                                                                                        @Html.Obout(new Obout.Mvc.ListBox.ListBox("ListIssues") { Width = 360, AutoPostBack = false, Height = 120, SelectionMode = ListBoxSelectionMode.Multiple, EnableLoadOnDemand = true })
+                                                                                        <br />
+                                                                                        <font color="blue">To select multiple items use Ctrl key on PC or Shift key on Mac</font>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr class="nav_blue_color">
+                                                                                    <td width="35%" align="right">
+                                                                                        <strong>
+                                                                                            <strong id="Label13">Other languages  :&nbsp;</strong>
+                                                                                        </strong>
+                                                                                    </td>
+                                                                                    <td width="65%" align="left">
+                                                                                        @Html.Obout(new Obout.Mvc.ListBox.ListBox("ListLanguage") { Width = 360, AutoPostBack = false, Height = 120, SelectionMode = ListBoxSelectionMode.Multiple, EnableLoadOnDemand = true })
+                                                                                        <br />
+                                                                                        <font color="blue">To select multiple items use Ctrl key on PC or Shift key on Mac</font>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>*@
+                                    <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" id="tblmain"
+                                                style="display: none;">
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdother" height="30px" style="display: none;">
+                                                        <span id="lblother" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdpayment" height="30px" style="display: none;">
+                                                        <span id="lblpayment" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+   @*                                             <tr class="white_color" align="center">
+                                                    <td id="tdclient" height="30px" style="display: none;">
+                                                        <span id="lblclient1" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>*@
+                                                <tr class="white_color" align="center">
+                                                    <td id="tdfee" height="30px" style="display: none;">
+                                                        <span id="lblfee" style="font-weight: bold; color: Black"></span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                    <table id="Table1" width="98%">
+                                        <tr class="background_color">
+                                            <td colspan="5" align="right">
+                                                <table id="Table2" width="99%">
+                                                    <tr cssclass="background_color">
+                                                        <td align="Right" cssclass="background_color" width="89%">
+                                                            @*  <asp:UpdatePanel ID="upd33" >
+                                                                <ContentTemplate>
+                                                         <asp:Button ID="imgDPreview"  OnClick="GetProviderDetails" Text="Preview"
+                                                                CssClass="button" />
+                                                       </ContentTemplate>
+                                                            </asp:UpdatePanel>*@
+                                                        </td>
+                                                        <td align="Right" class="background_color" width="10%">
+                                                            <input type="submit" value="Save" title="Save" class="button" onclick="return CheackAvailability(15);" />&nbsp;
+                                                            @Html.ActionLink("Cancel", "ViewElectricianAdvancedSearch", null, new { @class = "button", Style = "width:34px;height:14px;" })
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="imgPreview" title="Profile Preview"></div>
+               <div id="viewfbimg" title="Facebook url help"></div>
+        <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div></div>
+    }
+
+    @{Html.RenderAction("Bottomsections", "Tools");}
+   
+</body>
+    <script type="text/javascript">
+        $(document).ready(function () {          
+            //$('#viewfbimg').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    resizable: false,
+            //    modal: true,
+            //    position: ['middle', 40]
+            //});
+            $("#afbimg").click(function () {
+
+                //var dialogDiv = $('#viewfbimg');
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = 'Showfbhelp';
+                Displaydialog('viewfbimg', viewUrl, 'auto', 1000, 'dvLoading', null, null);
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function rdfbcommentsYescheck() {
+            var fburl = trim(document.getElementById('txtfacebookurl').value);
+            if (fburl != '' && fburl != null) {
+                if (document.getElementById("rdfbcommentsYes").checked == true) {
+                    document.getElementById("rdfbcommentsNo").checked = false;
+                    clearalerts();
+                    ValidateAlertClear('tblmain', 'lblpayment', 'tdpayment', 'tdfburlmain', 'white');
+                }
+            }
+            else {
+                clearalerts();
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblpayment').innerHTML = "Please enter facebook url inorder to show facbook comments on your public profile.";
+                document.getElementById('tdpayment').style.display = '';
+                document.getElementById('tdpayment').bgColor = "orange";
+                document.getElementById('tdfburlmain').bgColor = "orange";
+                document.getElementById('txtfacebookurl').focus();
+                //document.getElementById('tblmain').style.display = '';
+                //document.getElementById('lblfburl').innerHTML = "Please enter facebook url inorder to show facbook comments on your public profile.";
+                //document.getElementById('tdfburl').style.display = '';
+                //document.getElementById('tdfburl').bgColor = "orange";
+                //document.getElementById('tdfburlmain').bgColor = "orange";
+                //document.getElementById('txtfacebookurl').focus();
+                return false;
+            }
+
+        }
+        function rdfbcommentsNocheck() {
+            if (document.getElementById("rdfbcommentsNo").checked == true) {
+                document.getElementById("rdfbcommentsYes").checked = false;
+               // ValidateAlertClear('tblmain', 'lblfburl', 'tdfburl', 'tdfburlmain', 'white');
+            }
+        }
+        function rdfreesessionYescheck() {
+            if (document.getElementById("rdfreesessionYes").checked == true) {
+                document.getElementById("rdfreesessionNo").checked = false;
+            }
+        }
+        function rdfreesessionNocheck() {
+            if (document.getElementById("rdfreesessionNo").checked == true) {
+                document.getElementById("rdfreesessionYes").checked = false;
+            }
+        }
+        function rdtscheduleYescheck() {
+            if (document.getElementById("rdtscheduleYes").checked == true) {
+                document.getElementById("rdtscheduleNo").checked = false;
+            }
+        }
+        function rdtscheduleNocheck() {
+            if (document.getElementById("rdtscheduleNo").checked == true) {
+                document.getElementById("rdtscheduleYes").checked = false;
+            }
+        }
+        //function ckhAcceptYescheck() {
+        //    if (document.getElementById("ckhAcceptYes").checked == true) {
+        //        document.getElementById("ckhAcceptNo").checked = false;
+        //        document.getElementById("ckhAcceptNoPrefer").checked = false;
+        //        document.getElementById("trInsurance").style.display = '';
+        //    }
+        //}
+        //function ckhAcceptNocheck() {
+        //    if (document.getElementById("ckhAcceptNo").checked == true) {
+        //        document.getElementById("ckhAcceptYes").checked = false;
+        //        document.getElementById("ckhAcceptNoPrefer").checked = false;
+        //        document.getElementById("trInsurance").style.display = 'none';
+        //    }
+        //}
+        //function ckhAcceptNoPrefercheck() {
+        //    if (document.getElementById("ckhAcceptNoPrefer").checked == true) {
+        //        document.getElementById("ckhAcceptYes").checked = false;
+        //        document.getElementById("ckhAcceptNo").checked = false;
+        //        document.getElementById("trInsurance").style.display = 'none';
+        //    }
+        //}
+        function rdocontactnocheck() {
+            if (document.getElementById("rdocontactno").checked == true) {
+                document.getElementById("rdocontactyes").checked = false;
+            }
+        }
+        function rdocontactyescheck() {
+            if (document.getElementById("rdocontactyes").checked == true) {
+                document.getElementById("rdocontactno").checked = false;
+            }
+        }
+
+        //function rbtnnocheck() {
+        //    if (document.getElementById("rbtnno").checked == true) {
+        //        document.getElementById("rbtnyes").checked = false;
+        //    }
+        //}
+        //function rbtnyescheck() {
+        //    if (document.getElementById("rbtnyes").checked == true) {
+        //        document.getElementById("rbtnno").checked = false;
+        //    }
+        //}
+
+        //function rdoAllowschedulingNocheck() {
+        //    if (document.getElementById("rdoAllowschedulingNo").checked == true) {
+        //        document.getElementById("rdoAllowschedulingYes").checked = false;
+        //    }
+        //}
+        //function rdoAllowschedulingYescheck() {
+        //    if (document.getElementById("rdoAllowschedulingYes").checked == true) {
+        //        document.getElementById("rdoAllowschedulingNo").checked = false;
+        //    }
+        //}
+        function clearalerts() {
+           // ValidateAlertClear('tblmain', 'lblother', 'tdother', 'tdothermain', 'White');
+            ValidateAlertClear('tblmain', 'lblpayment', 'tdpayment', 'tdpaymentmain', 'white');
+            //ValidateAlertClear('tblmain', 'lblclient1', 'tdclient', 'tdclientmain', 'White');
+            ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+        }
+        function CheackAvailability(Roleid) {
+            //if (document.getElementById('txtotherservice').value != '') {
+            //    clearalerts();
+            //    if (document.getElementById('txtotherservice').value.length > 225) {
+            //        clearalerts();
+            //        //Glb_ShowAlert("Please enter other services of 225 characters");
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblother').innerHTML = "Please enter other services of 225 characters";
+            //        document.getElementById('tdother').style.display = '';
+            //        document.getElementById('tdother').bgColor = "orange";
+            //        document.getElementById('tdothermain').bgColor = "orange";
+            //        document.getElementById('txtotherservice').focus();
+            //        return false;
+            //    }
+            //    else {
+
+            //        ValidateAlertClear('tblmain', 'lblother', 'tdother', 'tdothermain', 'White');
+            //    }
+            //}
+            if (document.getElementById('txtPayment').value != '') {
+                clearalerts();
+                if (document.getElementById('txtPayment').value.length > 500) {
+                    //Glb_ShowAlert("Please enter payments/condition of 500 characters");
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lblpayment').innerHTML = "Please enter payments/condition of 500 characters";
+                    document.getElementById('tdpayment').style.display = '';
+                    document.getElementById('tdpayment').bgColor = "orange";
+                    document.getElementById('tdpaymentmain').bgColor = "orange";
+                    document.getElementById('txtPayment').focus();
+                    return false;
+                }
+                else {
+
+                    ValidateAlertClear('tblmain', 'lblpayment', 'tdpayment', 'tdpaymentmain', 'white');
+                }
+            }
+            //if (document.getElementById('txtClientprofile').value != '') {
+            //    clearalerts();
+            //    if (document.getElementById('txtClientprofile').value.length > 500) {
+            //        clearalerts();
+            //        //Glb_ShowAlert("Please enter client profile of 500 characters");
+            //        document.getElementById('tblmain').style.display = '';
+            //        document.getElementById('lblclient1').innerHTML = "Please enter client profile of 500 characters";
+            //        document.getElementById('tdclient').style.display = '';
+            //        document.getElementById('tdclient').bgColor = "orange";
+            //        document.getElementById('tdclientmain').bgColor = "orange";
+            //        document.getElementById('txtClientprofile').focus();
+            //        return false;
+            //    }
+            //    else {
+
+            //        ValidateAlertClear('tblmain', 'lblclient1', 'tdclient', 'tdclientmain', 'White');
+            //    }
+            //}
+
+            if ((document.getElementById('txtFromFee').value != '') && (document.getElementById('txtToFee').value == '')) {
+                clearalerts();
+                //Glb_ShowAlert("Please enter session fee.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblfee').innerHTML = "Please enter session fee.";
+                document.getElementById('tdfee').style.display = '';
+                document.getElementById('tdfee').bgColor = "orange";
+                document.getElementById('tdfeemain').bgColor = "orange";
+                document.getElementById('txtToFee').focus();
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+            }
+            if ((document.getElementById('txtFromFee').value == '') && (document.getElementById('txtToFee').value != '')) {
+                clearalerts();
+                //Glb_ShowAlert("Please enter session fee.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('lblfee').innerHTML = "Please enter session fee.";
+                document.getElementById('tdfee').style.display = '';
+                document.getElementById('tdfee').bgColor = "orange";
+                document.getElementById('tdfeemain').bgColor = "orange";
+                document.getElementById('txtFromFee').focus();
+                return false;
+            }
+            else {
+
+                ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+            }
+            if (document.getElementById('txtFromFee').value != '') {
+                clearalerts();
+                var mytext = document.getElementById('txtFromFee').value;
+                if (mytext.indexOf('.') == 0) {
+                    var mytexttwo = mytext.substring(mytext.indexOf('.') + 1);
+                    if (mytexttwo.length <= 0) {
+                        //Glb_ShowAlert("Invalid session fee");
+                        document.getElementById('tblmain').style.display = '';
+                        document.getElementById('lblfee').innerHTML = "Invalid session fee";
+                        document.getElementById('tdfee').style.display = '';
+                        document.getElementById('tdfee').bgColor = "orange";
+                        document.getElementById('tdfeemain').bgColor = "orange";
+                        document.getElementById('txtFromFee').focus();
+                        return false;
+                    }
+                    else {
+
+                        ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+                    }
+                }
+                for (cnt = 0; cnt <= mytext.length - 1; cnt++) {
+                    var num = mytext.charAt(cnt);
+                    if ((num == 0) || (num == 1) || (num == '.') || (num == 2) || (num == 3) || (num == 4) || (num == 5) || (num == 6) || (num == 7) || (num == 8) || (num == 9)) {
+
+                        ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+                    }
+                    else {
+                        clearalerts();
+                        //Glb_ShowAlert("Invalid session fee");
+                        document.getElementById('tblmain').style.display = '';
+                        document.getElementById('lblfee').innerHTML = "Invalid session fee";
+                        document.getElementById('tdfee').style.display = '';
+                        document.getElementById('tdfee').bgColor = "orange";
+                        document.getElementById('tdfeemain').bgColor = "orange";
+                        document.getElementById('txtFromFee').focus();
+                        return false;
+                    }
+                }
+            }
+            if (document.getElementById('txtToFee').value != '') {
+                clearalerts();
+                var mytext = document.getElementById('txtToFee').value;
+                if (mytext.indexOf('.') == 0) {
+                    clearalerts();
+                    var mytexttwo = mytext.substring(mytext.indexOf('.') + 1);
+                    if (mytexttwo.length <= 0) {
+                        clearalerts();
+                        //Glb_ShowAlert("Invalid session fee");
+                        document.getElementById('tblmain').style.display = '';
+                        document.getElementById('lblfee').innerHTML = "Invalid session fee";
+                        document.getElementById('tdfee').style.display = '';
+                        document.getElementById('tdfee').bgColor = "orange";
+                        document.getElementById('tdfeemain').bgColor = "orange";
+                        document.getElementById('txtToFee').focus();
+                        return false;
+                    }
+                    else {
+
+                        ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+                    }
+                }
+                for (cnt = 0; cnt <= mytext.length - 1; cnt++) {
+                    var num = mytext.charAt(cnt);
+                    if ((num == 0) || (num == 1) || (num == '.') || (num == 2) || (num == 3) || (num == 4) || (num == 5) || (num == 6) || (num == 7) || (num == 8) || (num == 9)) {
+
+                        ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+                    }
+                    else {
+                        clearalerts();
+                        //Glb_ShowAlert("Invalid session fee");
+                        document.getElementById('tblmain').style.display = '';
+                        document.getElementById('lblfee').innerHTML = "Invalid session fee";
+                        document.getElementById('tdfee').style.display = '';
+                        document.getElementById('tdfee').bgColor = "orange";
+                        document.getElementById('tdfeemain').bgColor = "orange";
+                        document.getElementById('txtToFee').focus();
+                        return false;
+                    }
+                }
+            }
+            if (document.getElementById('txtToFee').value != '') {
+                clearalerts();
+                var mytext = document.getElementById('txtToFee').value;
+                text = 0;
+                for (cnt = 0; cnt <= mytext.length - 1; cnt++) {
+                    var num = mytext.charAt(cnt);
+                    if (num == '.') {
+                        text += 1;
+                    }
+                }
+                if (text > 1) {
+                    clearalerts();
+                    //Glb_ShowAlert("Invalid session fee");
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lblfee').innerHTML = "Invalid session fee";
+                    document.getElementById('tdfee').style.display = '';
+                    document.getElementById('tdfee').bgColor = "orange";
+                    document.getElementById('tdfeemain').bgColor = "orange";
+                    document.getElementById('txtToFee').focus();
+                    return false;
+                }
+                else {
+
+                    ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+                }
+            }
+            if (document.getElementById('txtFromFee').value != '') {
+                clearalerts();
+                var mytext = document.getElementById('txtFromFee').value;
+                text = 0;
+                for (cnt = 0; cnt <= mytext.length - 1; cnt++) {
+                    var num = mytext.charAt(cnt);
+                    if (num == '.') {
+                        text += 1;
+                    }
+                }
+                if (text > 1) {
+                    clearalerts();
+                    //Glb_ShowAlert("Invalid session fee");
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lblfee').innerHTML = "Invalid session fee";
+                    document.getElementById('tdfee').style.display = '';
+                    document.getElementById('tdfee').bgColor = "orange";
+                    document.getElementById('tdfeemain').bgColor = "orange";
+                    document.getElementById('txtFromFee').focus();
+                    return false;
+                }
+                else {
+
+                    ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+                }
+            }
+            if ((document.getElementById('txtFromFee').value != '') && (document.getElementById('txtToFee').value != '')) {
+                clearalerts();
+                var fromfee = parseFloat(document.getElementById('txtFromFee').value);
+                var Tofee = parseFloat(document.getElementById('txtToFee').value);
+                if (Tofee < fromfee) {
+                    clearalerts();
+                    //Glb_ShowAlert("Invalid session fee");
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('lblfee').innerHTML = "Invalid session fee";
+                    document.getElementById('tdfee').style.display = '';
+                    document.getElementById('tdfee').bgColor = "orange";
+                    document.getElementById('tdfeemain').bgColor = "orange";
+                    document.getElementById('txtToFee').focus();
+                    return false;
+                }
+                else {
+
+                    ValidateAlertClear('tblmain', 'lblfee', 'tdfee', 'tdfeemain', 'white');
+                }
+            }
+
+        }
+        $(document).ready(function () {
+            $(".closeprivew").live("click", function (e) {
+                var dialogDiv = $('#imgPreview');
+                dialogDiv.dialog('close');
+            });
+        });
+    </script>
+     @*<script type="text/javascript">
+         var linkObj;
+         $(function () {
+             $('#updateDialog').dialog({
+                 autoOpen: false,
+                 width: 900,
+                 resizable: false,
+                 modal: true,
+                 buttons: [
+                 {
+                     text: "Submit",
+                     "class": 'button',
+                     click: function () { $("#update-message").html(''); $("#updateCarForm").submit();}
+                 },
+                 {
+                      text: "Cancel",
+                     "class": 'button',
+                     click: function () {$(this).dialog("close");}
+
+                 }
+                 ]
+             });
+             $(".editLink").click(function () {
+                 //change the title of the dialog
+                 linkObj = $(this);
+                 var dialogDiv = $('#updateDialog');
+                 $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                 var viewUrl = linkObj.attr('href');
+                 $.get(viewUrl, function (data) {
+                     dialogDiv.html(data);
+                     $('#dvLoading').dialog('close');
+                     dialogDiv.dialog('open');
+                 });
+                 return false;
+             });
+         });
+         function updateSuccess(data) {
+             if (data != '') {
+                 var obj = data.Object.PlanName;
+                 var obj1 = new Array();
+                 var obj3 = null;
+                 obj1 = obj.split(",");
+                 var i;
+                 ListPayer.options.clear();
+                 for (i = 0; i <= obj1.length - 1; i++) {
+                     ListPayer.options.add(obj1[i], i);
+                 }
+                 $('#updateDialog').dialog('close');
+             }
+         }
+    </script>*@
+   @* <script type="text/javascript">
+        var obj = "@ViewBag.IsAcceptInsurance";
+        if (obj == "Yes") {
+            document.getElementById("trInsurance").style.display = '';
+        }
+        else {
+            document.getElementById("trInsurance").style.display = 'none';
+        }
+    </script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").addClass("active");
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").removeClass();
+        });
+    </script>
+</html>

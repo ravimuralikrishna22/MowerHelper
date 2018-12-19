@@ -1,0 +1,90 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+      <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function Validate() {
+            var actionitem = trim(document.getElementById('txtactionitem').value);
+            document.getElementById('txtactionitem').value = actionitem;
+            if (document.getElementById('txtactionitem').value == '') {
+                InlineAlert('lblErrAction', 'tdActionItem', 'Please enter action item');
+                document.getElementById("txtactionitem").focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrAction', 'tdActionItem', 'white')
+            }
+
+
+            if (document.getElementById('txtactionitem').value.length > 1000) {
+                InlineAlert('lblErrAction', 'tdActionItem', 'Action item text can be up to 1000 characters');
+                document.getElementById("txtactionitem").focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrAction', 'tdActionItem', 'white')
+            }
+        }
+            </script>
+
+</head>
+<body>
+ @using (Html.BeginForm("Editaction", "Task", null, FormMethod.Post))
+ {
+     <input type="hidden" id="hdnaction_id" name="hdnaction_id" value="@ViewBag.Action_id" />
+     <input type="hidden" id="hdntask_id" name="hdntask_id" value="@ViewBag.Task_ID" />
+ 
+        <div id="update-message" class="error" style="padding-left: 150px; font-weight: bold;">
+        </div> 
+         
+        <div id="div10" class="content-box">
+            <div class="content-box-content">
+            <table align="center" border="0" class="border_style" cellpadding="7" cellspacing="1"
+                    width="100%">
+               
+                    <tr class="white_color">
+                        <td align="center" width="20%">
+                           <font color="Red"><b>&nbsp;*</b></font><strong>Date &nbsp;:&nbsp;</strong>
+                        </td>
+                        <td align="left">
+                     
+                             <span id="lblDate" >@ViewBag.lblDate </span>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td align="right">
+                            <font color="red">*</font><strong>Action item&nbsp;:&nbsp;</strong>
+                        </td>
+                        <td align="left" width="80%" id= "tdActionItem" runat="server">
+                            @Html.TextArea("txtactionitem", (string)ViewBag.Actionitemtitle, 3, 3, new { @class = "textfield", @style = "width:350px;height:110px;" })
+                            <span id="lblErrAction" style="font-weight: bold; color: Black;"></span><br />
+                            (Maximum length 1000 characters)
+                        </td>
+                    </tr>
+                    
+
+                </table>
+                                <table border="0" cellpadding="5" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td width="66%">
+                        </td>
+                        <td align="right" width="64%">
+                        <input type="submit" title="Save" value="Save" class="button" onclick="return Validate();"  />
+
+                            &nbsp;
+                           <input type="button" class="Editactionclose button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+ }
+        </body>
+    </html>

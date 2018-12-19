@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+               @Styles.Render("~/Content/themes/base/TherpistStyles")
+         @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+         <script type="text/javascript">
+             $(document).ready(function () {
+                 var Type = $('#hdntype').val();
+                 if (Type != '') {
+                     $('#ddlListingMsgsType').val(Type);
+                 }
+                 else {
+                     $('#ddlListingMsgsType').val("NEWviewed");
+
+                 }
+                 var psize = $('#hdnpagesize').val();
+                 if (psize != '') {
+                     $('#ddlrecords').val(psize);
+                 }
+                 else {
+                     $('#ddlrecords').val("10");
+
+                 }
+
+             });
+             $(document).ready(function () {
+                 var TopIndex = '@Session["TopIndex"]';
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").addClass("active");
+                  $("#Menu3").removeClass();
+              });
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("Fromveriuserandsup", "Messages", FormMethod.Get, null))
+    {
+                    
+    <div>
+        @{Html.RenderAction("Topsection", "Tools");}
+    </div>
+            <div>
+       @{Html.RenderAction("Msg_Main", "Messages", new { @Tabid = "3" });}
+    </div>
+    <div id="main-content">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr class="background_color">
+                <td align="left" valign="top" width="100%">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr id="trtabs">
+                            <td width="100%" class="navigation">
+                                <div class="admin-tab">
+                                    @{int FromcontactCount = Convert.ToInt32(ViewBag.contactcount);}
+                                    <a class="inadmin-link" href="Contactusentries" id="acontactus"><span>Contact us entries&nbsp;(@FromcontactCount)</span>
+                                    </a>
+                                </div>
+                                                                <div class="admin-tab">
+                                    @{int supervisercnt = Convert.ToInt32(ViewBag.supervisercnt);}
+                                    @{int vusercount = Convert.ToInt32(ViewBag.vusercount);}
+                                      @{int vericount = supervisercnt + vusercount;}
+                                    <a class="admin-link" id="aFromveri" href="Fromveriuserandsup"><span>From verification user/supervisor&nbsp;(@vericount)</span>
+                                    </a>
+                                </div>
+
+                                                                <div class="admin-tab">
+                                                                 @{int paapcount = Convert.ToInt32(ViewBag.paapcount);}
+                                    @{int newpaapcount = Convert.ToInt32(ViewBag.Newpaapcount);}
+                                    @{int practicecount = paapcount + newpaapcount;}
+                                    <a class="inadmin-link" id="afromnewpaap" href="frompractices"><span>From mower helper&nbsp;(@practicecount)</span>
+                                    </a>
+                                </div>
+                                <div class="admin-tab">
+                                    @{int Sentcount = Convert.ToInt32(ViewBag.Sentcount);}
+                                    <a class="inadmin-link" id="aSentMessages" href="SentMessages"><span>Sent messages&nbsp;(@Sentcount)</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="background_color">
+                            <td id="tdtabs" class="tab-background" width="100%">
+                            <table id="Table1" cellspacing="0" cellpadding="0" width="70%" align="center" border="0">
+                                            <tr>
+                                                <td width="20%" align="center">
+                                                    <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                        <li><strong>Filter by :&nbsp;</strong>
+                                                            @Html.DropDownList("ddlListingMsgsType", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="New", Value = "New" },
+                                                               new SelectListItem{ Text="Viewed", Value = "Viewed" },
+                                                               new SelectListItem{ Text="Archived", Value = "Archived" },
+                                                               new SelectListItem{ Text="All", Value = "All" }, 
+                                                               new SelectListItem{ Text="New/Viewed", Value = "NEWviewed" }, 
+                                                              },
+                                                             new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                             @*   @if (Convert.ToInt32(ViewBag.totrec) > 0)
+                                                {*@
+                                                <td width="20%" align="center">
+                                                    <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                        <li><strong>Rows per page :&nbsp;</strong>
+                                                         @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                              @*  }*@
+                                            </tr>
+                                        </table>
+                              @{Html.RenderAction("Fromveriuser", "Messages");}
+                                @{Html.RenderAction("Fromverisupervisor", "Messages");}
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+                            <div>
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+
+    }
+</body>
+</html>

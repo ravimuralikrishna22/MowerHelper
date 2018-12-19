@@ -1,0 +1,220 @@
+﻿@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <style type="text/css">
+        input[type="radio"]
+        {
+            margin-right: 5px;
+        }
+
+        .ui-autocomplete
+        {
+            width: 800px;
+        }
+        /* IE 6 doesn't support max-height
+   * we use height instead, but this forces the menu to always be this tall
+   */
+        * html .ui-autocomplete
+        {
+            width: 800px;
+        }
+
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .item
+        {
+            position: relative !important;
+            display: -moz-inline-stack;
+            display: inline-block;
+            zoom: 1;
+            *display: inline;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .header
+        {
+            margin-left: 2px;
+        }
+
+        .c1
+        {
+            width: 160px;
+        }
+
+        .c2
+        {
+            margin-left: 10px;
+            width: 90px;
+        }
+    </style>
+
+</head>
+<body>
+     @using (Ajax.BeginForm("AddNotes", "Notes", new AjaxOptions
+     {
+         InsertionMode = InsertionMode.Replace,
+         HttpMethod = "POST",
+         OnSuccess = "updateNoteSuccess",
+         OnComplete = "SessionExpireFail"
+
+
+     }, new { @id = "updateNoteForm" }))
+     {
+         // @using (Html.BeginForm("AddNotes", "Notes", FormMethod.Post, null))
+         // {
+        @Html.AntiForgeryToken()
+              @Html.Hidden("dt_filter")
+             @Html.Hidden("txt_FromDate")
+             @Html.Hidden("txt_ToDate")
+       
+        <div class="content-box">
+            <div class="content-box-content">
+                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                    border="0">
+                    <tr height="20" class="white_color" id="TrNoteType" runat="server">
+                        <th align="right" width="22%">&nbsp;&nbsp;<font color="red">*</font><strong>Note for :</strong>&nbsp;</th>
+                        <td align="left">
+
+                            @Html.RadioButton("RBPatient", "1", false, new { @GroupName = "NoteType", onclick = "return RBPatientcheck();" })&nbsp;Client&nbsp;
+                                @Html.RadioButton("RBNonPatient", "1", true, new { @GroupName = "NoteType", onclick = "return RBNonPatientcheck();" })&nbsp;Non-Client
+                        </td>
+                    </tr>
+                    <tr id="Trcombo2" style="display: none;" runat="server" class="white_color">
+                        <th align="right" width="22%"><font color="red">*</font><strong>Client :</strong>&nbsp;</th>
+                        <td align="left" id="tdPat" runat="server">
+                            @Html.Obout(new Obout.Mvc.ComboBox.ComboBox("ComboPatients")
+                       {
+                           Width = 400,
+                           MenuWidth = 400,
+                           Height = 200,
+                           HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                               @:<div class="header  c1">Client</div><div class="header c2">Phone</div>
+),
+
+                           ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+                             @:<div class="item c1">@(((MowerHelper.Models.BLL.BLLSchedule.ListofPatients)item.DataItem).PatientName)</div><div class="item c2">@(((MowerHelper.Models.BLL.BLLSchedule.ListofPatients)item.DataItem).Phone)</div>
+)
+                       })
+                            &nbsp;&nbsp;
+                                <span id="lblErrPat" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="10" class="white_color" id="trnotedate" runat="server" style="display:none">
+                        <th align="right"><font color="red">*</font><strong>Note date :</strong>&nbsp;</th>
+                        <td align="left" id="tdNDate" runat="server">
+                            @Html.TextBox("txt_Date", (string)ViewBag.Todaydate, new { @class = "textfield Datefield", MaxLength = "10", style = "width:80px", autocomplete = "off" })
+                            &nbsp;&nbsp;
+                                <span id="lblNoteDate" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="20" id="trnotes" runat="server" class="white_color">
+                        <th align="right"><font color="red">*</font><strong>Note :</strong>&nbsp;</th>
+                        <td align="left" id="tdNotes" runat="server">
+                            @Html.TextArea("txtNotes", null, 3, 3, new { @class = "textfield", style = "width:350px;height:80px;" })
+                            &nbsp;&nbsp;(Maximum length upto 1000 characters)
+                                <br />
+                            <span id="lblErrNote" style="font-weight: bold; color: Black"></span>
+
+                        </td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                            <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Validate();" />
+                            &nbsp;
+                                              <input type="button" class="close button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+     }
+</body>
+@*<script type="text/javascript">
+    //$(function () {
+    //      $("#txt_Date").datepicker({
+    //        dateFormat: 'mm/dd/yy',
+    //        changeMonth: true,
+    //        changeYear: true,
+    //        //                showCurrentAtPos: 1,
+    //        showWeeks: true,
+    //        inline: true,
+    //        numberOfMonths: [1, 1],
+    //        yearRange: "1950:2020",
+    //        showOn: "button",
+    //        buttonImage: "../Images/calender.gif",
+    //        buttonImageOnly: true
+
+    //    });
+    //});
+</script>*@    
+<script type="text/javascript">    
+    function RBPatientcheck() {
+        clearalerts()
+        //                alert("1");
+        document.getElementById('RBPatient').checked = true;
+        document.getElementById('RBNonPatient').checked = false;
+        if (document.getElementById('RBPatient').checked == true) {
+
+                  //           alert("2");
+            document.getElementById('Trcombo2').style.display = '';
+            //return false;
+        }
+    }
+    function RBNonPatientcheck() {
+        clearalerts()
+        document.getElementById('RBPatient').checked = false;
+        document.getElementById('RBNonPatient').checked = true;
+        if (document.getElementById('RBNonPatient').checked == true) {
+            document.getElementById('Trcombo2').style.display = 'none';
+        }
+    }
+    function updateNoteSuccess(data) {
+        //alert(data.Success);        
+        if (data != '' & data.Success == true) {
+            $('#dvLoading').dialog('close');
+            $('#AddNoteDialog').dialog('close');
+            //window.location.href = '../Notes/ProfileNotes';   ViewBag.rdoActiveArchive
+        @*    $("#gridcontent1").load("@Url.Action("DisplayProfileNotes", "Notes")?dt_filter=" + "30" + "&rdoActiveArchive=" + "Active");*@
+            var searchNotes = '@ViewBag.txtsnotes'
+            if ('@ViewBag.rdoActiveArchive' == 'Archive') {
+                $("#gridcontent1").load('../Notes/DisplayProfileNotes?dt_filter=' + document.getElementById("dt_filter").value + "&txt_FromDate=" +
+                              document.getElementById("txt_FromDate").value + "&txt_ToDate=" + document.getElementById("txt_ToDate").value + "&page=" + '1' + "&rdoActiveArchive=" + '@ViewBag.rdoActiveArchive'
+                               + "&hdnnoteclientid=" + '@ViewBag.ToReference_ID' + "&txtnotes=" + searchNotes + "&txtcustomer=" + escape('@ViewBag.txtcustomer'));
+
+            }
+            else {
+
+                $("#gridcontent1").load('../Notes/DisplayProfileNotes?dt_filter=' + document.getElementById("dt_filter").value + "&txt_FromDate=" +
+                             document.getElementById("txt_FromDate").value + "&txt_ToDate=" + document.getElementById("txt_ToDate").value + "&page=" + '@ViewBag.notespage' + "&rdoActiveArchive=" + '@ViewBag.rdoActiveArchive'
+                             + "&hdnnoteclientid=" + '@ViewBag.ToReference_ID' + "&txtnotes=" + searchNotes + "&txtcustomer=" + escape('@ViewBag.txtcustomer')
+                              );
+            }
+        }
+           
+        else {
+            $('#dvLoading').dialog('close');
+            return false;
+        }
+    }
+</script>
+</html>

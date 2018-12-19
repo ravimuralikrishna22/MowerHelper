@@ -1,0 +1,335 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    @* <meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
+        <meta name="vs_defaultClientScript" content="JavaScript">
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+    <meta name="DC.creator" content="Find a therapist">*@
+    @Styles.Render("~/Content/Printprofile.css")
+   @* <link href="~/Content/Printprofile.css" type="text/css" rel="Stylesheet" />*@
+    <style type="text/css" rel="stylesheet">
+        .blueborderbg
+        {
+            background-color: #d0e4f4;
+            font-family: Arial,Verdana;
+            font-size: 9pt;
+            color: Black;
+        }
+        .skybluebg
+        {
+            background-color: #f5faff;
+            height: 22px;
+            font-family: Arial,Verdana;
+            font-size: 9pt;
+            color: Black;
+        }
+        
+        .gray
+        {
+            background-color: #ffffff;
+            height: 22px;
+            font-family: Arial,Verdana;
+            font-size: 9pt;
+            color: Black;
+        }
+        .button
+        {
+            font-family: Verdana, Arial, sans-serif;
+            display: inline-block;
+            background: #459300 top left repeat-x !important;
+            border: 1px solid #459300 !important;
+            padding: 4px 7px 4px 7px !important;
+            color: #fff !important;
+            font-size: 11px !important;
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript">
+        function PrintThisWindow() {
+            window.print();
+            return false;
+        }
+    </script>
+    <script type="text/javascript">
+        function cancel() {
+           
+            window.location.href = '@Url.RouteUrl("ProviderProfile", new { id = ViewBag.id, Therapistname =ViewBag.businessnm1})';
+        }
+    </script>
+   </head>
+<body>
+
+    <form id="form1">
+    <input type="hidden" id="hdnproviderid3" value="@ViewBag.id" />
+    <input type="hidden" id="hdnprovidernm" name="hdnprovidernm" value="@ViewBag.businessnm1" />
+    <table cellpadding="5" cellspacing="1" border="0" align="center" style="padding-top:20px; width: 1050px; margin: 0 auto;">
+        <tr>
+            <td align="right" colspan="2">
+                <div class='noPrint'>
+                <input type="submit" id="imgbtnprint" value="Print" class="button" onclick="return PrintThisWindow();" />
+                        &nbsp;
+                        <input type="button" value="Back" class="button" onclick="return cancel();" />
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="main" style="width: 1050px; margin: 0 auto;">
+        <div class="outerWrapper" id="pageWrapper">
+            <div class="pageInner">
+                <!-- Returned ../rms/rms_html/top_nav.php -->
+                <div style='clear: both; height: 4px;'>
+                </div>
+                <div  class="profile">
+                    <div class="region-left">
+                        <div class='section profile-photo'>
+                      
+                                                  
+                                                        <img id="imgProvider" src="@ViewBag.providerimage" style="border-color:White; width:120px; height:150px; border-style:solid; border-width:1px;" />
+                                                  
+                 @*   <img id="imgProvider" src="@ViewBag.providerimage" style="border-color:White; width:120px; height:150px; border-style:solid; border-width:1px;" />*@
+                            @*<asp:Image ImageAlign="Top" ID="imgProvider" AlternateText="Provider Image" BorderColor="White"
+                                Width="120px" Height="150px" BorderStyle="Solid" BorderWidth="1px" runat="server" />*@</div>
+                        <div class='section profile-buttons'>
+                            <div class='profile-contact clearfix'>
+                                <div class='cols-1 col clearfix'>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="region-right">
+                        <div class="profile-header">
+                        <table>
+                        <tr>
+                        <td>
+                        <div class='section profile-name'>
+                                <h1 itemprop="name">
+                                 <label id="lblProviderName" style="font-weight:bold; font-family:Arial; font-size:16pt;">@ViewBag.ProviderName</label>
+                                  </h1>
+                                <div class="profile-title">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                        <br />
+                        <div class='section profile-phone'>
+                            <table>
+                            <tr>
+                            <td>
+                            <span class="ui-sprite" itemprop="telephone">
+                            <br />
+                            <img alt="" src="~/Images/Phone-icon.png" />
+                             </span>
+                            </td>
+                            <td>
+                             <span class="ui-sprite" itemprop="telephone">
+                             <label id="lblworkphone" style="font-size:22px;">@ViewBag.Vmoffice</label>
+                             </span>
+                            </td>
+                            <td>
+                           @*  <span class="ui-sprite" itemprop="telephone">
+                             <label id="lblExtension" style="font-size:22px;">@Html.Raw(ViewBag.webextwnsion1)</label>
+                             </span>*@
+                            </td>
+                            </tr>
+                            </table>
+                            </div>
+                        </td>
+                        </tr>
+                        </table>
+                            <div class='section profile-menu'>
+                                <div class='clearfix'>
+                                    <div class='cols-1 col clearfix'>
+                                        <ul>
+                                            <li><a href="#" class='active'>Mower Helper Profile</a> </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="profile-verified">
+                                    <div class="verified-wrapper">
+                                     <table style="width:100%;">
+                                    <tr>
+                                    <td>
+                                    
+                                     <img id="imglicense" alt="" src="~/Images/check_256.png" />
+                                    </td>
+                                    <td>
+                                    <label id="lbllicensemsg" style="font-weight:bold; font-family:Arial; color:Green; font-size:16pt;">License verified</label>
+                                    </td>
+                                    </tr>
+                                    </table>
+                                   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-middle">
+                        @if (ViewBag.desc != null)
+                        {
+                            <div class='section profile-personalstatement'>
+                                <h2>
+                                    Personal statement</h2>
+                                <div class="statementPara">
+                                <label id="lblPersonalStatement" style="font-family:Arial; font-weight:normal; font-size:9pt;">@Html.Raw(HttpUtility.HtmlDecode(ViewBag.desc))</label>
+                                    </div>
+                            </div>
+                        }
+                            @*<div class='section profile-hoursofwork' id="divper" >
+                            <h2>Hours Of Work</h2>
+                             <div class='cols-1 col clearfix'>
+                                     <span " style="font-family:Arial; font-weight:normal; font-size:9pt;">@Html.Raw(HttpUtility.HtmlDecode(ViewBag.officehours))</span>
+                                    
+                                        </div>
+                            </div>*@
+                            <div id="divqualify" class='section profile-qualifications'>
+                                <h2>
+                                    Qualifications</h2>
+                                <div class="section-content">
+                                    <div class='clearfix'>
+                                        <div class='cols-1 col clearfix'>
+                                            <ul>
+                                            @if (ViewBag.Yearsinpractice != null)
+                                            {
+                                              
+                                                <li id="lipractice" style="padding-bottom: 10px;"><strong>Years in Practice&nbsp;:</strong>&nbsp;
+                                                <span id="lblYearsinPractice" style="font-weight:normal;">@ViewBag.Yearsinpractice</span>                                          
+                                                </li>
+                                            }
+                                           @* @if (ViewBag.degree != null)
+                                            {
+                                                <li id="lischool" runat="server" style="padding-bottom: 10px;"><strong>School&nbsp;:</strong>
+                                                <span id="lbldegree" style="font-family:Arial; font-weight:normal; font-size:9pt;">@Html.Raw(HttpUtility.HtmlDecode(ViewBag.degree))</span>                                            
+                                                </li>
+                                            }*@
+                                                <li id="lilic" runat="server" style="padding-bottom: 10px;"><strong>License No&nbsp;:</strong>
+                                                <span id="lbllicense" style="font-family:Arial; font-weight:normal; font-size:9pt;">@ViewBag.license</span>
+                                                                                                      
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         @*   @if (ViewBag.certifications != null)
+                            {
+                            <div class='section profile-spec_zone_4' id="divcert" >
+                                    <h2>
+                                        Certification(s)</h2>
+                                    <div class='cols-1 col clearfix'>
+                                     <span id="lblcertifications" style="font-family:Arial; font-weight:normal; font-size:9pt;">@ViewBag.certifications</span>
+                                    
+                                        </div>
+                                </div>
+                            }*@
+                                @if (ViewBag.avcostpersession != null)
+                                {
+                            <div class='section profile-finances' id="divfinance">
+                                <h2>
+                                    Finances</h2>
+                                <div class="section-content">
+                                    <div class='clearfix'>
+                                        <div class='cols-1 col clearfix'>
+                                            <ul>
+                                                <li><strong>Avg&nbsp;Cost&nbsp;(per&nbsp;hourly)&nbsp;:</strong>&nbsp;
+                                                 <span id="lblavcostpersession" style="font-family:Arial; font-weight:normal; font-size:9pt;">@ViewBag.avcostpersession</span>
+                                                
+                                                </li></ul>
+                                        </div>
+                                    </div>
+                                    <div class='spec-list clearfix'>
+                                        <div class='profile-list-comma'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                }
+                        </div>
+                        <div class="profile-right">
+                        @if (ViewBag.address != null)
+                        {
+                            <div class='section profile-address'>
+                                <h2>
+                                    Location</h2>
+                                <div class="section-content">
+                                    <div class='address address-rank-1' itemprop="workLocation" itemscope itemtype="http://schema.org/Place">
+                                        <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                                        <label id="lblAddress">@Html.Raw(ViewBag.address)</label>
+                                            
+                                        </div>
+                                        <span itemprop="geo" itemscope itemtype="http://schema.org/Geo">
+                                            <meta itemprop="latitude" content="29.759026">
+                                            <meta itemprop="longitude" content="-95.363279">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                           
+                       @*     @if (ViewBag.ClientProfile != null)
+                            {
+                            <div class='section profile-spec_zone_4' id="divclient" >
+                                <h2>
+                                    Client Focus</h2>
+                                <div class='cols-1 col clearfix'>
+                                 <label id="lblClientProfile" style="font-family:Arial; font-weight:normal; font-size:9pt;">@Html.Raw(HttpUtility.HtmlDecode(ViewBag.ClientProfile))</label>
+                                    </div>
+                            </div>
+                            }*@
+                            @if (ViewBag.paymentsandconditions != null)
+                            {
+                                <div class='section profile-spec_zone_4' id="divpayment" >
+                                    <h2>
+                                        Payments/Conditions</h2>
+                                    <div class='cols-1 col clearfix'>
+                                     <label id="lblPaymentsandConditions" style="font-family:Arial; font-weight:normal; font-size:9pt;">@ViewBag.paymentsandconditions</label>
+                                        </div>
+                                </div>
+                            }
+@*                            @if (ViewBag.OtherServices != null)
+                            {
+                                <div class='section profile-spec_zone_4' id="divother" >
+                                    <h2>
+                                        Other services</h2>
+                                    <div class='cols-1 col clearfix'>
+                                    <label id="lblOtherServices" style="font-family:Arial; font-weight:normal; font-size:9pt;">@ViewBag.OtherServices</label>
+                                      </div>
+                                </div>
+                            }
+                            @if (ViewBag.language != null)
+                            {
+                                <div class='section profile-spec_zone_4' id="divlang" >
+                                    <h2>
+                                        Other languages</h2>
+                                    <div class='cols-1 col clearfix'>
+                                     <label id="lblLanguages" style="font-family:Arial; font-weight:normal; font-size:9pt;">@ViewBag.language</label>
+                                      </div>
+                                </div>
+                            }*@
+                        </div>
+                        &nbsp;
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table cellpadding="5" cellspacing="1" border="0" align="center"  style=" padding-top:20px; padding-bottom:20px; width:1050px; margin:0 auto;">
+        <tr>
+            <td colspan="2" align="right">
+                <div class='noPrint'>
+                <input type="button" value="Back" class="button" id="imgnbtnback" onclick="return cancel();" />
+                   
+                </div>
+            </td>
+        </tr>
+    </table>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,465 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      @Styles.Render("~/Content/themes/base/jqueryCSS")
+      @Scripts.Render("~/Scripts/Thscriptscript")
+      <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 50px; }
+          tr.gridHead th:nth-child(2) { width: 200px; }
+          tr.gridHead th:nth-child(3) { width: 200px; }
+          tr.gridHead th:nth-child(4) { width: 200px; }
+          tr.gridHead th:nth-child(5) { width: 200px; }
+          tr.gridHead th:nth-child(6) { width: 80px; }
+              .dvLoading .ui-dialog-titlebar{display:none;}
+        
+    </style>
+    
+            <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                $("#txt_FromDate").on('change keyup paste mouseup', function () {
+                    //  alert("1");
+                    if ($(this).val().length == 10) {
+                        //alert("2");
+                        if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+                        var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+                        // alert(St);
+                        var targetDate = new Date(St);
+                        targetDate.setDate(targetDate.getDate() + 365);
+                        //   alert(targetDate);
+                        var todaydate = new Date();
+                        todaydate.setDate(todaydate.getDate());
+                        var dd = todaydate.getDate();
+                        var mm = todaydate.getMonth() + 1; //January is 0!
+                        var yyyy = todaydate.getFullYear();
+                        var today = mm + '/' + dd + '/' + yyyy;
+                        var dd1 = targetDate.getDate();
+                        var mm1 = targetDate.getMonth() + 1;
+                        var yyyy1 = targetDate.getFullYear();
+                        var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+                        //  alert(target1);
+                        if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+                        else { document.getElementById('txt_ToDate').value = target1; return false; }
+                    }
+                });
+
+                var frm = $("#formname");
+                $('#dt_filter').change(function () {
+                    if (document.getElementById('dt_filter').value == 'Custom') {
+                        document.getElementById('tddaterange').style.display = '';
+                        $('#txt_FromDate').val("");
+                        $('#txt_ToDate').val("");
+                    }
+                    else {
+                        document.getElementById('tddaterange').style.display = 'none';
+                        $('#txt_FromDate').val("");
+                        $('#txt_ToDate').val("");
+                    }
+                    return false;
+                });
+            });
+</script>
+<script type="text/javascript">
+
+    //$(function () {
+    //         $("#txt_FromDate,#txtEndDateforDaily,#txtEndDateforWeek").datepicker({
+    //        dateFormat: 'mm/dd/yy',
+    //        changeMonth: true,
+    //        changeYear: true,
+    //        //                showCurrentAtPos: 1,
+    //        showWeeks: true,
+    //        inline: true,
+    //        numberOfMonths: [1, 1],
+    //        yearRange: "1950:2020",
+    //        showOn: "button",
+    //        buttonImage: "../Images/calender.gif",
+    //        buttonImageOnly: true
+
+    //    });
+    //});
+
+
+    //$(function () {
+    //    $("#txt_ToDate,#txtEndDateforDaily,#txtEndDateforWeek").datepicker({
+    //        showOn: "button",
+    //        buttonImage: "../Images/calender.gif",
+    //        buttonImageOnly: true
+    //    });
+    //});
+    </script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var psize = $('#hdnpagesize').val();
+        if (psize != '') {
+            $('#ddlrecords').val(psize);
+        }
+        else {
+            $('#ddlrecords').val("10");
+
+        }
+
+
+        var fromdate = $('#hdnFromdate').val();
+        if (fromdate != '' & fromdate != null) {
+            $('#txt_FromDate').val(fromdate);
+            document.getElementById('tddaterange').style.display = '';
+        }
+        else {
+            $('#txt_FromDate').val("");
+            document.getElementById('tddaterange').style.display = 'none';
+
+        }
+
+        var todate = $('#hdnTodate').val();
+        if (todate != '' & todate != null) {
+            $('#txt_ToDate').val(todate);
+            document.getElementById('tddaterange').style.display = '';
+        }
+        else {
+            $('#txt_ToDate').val("");
+            document.getElementById('tddaterange').style.display = 'none';
+
+        }
+
+        var drange = $('#hdndaterange').val();
+        if (drange != '') {
+            $('#dt_filter').val(drange);
+
+        }
+        else {
+            $('#dt_filter').val("0");
+
+
+        }
+        var projectId = "@ViewBag.ProjectId";
+        if (projectId != '' & projectId != null)
+        {
+            $('#ddlsite').val(projectId);
+        }
+        var mobtype = '@ViewBag.Mobile_type';
+        if (mobtype != '') {
+            $('#ddlmobile').val(mobtype);
+
+        }
+        else {
+            $('#ddlmobile').val("0");
+        }
+        document.getElementById('lblProvidername').innerHTML = "@ViewBag.UserName";
+        $("#btnClear").live("click", function () {
+            window.location = "../Providers/Providerloginhistory?Login_ID=" + $("#hdnloginid").val() + "&ProName=" + $("#hdnUname").val();
+         });
+    });
+    </script>
+        <script type="text/javascript">
+         function cancel() {
+            window.location.href = "@Url.Action("Providerprofile", "Providers")"; 
+         }
+            $(document).ready(function () {
+                //$('#divlogindialog').dialog({
+                //    autoOpen: false,
+                //    width: 800,
+                //    resizable: false,
+                //    modal: true
+                //});
+                $(".close").live("click", function (e) {
+                    e.preventDefault();
+                    $('#divlogindialog').dialog('close');
+                });
+            });
+    </script>
+    <script type="text/javascript">
+        var linkObj;
+        $(function () {
+
+            //$(".Logindetailslink").click(function () {
+            //    //change the title of the dialog
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#divlogindialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            @*var mobtype = '@ViewBag.Mobile_type';
+            if (mobtype != '') {
+                $('#ddlmobile').val(mobtype);
+
+            }
+            else {
+                $('#ddlmobile').val("0");
+            }*@
+        });
+    </script>
+    <script language="javascript" type="text/javascript">
+        function ValidSearch() {
+            if (document.getElementById('dt_filter').value == 'Custom') {
+
+                if (document.getElementById('txt_FromDate').value != '' && document.getElementById('txt_FromDate').value != "mm/dd/yyyy") {
+                    if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) {
+                        return false;
+                    }
+                }
+                if (document.getElementById('txt_ToDate').value != '' && document.getElementById('txt_ToDate').value != "mm/dd/yyyy") {
+                    if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) {
+                        return false;
+                    }
+                }
+                var CDate = new Date()
+                var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear();
+                var FromDate = document.getElementById('txt_FromDate').value;
+                if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == "mm/dd/yyyy") {
+                    alert('Select from date');
+                    document.getElementById('txt_FromDate').focus();
+                    return false;
+                }
+                if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == "mm/dd/yyyy") {
+                    alert('Select to date');
+                    document.getElementById('txt_ToDate').focus();
+                    return false;
+                }
+                var St = document.getElementById('txt_FromDate').value;
+                St = new Date(St);
+                var En = document.getElementById('txt_ToDate').value
+                En = new Date(En);
+                if (St > En) {
+                    alert("From date should not be greater than to date")
+                    return false;
+                }
+
+            }
+            document.forms.item(0).submit();
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("Providerloginhistory", "Providers", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+        <br />
+              <input id="hdnFromdate" name="hdnFromdate" type="hidden" value="@ViewBag.Fromdate"/>
+        <input id="hdnTodate" name="hdnTodate" type="hidden" value="@ViewBag.Todate"/>
+        <input id="hdndaterange" name="hdndaterange" type="hidden" value="@ViewBag.Daterange"/>
+        <input type="hidden" name="hdnnoofrecords" id="hdnnoofrecords" value="@ViewBag.totrec" />
+         <input id="hdnpagesize" type="hidden" value="@ViewBag.expsize"/>
+                 <input id="hdnloginid" name="hdnloginid" type="hidden" value="@ViewBag.Login_ID"/>
+        <input id="hdnUname" name="hdnUname" type="hidden" value="@ViewBag.UserName"/>
+    <div id="main-content">
+                <table id="tblsearch" runat="server" width="90%" align="center">
+                    <tr class="background_color">
+                        <td>
+                            <strong><b> Mower Helper Name :</b></strong>
+                            <span id="lblProvidername" style="font-size: 13px; font-weight: bold;"></span>
+                        </td>
+                    </tr>
+      <tr class="background_color">
+                                  <td width="37%" align="left">
+@*                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Category/vendor/notes : </strong>&nbsp;
+                                        <input type="text" name="txtCategory" id="txtCategory" class="textfield" onkeypress="return fnsetfocus(event,'btnSearch')" style="width: 200px;" />
+                                    </li>
+                                </ul>*@
+                                      <strong>Site&nbsp;:&nbsp; </strong>
+                                                         @Html.DropDownList("ddlsite", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="Mower Helper", Value = "20" },
+                                                               new SelectListItem{ Text="Mower Helper-Mobile", Value = "21" }
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:230px;" })
+                                      &nbsp;&nbsp;&nbsp;
+                                      <strong>Mobile : </strong>
+                                                       @Html.DropDownList("ddlmobile", new List<SelectListItem>
+
+                                                              {
+                                                                  new SelectListItem{ Text="--Select--", Value = "0" },
+                                                               new SelectListItem{ Text="Android", Value = "Android" },
+                                                               new SelectListItem{ Text="IPhone", Value = "IPhone" }
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:100px;" })
+                            </td>
+                            <td width="63%">
+                            <table runat="server" style="padding-top:10px; padding-bottom:10px;">
+                        <tr class="background_color">
+                        <td width="40%" align="left" style="padding-left:80px;">
+                                                <strong>Date range&nbsp;:&nbsp; </strong>
+                                                                                    @Html.DropDownList("dt_filter", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                        </td>
+                        <td width="40%" id="tddaterange" runat="server" style="display:none" align="left">
+                    <strong> From : </strong> &nbsp;&nbsp;&nbsp;  
+                                                              <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield Datefield" maxlength="10" style="width: 75px;" />
+                                                             &nbsp;&nbsp; <strong> To : </strong> &nbsp;&nbsp;&nbsp; 
+                                                             <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield Datefield" maxlength="10" style="width: 75px;" />
+                        </td>
+                        <td width="10%" align="right">
+                        @*<input type="submit" name="btnSearch" value="Search" id="btnSearch" onclick="return ValidSearch();" class="button" />*@
+                            <a id="btnSearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>&nbsp;&nbsp;&nbsp;
+                            <a id="btnClear" href="#" @*onclick="return btnclear();"*@ title="Clear"><img alt="" id="" src="~/Images/refreshimages.png" style="width:30px;" /></a>
+                        </td>
+                        </tr>
+                        </table>
+                            </td>
+                                  </tr>
+      </table>
+        <div class="content-box">
+            <div class="content-box-header">
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="80%" align="left">
+                    <h3>
+                        List of login history details</h3>
+                </td>
+                <td width="20%" align="center">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                     @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}
+                                    </li>
+                                </ul>
+                            </td>
+               
+            </tr>
+        </table>
+     </div>
+     <div class="content-box-content">
+                                                                       @{ WebGrid provgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.expsize == null ? "10" : ViewBag.expsize));}
+                                            @{WebGrid grid = provgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+
+                                                  columns: grid.Columns(
+
+                                                        grid.Column("Sino", "#", canSort: false),
+                                                        //grid.Column("Username", "User name", canSort: false),
+
+                                                        //grid.Column("RoleName", "Role", canSort: false),
+                                                        grid.Column("IPAddress", "IP address", canSort: false, style: "width: 200px;",
+                                                        format: @<text>
+                                            @if(!string.IsNullOrEmpty(item.IPAddress)){
+                                      //@Html.ActionLink((string)item.IPAddress, "ProviderLoginInformation", "Providers", new { LoginHistory_ID = item.LoginHistory_ID }, new { @class = "Logindetailslink", @style = "color:#0066CC;cursor:pointer;" })
+                                                <a href="#" class="Logindetailslink" style="color:#0066CC;cursor:pointer;" onclick="return Displaydialog('divlogindialog', '@Url.Action("ProviderLoginInformation", "Providers", new { LoginHistory_ID = item.LoginHistory_ID })','auto',800,'dvLoading',null,null);">@item.IPAddress</a>
+                                            }
+                          
+                          </text>),
+                                                        grid.Column("LogIn_DateTime", "Date time", canSort: false),
+                                                        grid.Column("logsuccess", "Success ind", canSort: false,format:@<text>
+                                            
+                                            @{
+                                                string logInd = null;
+                                                if(item.logsuccess == "True")
+                                                {
+                                                    logInd = "Yes";
+                                                }
+                                                else
+                                                {
+                                                    logInd = "No";
+                                                }
+                                                }
+                                            <span>@logInd</span>
+                                            </text>)
+
+
+                                                                    )).ToString();
+
+
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                            @(new HtmlString(gridhtml))
+                            
+                            <br />
+
+                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                            <br />
+                                              }
+                                              else
+                                              {
+                            <table id="divoutmsg" width="100%">
+                                <tr>
+                                    <td align="center" valign="middle" height="25px">
+                                        <span id="lblOutMsg" style="font-size: 13px; font-weight: bold;" class="errormsg">
+                                            No login history details found. </span>
+                                    </td>
+                                </tr>
+                            </table>
+                                              }
+                        }
+  </div>
+ 
+    
+    </div>
+
+    </div>
+                                        <table runat="server" width="98%">
+                                    <tr class="background_color">
+                                        <td align="right">
+                                             <input value="Cancel" type="button" class="button" style="width: 60px;" id="btnclose" onclick="return cancel();"/>
+                                        </td>
+                                    </tr>
+                                </table>
+            <div id="UpdcertDialog" title="Provider certificates">
+      </div>
+                    <div id="VerifyLinkDialog" title="Verify provider">
+      </div>
+                <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+         <div id="divlogindialog" title="Provider Login information"></div>
+
+                                              if (grid.Rows.Count <= 9)
+                                              {
+                                                  if (grid.Rows.Count <= 4)
+                                                  {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+                                                  }
+                                                  else
+                                                  {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                                                  }
+                                              }
+                                              Html.RenderAction("Bottomsections", "Tools");
+
+
+    }
+               
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</body>
+</html>

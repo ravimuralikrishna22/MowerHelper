@@ -1,0 +1,183 @@
+﻿@model MowerHelper.Models.BLL.Patients.patients
+
+<style>
+    .gridFooter span
+    {
+        /*background:white !important;*/
+        border:none !important;
+    }
+        .gridFooter span span
+        {
+            background:#469400 url('../../../images/bg-button-green.gif') top left repeat-x !important;
+        }
+</style>
+<script>
+    $(".EditDialog").click(function (event) {
+        event.preventDefault();
+    });
+    $('#S1P1').val('@Model.page');
+    $('#EditlDialog').dialog({
+        autoOpen: false,
+        width: 870,
+        resizable: false,
+        //height: 360,
+        modal: true
+    });
+    $(document).ready(function () {
+        $(".gridHead th a").click(function () {
+            $('#divLoading2').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("DisplayClientApptList","Clients")' + queryString + '&S1P1=' + '@Request["S1P1"]';
+            //$("#appList").load(requestUrl);
+            $.ajax({
+                url: requestUrl,
+                type: "get",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+                    $('#appList').html(data);
+                    $("#divLoading2").dialog('close');
+                }
+
+            });
+            return false;
+                });
+        $('#gridFootera a').click(function () {
+            $('#divLoading2').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+              var requestUrl = '@Url.Action("DisplayClientApptList", "Clients")' + queryString ;         
+            $('#appList').load(requestUrl);
+            $.ajax({
+
+                url: requestUrl,
+                type: "get",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+                    $('#appList').html(data);                
+                    $("#divLoading2").dialog('close');
+                }
+
+            });
+                return false;
+            });
+
+
+       });
+</script>
+  <div class="content-box">
+                <div class="content-box-header">
+                <h3>Appointments</h3>
+                </div>
+                <div class="content-box-content">
+                 
+          @{string heading1;
+            string sortdir = null;
+            if (Request["S1sort"] == "Appointment_Date" && Request["S1sortdir"] == "ASC")
+            {
+                sortdir = "ASC";
+                heading1 = "Date / Time ▲";
+            }
+            else if (Request["S1sort"] == "Appointment_Date" && Request["S1sortdir"] == "DESC")
+            {
+                sortdir = "DESC";
+                heading1 = "Date / Time ▼";
+            }
+            else
+            {
+                sortdir = "DESC";
+                heading1 = "Date / Time ▼";
+            }
+                                            }
+                                            @{WebGrid Proggrid = new WebGrid(rowsPerPage:10, fieldNamePrefix: "S1", pageFieldName: "P1");}
+                                            @{WebGrid grid = Proggrid.Bind(rowCount: ViewBag.totrec, source: Model.PatientsList, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (string.IsNullOrEmpty(Request["S1P1"])  ? "1" : Request["S1P1"]);
+                                                  string newpagera = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Appointment_Date", heading1, style: "Date"),
+                                                                                               grid.Column("", "Appointment notes", canSort: false, style: "Note",
+                                                  format:@<text>
+                                                         @{var description = (string)HttpUtility.HtmlDecode(item.GeneralNarrative);
+                                                           if(description!=null & description!="")
+                                                           {
+                                                           if (description.Length > 100)
+                                                           {
+                                                               count = count + 1;
+                                                               description = description.Substring(0, 100);
+                                                             //Html.Label(description);
+                                                               <label>@description</label>
+<a id="amore" onclick="return false;" onmouseover="return ondescriptionover('Ptbldesc @count');" onmouseout="return ondescriptionout('Ptbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="Ptbldesc @count" style="width: 400px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3>Appointment notes :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@HttpUtility.HtmlDecode(item.GeneralNarrative)</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@HttpUtility.HtmlDecode(item.GeneralNarrative)</span>
+                                                           }
+                                                           }
+                                                           }
+                                                
+                                                </text>),
+                                                                                                                                                                                                 
+                                                                                                        grid.Column("", "Action", canSort: false,style: "action",
+                                                  format:@<text>
+                                            @if(Model.PatientsList.Count >=1)
+                                            {
+                                            <a   class = "EditDialog", title = "Click here to edit appointment" href ="#"
+                                                onclick="return Displaydialog('EditlDialog','../Clients/EditAppointment?apptEid='+'@item.Appointment_ID'+ '&S1P1='+'@pageno'+'&pageRecCount='+'@Model.PatientsList.Count'+'&S1sort='+'@Request["S1sort"]' +'&S1sortdir='+'@sortdir',490,930,'divLoading2',null,null);">
+                                                <img src="~/Images/edit.gif" />
+                                            </a>
+                                            }
+                                            else
+                                            {
+                                             var deletePage = Convert.ToInt32(pageno)-1 ;
+                                             <a   class = "EditDialog", title = "Click here to edit appointment" href ="#"
+                                                onclick="return Displaydialog('EditlDialog','../Clients/EditAppointment?apptEid='+'@item.Appointment_ID'+ '&S1P1='+'@deletePage'+'&pageRecCount='+'@Model.PatientsList.Count'+'&S1sort='+'@Request["S1sort"]' +'&S1sortdir='+'@sortdir',490,930,'divLoading2',null,null);">
+                                                <img src="~/Images/edit.gif" />
+                                            </a>
+                                            }
+                                           @* @Html.ActionLink(" ", "EditAppointment", new { apptEid = (int)item.Appointment_ID },
+                                                  new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 45px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditDialog", @title = "Click here to edit appointment" })*@
+                    </text>)
+
+
+                                                                                                                                                                                                 )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                               
+                                                  
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpagera != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div id="gridFootera" class="gridFooter" style="padding-left: 300px;">@(new HtmlString(newpagera))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdcharge" runat="server" width="100%">
+                            <tr><td style="text-align:center; vertical-align:middle; height:25px;"><span id="lblnorecords" class="errormsg" style="font-size:13px;font-weight:bold;">No appointments found</span></td></tr>
+                        </table>
+                                               
+                                              }
+                                            }
+
+         </div>
+                </div>

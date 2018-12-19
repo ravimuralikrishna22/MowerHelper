@@ -1,0 +1,405 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Mower Helper-Find an Mower Helper</title>
+    @*        <link href="~/Content/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="~/SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+        <script src="~/Scripts/jquery-1.7.1.js" type="text/javascript"></script>
+ <script src="~/Scripts/jquery-ui-1.8.11.js" type="text/javascript"></script>
+        <link href="~/Content/flytooltip.css" rel="stylesheet" type="text/css" />
+   <script  src="~/Scripts/flytooltip.js" type="text/javascript"></script>*@
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var Type = $('#hdntype').val();
+            if (Type != '') {
+                $('#ddlListingMsgsType').val(Type);
+            }
+            else {
+                $('#ddlListingMsgsType').val("NEWviewed");
+
+            }
+            var psize = $('#hdnpagesize').val();
+            if (psize != '') {
+                $('#ddlrecords').val(psize);
+            }
+            else {
+                $('#ddlrecords').val("10");
+
+            }
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#ReplyDialog');
+                dialogDiv.dialog('close');
+            });
+
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#TopicDialog');
+                dialogDiv.dialog('close');
+                window.location.href = '@Url.Action("MessageFromTherapisthelp", "Messages")';
+            });
+        });
+
+    </script>
+    <style type="text/css">
+        .dvLoading .ui-dialog-titlebar
+        {
+            display: none;
+        }
+
+        tr.gridHead th:nth-child(1)
+        {
+            width: 15%;
+        }
+
+        tr.gridHead th:nth-child(2)
+        {
+            width: 10%;
+        }
+
+        tr.gridHead th:nth-child(3)
+        {
+            width: 55%;
+        }
+
+        tr.gridHead th:nth-child(4)
+        {
+            width: 10%;
+        }
+
+        tr.gridHead th:nth-child(5)
+        {
+            width: 10%;
+        }
+
+        tr.gridRow td:nth-child(3)
+        {
+            width: 55%;
+            text-align: left;
+        }
+
+        tr.gridAltRow td:nth-child(3)
+        {
+            width: 55%;
+            text-align: left;
+        }
+        .gridTable
+        {
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+    @using (Html.BeginForm("MessageFromTherapisthelp", "Messages", FormMethod.Get, null))
+    {
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div>
+        <div>
+            @{Html.RenderAction("Msg_Main", "Messages", new { @Tabid = "2" });}
+        </div>
+        <div id="main-content">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr class="background_color">
+                    <td align="left" valign="top" width="100%">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr id="trtabs">
+                                <td width="100%" class="navigation">
+                                    <div class="admin-tab">
+                                        @{int FromThhelpCount = Convert.ToInt32(ViewBag.FromThhelpCount);}
+                                        <a class="admin-link" href="MessageFromTherapisthelp" id="afromtherapisthelp"><span>From Mower Helper&nbsp;&nbsp;(@FromThhelpCount)</span>
+                                        </a>
+                                    </div>
+
+                                    @if (ViewBag.Roleid != "31" && ViewBag.Roleid != "38" && ViewBag.ShowElectricians == "Y")
+                                    {
+                                        <div class="admin-tab">
+                                            @{int FromPublicCount = Convert.ToInt32(ViewBag.FromPublicCount);}
+                                            <a class="inadmin-link" id="aFrompubliclisting" href="PublicMessages"><span>From public profile page&nbsp;&nbsp;(@FromPublicCount)</span>
+                                            </a>
+                                        </div>
+                                    }
+                                    @if (ViewBag.Roleid == "31")
+                                    {
+                                        <div class="admin-tab">
+                                            @{int supervisercnt = Convert.ToInt32(ViewBag.supervisercnt);}
+                                            <a class="inadmin-link" id="afromverificationsuperviser" href="FromVerificationSupervisor"><span>From Verification Supervisor&nbsp;&nbsp;(@supervisercnt)</span>
+                                            </a>
+                                        </div>
+                                    }
+                                    @if (ViewBag.Roleid == "38")
+                                    {
+                                        <div class="admin-tab">
+                                            @{int vusercount = Convert.ToInt32(ViewBag.vusercount);}
+                                            <a class="inadmin-link" id="afromverificationuser" href="Fromverificationuser"><span>From Verification users&nbsp;&nbsp;(@vusercount)</span>
+                                            </a>
+                                        </div>
+                                    }
+                                    @if (ViewBag.Roleid == "4" && ViewBag.Showschedule == "Y" && ViewBag.ShowElectricians == "Y")
+                                    {
+                                        <div class="admin-tab">
+                                            @{int vusercount = Convert.ToInt32(ViewBag.aptreqcount);}
+                                            <a class="inadmin-link" id="aschedulemessage" href="ScheduleMessages"><span>Appointment Requests&nbsp;&nbsp;(@vusercount)</span>
+                                            </a>
+                                        </div>
+                                    }
+
+                                    <div class="admin-tab">
+                                        @{int Sentcount = Convert.ToInt32(ViewBag.Sentcount);}
+                                        <a class="inadmin-link" id="aSentMessages" href="SentMessages"><span>Sent messages&nbsp;&nbsp;(@Sentcount)</span>
+                                        </a>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <tr class="background_color">
+                                <td id="tdtabs" class="tab-background" width="100%">
+                                    <div class="content-box">
+                                        <div class="content-box-header">
+                                            <table id="Table1" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                <tr>
+                                                    <td width="25%">
+                                                        <h3>From Mower Helper</h3>
+                                                    </td>
+                                                    <td width="55%" align="center">
+                                                        <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                            <li><strong>Filter by :&nbsp;</strong>
+                                                                @Html.DropDownList("ddlListingMsgsType", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="New", Value = "New" },
+                                                               new SelectListItem{ Text="Viewed", Value = "Viewed" },
+                                                               new SelectListItem{ Text="Archived", Value = "Archived" },
+                                                               new SelectListItem{ Text="All", Value = "All" }, 
+                                                               new SelectListItem{ Text="New/Viewed", Value = "NEWviewed" }, 
+                                                              },
+                                                             new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                    @if (Convert.ToInt32(ViewBag.totrec) > 0)
+                                                    {
+                                                        <td width="20%" align="center">
+                                                            <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                                <li><strong>Rows per page :&nbsp;</strong>
+                                                                    @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            </table>
+                                            <div class="clear">
+                                            </div>
+                                        </div>
+                                        <div class="content-box-content">
+                                            @{string heading1;
+                                              if (Request["sort"] == "Sender" && Request["sortdir"] == "ASC")
+                                              {
+                                                  heading1 = "Sender ▲";
+                                              }
+                                              else if (Request["sort"] == "Sender" && Request["sortdir"] == "DESC")
+                                              {
+                                                  heading1 = "Sender ▼";
+                                              }
+                                              else
+                                              {
+                                                  heading1 = "Sender .";
+                                              }
+                                            }
+                                            @{
+                                              WebGrid Dsmgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.Thpagesize));}
+                                            @{WebGrid grid = Dsmgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  if (ViewBag.Type != "Archived")
+                                                  {
+                                                      string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                      columns: grid.Columns(grid.Column("Sender", heading1), grid.Column("SendingDate", "Requested date"),
+                                                      grid.Column("", "Topic", canSort: false,
+                                      format:@<text>@Html.ActionLink((string)item.Subject, "MessageDetails", new { Msg_id = (int)item.Message_ID }, new { @class = "TopicLink", @style = ((string)(item.Read_IndWrite) == "N" ? "font-weight:bold;color:#0066CC;cursor:pointer;" : "font-weight:;color:#0066CC;cursor:pointer;") })</text>),
+                                                                                                                 grid.Column(header: "Archive", format: (item) =>
+                                                                                                                 {
+                                                                                                                     var str = item.ArchiveInd;
+                                                                                                                     if (str == "N")
+                                                                                                                         return @Html.ActionLink("Archive", "MsgArchive", new { Msg_id = (int)item.Message_ID },
+                                          new { @style = ((string)(item.Read_IndWrite) == "N" ? "font-weight:bold;color:#0066CC;cursor:pointer;" : "font-weight:;color:#0066CC;cursor:pointer;"), @class = "confirmDialog", @title = "Click here to archive message" });
+
+
+                                                                                                                     else
+                                                                                                                         return Html.Label("-");
+
+                                                                                                                 }),
+                                                          grid.Column("", "Reply", canSort: false,
+                                          format:@<text>@Html.ActionLink("Reply", "MessageReply", new { Msg_id = (int)item.Message_ID, Ind = "2", MsgCategory_ID = (int)item.MsgCategory_ID }, new { @class = "ReplyLink", @style = ((string)(item.Read_IndWrite) == "N" ? "font-weight:bold;color:#0066CC;cursor:pointer;" : "font-weight:;color:#0066CC;cursor:pointer;") })</text>)
+
+                                                         )).ToString();
+                                                      gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  }
+
+
+                                                  else
+                                                  {
+
+                                                      string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                     columns: grid.Columns(grid.Column("Sender", heading1), grid.Column("SendingDate", "Requested date"),
+                                                     grid.Column("", "Topic", canSort: false,
+                                     format:@<text>@Html.ActionLink((string)item.Subject, "MessageDetails", new { Msg_id = (int)item.Message_ID }, new { @class = "TopicLink", @style = ((string)(item.Read_IndWrite) == "N" ? "font-weight:bold;color:#0066CC;cursor:pointer;" : "font-weight:;color:#0066CC;cursor:pointer;") })</text>)
+
+                                                        )).ToString();
+                                                      gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                            
+                                            
+                                            
+                                                  }
+                                                <br />
+                                                <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                    <tr id="trdsmerror" class="white_color">
+                                                        <td align="center" height="25px" valign="middle" colspan="2">
+                                                            <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">No Mower Helper messages found</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to archive the message?
+            </p>
+        </div>
+        <div id="TopicDialog" title="Message details">
+        </div>
+        <div id="ReplyDialog" title="Message reply">
+        </div>
+        <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+            <img src="../Images/ajax-loader2.gif" alt="Processing" />
+        </div>
+        <input id="hdntype" type="hidden" value="@ViewBag.Type"/>
+        <input id="hdnpagesize" type="hidden" value="@ViewBag.Thpagesize"/>
+        <div>
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+  
+        <script type="text/javascript">
+            $(".confirmDialog").live("click", function (e) {
+
+                var url = $(this).attr('href');
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            window.location = url;
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+
+                        }
+                    }
+                });
+                $("#dialog-confirm").dialog('open');
+                return false;
+            });
+            var linkObj;
+            $(function () {
+                $('#TopicDialog').dialog({
+                    autoOpen: false,
+                    width: 1000,
+                    resizable: false,
+                    modal: true,
+                    close: function () {
+                        window.location.href = '@Url.Action("MessageFromTherapisthelp", "Messages")';
+                }
+            });
+            $('#ReplyDialog').dialog({
+                autoOpen: false,
+                width: 1000,
+                resizable: false,
+                modal: true
+
+            });
+            $(".TopicLink").click(function () {
+                //change the title of the dialog
+                linkObj = $(this);
+                var dialogDiv = $('#TopicDialog');
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = linkObj.attr('href');
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    $('#dvLoading').dialog('close');
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            });
+            $(".ReplyLink").click(function () {
+                //change the title of the dialog
+                linkObj = $(this);
+                var dialogDiv = $('#ReplyDialog');
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = linkObj.attr('href');
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    $('#dvLoading').dialog('close');
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            });
+        });
+        </script>
+
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+            $("#Menu4").removeClass();
+        });
+    </script>
+</body>
+</html>

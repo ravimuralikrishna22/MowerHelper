@@ -1,0 +1,298 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+        @Scripts.Render("~/ThScripts/ThJquery")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+
+           @Styles.Render("~/Content/themes/base/jqueryCSS")
+            @Scripts.Render("~/Scripts/Thscriptscript")
+             @Scripts.Render("~/ThScripts/Thjquerycripts")
+    <style type="text/css">
+             .dvLoading .ui-dialog-titlebar{display:none;}  
+             </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#divverifyuserview').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+            //$('#divverifyedit').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true,
+            //    close: function () { $('.ddlactionclass').val(0); }
+            //});
+        });
+       
+       $(document).ready(function () {
+           var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        });
+
+    </script>
+        <script type="text/javascript">
+//         $(function () {
+//            $(".Verifyuserview").click(function () {
+//                //                alert("1");
+//                linkObj = $(this);
+//                var dialogDiv = $('#divverifyuserview');
+//                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+//                var viewUrl = linkObj.attr('href');
+////               var viewUrl = "../Profiles/Verifyuserview?verification_User_Id=" + verification_User_Id + '&Login_ID=' + Login_ID;
+//                $.get(viewUrl, function (data) {
+//                    dialogDiv.html(data);
+//                    $('#dvLoading').dialog('close');
+//                    dialogDiv.dialog('open');
+//                });
+//                return false;
+//            });  
+//        });
+</script>
+  <script type="text/javascript">
+      $(document).ready(function () {
+          $(".viewclose").live("click", function (e) {
+              var dialogDiv = $('#divverifyuserview');
+              dialogDiv.dialog('close');
+              return false;
+          });
+
+          $(".veditclose").live("click", function (e) {
+              var dialogDiv = $('#divverifyedit');
+              dialogDiv.dialog('close');
+              return false;
+          });
+      });
+
+    </script>
+    <script type="text/javascript">
+        function ddlchange(dId, verification_User_Id, Login_ID) {
+            if (dId == "1") {
+                //var dialogDiv = $('#divverifyedit');
+                //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Profiles/VerificationusersEdit?verification_User_Id=" + verification_User_Id + '&Login_ID=' + Login_ID;
+                Displaydialog('divverifyedit', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                $('.ddlactionclass').val(0);
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            }
+            if (dId == "I") {
+                window.location.href = "../Profiles/Changestatus?verification_User_Id=" + verification_User_Id + '&Login_ID=' + Login_ID + '&status=' + dId; ;
+                $('.ddlactionclass').val(0);
+            }
+            if (dId == "A") {
+                window.location.href = "../Profiles/Changestatus?verification_User_Id=" + verification_User_Id + '&Login_ID=' + Login_ID + '&status=' + dId;
+                $('.ddlactionclass').val(0);
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var psize = $('#hdnpagesize').val();
+            if (psize != '') {
+                $('#ddlrecords').val(psize);
+            }
+            else {
+                $('#ddlrecords').val("10");
+
+            }
+
+        });
+    </script>
+</head>
+<body>
+         @using (Html.BeginForm("ApproveProviders", "Profiles", FormMethod.Get, null))
+    {
+         <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+      
+            <div id="main-content">
+        @Html.Partial("_NavigationTool")
+                  <input id="hdnpagesize" name="hdnpagesize" type="hidden" value="@ViewBag.pagesize"/>
+            <div class="content-box">
+    <div class="content-box-header">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                            <tr>
+                                                <td width="73%" align="left">
+                                                  <h3>
+                      <span>Verification users</span>  
+                    </h3>
+                                                 </td>
+                                                  @*   <td width="20%" style="text-align:right;">
+                                <ul style="list-style: none!important; padding-right: 1px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                     @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}
+                                    </li>
+                                </ul></td>*@
+                                                   <td width="20%" style="text-align:right;">
+                                <ul style="list-style: none!important; padding-right: 1px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>                                
+                                         @Html.DropDownList("ddlrecords", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new {style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                    </li>
+                                </ul></td>
+                                                     <td width="7%" align="center">
+                                                    <ul style="list-style: none!important; padding-right: 5px;" class="content-box-tabs">
+                                                        <li style="padding: 0px; margin: 0px;">
+@Html.ActionLink("Add new", "AddnewVerificationUser", null, new { @class = "lnkNew", @style = "font-weight:bold; font-size:15px; color:#0066CC" })
+          </li>
+                                                            </ul>
+                                                           
+                                                            </td>
+                                                        
+                                                 </tr>
+                                                 </table>
+         <script>$("#ddlrecords").change(function () {
+
+    window.location.href = '@Url.Action("ApproveProviders", "Profiles")?ddlrecords=' + document.getElementById('ddlrecords').value;
+});</script>
+     </div>
+       @if (ViewBag.checkallowpat != "Yes")
+           {
+     <div class="content-box-content">
+        
+      @{
+          WebGrid Docgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.pagesize)!=0?Convert.ToInt32(ViewBag.pagesize):10);}
+                                            @{WebGrid grid = Docgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totalrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("slno", "#", style: "width: 700px;",canSort: true),
+                                                  grid.Column("Full_Name", "Full name", canSort: true,format: @<text>
+                                                  @{
+                                                      string name = item.Full_Name;
+                                                      //@Html.ActionLink(name, "Verifyuserview", "Profiles",new { verification_User_Id = item.verification_User_Id, Login_ID = item.Login_ID }, new { @class = "Verifyuserview" })
+                                                      <a href="#" class="Verifyuserview" onclick="return Displaydialog('divverifyuserview','@Url.Action("Verifyuserview","Profiles", new { verification_User_Id = item.verification_User_Id, Login_ID = item.Login_ID })','auto',900,'dvLoading',null,null);">@name</a>
+                                                      }
+                                                  
+                                                  </text>
+                                                  
+                                                  ),
+                                                  grid.Column("fulladdress", "Address", canSort: false),
+                                                  grid.Column("WorkPhone", "Phone", canSort: false),
+                                                  grid.Column("Status", canSort: false,format: @<text>
+                                                  
+                                                  @{
+                                                      string statusind1 = Convert.ToString(item.Status_Ind);
+                                                      if(statusind1=="A"){
+                                                          <span>Active</span>
+                                                      }
+                                                      else{
+                                                          <span>InActive</span>
+                                                      }
+                                                      }
+                                                  </text>
+                                            
+                                            
+                                            
+                                            
+),
+                                                   grid.Column("RoleType", "Role name", canSort: false),
+                                                   grid.Column("Action", canSort: false, style: "action", format: @<text>
+                                                                      @{
+                                                                          string statusind = Convert.ToString(item.Status_Ind);
+                                                                          if (statusind == "A")
+                                                                          {
+                                                                               @Html.DropDownList("DDLAction", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select action--", Value = "0" },
+                                                               new SelectListItem{ Text="Edit", Value = "1" },
+                                                               new SelectListItem{ Text="Inactive", Value = "I" }
+                                                              
+                                                              },
+                                                         new { @class = "ddlactionclass", onchange = "return ddlchange(this.value, '" + item.verification_User_Id + "','" + item.Login_ID + "')", style = "font-family:arial;font-size:13px;height:20px;width:160px;" }) 
+                                                                          }
+                                                                          else
+                                                                          {
+                                                                           @Html.DropDownList("DDLAction1", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select action--", Value = "0" },
+                                                               new SelectListItem{ Text="Edit", Value = "1" },
+                                                               new SelectListItem{ Text="Active", Value = "A" }
+                                                              
+                                                              },
+                                                                             new { @class = "ddlactionclass", @onchange = "return ddlchange(this.value, '" + item.verification_User_Id + "','" + item.Login_ID + "')", style = "font-family:arial;font-size:13px;height:20px;width:160px;" }) 
+                                                                          }
+
+                                                                         }
+                                                                           
+                                                                           
+                                                 
+                                                 
+                                                 
+                                                 </text>)
+                                                  )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>    
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table cellspacing="0" id="tblnorecords" runat="server" cellpadding="0" width="100%" border="0" align="center">
+     <tr class="white_color" runat="server">
+                <td align="center" height="25px" valign="middle" width="100%">
+                  <label id="" style="font-weight:bold; font-size:13px;">No Verification users found</label>
+                   </td>
+        </tr>
+     </table>
+                                              }
+                                              }  
+         
+</div>
+           }
+           
+          
+</div>
+            </div>    
+        <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+          <div id="divverifyuserview" title="Verification users view"></div>
+          <div id="divverifyedit" title="Verification users Edit" ></div>
+           <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>   
+         }
+    </body>
+</html>

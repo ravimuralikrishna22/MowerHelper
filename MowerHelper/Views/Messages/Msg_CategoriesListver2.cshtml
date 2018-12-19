@@ -1,0 +1,417 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <title>Mower Helper-Find an Mower Helper</title>
+    
+  @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+     <script src="~/Scripts/jquery.mcautocomplete.js" type="text/javascript"></script>
+    <link href="~/Content/themes/base/jquery.ui.autocomplete.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+    #tr1{height:35px;} 
+     .ui-autocomplete { width:600px; }	
+  
+    </style>
+    <script type="text/javascript">
+//        alert('@Session["TopIndex"]')
+        $(document).ready(function () {
+            var setddl = "@ViewBag.Summarypagesize";
+            //         alert(setddl);
+            if (setddl != null && setddl != "") {
+                $("#ddlrecords").val(setddl);
+            }
+            else {
+                $("#ddlrecords").val("10");
+            }
+        });
+        function gotoTools() {
+            window.location = "../AdminHome/AdminArea";
+        }
+        $(document).ready(function () {
+           @* if ('@TempData["txtCategory"]'!="") {*@
+             $("#txtCategory").val('@TempData["txtCategory"]');
+        //}
+            $("#txtCategory").mcautocomplete({
+                // These next two options are what this plugin adds to the autocomplete widget.
+                showHeader: false,
+                columns: [{ name: 'Code', width: '300px', valueField: 'Category' }],
+                focus: function (event, ul) {
+                    $("#txtCategory").val(ul.item.Category);
+                    return false;
+                },
+                // Event handler for when a list item is selected.
+                select: function (event, ul) {
+                    $("#txtCategory").val(ul.item.Category);
+                    return false;
+
+                },
+
+                // The rest of the options are for configuring the ajax webservice call.
+                minLength: 2,
+                source: function (request, response) {
+                    $.ajax({
+                        url: '../Messages/getAutoMessage',
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        data: {
+                            term: request.term
+                        },
+                        // The success event handler will display "No match found" if no items are returned.
+                        success: function (data) {
+                            var result;
+                            if (!data || data.length === 0 || !data[0].Category || data[0].Category.length === 0) {
+                                //                              alert("1");
+                                //                              result = [{ label: 'No match found.'}];
+                            }
+                            else {
+                                //                              alert("2");
+                                result = data;
+
+                            }
+                            response(result);
+                        }
+                    });
+                }
+            });
+
+        
+        });
+        function ValidSearch() {
+            //document.forms.item(0).submit();
+            if (document.getElementById('txtCategory').value != '') {
+
+                window.location.href = '@Url.Action("MessageCategories", "Messages")?txtCategory=' + document.getElementById('txtCategory').value + '&ddlrecords=' + document.getElementById('ddlrecords').value;
+             }
+             else {
+                 window.location.href = '@Url.Action("MessageCategories", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value;
+             }
+        }
+    </script>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             
+             $("#imgClear1").live("click", function () {
+                 $("#txt_Name").val("");
+                 if (document.getElementById("trFile")) {
+                     $("#txt_FilePath").val("");
+                 }
+             });
+             $("#btnCancel").live("click", function () {
+                 var dialogDiv = $('#AddnewMsgDialog');
+                 dialogDiv.dialog('close');
+                 //window.location = "../Messages/MessageCategories";
+             });
+             $("#btnSave").live("click", function () {
+                 if ($("#txt_Name").val() == '') {
+                     alert("Please enter name");
+                     $("#txt_Name").focus();
+                     return false;
+                 }
+                 if (document.getElementById("trFile").style.display == "") {
+                     if ($("#txt_FilePath").val() == '') {
+                         alert("Please enter file path");
+                         $("#txt_FilePath").focus();
+                         return false;
+                     }
+                 }
+                 //alert("success");
+             });
+             $("#imgEClear1").live("click", function () {
+                 $("#txtEdit_Name").val("");
+                 if (document.getElementById("trFile")) {
+                     $("#txtedit_FilePath").val("");
+                 }
+             });
+             $("#btnECancel").live("click", function () {
+                 var dialogDiv = $('#EditMsgCatDialog');
+                 $('.ddlactionclass').val('s');
+                 dialogDiv.dialog('close');
+                 //window.location = "../Messages/MessageCategories";
+             });
+             $("#btnESave").live("click", function () {
+                 if ($("#txtEdit_Name").val() == '') {
+                     alert("Please enter name");
+                     $("#txtEdit_Name").focus();
+                     return false;
+                 }
+                 if (document.getElementById("trFile").style.display == "") {
+                     if ($("#txtedit_FilePath").val() == '') {
+                         alert("Please enter file path");
+                         $("#txtedit_FilePath").focus();
+                         return false;
+                     }
+                 }
+                 //alert("success");
+             });
+         });
+  </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#AddnewMsgDialog').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+            //}); 
+            //$('#EditMsgCatDialog').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+            //}); 
+            //$('#RolesDialog').dialog({
+            //    autoOpen: false,
+            //    width: 800,
+            //    resizable: false,
+            //    modal: true
+            //});
+        });
+            //function lnknewcatgry() {
+            //    var dialogDiv = $('#AddnewMsgDialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = "../Messages/Msg_CategoriesAction";
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //}
+    </script>
+</head>
+<body>
+    
+   <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+         @using (Html.BeginForm("MessageCategories", "Messages", FormMethod.Get, null))
+         {
+             @Html.Hidden("hdnCId")
+             @Html.Hidden("hdnStatus")
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+      
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr id="tr1" class="background_color" align="center">
+                    <td width="20%"></td>
+                        <td width="30%">
+                            <strong>Category name&nbsp;:</strong> &nbsp;@*<input name="txtCategory" id="txtCategory" class="textfield" autocomplete="off" style="width:180px;" type="text" />*@
+                            @Html.TextBox("txtCategory", null, new { @class = "textfield", @style = "width:180px;" })
+                           
+                        </td>
+                        <td align="left">
+                            <a id="search" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                        @*<input name="search" value="Search" id="search" class="button" type="submit" />*@&nbsp; 
+                        <input class="button" type="button" value="Cancel" id="btnCancel" name="btnCancel" style="vertical-align:top" onclick="return gotoTools();"/>
+                        </td>
+                        
+                    </tr>
+           </table>
+           <br>
+           <div class="content-box">
+        <div class="content-box-header">
+        <h3>Categories list</h3>
+         <ul id="ulchg" class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+                                                <a id="lnkctgry" href="#" style = "color:#0066CC;font-size:14px;font-weight:bold;" onclick="return Displaydialog('AddnewMsgDialog', '../Messages/Msg_CategoriesAction', 'auto', 800, 'dvLoading', null, null);">Add new category</a>
+                                               @* @Html.ActionLink("Add new category", "Msg_CategoriesAction", null, new { @style = "color:#0066CC;font-size:14px;font-weight:bold;" })*@
+                                            </ul>
+                                            <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                <li><strong>Rows per page :&nbsp;</strong>
+                                                    @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                                </li>
+                                            </ul>
+                          <script>$("#ddlrecords").change(function () {
+    window.location.href = '@Url.Action("MessageCategories", "Messages")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txtCategory=' + document.getElementById('txtCategory').value;
+});</script>
+        </div> 
+        <div class="clear">
+                                        </div>
+                                        <div class="content-box-content">
+                                          @{string heading1;
+                                            if (Request["sort"] == "Category" && Request["sortdir"] == "ASC")
+                                            {
+                                                heading1 = "Name  ▲";
+                                            }
+                                            else if (Request["sort"] == "Category" && Request["sortdir"] == "DESC")
+                                            {
+                                                heading1 = "Name  ▼";
+                                            }
+                                            else
+                                            {
+                                                heading1 = "Name  ▲";
+                                            }
+             
+                                            }
+                                            @{string Summarypagesize = (ViewBag.Summarypagesize == null ? "10" : ViewBag.Summarypagesize);
+                                              WebGrid Summarygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Summarypagesize));}
+                                            @{WebGrid grid = Summarygrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  //int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Category", heading1, style: "width:35%"), grid.Column("messageType", "Type", canSort: false, style: "width:10%"), grid.Column("status", "Status", canSort: false, style: "width:5%"), grid.Column("messagePath", "Filepath", canSort: false, style: "width:40%"), grid.Column("Action", canSort: false, style: "width: 10%;", format: @<text> 
+                                                  @{
+                                                      string Status_Ind = (string)item.status;
+                                                      if (Status_Ind == "Active")
+                                                      {
+                                                            @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                                  new SelectListItem{Text="Select",Value="s",Selected=true},
+                                                                  new SelectListItem{Text="Edit", Value="E"},
+                                                                  new SelectListItem{ Text="Inactivate", Value = "I" },
+                                                                  new SelectListItem{ Text="View roles", Value = "R" },
+                                                              },
+      new { @class = "ddlactionclass", onchange = "return ddlchange(this.value, '" + item.MsgCategory_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:100px;" })
+                                                      }
+                                                      else
+                                                      {
+                                                           @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                                  new SelectListItem{Text="Select",Value="s",Selected=true},
+                                                                  new SelectListItem{Text="Edit", Value="E"},
+                                                                  new SelectListItem{ Text="Active", Value = "A" },
+                                                                  new SelectListItem{ Text="View roles", Value = "R" },
+                                                             
+                                                              },
+        new { @class = "ddlactionclass", onchange = "return ddlchange(this.value, '" + item.MsgCategory_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:100px;" })
+                                                      }
+                                                      
+                                                        }
+                                                  </text>))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdResponse" runat="server" width="100%">
+                                                    <tr>
+                                                        <td align="center" valign="middle" height="25px">
+                                                            <span id="lblResponse" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                                No records found.</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                              }
+                                            }
+                                       
+                                        </div>
+        </div>
+    
+   </div>
+             <div id="AddnewMsgDialog" title="Add new Category"></div>
+             <div id="EditMsgCatDialog" title="Edit Message Category"></div>
+             <div id="RolesDialog" title="Associated Roles"></div>
+             <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+         }
+    <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+    
+</body>
+ <script type="text/javascript">
+     function ddlchange(ddid, Catid) {
+         if (ddid == "E") {
+             //var dialogDiv = $('#EditMsgCatDialog');
+             //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+             var viewUrl = "../Messages/Msg_CategoriesEdit?cId=" + Catid;
+             Displaydialog('EditMsgCatDialog', viewUrl, 'auto', 800, 'dvLoading', null, null);
+             //$.get(viewUrl, function (data) {
+             //    dialogDiv.html(data);
+             //    $('#dvLoading').dialog('close');
+             //    dialogDiv.dialog('open');
+             //});
+             //return false;
+             //window.location = "../Messages/Msg_CategoriesEdit?cId="+Catid;
+         }
+         if(ddid=="I"){
+             if (confirm(" Do you want to inactivate the category?")) {
+                 document.getElementById('hdnCId').value = Catid;
+                 document.getElementById('hdnStatus').value = "Yes";
+                 document.forms[0].submit();
+                 //            this.form.submit();
+             }
+             else {
+                 $('.ddlactionclass').val('s');
+                 document.getElementById('hdnStatus').value = "No";
+                 return false;
+                 //            window.location = "../Admin/ViewRXInfo";
+             }
+         }
+         if (ddid == "A") {
+             if (confirm(" Do you want to activate the category?")) {
+                 document.getElementById('hdnCId').value = Catid;
+                 document.getElementById('hdnStatus').value = "Yes";
+                 document.forms[0].submit();
+                 //            this.form.submit();
+             }
+             else {
+                 document.getElementById('hdnStatus').value = "No";
+                 return false;
+                 //            window.location = "../Admin/ViewRXInfo";
+             }
+         }
+         if (ddid == "R") {
+             //var dialogDiv = $('#RolesDialog');
+             //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+             var viewUrl = "../Messages/Msg_CategoriesRoles?cId=" + Catid;
+             Displaydialog('RolesDialog', viewUrl, 'auto', 800, 'dvLoading', null, null);
+             //$.get(viewUrl, function (data) {
+             //    dialogDiv.html(data);
+             //    $('#dvLoading').dialog('close');
+             //    dialogDiv.dialog('open');
+             //});
+             //return false;
+             //window.location = "../Messages/Msg_CategoriesRoles?cId=" + Catid;
+         }
+     }
+    
+       $(document).ready(function () {
+           var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        });
+     </script>
+    <script type="text/javascript">
+        function AddMsgCat(data) {
+            if (data.Success == false) {
+                alert(data.ErrorMessage);
+                return false;
+            }
+        }
+    </script>
+</html>

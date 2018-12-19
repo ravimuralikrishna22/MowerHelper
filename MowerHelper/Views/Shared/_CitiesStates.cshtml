@@ -1,0 +1,144 @@
+﻿@*@model MowerHelper.Models.BLL.Billing.CCProcess*@
+@using MowerHelper.Models.Classes
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+ $(document).ready(function () {
+     $('#txtZip').keyup(function () {
+        // alert(event.keyCode);
+            var recordId = $('#txtZip').val();
+            if ($(this).val().length == 5) {
+                $.getJSON("../Public/GetStateCitiesByZip", { zipcode: recordId },
+                function (data) {
+                    if (data.indexOf(",") != -1) {
+                        var data1 = data.split(',');
+                        //alert(data1[1]);alert(data1[0]);
+                        $("#DDState").empty();
+                        $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                        $('#DDState').append($('<option > </option>').val(data1[1]).html(data1[0]));
+                        $("select#DDState").prop('selectedIndex', 1);
+                        $("#DDCity").empty();
+                        $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                        $('#DDCity').append($('<option > </option>').val(data1[3]).html(data1[2]));
+                        $("select#DDCity").prop('selectedIndex', 1);
+                    }
+                    else {
+                        $("#DDState").empty();
+                        $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                        $.each(data, function (index, value) {
+                            $('#DDState').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                        });
+                        $("#DDCity").empty();
+                        $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                    }
+                });
+            }
+            else {
+                if (event.keyCode == '8' || event.keyCode == '88' || event.keyCode == '46') {
+                    $.getJSON("../Public/GetStateByZip",
+                    function (data) {
+                        $("#DDState").empty();
+                        $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                        $.each(data, function (index, value) {
+                            $('#DDState').append($('<option > </option>').val(data[index].StateId).html(data[index].StateFullName));
+                        });
+                    });
+                    $("#DDCity").empty();
+                    $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                }
+            }
+        });
+        $('#DDState').change(function () {
+            var recordId = $('#DDState').val();
+            var recordId1 = $("#txtZip").val();
+            if (recordId != '' && recordId1 == '') {
+                $.getJSON("../Public/GetCitiesByStates", { id: recordId },
+             function (data) {
+                    $("#DDCity").empty();
+                    $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                    $.each(data, function (index, value) {
+                        $('#DDCity').append($('<option > </option>').val(data[index].CityId).html(data[index].CityName));
+                    });
+                });
+               }
+               else if (recordId != '' && recordId1 != '') {
+                   $.getJSON("../Public/GetCitiesByZip", { id: recordId, zipcode: recordId1 },
+                function (data) {
+                    $("#DDCity").empty();
+                    $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                    $.each(data, function (index, value) {
+                        $('#DDCity').append($('<option > </option>').val(data[index].CityId).html(data[index].CityName));
+                    });
+                });
+               }
+               else {
+                   $("#DDCity").empty();
+                   $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+               }
+           });
+           if ($('#txtZip').val() != '') {
+
+               var recordId = $('#txtZip').val();
+               var stateid = '@ViewData["State_ID"]';
+               var statename = '@ViewData["Statename"]';
+               var City_ID = '@ViewData["City_ID"]';
+               var City = '@ViewData["Cityname"]';
+               if (recordId != '' && stateid != '' && City_ID != '') {
+                   $("#DDState").empty();
+                   $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                   $('#DDState').append($('<option > </option>').val(stateid).html(statename));
+                   $("select#DDState").prop('selectedIndex', 1);
+                   $("#DDCity").empty();
+                   $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                   $('#DDCity').append($('<option > </option>').val(City_ID).html(City));
+                   $("select#DDCity").prop('selectedIndex', 1);
+               }
+           }
+       });
+</script>
+<div>
+
+    <tr class="white_color">
+        <th align="right" width="20%">&nbsp;<font color="red"><b>*</b></font><strong>Zip :</strong>
+        </th>
+        <td id="tdzip" align="left" width="80%" colspan="3">
+            @Html.TextBox("txtZip", (string)ViewData["Zip"], new { @class = "textfield", MaxLength = "5", style = "width:45px", autocomplete = "off", onkeypress = "return fnsetfocus(event,'btnNext')", placeholder = "Zip" })
+            &nbsp;&nbsp;&nbsp;<span id="lblzip" style="display: none; font-weight: bold;"></span>
+        </td>
+    </tr>
+    <tr class="white_color" id="trCountry">
+        <th align="right" width="25%">&nbsp;<font color="red"><b>*</b></font><strong>Country :</strong>
+        </th>
+        <td id="tdcountry" align="left" width="80%" colspan="6">
+            @Html.DropDownList("DDLcountry", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select Country-- ", Value = "0" },
+                                                               new SelectListItem{ Text="United States", Value = "1", Selected =true }
+                                                              },
+new { style = "font-family:arial;font-size:13px;height:22px;width:248px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+            &nbsp;&nbsp;&nbsp;<span id="lblcountry" style="display: none; font-weight: bold;"></span>
+        </td>
+    </tr>
+    <tr class="white_color">
+        <th align="right" width="20%">&nbsp;<font color="red"><b>*</b></font><strong>State :</strong>
+        </th>
+        <td id="tdstate" align="left" width="80%" colspan="6">
+            @*  @if (Model.StateList != null)
+                                                {  *@
+            @Html.DropDownList("DDState", new SelectList(clsCommonCClist.GetStates(),"StateId","StateFullName"), "--Select State--", new { @style = "width:248px;height:25px;font:13px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+            @* }*@
+            &nbsp;&nbsp;&nbsp;<span id="lblstate" style="display: none; font-weight: bold;"></span>
+        </td>
+    </tr>
+    <tr class="white_color">
+        <th align="right" width="20%">&nbsp;<font color="red"><b>*</b></font><strong>City :</strong>
+        </th>
+        <td id="tdcity" align="left" width="80%" colspan="6">
+            @Html.DropDownList("DDCity",new List<SelectListItem>{new SelectListItem{ Text="--Select City-- ", Value = "0" , Selected =true}}, new { @style = "width:248px;height:25px;font:13px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+            &nbsp;&nbsp;&nbsp;<span id="lblcity" style="display: none; font-weight: bold;"></span>
+        </td>
+    </tr>
+
+</div>

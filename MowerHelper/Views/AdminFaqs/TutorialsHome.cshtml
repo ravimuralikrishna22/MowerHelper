@@ -1,0 +1,272 @@
+﻿@using Obout.Mvc.HTMLEditor;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+      <style type="text/css">
+             .dvLoading .ui-dialog-titlebar{display:none;}
+    </style>
+      @Styles.Render("~/Content/styles")
+             @Styles.Render("~/Content/themes/base/TherpistStyles")
+                 @Scripts.Render("~/Scripts/Thscriptscript")
+                          <script type="text/javascript">
+
+                              var title;
+                              $(function () {
+                                  title = "@ViewBag.title";
+                                  if (title != null && title != "") {
+                                      document.getElementById('txtTitle1').value = title;
+                                  }
+                              });
+                              $(document).ready(function () {
+                                  var TopIndex = '@Session["TopIndex"]';
+                                    $("#Menu0").removeClass();
+                                    $("#Menu1").removeClass();
+                                    $("#Menu2").removeClass();
+                                    $("#Menu3").addClass("active");
+                                });
+                             
+   </script>
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
+        $(function () {
+
+            //$('#Videoplay').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    //                      height: 400,
+            //    resizable: false,
+            //    modal: true
+            //});
+
+            //$(".openDialog").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#Videoplay');
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+        });
+       
+    </script>
+   <script type="text/javascript">
+          $(function () {
+              $('#imgbtnUcancel').click(function () {
+      
+           window.location.href = "../AdminFaqs/Help";
+       });
+       $('#imgbtnDcancel').click(function () {
+
+           window.location.href = "../AdminFaqs/Help";
+       });
+   });
+          function ValidSearch() {
+              document.forms.item(0).submit();
+          }
+   </script>
+</head>
+<body>
+   @using (Html.BeginForm("TutorialsHome", "AdminFaqs", null, FormMethod.Get, new { @enctype = "multipart/form-data" }))
+   {
+  <div>
+
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+     <div id="body-wrapper">
+          <div id="main-content">
+        @Html.Partial("_NavigationTool")
+          <table cellspacing="0" cellpadding="0" width="100%" align="center">
+            <tr style="background:none;">
+                <td valign="top" class="paddingleft">
+                    <br />
+                    <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                        <tr style="background:none;">
+                            <td>
+                                <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                  
+                                    <tr style="background:none;">
+                                        <td>
+                                            <table>
+                                                <tr style="background:none;">
+                                                    <td align="center" style="padding-left:450px;">
+                                                        
+                                                                &nbsp;&nbsp;&nbsp;<b>Title :</b>&nbsp;
+                                                               <input type="text" id="txtTitle1" name="txtTitle1" class="" style="width:180px;" />
+                                                               @* <asp:TextBox ID="txtTitle1" BackColor="white" runat="server" Width="180px" AutoPostBack="true"
+                                                                    AutoComplete="off" CssClass="textfield" onkeypress="return fnsetfocus(event,'imgbtnUsubmit')" onkeydown="return fnsetfocus(event,'imgbtnUsubmit')"></asp:TextBox>*@
+                                                               
+                                                         
+                                                    </td>
+                                                    <td>
+                                                        &nbsp;&nbsp;
+                                                        <a id="imgbtnUsubmit" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                                                  @* <input type="submit" id="imgbtnUsubmit" value="Search" class="button" />*@&nbsp;
+                                                   <input id="imgbtnUcancel" name="imgbtnUcancel" value="Cancel" class="button" style="width:40px;vertical-align:top;" />
+                                                  @*      <asp:Button ID="imgbtnUsubmit" runat="server" Text="Search" class="button" />&nbsp;
+                                                         <asp:Button ID="imgbtnUcancel" runat="server" Text="Cancel" class="button" />*@
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr style="background:none;">
+                            <td >
+                                <div class="content-box">
+                                <div class="content-box-header">
+                                
+                                <ul class="content-box-tabs"></ul>
+                                    <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                        <tr>
+                                            <td width="70%" align="left">
+                                                <h3>
+                                                    Media&nbsp;list</h3>
+                                            </td>
+                                            <td width="17%" align="right">
+                                              @*  <ul style="list-style: none!important; padding-right: 5px;" class="content-box-tabs">
+                                                    <uc1:TotalRecordsPerPage ID="TotalRecordsPerPage1" runat="server"></uc1:TotalRecordsPerPage>
+                                                </ul>*@
+                                            </td>
+                                            <td width="13%" align="left">
+                                          
+                                                <ul style="list-style: none!important; padding-right: 5px;" class="content-box-tabs">
+                                                <li>
+                                                 <a id="lnkAddNew" href="@Url.Action("AddNewMedia", "AdminFaqs")" style="color:#0066CC; font-size:15px;"><b>Add media</b></a>
+                                                </li>
+                                               @*     <asp:LinkButton ID="lnkAddNew" ForeColor="#0066CC" Font-Bold="false" Font-Size="15px"
+                                                        runat="server"><b>Add media</b></asp:LinkButton>*@
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="content-box-content">
+                                   @{
+              WebGrid Docgrid = new WebGrid(rowsPerPage: 10);}
+                                            @{WebGrid grid = Docgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totalrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("SINo", "#", style: "width: 700px;", canSort: false),
+                                                  grid.Column("Title", "Title", canSort: false),
+                                                  grid.Column("Description", "Description", canSort: false),
+                                                   grid.Column("FileType", "Media content", canSort: false, format:@<text>@*@Html.ActionLink((string)item.FileType, "download2", "AdminFaqs", new { @id = Convert.ToInt32(item.Helpmedia_ID) }, new {@class = "openDialog", @title = "Click here to Play the file", style = "font-weight:bold;" })*@ 
+                                            <a href="#" class="openDialog" title = "Click here to Play the file" style = "font-weight:bold;" onclick="return Displaydialog('Videoplay','@Url.Action("download2","AdminFaqs",new { @id = Convert.ToInt32(item.Helpmedia_ID) })','auto',1000,'dvLoading',null,null);">@item.FileType</a>
+                                              </text>),
+                                                    grid.Column("CreadtedOn", "Creadted on", canSort: false),
+                                                    grid.Column("", "Download", canSort: false, format:@<text>@Html.ActionLink("Download", "Download", "AdminFaqs", new { @id = Convert.ToInt32(item.Helpmedia_ID) }, new { @title = "Click here to download the file", style = "font-weight:bold;" })   </text>),
+
+                                                  grid.Column("", "Edit", canSort: false,
+                                                  format:@<text>
+                                                
+                                                  @Html.ActionLink(" ", "EditMedia", new { Helpmedia_ID = item.Helpmedia_ID },
+                                   new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditDialog", @title = "Click here to Edit Media" })</text>),
+                                                  grid.Column("", "Delete", canSort: false,
+                                                  format:@<text>@Html.ActionLink(" ", "DeleteMedia", new { Helpmedia_ID = item.Helpmedia_ID },
+                                        new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog1", @title = "Click here to delete Plan" })</text>)
+                                                  )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>    
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table cellspacing="0" id="tblnorecords" runat="server" cellpadding="0" width="100%" border="0" align="center">
+     <tr class="white_color" runat="server">
+                <td align="center" height="25px" valign="middle" width="100%">
+                  <label id="" style="font-weight:bold; font-size:13px;">No Videos found.</label>
+                   </td>
+        </tr>
+     </table>
+                                              }
+                                              }  
+                   
+
+                         <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                        <tr style="background:none;">
+                            <td style="height: 50px">
+                                <table cellspacing="0" cellpadding="0" width="98%" align="center" border="0">
+                                    
+                                    <tr style="background:none;">
+                                        <td align="right">
+                                         <input id="imgbtnDcancel" name="imgbtnDcancel" value="Cancel" class="button" style="width:40px;" />
+                                          
+                                            </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div></div>
+    <div>
+     <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+        <div id="AddNewMedia" title="Add New Media"></div>
+             @{Html.RenderAction("Bottomsections", "Tools");}
+
+        </div>
+       <div id="Videoplay"></div>
+        <div id="dialog-confirm1" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete the video?
+            </p>
+        </div>
+   }
+</body>
+<script type="text/javascript">
+    $(".confirmDialog1").live("click", function (e) {
+
+        var url = $(this).attr('href');
+        $("#dialog-confirm1").dialog({
+            autoOpen: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            buttons: {
+                "Yes": function () {
+                    $(this).dialog("close");
+                    window.location = url;
+
+                },
+                "No": function () {
+                    $(this).dialog("close");
+
+                }
+            }
+        });
+        $("#dialog-confirm1").dialog('open');
+        return false;
+
+    
+   
+
+    });
+        </script>
+</html>

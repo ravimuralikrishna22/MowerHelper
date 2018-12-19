@@ -1,0 +1,147 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <style type="text/css">
+        .ui-datepicker-calendar .ui-state-active
+        {
+              background: url("../images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #e6e6e6;
+    border: 1px solid #d3d3d3;
+    color: #555;
+    font-weight: normal;
+        }
+          .Highlighted a
+        {
+            background-color:#6eafbf !important;
+            background-image: none !important;
+            color: White !important;
+            font-weight: bold !important;
+            font-size: 10pt;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var dates = "@ViewBag.weekhigh";
+            var dates1 = new Array();
+            dates1 = dates.split(",");
+           $("#divYear").datepicker(
+            {
+                numberOfMonths: [3, 4],
+            onSelect: function () {
+                window.location = 'Schedulespecs?timeinterval=' + '07:00-07:00' + '&apptdate=' + $("#divYear").val();
+            },
+            beforeShowDay: highlightDays
+            });
+           function highlightDays(date) {
+               for (var i = 0; i < dates1.length; i++) {
+                   if (new Date(dates1[i]).toString() == date.toString()) {
+                       return [true, 'Highlighted'];
+                   }
+               }
+               return [true, ''];
+           }
+            $("#divYear").datepicker("setDate", "1/1/" + $("#ddlYear").val());           
+            $("#ddlYear").change(function () {
+                var obj = $("#ddlYear").val();
+                window.location = '../Schedule/ViewYearlySchedule?year=' + obj;
+            });
+            $(".ui-state-default").on("mouseenter", function () {
+                var closest_datepicker = $(this).closest('div.ui-datepicker-group');
+                var month = closest_datepicker.find('span.ui-datepicker-month').text();
+                $(this).attr('title', month + '  ' + $(this).text());
+            });
+           
+          
+        });
+    </script>
+</head>
+<body>
+    <div>
+        @{Html.RenderAction("Topsection", "Tools");}
+    </div>
+    <div id="main-content">
+        <table width="90%" cellpadding="0" cellspacing="0">
+          
+                            <tr id="trtabsadmin" runat="server">
+                                <td width="100%" class="navigation">
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="admincust" href="Schedulespecs" ><span>Day</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="admintask"  href="WeeklyAppts"><span>Week</span>
+                                        </a>
+                                    </div>
+                                
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adminnote" href="ViewProvMonthlySchedule"><span>Month</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="adminContact" href="ViewYearlySchedule"><span>Year</span>
+                                        </a>
+                                    </div>                                 
+                                </td>
+                            </tr>
+           
+                            <tr class="background_color">
+                                <td id="tdtabsadmin" class="tab-background"   width="90%">
+        
+    @*  <div style="width: 90%; margin: 0 auto" >*@
+            <table cellspacing="1" cellpadding="4" border="0" width="100%" ><tr><td align="left">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" >
+            <tr class="background_color">
+                <td align="middle">
+                    <strong><font size="2">Please select year :</font>&nbsp;</strong>
+                    @*@{ string[] years = { "2014", "2015", "2016", "2017" };}*@
+                    @{
+                        List<string> yearslist = new List<string>();
+                        for(int i=DateTime.Now.Year-5;i<=DateTime.Now.Year+5;i++)
+                        {
+                            yearslist.Add(i.ToString());
+                        }
+                        string[] years = yearslist.ToArray();
+                        }
+                    @{
+                        string year = null;
+                        if (Request["year"] != null)
+                        {
+                            year = Request["year"].ToString();
+                        }
+                        else
+                        {
+                            year = Convert.ToString(DateTime.Now.Year);
+                        }
+                    }
+                    &nbsp;&nbsp;@Html.DropDownList("ddlYear", new SelectList(years, year), new { @style = "width:80px;height:25px;font-size:13px;" })
+                </td>
+              
+            </tr>
+        </table>
+            <div id="divYear">
+            </div>
+                </td></tr></table>
+ @*  </div>*@
+                                    </td></tr></table>
+    </div>
+    <div>
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             var TopIndex = '@Session["TopIndex"]';
+             $("#Menu0").removeClass();
+             $("#Menu1").addClass("active");
+             $("#Menu2").removeClass();
+             $("#Menu3").removeClass();
+         });
+    </script>
+</body>
+</html>

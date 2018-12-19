@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+    <div id="wrapper">
+       
+       
+              <div id="flt02">
+            <div id="bodycon">
+                <div id="contentpannel" class="padding-top">
+                    <div style="height: 450px; margin-top: 110px;margin-left:10px;margin-right:10px;">
+                        <p style="font-family: Arial; font-weight: bold; font-size: 16px; text-align: justify;line-height:25px;">
+                          Oops... it seems we ran into a problem or you are trying to access a page that is not present.
+                          Please @Html.ActionLink("Click here", "Index", "Home",null, new { @target = "_parent" }) to go to the home page. To provide better service, we log our website visitors details such as IP address : @ViewBag.ipaddress
+
+                        </p>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</body>
+</html>

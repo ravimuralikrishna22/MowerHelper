@@ -1,0 +1,266 @@
+﻿@model List<MowerHelper.Models.BLL.Billing.CCProcess>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+
+   
+</head>
+<body>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             // $("#ECardType").attr("MasterCard");
+            // alert("@ViewBag.practice_ind");
+           
+             if ("@Model[0].practice_ind" == "Y") {
+          @*   if ("@ViewBag.practice_ind" == "Y") {*@
+                
+                 document.getElementById('Echkaddress').checked = true;
+             }
+             else {
+                 document.getElementById('Echkaddress').checked = false;
+             }
+         });
+         </script>
+    @using (Ajax.BeginForm("EditPaymentMethod", "Admin", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess1",
+            OnComplete = "SessionExpireFail"
+
+        }, new { @id = "updateCarForm1" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="ECardNumber1" name="ECardNumber1" />
+        <input id="Ehdncardnumber" type="hidden" name="Ehdncardnumber" /> 
+        <input type="hidden" id="EHdnPractice_ID" name="EHdnPractice_ID" value="@ViewBag.Practice_ID" />
+        <input type="hidden" id="EHdnProvider_ID" name="EHdnProvider_ID" value="@ViewBag.Provider_ID" />
+        <input type="hidden" id="EhdnCardid" name="EhdnCardid" value="@ViewBag.CardID" />
+        <input type="hidden" id="Ehdnadd1" name="Ehdnadd1" value="" />
+        <input type="hidden" id="Ehdnadd2" name="Ehdnadd2" value="" />
+        <input type="hidden" id="Ehdnzip" name="Ehdnzip" value="" />
+        <input type="hidden" id="Ehdnstate" name="Ehdnstate" value="" />
+        <input type="hidden" id="Ehdncity" name="Ehdncity" value="" />
+        <input type="hidden" id="vaultid" name="vaultid" value="@ViewBag.vaultid" />
+        <input type="hidden" id="customerid" name="customerid" value="@ViewBag.customerid" />
+        <div id="Eupdate-message" class="error" style="padding-left: 250px; font-weight: bold;">
+        </div>
+        
+        <div id="div10" class="content-box">
+            <div class="clear"></div>
+            <div class="content-box-content">
+                <table align="center" width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style">
+                    <tr class="white_color" id="Erow12">
+                        <td align="right" style="width: 30%" id="ETableCell28" runat="server">
+                            <font color="red">*</font><strong>Card name :&nbsp;</strong>
+                        </td>
+                        <td id="ETableCell29" runat="server">
+                            @Html.DropDownList("ECardType", null, new { @class = "textfield", @style = "height:25px" })
+                            &nbsp;&nbsp;&nbsp;
+                             @Html.TextBox("EIssuingBank",(string)@Model[0].IssuingBank, new { @class = "textfield", autocomplete = "off",placeholder="Issuing Bank",maxlength="50" })
+                               <img src="~/Images/help2.png" id="ImgIssuing" style="vertical-align: middle" onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.IssuingNotesEdit' ,300);" />
+                            <span id="Elbcardtype" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Erow10" class="nav_blue_color">
+                        <td id="ETableCell24" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Credit card number :&nbsp;</strong>
+                        </td>
+                        <td id="ETableCell25" runat="server">
+                            @Html.TextBox("ECardNumber", (string)ViewBag.cardnumber, new { @class = "textfield", @onkeydown = "return isValidNumeric(ECardNumber,16,0,event);", autocomplete = "off" })
+                            <b>Cvv :&nbsp;</b>
+                            @Html.TextBox("EtxtCVV2", (string)ViewBag.cvv2, new
+                       {
+                           @style = "width:50px",
+                           @class = "textfield",
+                           @onkeypress = "return AlphaNumbers(event);"
+                       })
+                            <img src="~/Images/help2.png" id="EImg2" style="vertical-align: middle" />
+                            <div id="EdivCvv" style="display: none">
+                                <table id="ETable7" width="100%" runat="server">
+                                    <tr>
+                                        <td>
+                                            <img src="~/Images/cvv2.jpg" style="vertical-align: middle" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="Elblcardnumber" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Etrfirstlastname" class="white_color" >
+                        <td id="Etdfl1" align="Right" style="width: 30%">
+                            <font color="red">*</font><strong>Name on card :</strong>&nbsp;
+                        </td>
+                        <td id="Etdfl2" runat="server">
+                            @Html.TextBox("EFullName",(string)@Model[0].FirstName + ' ' + (string)@Model[0].LastName, new { @class = "textfield",style = "width:180px", autocomplete = "off", placeholder="First and Last name" })&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span id="Elblfullname" style="display:none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Etrfirstname" class="white_color"  style="display:none">
+                        <td id="ETd1" align="Right" style="width: 30%">
+                            <font color="red">*</font><strong>First name :</strong>&nbsp;
+                        </td>
+                        <td id="ETd2" runat="server">
+                            @Html.TextBox("Etxtfirstname", (string)@Model[0].FirstName, new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                id="Elblfirstname" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Etrlastname" class="nav_blue_color" style="display:none">
+                        <td id="ETd3" align="Right" style="width: 30%">
+                            <font color="red">*</font><strong>Last name :</strong>&nbsp;
+                        </td>
+                        <td id="ETd4" runat="server">
+                            @Html.TextBox("Etxtlastname", (string)@Model[0].LastName, new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                id="Elbllastname" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="Erow13" class="white_color">
+                        <td id="ETableCell30" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Card expiry date :&nbsp;</strong>
+                        </td>
+                        <td id="ETableCell31" runat="server">
+                            @Html.DropDownList("Emonth", null, new { @class = "textfield", @style = "width:50px" })
+                            @Html.DropDownList("Eyear", null, new { @class = "textfield", @style = "width:100px" })
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span id="ElblExpyear" style="display: none;"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" id="Erow15">
+                        <td id="ETableCell34" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Billing address 1 :&nbsp;</strong>
+                        </td>
+                        <td id="ETableCell35" runat="server">
+                            @Html.TextBox("EditAddress1", (string)ViewBag.PAddress1, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })&nbsp;&nbsp;&nbsp;<span
+                                id="Elbladdress" style="display: none"></span>
+                            @Html.CheckBox("Echkaddress")&nbsp;&nbsp;&nbsp; <strong>Same as mower helper address
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr id="Erow16" class="nav_blue_color">
+                        <td id="ETableCell36" align="right" style="width: 30%">
+                            <strong>Address 2 :&nbsp;</strong>
+                        </td>
+                        <td id="ETableCell37" runat="server">
+                            @Html.TextBox("EditAddress2", (string)ViewBag.PAddress2, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })
+                        </td>
+                    </tr>
+                 @*     @Html.Partial("_CitiesStatesPaymentMetod", null, new ViewDataDictionary { { "GetStates", clsCommonCClist.GetStates()} })*@
+
+      
+                    
+                   @Html.Partial("_CitiesStatesPaymentMetod", Model)
+                </table>
+                <br />
+                <table width="94%" id="tblProcess">
+                    <tr id="TableRow7">
+                        <td id="TableCell11" width="100%" align="right">
+                            <input type="submit" name="EbtnProcess2" id="EbtnProcess2" value="Save" class="button"
+                                onclick="return ECognodeProcess();" />
+                            &nbsp;
+                            <input type="button" class="close button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+       
+    }
+    <script type="text/javascript">
+        var objcardtype = "@ViewBag.CardType";
+        var objmonth = "@Model[0].StrExpMon";
+        var objyear = "@Model[0].StrExpYear";
+        if (objcardtype != '') {
+            $("#ECardType option:contains(" + objcardtype + ")").attr('selected', 'selected');
+        }
+        if (objmonth != '') {
+            $("#Emonth").val(objmonth);
+        }
+        if (objyear != '') {
+           // alert(objyear);
+            $("#Eyear").val('@Model[0].StrExpYear');
+        }
+      
+        $(document).ready(function () {
+            $("#ECardNumber").bind('contextmenu', function (e) {
+                e.preventDefault();
+                //  alert('Right Click is not allowed');
+            });
+            $('#EImg2').mouseover(function () {
+                //document.getElementById("EdivCvv").style.zIndex = '1005';
+                //document.getElementById("EdivCvv").style.left = '400px';
+               // document.getElementById("EdivCvv").style.top = '50px';
+                document.getElementById("EdivCvv").style.position = 'absolute';
+                document.getElementById("EdivCvv").style.display = '';
+            });
+            $('#EImg2').mouseout(function () {
+
+                document.getElementById('EdivCvv').style.display = 'none';
+            });
+        });
+    </script>
+    <script type="text/javascript" language="JavaScript">
+        window.history.forward();
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // $("#ECardType").attr("MasterCard");
+           @* var obj = "@ViewBag.practice_ind";
+             //alert(obj);
+             if (obj == "Y") {
+                 // alert("1");
+                 document.getElementById('chkaddress').checked = true;
+             }
+             else {
+                 document.getElementById('chkaddress').checked = false;
+             }*@
+             var date = new Date();
+             var Nextyear = date.getFullYear() + 1;
+             if (objyear != "") {
+                
+                 $('#Eyear').val('@Model[0].StrExpYear');
+             }
+             else
+             {
+                 $('#Eyear').val(Nextyear);
+             }
+
+        });
+        function updateSuccess1(data) {
+            if (data != '' & data.Success == true) {
+                $('#updateDialog1').dialog('close');
+                @*   $("#loadPayment").load("@Url.Action("FTservicesAddnewpayment", "Admin")");*@
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                $.ajax({
+
+                    url: "@Url.Action("FTservicesAddnewpayment", "Admin")",
+                    type: "get",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+
+                        $('#loadPayment').html(data);
+                        $("#dvLoading").dialog('close');
+                    }
+
+                });
+                document.body.style.cursor = 'default';
+            }
+            else {
+                document.body.style.cursor = 'default';
+                if (data != "_Logon_") {                    
+                    alert(data.ErrorMessage);
+                }
+            }
+        }
+    </script>
+    <script type="text/javascript">
+      
+    </script>
+</body>
+</html>

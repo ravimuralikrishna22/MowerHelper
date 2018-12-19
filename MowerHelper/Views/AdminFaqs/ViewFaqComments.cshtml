@@ -1,0 +1,62 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+     <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+
+                                                <table cellspacing="0" cellpadding="0"  bgcolor="#EAF1F6" align="center" width="100%"
+                                                    border="0" style="border: solid 1px #CCCCCC;">
+                                                    <tr>
+                                                        <td width="83%" align="left"  valign="top">
+                                                            <table class="border_style" cellpadding="4" cellspacing="1"  align="center"  width="100%">
+                                                                <tr class="white_color" height="20">
+                                                                    <td align="right" width="30%">
+                                                                        <strong>&nbsp;&nbsp;&nbsp;Question&nbsp;:&nbsp;</strong></td>
+                                                                    <td width="70%">
+                                                                    <label id="lblQuestion">@ViewBag.question</label>
+                                                                        </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="20">
+                                                                    <td align="right" style="height: 22px" width="30%">
+                                                                        <strong>&nbsp;&nbsp;&nbsp;Answer&nbsp;:&nbsp;</strong> </td>
+                                                                    <td style="height: 22px" width="70%">
+                                                                    <label id="lblAnswer">@Html.Raw(ViewBag.lblAnswer)</label>
+                                                                        </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="20">
+                                                                    <td align="right" width="30%">
+                                                                       <strong> &nbsp;&nbsp;&nbsp;Category&nbsp;:&nbsp;</strong> </td>
+                                                                    <td width="70%">
+                                                                    <label id="lblCategory">@ViewBag.lblCategory</label>
+                                                                       </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="20">
+                                                                    <td align="right" width="30%">
+                                                                       <strong> &nbsp;&nbsp;&nbsp;Status&nbsp;:&nbsp;</strong> </td>
+                                                                    <td width="70%">
+                                                                    <label id="lblStatus">@ViewBag.lblStatus</label>
+                                                                        </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                    <tr>
+                                                        <td align="left"><asp:Label ID="Label1"  runat="server"></asp:Label></td>
+                                                        <td align="right" style="padding-bottom:5px; padding-right:10px; padding-top:5px;">
+                                                        <input type="submit" class="cancel1 button" name="" id="" value="Close" />
+                                                     @*   <asp:Button ID="ImgClose" runat="server" class="button" Text="Close"  OnClientClick="return HideDiv();" />*@
+                                                        </td>
+                                                    </tr>
+                                                </table>
+
+</body>
+</html>

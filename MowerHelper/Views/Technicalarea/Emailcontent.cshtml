@@ -1,0 +1,95 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+          @Styles.Render("~/Content/themes/base/jqueryCSS")
+      @Scripts.Render("~/Scripts/Thscriptscript")
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var cat = $('#hdncat').val();
+            if (cat != '') {
+                $('#ddllistCategory').val(cat);
+            }
+            else {
+                $('#ddllistCategory').val("0");
+
+            }
+            var subcat = $('#hdnsubcat').val();
+            if (subcat != '') {
+                $('#ddllistSubCategory').val(subcat);
+            }
+
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+                $("#Menu0").removeClass();
+                $("#Menu1").removeClass();
+                $("#Menu2").removeClass();
+                $("#Menu3").addClass("active");
+            });
+    </script>
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("Emailcontent", "Technicalarea", FormMethod.Get, null))
+    {        Html.RenderAction("Topsection", "Tools");
+        <br />
+        @Html.Partial("_NavigationTool")
+        <input id="hdncat" name="hdncat" type="hidden" value="@ViewBag.cat"/>
+        <input id="hdnsubcat" name="hdnsubcat" type="hidden" value="@ViewBag.subcat"/>
+<table class="border_style" cellspacing="1" cellpadding="4" width="97%" align="center"
+                    border="0">
+                    <tr class="white_color">
+                        <td align="right">
+                            <b><font style="color: red">*</font></b><strong>&nbsp;E-mail Category&nbsp;:&nbsp;</strong></td>
+                        <td align="left">
+                                                                                         @if (Model.StateList != null)
+                                                                                         {
+                                                                            @Html.DropDownList("ddllistCategory", Model.StateList, "--Select category--", new { @style = "width:270px;height:25px;font:13px;" })
+                                                                                         }
+                              <script>$("#ddllistCategory").change(function () {
+    window.location.href = '@Url.Action("Emailcontent", "Technicalarea")?ddllistCategory=' + document.getElementById('ddllistCategory').value + '&ddllistSubCategory=' + document.getElementById('ddllistSubCategory').value + '&ddlrecords=' + document.getElementById('ddlrecords').value;
+
+});
+    </script>
+                            </td>
+                    </tr>
+                    <tr class="white_color">
+                        <th align="right">
+                            <b><font style="color: red">*</font></b><strong>&nbsp;E-mail subcategory&nbsp;:&nbsp;</strong></th>
+                        <td align="left">
+                             @Html.DropDownList("ddllistSubCategory", Model.CityList, new { @style = "width:310px;height:25px;font:13px;"})@*//, onchange = "this.form.submit();" })*@
+                                <script>$("#ddllistSubCategory").change(function () {
+    window.location.href = '@Url.Action("Emailcontent", "Technicalarea")?ddllistCategory=' + document.getElementById('ddllistCategory').value + '&ddllistSubCategory=' + document.getElementById('ddllistSubCategory').value + '&ddlrecords=' + document.getElementById('ddlrecords').value;
+
+});
+    </script>
+                            </td>
+                    </tr>
+                </table>
+        Html.RenderAction("EmailcontentGrid", "Technicalarea");
+            <table  runat="server" width="98%">
+                                    <tr class="background_color">
+                                        <td align="right" style="padding-top:10px;">
+                                               <input value="Cancel" type="button" class="button" style="width: 60px;" id="btnclose1" onclick="return cancel();"/>
+                                           
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+        Html.RenderAction("Bottomsections", "Tools");
+        
+    }
+               
+
+</body>
+</html>

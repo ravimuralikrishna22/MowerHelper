@@ -1,0 +1,982 @@
+﻿@model MowerHelper.Models.BLL.Providers.Provider_AdvancedSearch
+@using System.Web;
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@using System;
+@using MowerHelper.Models.Classes;
+@using System.Web;
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<head>
+    <style>
+        .ob_iCboICBC li
+        {
+            float: left;
+            width: 195px;
+        }
+    </style>
+    @Styles.Render("~/Content/common")
+    @Styles.Render("~/Content/themes/base/autocomplete")
+    @Scripts.Render("~/Scripts/Thscriptscript")
+    @Scripts.Render("~/ThScripts/Thjquerycripts")
+         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+       <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+        $(function () {
+                fnlanglat();
+            var pageno = "@ViewBag.Pagenation";
+            if (pageno != 1) {
+                $('#apage' + pageno).removeClass('pagination1');
+                $('#apage' + pageno).addClass('button');
+            }
+            else {
+                $('#apage' + pageno).addClass('button');
+            }
+            JqAutocomplete1('@Url.Action("Zipcodes", "Search")', 'txtZIP');
+ 
+            JqAutocomplete1('@Url.Action("GetProviderfullnames", "AdvancedSearch")', 'txtfullname');
+        
+            var listcount = "@ViewBag.listcount";
+            if (listcount > 0) {
+                document.getElementById('map-canvas').style.display = "";
+            }
+            else {
+                document.getElementById('map-canvas').style.display = "none";
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        function rdfreeyescheck() {
+            if (document.getElementById("rdfreeyes").checked == true) {
+                document.getElementById("rdfreeno").checked = false;
+            }
+        }
+        function rdfreenocheck() {
+            if (document.getElementById("rdfreeno").checked == true) {
+                document.getElementById("rdfreeyes").checked = false;
+            }
+        }
+        function ResetAll() {
+            document.getElementById('txtfullname').value = "";
+            document.getElementById('txtZIP').value = "";
+            document.getElementById('ddlDistance').selectedIndex = 0;
+            document.getElementById("rdfreeyes").checked = true;
+            document.getElementById("rdfreeno").checked = false;
+         
+            return false;
+        }
+        function tracking() {
+            if (getcookie('City') == null) {
+                if (google.loader.ClientLocation) {
+                    visitor_lat = google.loader.ClientLocation.latitude;
+                    createcookie("Latitude", visitor_lat, 1)
+                    visitor_lon = google.loader.ClientLocation.longitude;
+                    createcookie("Longitude", visitor_lon, 1)
+                    visitor_city = google.loader.ClientLocation.address.city;
+                    createcookie("City", visitor_city, 1)
+                    visitor_region = google.loader.ClientLocation.address.region;
+                    createcookie("State", visitor_region, 1)
+                    visitor_country = google.loader.ClientLocation.address.country;
+                    createcookie("Country", visitor_country, 1)
+                    visitor_countrycode = google.loader.ClientLocation.address.country_code;
+                    createcookie("Countrycode", visitor_countrycode, 1)
+                }
+            }
+        }
+        function createcookie(name, val, days) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + days);
+            document.cookie = name + "=" + escape(val) + "; path=/";
+            }
+        function getcookie(name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length;
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+                else {
+                    return null;
+                }
+            }
+            else {
+                return null;
+            }
+        }
+    </script>
+    <script type="text/javascript">
+        var geocoder;
+        var map1;
+        var markersArray = [];
+
+        function fnlanglat() {
+            var straddress = "@ViewBag.zip";
+            var fullname = "@ViewBag.fullname";
+
+            var strzoomvalue = null;
+            if (fullname != "" && fullname != null)
+            {
+                straddress = "@ViewBag.totadd";
+                strzoomvalue = 10;
+            }
+           else if (straddress == "" || straddress == null) {
+                straddress = "United States";
+                strzoomvalue = 4;
+            }
+            else {
+                straddress = straddress + ",United States";
+                strzoomvalue = 10;
+            }
+            //alert(straddress);
+            //alert(strzoomvalue);
+            geocoder = new google.maps.Geocoder();
+
+            latlang = geocoder.geocode({
+
+                'address': straddress
+            },
+
+                    function (results, status) {
+
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            map1.setCenter(results[0].geometry.location);
+
+                        }
+                        //else {
+                        //    alert("Geocode was not successful for the following reason: " + status);
+                        //}
+                    });
+
+            var myOptions =
+            {
+                center: latlang, zoom: strzoomvalue,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                navigationControlOptions:
+    {
+        style: google.maps.NavigationControlStyle.SMALL
+    }
+            };
+            map1 = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+            plotMarkers();
+        }
+
+
+        var locationsArray = new Array();
+        var totadd = "@ViewBag.totadd";
+        if (totadd != null) {
+        locationsArray = totadd.split('$');
+    }
+
+
+    function plotMarkers() {
+        for (var i = 0; i <= locationsArray.length - 2; i++) {
+
+            codeAddresses(locationsArray[i]);
+
+        }
+    }
+
+    function codeAddresses(address1) {
+        geocoder.geocode({ 'address': address1 }, function (results, status) {
+            //alert(status);
+            if (status == google.maps.GeocoderStatus.OK) {
+                var latitude1 = results[0].geometry.location.lat();
+                var longitude1 = results[0].geometry.location.lng();
+                var latlng1 = new google.maps.LatLng(latitude1, longitude1);
+                var marker = new google.maps.Marker
+            (
+             {
+                 position: new google.maps.LatLng(latitude1, longitude1),
+                 map: map1,
+                 icon: '@ViewBag.imgpath'
+                                  }
+                                    );
+                             //alert(address1);
+                                  var infowindow = new google.maps.InfoWindow({ content: "<div style='padding-bottom: 9pt; width:275px;'><b>" + address1 + "</b></div>" });
+                             //infowindow.open(map, marker);
+                                  google.maps.event.addListener(marker, 'mouseover', function () {
+                                      infowindow.open(map1, marker);
+                                  });
+                                  google.maps.event.addListener(marker, 'mouseout', function () {
+                                      infowindow.close();
+                                  });
+
+
+
+                              }
+                              else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                                  wait = true;
+                                  setTimeout("wait = true", 2000);
+                              }
+                         //else {
+                         //    //alert("Request failed.")
+                         //    alert("Geocode was not successful for the following reason: " + status);
+                         //}
+                     });
+                      }
+
+                      //google.maps.event.addDomListener(window, 'load', fnlanglat);
+
+</script>
+  
+</head>
+<body>
+    @using (Html.BeginForm("ProviderSearch", "AdvancedSearch"))
+    {
+     @Html.AntiForgeryToken()
+        <input type="hidden" id="hdnfullname" value="@ViewBag.fullname" />
+        <input type="hidden" id="hdnzip" value="@ViewBag.zip" />
+        <input type="hidden" id="hdndistance" value="@ViewBag.distance" />
+        <input type="hidden" id="hdngender" value="@ViewBag.gender" />
+        <input type="hidden" id="hdnfreesession" value="@ViewBag.freesession" />
+        <div id="wrapper">
+            <div id="flttop">
+                <div id="header01">
+                    <div id="headermain02">
+                        <div id="logopublic">
+                            <a id="logo_find1" runat="server" href="@Url.Action("Index", "Home", null)"  title="Home" style="text-decoration:none;" class="bluemenuPublic">
+                               Mower Helper</a></div>
+                        <div id="mainnavcon">
+                            <div class="mainnav">
+                                <ul>
+                                       @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                    <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                    }
+                                    <li class="page_item page-item-2"><a id="aListprac" runat="server" title="Products & Services">
+                                        Products&nbsp;&&nbsp;Services</a></li>
+                                    <li class="page_item page-item-3">@Html.ActionLink("Log in", "login", "Home", null, new { @title = "Log in" })</li>
+                                    <li class="page_item page-item-4"> @Html.RouteLink("Sign Up", "Register")</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="flt02">
+                <div id="bodycon">
+                    <div id="contentpannel" runat="server">
+                        <div id="leftcon">
+                            <div class="content1" style="padding-bottom: 200px;">
+                                <div style="width: 702px; float: left; padding: 15px 0px 0px 0px;">
+                                    <h1 style="padding-bottom: 15px;">
+                                        Advanced Search</h1>
+                                </div>
+                                <div id="advanced-form">
+                                    <table width="100%" border="0" cellspacing="1" cellpadding="5">
+                                        <tr>
+                                            <td width="40%" align="left" valign="top">
+                                                <table>
+                                                    <tr>
+                                                        <td  width="33%" style="text-align:right;">
+  <label>
+                                                    Mower Helper Name :
+                                                </label>
+                                                        </td>
+                                                        <td>
+                                                               <input name="txtfullname" class="textfield" id="txtfullname" style="width: 240px;
+                                                    font-family: arial; font-size: 9pt;" type="text">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                           <td width="20%" align="left" valign="top">
+                                               <table>
+                                                   <tr>
+                                                       <td>
+                                                           <label> Free Estimate :</label>
+                                                       </td>
+                                                       <td>
+                                                             @{ bool Yes3;
+                                                                                                       bool No3;
+                                                                                                    }
+                                                                                                    @if (Convert.ToString(ViewBag.freesession) == "2")
+                                                                                                    {
+                                                                                                        Yes3 = false;
+                                                                                                        No3 = true;
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        Yes3 = true;
+                                                                                                        No3 = false;
+                                                                                                    }
+                                               @Html.RadioButton("rdfreeyes", "1", Yes3, new { @onclick = "return rdfreeyescheck();" })&nbsp;Yes
+                                               @Html.RadioButton("rdfreeno", "2", No3, new { @onclick = "return rdfreenocheck();" })&nbsp;No
+                                                       </td>
+                                                   </tr>
+                                               </table>
+                                            </td>
+                                           
+                                        </tr>
+                                        <tr>
+                                          
+                                              <td width="40%" align="left" valign="top">
+                                                  <table>
+                                                   <tr>
+                                                       <td>
+  <label>
+                                                    US City or Zip Code :
+                                                </label>
+                                                       </td>
+                                                       <td>
+<input name="txtZIP" class="textfield" id="txtZIP" style="width: 240px;" type="text">
+                                                       </td>
+                                                   </tr>
+                                               </table>
+                                                  </td>
+                                            <td width="20%" align="left" valign="top">
+                                                <table width="100%">
+                                                   <tr width="100%">
+                                                       <td  width="43%" style="text-align:right;">
+ <label>
+                                                    Radius :</label>
+                                                       </td>
+                                                       <td>
+  <select name="ddlDistance" class="textfield" id="ddlDistance" style="width: 100px;
+                                                    height: 25px;" >
+                                                    <option value="0"></option>
+                                                    <option value="5">5 Miles</option>
+                                                    <option value="10">10 Miles</option>
+                                                    <option value="20">20 Miles</option>
+                                                    <option value="50">50 Miles</option>
+                                                    <option value="100">100 Miles</option>
+                                                    <option value="250">250 Miles</option>
+                                                </select>
+                                                       </td>
+                                                   </tr>
+                                               </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        </tr>
+                                    </table>
+                               
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                        <tr width="100%">
+                                            <td width="30%" align="left" style="padding-left:100px;" >
+                                                <input type="submit" class="button" value="Submit" id="imgbtnSubmit" style="height: 25px;
+                                                    width: 60px;" />
+                                            </td>
+                                            <td align="left" width="70%">
+                                                <input type="submit" class="button" value="Reset" id="imgbtnCancel" onclick="return ResetAll();"
+                                                    style="height: 25px; width: 50px;" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <input style="" type="hidden" runat="server" id="hdnPaging" />
+                                </div>
+                                @*<div id="map-canvas" style="position:relative; width:94%; height:350px;"></div>*@
+                                <div id="map-canvas" style="position:relative;width:94%;height:350px;"></div>
+                                <br />
+                                <br />
+                                <br />
+                        @if (ViewBag.listcount > 0)
+                        {
+                                 <span  style="font-family: arial; font-size: 14pt;">Advanced Search Results</span><br />
+                                 <span  style="font-family: arial; font-size: 9pt;">@ViewBag.listing</span>
+                        }
+                                <table width="100%" border="0" cellpadding="1" cellspacing="0" id="trRecordsList">
+                                    @if (ViewBag.listcount > 0)
+                                    {
+                                        foreach (var item in ViewBag.list)
+                                        {
+                                            string qn = null;
+                                            int length = 0;
+                                            qn = (string)item.Paragraph;
+
+                                            if (qn != null)
+                                            {
+
+                                                length = qn.Length;
+                                            }
+                                        <tr>
+                                            <td colspan="3" align="center" style="font-family: Arial; font-size: 9pt;" valign="top">
+                                                <div style="width: 95%;">
+                                                    <div align="right" style="margin-right: 53px;">
+                                                        @{
+                                            string cityname = null;
+                                                        }
+                                                        @if (item.CityNm != null)
+                                                        {
+                                                            if (ViewBag.citynm123 != item.CityNm)
+                                                            {
+                                                                cityname = item.CityNm;
+                                                                cityname = cityname.ToUpper();
+                                                            }
+
+                                                            ViewBag.citynm123 = item.CityNm;
+
+                                                        }
+                                                        @if (cityname != null)
+                                                        {
+                             
+                                                            <span id="Span2" style="font-family: arial; font-size: 9pt; font-weight: bold;">
+                                                                @cityname
+                                                            </span>
+                                                        }
+                                                    </div>
+                                                    <div id="therapist-Profiles" style="margin-right: 35px;">
+                                                        <div id="tpbgcon">
+                                                          
+                                                            <div style="width: 670px; float: left;">
+                                                                <div style="width: 102px; float: left;" id="tdImage">
+                                                                    <div style="width: 92px; float: left; background-color: #FFFFFF; padding: 4px;">
+                                                                        <a id="aimgprovider">
+                                                                               @{
+                                        string domain = null;
+                                        MowerHelper.Models.Classes.clsWebConfigsettings objconfig = new MowerHelper.Models.Classes.clsWebConfigsettings();
+                                        string Requesturl = null;
+                                        if (Request.Url != null){
+                                            Requesturl = Request.Url.ToString();
+                                          
+                                        }
+                                        var strurl = Requesturl.Split('/');
+                                            }
+                                            @if (objconfig.GetConfigSettingsValue("Islocal") == "Y")
+                    {
+                        if (Requesturl.Contains("localhost:"))
+                        {
+                            domain = strurl[0] + "//" + strurl[2] + "/";
+
+                        }
+                        else if (Requesturl.Contains("vbv"))
+                        {
+                            domain = strurl[0] + "//" + strurl[2] + "/" + strurl[3] + "/";
+
+                        }
+                    }
+                    else
+                    {
+                        domain = objconfig.GetConfigSettingsValue("PublicImageChecklocal");
+                    }
+                                               @if (!DBNull.Value.Equals(item.Picture) && item.Picture != null)
+                                            {
+
+                                                string str = item.Picture;
+                                                ViewData["str"] = str;
+                                                ViewBag.strimage = str;
+                                                if (str.Contains(".") == true)
+                                                {
+                                                    string[] str1 = str.Split('.');
+                                                    ViewData["ExistedLogo"] = str1[0];
+                                                    ViewBag.ExistedLogo = str1[0];
+                                                    ViewData["ExistedExtn"] = str1[1];
+                                                    ViewBag.ExistedExtn = str1[1];
+                                                }
+
+                                                string strings = null;
+                                                strings = Path.Combine(Server.MapPath("~/Attachments/Providers"), str);
+                                                if (System.IO.File.Exists(strings))
+                                                {
+
+                                                    ViewBag.providerimage = domain + "Attachments/Providers/" + str;
+                                                   
+
+                                                }
+                                                else
+                                                {
+
+                                                    ViewBag.providerimage = domain + "images/Coach1.JPG";
+                                                   
+                                                }
+                                               }
+                                             else
+                    {
+                      
+                            ViewBag.providerimage = domain + "images/Coach1.JPG";
+                    }
+
+                                                                         
+                                                                                 <img id="imgProvider" src="@ViewBag.providerimage" style="border-style:solid; width:80px; height:100px;"  />
+                                                                        
+                                                                           
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div style="width: 553px; float: left; padding-left: 10px;">
+                                                                    <div style="width: 553px; float: left;">
+                                                                        <div style="width: 373px; float: left;">
+                                                                            <div class="ntptitle" style="width: 373px; float: left;">
+                                                                                <table align="left" width="100%">
+                                                                                    <tr>
+                                                                                        <td align="left">
+                                                                                            @{
+                                            string estate = item.State_Name.ToString().Trim().Replace("/ ", "-");
+                                               estate = estate.Replace("/", "-");
+                                               estate = estate.Replace("'", "-");
+                                               estate = estate.Replace(" ", "-");
+                                               string ecity = item.CityNm.ToString().Trim().Replace("/ ", "-");
+                                               ecity = ecity.Replace("/", "-");
+                                               ecity = ecity.Replace("'", "-");
+                                               ecity = ecity.Replace(" ", "-");
+                                                                                            }
+                                                                                             @Html.RouteLink((string)item.ProviderFullName, "ProviderProfile", new { @randomnumber = item.Random_number, Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-"),state=estate,city=ecity,zip=item.ZIPValue }, new { @title = "see full profile of " + item.ProviderFullName + ", Mower Helper in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue })
+                                                                                            <br />
+                                                                                            <br />
+                                                                                            <span id="lblBusinessName" style="font-family: arial; font-size: 9pt; font-weight: bold;">
+                                                                                                @item.Businessname
+                                                                                            </span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </div>
+                                                                            <div style="width: 373px; float: left;">
+                                                                                <table align="left" width="100%">
+                                                                                    <tr>
+                                                                                        <td align="left">
+                                                                               <span id="Span1" style="font-family: arial;
+                                                                font-size: 9pt; font-weight: normal;">
+                                                                @Html.Raw(item.Address)
+                                                            </span><a id="A4" style="font-family: Arial; font-size: 9pt; display: none">
+                                                                @item.State_Name
+                                                            </a><a id="A5" style="font-family: Arial; font-size: 9pt; display: none">
+                                                                @item.ZIPValue
+                                                            </a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div style="width: 180px; float: right;" align="right">
+                                                                           <table>
+                                                        <tr>
+                                                            <td style="background-color:#1d70ab; text-align:center; height:30px; width:110px;">
+@Html.RouteLink("VIEW PROFILE", "ProviderProfile", new { @randomnumber = item.Random_number, Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-"),state=estate,city=ecity,zip=item.ZIPValue }, new {@style="color:#ffffff; font-weight:bold; font-size: 10pt;", @title = "see full profile of " + item.ProviderFullName + ", Mower Helper in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue })
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                                            <div id="divphones" style="width: 180px; float: left; padding: 6px 0px; padding-top: 10px;">
+                                                                                <table>
+                                                                                     @if (item.distance != 0)
+                                                                                     {
+                                                                                         <tr align="right">
+                                                                                             <td>
+                                                                                                 <a style="font-weight: bold; font-family: Arial; font-size: 9pt; text-align: right;">
+                                                                                                    @if (ViewBag.zippcode != null)
+                                                                                                    {
+                                                                        @item.distance <span>miles from </span>@ViewBag.zippcode
+                                                                                                    }
+                                                                                                 </a>
+                                                                                             </td>
+                                                                                         </tr>
+                                                                                     }
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <div id="trOfficeVM" class="ntpphone" style="float: left; padding: 0px 10px;">
+                                                                                                <span class="ntpphone01">Phone :</span> <a id="A6">
+                                                                                                                                            @item.Vmoffice
+                                                                                                                                        </a>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                 
+                                                                                    <tr>
+                                                                                        @if (item.Fax != "" & item.Fax != null)
+                                                                                        {
+                                                                                        <td>
+                                                                                            <div id="trFax" class="ntpphone" style="float: left; padding: 0px 10px;">
+                                                                                                <span class="ntpphone01">Fax :</span> <a id="A8">
+                                                                                                                                          @item.Fax
+                                                                                                                                      </a>
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        }
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="clearme" style="display: none;">
+                                                                            <img id="imgclr" alt="clear" /></div>
+                                                                    </div>
+                                                                 
+                                                                </div>
+                                                            </div>
+                                                            <div id="description" style="width: 670px; float: left;">
+                                                                <p>
+                                                                    @if (qn != null)
+                                                                    {
+                                                                        if (length > 400)
+                                                                        {
+                                                                            qn = qn.Remove(400, qn.Length - 400) + "...";
+                                                                         
+                                                                        <span id="Span3" style="font-family: arial; font-size: 9pt; font-weight: normal;">
+                                                                            @Html.Raw(HttpUtility.HtmlDecode(qn))
+                                                                        </span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                         
+                                                                        <span id="Span4" style="font-family: arial; font-size: 9pt; font-weight: normal;">
+                                                                            @Html.Raw(HttpUtility.HtmlDecode(qn))
+                                                                        </span>
+                                                                        }
+                                                                    }
+                                                                    @if (qn != null)
+                                                                    {
+                                                                        if (length > 400)
+                                                                        {                                                
+                                                                       @Html.RouteLink("[ more ]", "ProviderProfile", new { @randomnumber = item.Random_number, Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-"),state=estate,city=ecity,zip=item.ZIPValue }, new {@style="font-family: Arial; font-size: 9pt; font-weight: bold; color:#044a7d;", @title = "see full profile of " + item.ProviderFullName + ", Electrician in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue })
+                                               
+                                                                        }
+                                                                    }
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td colspan="3" style="font-family: Arial; font-size: 9pt; padding-left: 10px;" align="left">
+                                            <span id="lblListing2" style="font-family: arial; font-size: 9pt;">@ViewBag.listing</span>
+                                        </td>
+                                       
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" align="center" style="font-family: Arial; font-size: 9pt; width: 5px">
+                                            @if (ViewBag.listpagingcount > 0)
+                                            {
+                                                foreach (var item in ViewBag.listpaging)
+                                                {
+                                                   
+                                                    int pageno = item.PageNo;
+ @Html.ActionLink(pageno.ToString(), "ProviderSearch", new { @page = pageno.ToString(), @txtZIP = ViewBag.zip, @ddlDistance = ViewBag.distance, @ddlfee = ViewBag.freesession}, new { @class = "pagination1", @style = "color:gray; margin:1px;", id = "apage" + pageno })
+                                                }
+                                            }
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            @if (ViewBag.records > 0)
+                                            {
+                                                <table  style="margin-left:500px;">
+                                                    <tr>
+                                                        <td valign="top" >
+                                                            <label>@ViewBag.pageno/@ViewBag.listpagingcount pages</label>
+                                                            <a href="#Top" title="Top of the Mower Helpers List" style="text-decoration: none; color: #044a7d;"
+                                                                class="lnkprovider">
+                                                                <img id="img123" src="@ViewBag.topimg" width="10" height="9" />
+                                                                Top</a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                               
+            
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="rightcon">
+                    <div id="divfeaured" runat="server" class="rightcon" style="width: 228px; float: left; background-image: url(@ViewBag.imgsrc24);
+                        padding: 5px 0px 18px 10px; background-repeat: no-repeat; background-position: left top;">
+                        <h2>
+                            Featured Electricians</h2>
+                    </div>
+                            <div style="width: 208px; float: left; padding: 0px 15px 365px 15px;">
+                                
+                                @if (ViewBag.FeaturedListcount > 0)
+                                {
+                                    foreach (var item in ViewBag.FeaturedList)
+                                    {
+                                        if (ViewBag.Deafult == "N")
+                                        {
+                                                                               <div id="divline" class="divline" style="width: 208px; float: left; padding-top: 10px;
+                                                                                                                                                                                                                                                           background-repeat: repeat-x; background-position: bottom left; padding-bottom: 10px;">
+                                            <div style="width: 42px; height: 40px; float: left; border: 1px #006600 solid;">
+                                                 @{
+                                        string domain = null;
+                                        MowerHelper.Models.Classes.clsWebConfigsettings objconfig = new MowerHelper.Models.Classes.clsWebConfigsettings();
+                                        string Requesturl = null;
+                                        if (Request.Url != null){
+                                            Requesturl = Request.Url.ToString();
+                                          
+                                        }
+                                        var strurl = Requesturl.Split('/');
+                                            }
+                                            @if (objconfig.GetConfigSettingsValue("Islocal") == "Y")
+                    {
+                        if (Requesturl.Contains("localhost:"))
+                        {
+                            domain = strurl[0] + "//" + strurl[2] + "/";
+
+                        }
+                        else if (Requesturl.Contains("vbv"))
+                        {
+                            domain = strurl[0] + "//" + strurl[2] + "/" + strurl[3] + "/";
+
+                        }
+                    }
+                    else
+                    {
+                        domain = objconfig.GetConfigSettingsValue("PublicImageChecklocal");
+                    }
+                                               @if (!DBNull.Value.Equals(item.Picture) && item.Picture != null)
+                                            {
+
+                                                string str = item.Picture;
+                                                ViewData["str"] = str;
+                                                ViewBag.strimage = str;
+                                                if (str.Contains(".") == true)
+                                                {
+                                                    string[] str1 = str.Split('.');
+                                                    ViewData["ExistedLogo"] = str1[0];
+                                                    ViewBag.ExistedLogo = str1[0];
+                                                    ViewData["ExistedExtn"] = str1[1];
+                                                    ViewBag.ExistedExtn = str1[1];
+                                                }
+
+                                                string strings = null;
+                                                strings = Path.Combine(Server.MapPath("~/Attachments/Providers"), str);
+                                                if (System.IO.File.Exists(strings))
+                                                {
+
+                                                    ViewBag.providerimage1 = domain + "Attachments/Providers/" + str;
+                                                   
+
+                                                }
+                                                else
+                                                {
+
+                                                    ViewBag.providerimage1 = domain + "images/Coach1.JPG";
+                                                   
+                                                }
+                                               }
+                                             else
+                    {
+                       
+                            ViewBag.providerimage1 = domain + "images/Coach1.JPG";
+                    }
+                                                <img width="42" height="40" alt="@item.ProviderFullName" src="@ViewBag.providerimage1" />
+                                            </div>
+                                            <div style="width: 160px; float: right;">
+                                                <div class="featured" style="width: 160px; float: left; padding: 0px; margin: 0px;">
+                                              @{
+                                            string estate1 = item.State_Name.ToString().Trim().Replace("/ ", "-");
+                                               estate1 = estate1.Replace("/", "-");
+                                               estate1 = estate1.Replace("'", "-");
+                                               estate1 = estate1.Replace(" ", "-");
+                                               string ecity1 = item.CityNm.ToString().Trim().Replace("/ ", "-");
+                                               ecity1 = ecity1.Replace("/", "-");
+                                               ecity1 = ecity1.Replace("'", "-");
+                                               ecity1 = ecity1.Replace(" ", "-");
+                                                                                            }
+                                                 @Html.RouteLink((string)item.ProviderFullName, "ProviderProfile", new { @randomnumber = item.Random_number, Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-"),state=estate1,city=ecity1,zip=item.ZIPValue }, new { @title = "see full profile of " + item.ProviderFullName + ", Mower Helper in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue })
+                                       
+                                                </div>
+                                                <div class="featured" style="width: 160px; float: left; padding-top: 5px;">
+                                                    @{
+                                                string add = item.Address;
+                                                string[] result = add.Split(new string[] { "<BR />" }, StringSplitOptions.None);
+                                                    }
+                                                    @Html.Raw(HttpUtility.HtmlDecode(result[1].ToString()))
+                                                </div>
+                                            </div>
+                                            <div class="clearme">
+                                                <img id="imgspace2" src="@ViewBag.speacer" width="1" height="1" /></div>
+                                        </div>
+                                        }
+                                        else
+                                        {
+                                            string imgind = null;
+                                            <div id="divline" class="divline" style="width: 208px; float: left; padding-top: 10px;
+                                                                                                                                                                                                                                                           background-repeat: repeat-x; background-position: bottom left; padding-bottom: 10px;">
+                                            <div style="width: 42px; height: 40px; float: left; border: 1px #006600 solid;">
+                                            
+                                                @if (item["Picture"] != null)
+                                                {
+                                                    string strings = null;
+
+                                                    strings = "~/Attachments/Providers" + "/";
+                                                    strings = strings + item["Picture"];
+
+                                                    if (System.IO.File.Exists(System.Web.HttpContext.Current.Server.MapPath(strings)))
+                                                    {
+                                                        if (strings.Contains("#") == true)
+                                                        {
+                                                            strings = strings.Replace("#", "$");
+                                                        }
+                                                        if (strings.Contains("&") == true)
+                                                        {
+                                                            strings = strings.Replace("&", "*");
+                                                        }
+                                                        strings = strings.Replace("../", "../../");
+                                                        strings = strings.Replace("~/", "");
+                                                        ViewBag.providerimage1 = (string)ViewBag.Imageurl + strings;
+
+                                                    }
+
+                                                 
+                                                    else
+                                                    {
+                                                        ViewBag.providerimage1 = (string)ViewBag.Imageurl + "images/Coach1.JPG";
+
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    ViewBag.providerimage1 = (string)ViewBag.Imageurl + "images/Coach1.JPG";
+
+                                                }
+                                                <img width="42" height="40" alt="@item["ProviderName"]" src="@ViewBag.providerimage1" />
+                                            </div>
+                                            <div style="width: 160px; float: right;">
+                                                <div class="featured" style="width: 160px; float: left; padding: 0px; margin: 0px;">
+                                                     @{
+                                        string elestate = null;
+                                        string elecity = null;
+                                        elestate = item["l_state"].ToString().Trim().Replace("/ ", "-");
+                                        elestate = elestate.ToString().Trim().Replace(" ", "-");
+                                        elestate = elestate.Replace("/", "-");
+                                        elecity = item["l_City"].ToString().Trim().Replace("/ ", "-");
+                                        elecity = elecity.ToString().Trim().Replace(" ", "-");
+                                        elecity = elecity.Replace("/", "-");
+                                                }
+                                                    @Html.RouteLink((string)item["ProviderName"], "ProviderProfile", new { @randomnumber = item["Random_number"], Therapistname = item["PublicURL"].ToString().Trim().Replace(" ", "-"),state=elestate,city=elecity,zip=item["l_zipcode"] }, new { @title = "see full profile of " + item["ProviderName"] + ", Mower Helper in " + item["l_City"] + ", " + item["l_state"] + " " + item["l_zipcode"] })
+                                                 
+                                       
+                                                </div>
+                                                <div class="featured" style="width: 160px; float: left; padding-top: 5px;">
+                                                    @item["Address"];
+                                                
+                                                </div>
+                                            </div>
+                                            <div class="clearme">
+                                                <img id="imgspace2" src="@ViewBag.speacer" width="1" height="1" /></div>
+                                        </div>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <span style="color: Red;">No Featured Electricians Found</span>
+                                }
+                       
+                     
+                            </div>
+            </div>
+            <div class="clearme">
+                <img id="imgspace1" src="@ViewBag.speacer"/></div>
+        </div>
+                    
+        <div id="footercon">
+            <div id="footerpublic">
+                     @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                            {
+                            <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                         
+                                <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.ShowArticles == "Y")
+                            {
+                                <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.Showforums == "Y")
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                      <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 270px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                    
+                            </ul>
+                            }
+                            <div class="copy">
+                                Copyright © 2018.Mower Helper , Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table style="display: none">
+            <tr>
+                <td id="tdSiteMeter" runat="server">
+                </td>
+            </tr>
+        </table>
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#txtfullname').val($('#hdnfullname').val());
+            $('#txtZIP').val($('#hdnzip').val());
+            $('#ddlDistance').val($('#hdndistance').val());
+            $('#ddlGender').val($('#hdngender').val());
+            $('#ddlfee').val($('#hdnfreesession').val());
+        });
+    </script>
+</body>

@@ -1,0 +1,1255 @@
+﻿@model MowerHelper.Models.BLL.Providers.Provider_ContactInfo
+@using MowerHelper.Models.Classes
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+     @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    <style type="text/css">
+        .Vtitle
+        {
+            width: 350px;
+        }
+
+        .Vdescription
+        {
+            width: 650px;
+        }
+
+        .dvLoading .ui-dialog-titlebar
+        {
+            display: none;
+        }
+    </style>
+    @*<style type="text/css">
+        .statement-nav
+        {
+            width: 673px;
+            border-bottom: 1px solid #cfdede;
+            float: left;
+            padding: 0 0 4px 0;
+        }
+
+            .statement-nav img.bookmarks
+            {
+                float: left;
+                margin: 2px 0 0 40px;
+            }
+
+            .statement-nav ul
+            {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                float: right;
+                width: 502px;
+            }
+
+                .statement-nav ul li
+                {
+                    list-style: none;
+                    padding-left: 3px;
+                    float: left;
+                }
+
+                    .statement-nav ul li a
+                    {
+                        font: bold 13px Arial;
+                        text-transform: uppercase;
+                        padding: 7px 28px 6px 28px;
+                        background: url(../images/bg-article-library-nav.gif) repeat-x 0 0;
+                        color: #ffffff!important;
+                        text-decoration: none!important;
+                    }
+
+                    .statement-nav ul li a, x:-moz-any-link
+                    {
+                        padding: 7px 28px 5px 28px;
+                    }
+
+                        .statement-nav ul li a:hover, .statement-nav ul li a.current
+                        {
+                            color: #000000!important;
+                            background: none repeat scroll 0 0 #cfdede;
+                        }
+
+        .statement-nav1
+        {
+            width: 100%;
+            border-bottom: 1px solid #cfdede;
+            float: left;
+            padding: 0 0 4px 0;
+        }
+
+            .statement-nav1 img.bookmarks
+            {
+                float: left;
+                margin: 2px 0 0 40px;
+            }
+
+            .statement-nav1 ul
+            {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                float: right;
+                width: 502px;
+            }
+
+                .statement-nav1 ul li
+                {
+                    list-style: none;
+                    padding-left: 3px;
+                    float: left;
+                }
+
+                    .statement-nav1 ul li a
+                    {
+                        font: bold 13px Arial;
+                        text-transform: uppercase;
+                        padding: 7px 28px 6px 28px;
+                        background: url(../images/bg-article-library-nav.gif) repeat-x 0 0;
+                        color: #ffffff!important;
+                        text-decoration: none!important;
+                    }
+
+                    .statement-nav1 ul li a, x:-moz-any-link
+                    {
+                        padding: 7px 28px 5px 28px;
+                    }
+
+                        .statement-nav1 ul li a:hover, .statement-nav1 ul li a.current
+                        {
+                            color: #000000!important;
+                            background: none repeat scroll 0 0 #cfdede;
+                        }
+
+        #content .profile_yellow_bg
+        {
+            background: #fff url(../Images/profile_yellow_bg.jpg) repeat-y right top;
+            margin: 0;
+            width: 996px;
+        }
+
+        #content .right_partbg
+        { /*background:#02437b url(../images/right_bg.png) repeat-x;*/
+            margin: 0;
+            padding: 20px 0 0 0;
+            float: left;
+            width: 271px;
+        }
+
+        .right_headingbg
+        {
+            width: 195px;
+            height: 31px;
+            background: url(../Images/right_headingbg.png) no-repeat;
+            font: italic 16px Georgia;
+            color: #fff;
+            padding: 8px 0 0 60px;
+        }
+
+        .right_text_part
+        {
+            padding: 0 10px 0 15px;
+            color: #b2d9ff;
+        }
+
+            .right_text_part p
+            {
+                color: #333;
+                line-height: 18px;
+            }
+
+        #content .center_right_profile .right_text_part p
+        {
+            color: #B2D9FF;
+            line-height: 18px;
+        }
+
+        #content .center_right_profile .right_partbg
+        {
+            background: #02437b url(../Images/right_bg.png) repeat-x;
+            margin: 0;
+            padding: 20px 0 0 0;
+            float: left;
+            width: 270px;
+        }
+
+        .profile_img
+        {
+            margin: 0;
+            padding: 0;
+        }
+
+            .profile_img img
+            {
+                border: 1px solid #000;
+                border-radius: 4px;
+                height: 130px;
+                padding: 1px;
+                width: 120px;
+                margin: 0 0 10px 52px;
+            }
+
+        .profile_img1
+        {
+            margin: 15px 0 0 0;
+            padding: 0;
+        }
+
+            .profile_img1 img
+            {
+                border: 1px solid #000;
+                border-radius: 4px;
+                height: 130px;
+                padding: 1px;
+                width: 120px;
+                margin: 0 15px 0 0;
+                float: left;
+            }
+
+        #content
+        {
+            width: 996px;
+            margin: -31px 0 0 0;
+            padding: 0;
+            position: relative;
+        }
+
+            #content .center_right
+            {
+                background: #fff url(../Images/center_right.png) repeat-y right top;
+                margin: 0 0 0 15px;
+                float: left;
+            }
+
+            #content .center_right_profile
+            {
+                background: #fff url(../Images/center_right_profile.jpg) repeat-y right top;
+                margin: 0;
+                width: 996px;
+            }
+
+            #content .profile_blue_bg
+            {
+                background: #fff url(../Images/profile_blue_bg.jpg) repeat-y right top;
+                margin: 0;
+                width: 996px;
+            }
+
+            #content .profile_gray_bg
+            {
+                background: #fff url(../Images/profile_gray_bg.jpg) repeat-y right top;
+                margin: 0;
+                width: 996px;
+            }
+
+            #content .profile_greenbg
+            {
+                background: #fff url(../Images/profile_greenbg.jpg) repeat-y right top;
+                margin: 0;
+                width: 996px;
+            }
+
+            #content .profile_lightblue_bg
+            {
+                background: #fff url(../Images/profile_lightblue_bg.jpg) repeat-y right top;
+                margin: 0;
+                width: 996px;
+            }
+
+            #content .profile_yellow_bg
+            {
+                background: #fff url(../Images/profile_yellow_bg.jpg) repeat-y right top;
+                margin: 0;
+                width: 996px;
+            }
+
+            #content .center_right_profile h4
+            {
+                color: #B2D9FF;
+                font: italic 14px Georgia,"Times New Roman",Times,serif;
+                margin: 0 0 5px;
+            }
+
+
+
+            #content .left_nev
+            {
+                float: left;
+                margin: 25px 0 0 0;
+                padding: 0;
+                width: 186px;
+            }
+
+        .left_nev ul
+        {
+            font: italic 17px Georgia, "Times New Roman", Times, serif;
+            text-align: right;
+            margin: 0;
+            padding: 0;
+        }
+
+        #navigation-block
+        {
+            position: relative;
+            text-align: right;
+        }
+
+        #hide
+        {
+            position: absolute;
+            top: 30px;
+            left: -190px;
+        }
+
+        ul#sliding-navigation li.sliding-element h3, ul#sliding-navigation li.sliding-element a
+        {
+            display: block;
+            width: 141px;
+            margin: 0;
+        }
+
+        ul#sliding-navigation li.sliding-element a
+        {
+            color: #333;
+            background: url(../Images/nav_arrow.png) no-repeat right 10px;
+            border-bottom: 1px solid #c7d0d5;
+            padding: 10px 30px 10px 0;
+        }
+
+            ul#sliding-navigation li.sliding-element a:hover
+            {
+                color: #046EC6;
+                background: url(../Images/nav_arrow1.png) no-repeat right 10px;
+            }
+
+            ul#sliding-navigation li.sliding-element a.on
+            {
+                color: #046EC6;
+                background: url(../Images/nav_arrow1.png) no-repeat right 10px;
+            }
+
+        #content .center_part
+        {
+            width: 500px;
+            float: left;
+            margin: 0 0 30px 0;
+            padding: 25px 10px 10px 14px;
+            background: #fff;
+            min-height: 397px;
+        }
+
+        #content .center_part1
+        {
+            width: 771px;
+            float: left;
+            margin: 0 0 30px 15px;
+            padding: 25px 10px 10px 14px;
+            background: #fff;
+            min-height: 397px;
+        }
+
+        .center_part p a
+        {
+            color: #333;
+            font: bold 12px Arial, Helvetica, sans-serif;
+        }
+
+            .center_part p a:hover
+            {
+                text-decoration: underline;
+                color: #046EC6;
+            }
+
+        .more_arrow
+        {
+            margin: 0;
+            padding: 0 0 0 26px;
+            background: url(../Images/more_arrow.png) no-repeat;
+            float: right;
+        }
+
+            .more_arrow a
+            {
+                color: #ff7000 !important;
+                font: italic 15px Georgia, "Times New Roman", Times, serif !important;
+            }
+
+                .more_arrow a:hover
+                {
+                    color: #333 !important;
+                }
+
+        #content .right_partbg
+        { 
+            margin: 0;
+            padding: 20px 0 0 0;
+            float: left;
+            width: 271px;
+        }
+
+        .right_headingbg
+        {
+            width: 195px;
+            height: 31px;
+            background: url(../Images/right_headingbg.png) no-repeat;
+            font: italic 16px Georgia;
+            color: #fff;
+            padding: 8px 0 0 60px;
+        }
+
+        .right_text_part
+        {
+            padding: 0 10px 0 15px;
+            color: #b2d9ff;
+        }
+
+            .right_text_part p
+            {
+                color: #333;
+                line-height: 18px;
+            }
+
+        #content .center_right_profile .right_text_part p
+        {
+            color: #B2D9FF;
+            line-height: 18px;
+        }
+
+        #content .center_right_profile .right_partbg
+        {
+            background: #02437b url(../Images/right_bg.png) repeat-x;
+            margin: 0;
+            padding: 20px 0 0 0;
+            float: left;
+            width: 270px;
+        }
+
+        .text-center
+        {
+            text-align: center;
+        }
+
+        .iner_bg
+        {
+            background: url(../Images/tr.png) repeat;
+            border-top: dashed 1px #3785c7;
+            margin: 15px 0 0 0;
+            padding: 10px;
+            opacity: 0.8;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .content_ul1
+        {
+            font: bold 12px Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+            .content_ul1 li
+            {
+                background: url(../Images/small_arrow2.png) no-repeat left 9px;
+                padding: 4px 15px;
+                border-bottom: 1px dotted #999;
+            }
+
+                .content_ul1 li a
+                {
+                    color: #333;
+                }
+
+                    .content_ul1 li a:hover
+                    {
+                        color: #1B81C8;
+                        text-decoration: underline;
+                    }
+
+        .follow_us p
+        {
+            color: #333;
+            margin: 0 0 10px 0;
+            text-align: center !important;
+        }
+
+        #content .center_right_profile .content_ul1
+        {
+            font: bold 12px Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+            #content .center_right_profile .content_ul1 li
+            {
+                background: url(../Images/small_arrow.png) no-repeat left 9px;
+                padding: 4px 15px;
+                border-bottom: 1px dotted #B2D9FF;
+            }
+
+                #content .center_right_profile .content_ul1 li a
+                {
+                    color: #fff;
+                }
+
+                    #content .center_right_profile .content_ul1 li a:hover
+                    {
+                        color: #B2D9FF;
+                        text-decoration: underline;
+                    }
+
+        .previes
+        {
+            background: url(../Images/Featured_bg2.jpg) repeat-x;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 0 10px 0;
+            padding: 5px 8px;
+            font: bold 13px Arial;
+            box-shadow: 3px 3px 4px #ccc;
+            opacity: 0.9;
+            color: #fff;
+            float: left;
+        }
+
+            .previes:hover
+            {
+                color: #fff;
+                text-decoration: underline;
+            }
+
+        .content_ul4
+        {
+            font: 12px Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #666;
+        }
+
+            .content_ul4 li
+            {
+                background: url(../Images/small_arrow2.png) no-repeat left 9px;
+                padding: 4px 15px;
+                border-bottom: 1px dotted #999;
+            }
+
+                .content_ul4 li a
+                {
+                    color: #333;
+                }
+
+                    .content_ul4 li a:hover
+                    {
+                        color: #1B81C8;
+                        text-decoration: underline;
+                    }
+
+        #content .center_right_profile .content_ul4
+        {
+            font: 12px Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: rgba(179, 218, 255, 0.47);
+        }
+
+            #content .center_right_profile .content_ul4 li
+            {
+                background: url(../Images/small_arrow.png) no-repeat left 9px;
+                padding: 4px 15px;
+                border-bottom: 1px dotted #ccc;
+            }
+
+                #content .center_right_profile .content_ul4 li a
+                {
+                    color: #fff;
+                    opacity: 0.6;
+                }
+
+                    #content .center_right_profile .content_ul4 li a:hover
+                    {
+                        color: #B2D9FF;
+                        text-decoration: underline;
+                    }
+
+        .content_ul2
+        {
+            font: 12px Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #666;
+        }
+
+            .content_ul2 li
+            {
+                background: url(../Images/small_arrow2.png) no-repeat left 9px;
+                padding: 4px 15px;
+                border-bottom: 1px dotted #999;
+                float: left;
+                width: 44px;
+                margin: 0 7px 0 0;
+            }
+
+                .content_ul2 li a
+                {
+                    color: #fff;
+                }
+
+                    .content_ul2 li a:hover
+                    {
+                        color: #B2D9FF;
+                        text-decoration: underline;
+                    }
+
+        #content .center_right_profile .content_ul2
+        {
+            font: 12px Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: rgba(179, 218, 255, 0.47);
+        }
+
+            #content .center_right_profile .content_ul2 li
+            {
+                padding: 4px 15px;
+                border-bottom: 1px dotted hsl(0, 0%, 80%);
+                float: left;
+                width: 44px;
+                margin: 0 7px 0 0;
+            }
+
+                #content .center_right_profile .content_ul2 li a
+                {
+                    color: #fff;
+                    opacity: 0.6;
+                }
+
+                    #content .center_right_profile .content_ul2 li a:hover
+                    {
+                        color: #B2D9FF;
+                        text-decoration: underline;
+                    }
+    </style>*@
+</head>
+<body>
+    @{Html.RenderAction("Topsection", "Tools");}
+    <div id="main-content">
+        <input type="hidden" id="hdnproid" name="hdnproid" value="@ViewBag.proid" />
+        @*<table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr class="background_color" >
+                <td align="left" valign="top" width="100%">*@
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+             @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+             {
+            <tr id="trtabs">
+                <td width="100%" class="navigation">
+                    <div class="admin-tab">
+                        <a class="admin-link" href="ViewIdentifyingInfo" id="aprovider">
+                            @if (Session["Roleid"].ToString()=="1")
+                            {
+                                <span>@Session["Elebusenessnm"].ToString()</span>
+                            }
+                            else{
+                                <span>Mower Helper Info</span>
+                            }
+                        </a>
+                    </div>
+                    @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                    {
+                    <div class="admin-tab">
+                        <a class="inadmin-link" href="ViewElectricianAdvancedSearch" id="acontent"><span>Content Settings</span>
+                        </a>
+                    </div>
+                    @* <div class="admin-tab">
+                                    <a class="inadmin-link" id="avideo" href="VideoAudioFiles"><span>Video/Audio Files</span>
+                                    </a>
+                                </div>*@
+                    <div class="admin-tab">
+                        <a class="inadmin-link" id="adoccument" href="ViewElectricianDocumentInfo"><span>Certificates & Youtube Video Files</span>
+                        </a>
+                    </div>
+                    }
+                    @* <div class="admin-tab">
+                                    <a class="inadmin-link" id="aproviderschedule" href="ProviderSchedule" ><span>Schedule Settings</span>
+                                    </a>
+                                </div>*@
+                    @*<div class="admin-tab">
+                                    <a class="inadmin-link" id="astatistic" href="Sitestatistics" ><span>Site Statistics</span>
+                                    </a>
+                                </div>*@
+                </td>
+            </tr>
+             }
+            <tr class="background_color">
+                <td id="tdtabs" width="100%">
+                    <div class="content-box">
+                        <div class="content-box-header">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td width="80%" align="left">
+                                        <h3 style="cursor: s-resize;">Mower Helper information</h3>
+                                    </td>
+                                    @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                                    {
+                                    <td width="10%" style="text-align: right;">
+                                        <input type="submit" value="Profile Preview" title="Profile Preview" class="button" id="btnimgPreview" name="btnimgPreview" />&nbsp;
+                                          &nbsp;
+                                    </td>
+                                    }
+                                    else{
+                                         <td width="10%" style="text-align: right;">
+                                             </td>
+                                    }
+                                    <td width="10%" style="text-align: right;">
+                                        @Html.ActionLink("Edit", "EditIdentifyingInfo", null, new { @class = "button", @style = "width:30px;height:14px;" })
+                                        &nbsp; &nbsp;&nbsp;
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            
+
+                            <div class="clear"></div>
+                        </div>
+                        <div class="content-box-content">
+                            <table id="Table2" align="Center" border="0px"
+                                cellspacing="1" width="100%" cellpadding="0" class="border_style" border="0">
+                                <tr>
+                                    @if (ViewBag.imageavail == "Y")
+                                    {
+                                        <td valign="top" colspan="2" style="text-align: center; padding-top: 30px;">
+                                            <img id="providerimage" height="170" width="132" src="@ViewBag.providerimage"   />
+
+                                        </td>
+                                    }
+                                    <td width="45%" valign="top">
+                                        <table id="Table3" cellspacing="1" width="100%" cellpadding="6"
+                                            class="border_style" border="0">
+                                            <tr class="tr_bgcolor">
+                                                <td colspan="2"><strong>&nbsp;Personal information</strong></td>
+                                            </tr>
+
+                                            <tr class="white_color">
+                                                <td align="right" width="45%">
+                                                    <span>
+                                                        <b>Mower helper business name :&nbsp;</b></span>
+                                                </td>
+                                                <td width="55%" align="Left">
+                                                    <span>@Model.PracticeName</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color">
+                                                <td align="right">
+                                                    <span>
+                                                        <b>Name :&nbsp;</b></span>
+                                                </td>
+                                                <td  align="Left">
+                                                    <span>@Model.Fullname</span>
+                                                </td>
+                                            </tr>
+                                            @if (clsWebConfigsettings.GetConfigSettingsValue("Show_license").ToUpper() == "YES")
+                                            {
+                                            <tr class="nav_blue_color" id="HideLicenseNo">
+                                                <td align="right" >
+                                                    <span id="Label28">
+                                                        <b>License number :&nbsp;</b></span>
+                                                </td>
+                                                <td  align="Left">
+                                                    <span id="lblLicenseNo">@Model.LicenseNo </span>&nbsp;&nbsp;&nbsp;
+                                                                           @* @if (ViewBag.IsLicenseVerified == "Y")*@
+                                                                           @if(Model.IsLicenseVerified == "Y")
+                                                                            {
+                                                                                <span id="lblislicense" style="color: Green; font-weight: bold;">
+                                                                                  @*  @ViewBag.islicense *@
+                                                                                    License verified
+                                                                                </span>
+                                                                            }
+                                                                           else if (Model.IsLicenseVerified == "Y")
+                                                                            {
+                                                                                <span id="Span1" style="color: Red; font-weight: bold;">@*@ViewBag.islicense*@
+                                                                                 License verified
+                                                                                </span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <span id="Span2" style="color: Red; font-weight: bold;">@*@ViewBag.islicense*@
+                                                                                    License not verified
+                                                                                </span>
+                                                                            }
+                                                    @if (Model.IsLicenseVerified == "N")
+                                                    {
+                                                        <img src="~/Images/help2.png" id="imglicensemsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip(' License not verified' ,280);" />
+                                                    }
+                                                </td>
+                                            </tr>
+                                            }
+                                            <tr class="white_color" id="hideLicense">
+                                                <td align="right" >
+                                                    <span id="Label30">
+                                                        <b>License expiry date :&nbsp;</b></span>
+                                                </td>
+                                                <td  align="Left">
+                                                    <span id="lblexpirydate">@Model.licenseexpirydate</span>
+                                                </td>
+                                            </tr>
+                                             <tr class="white_color" id="TennisCLicenseImg">
+                                                <td align="right" >
+                                                    <span >
+                                                        <b>Mower helper license :&nbsp;</b></span>
+                                                </td>
+                                                <td  align="Left">
+
+                                                   @* <span id="lblElectrician">@ViewBag.providerEleimage</span>*@
+                                                    @if (!string.IsNullOrEmpty(Model.ElectricianImage))
+                                                    {
+                                                    @Html.ActionLink((string)Model.ElectricianImage, "electricianslicDownload", new { @certname = Model.ElctricianCustmiseImage, @certname1 = Model.ElectricianImage }, new { @style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                    } 
+                                                      @if (ViewBag.Electmsg != null)
+                                                      {
+                                                        <img src="~/Images/help2.png" id="imgElelicensemsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.Electmsg' ,320);" />
+                                                      }                                                 
+                                                </td>
+                                            </tr>
+                                             <tr class="white_color">
+                                                <td align="right" >
+                                                    <span >
+                                                        <b>Driver license :&nbsp;</b></span>
+                                                </td>
+                                                <td " align="Left">
+                                                   @* <span >@ViewBag.providerDriverimage </span>*@
+                                                      @if (!string.IsNullOrEmpty(ViewBag.driverImage))
+                                                      {
+                                                    @Html.ActionLink((string)ViewBag.driverImage, "electricianslicDownload", new { @certname = ViewBag.DriverCustomiseImage, @certname1 = ViewBag.driverImage }, new { @style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                      }
+                                                      @if (ViewBag.Drivermsg != null)
+                                                      {
+                                                        <img src="~/Images/help2.png" id="imgDriverlicensemsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.Drivermsg' ,320);" />
+                                                      }   
+                                                                                                    </td>
+                                            </tr>
+                                             @if (Model.Refferal_Indicator == "Y")
+                                             {
+                                            <tr class="white_color">
+                                                <td align="right" >
+                                                    <span >
+                                                        <b>Referral code :&nbsp;</b></span>
+                                                </td>
+                                                <td  align="Left">
+                                                   <span >@Model.Referralcode </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                      @*@Html.ActionLink("Email this to your friend", "ReferToFriend", new { @code = Model.Referralcode }, new { @class = "button", @style = "width:135x;height:14px;", id = "btnrefer", name = "btnrefer" })*@
+                                                    <a href="#" id="btnrefer" name="btnrefer" style="width:150px;height:14px;" class = "button" onclick="return Displaydialog('divRefer','@Url.Action("ReferToFriend",new { @code = Model.Referralcode })','auto',700,'dvLoading',null,null);">Email this to your friend</a>
+                                                </td>
+                                            </tr>
+                                             }
+                                            @* <tr class="nav_blue_color">
+                                                                        <td align="right" Width="40%">
+                                                                            <span ID="Label31" >
+										<b>Certification(s) :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td Width="60%" align="Left">
+                                                                            <span ID="lblCertification" >@ViewBag.certification</span>
+                                                                        </td>
+                                                                    </tr>*@
+                                            <tr class="nav_blue_color" style="display:none">
+                                                <td align="right">
+                                                    <span id="lblWeb"><b>Your website link :&nbsp;</b></span>
+                                                </td>
+                                                <td >
+                                                    <span id="lblWebsite">@Model.Website</span>
+                                                </td>
+                                            </tr>
+                                            @* <tr class="white_color">
+                                                                        <td align="right">
+                                                                            <span ID="lblfacebook" ><b>Facebook url :&nbsp;</b></span>
+                                                                        </td>
+                                                                        <td Width="60%">
+                                                                            <span ID="lblfacebookurl" >@ViewBag.facebookurl</span>
+                                                                        </td>
+                                                                    </tr>*@
+                                            @*<tr class="white_color" style="display:none">
+                                                <td width="30%" align="right">
+
+                                                    <span id="lblfacebook"><b>Facebook url :&nbsp;</b></span>
+                                                </td>
+                                                <td width="60%" align="left">
+                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                        <tr class="white_color">
+                                                            <td align="left" width="10%">
+                                                                <span id="lblfacebookurl">@ViewBag.facebookurl</span>&nbsp;
+                                                            </td>
+                                                            <td align="left" width="90%">
+
+                                                                <a href="#" id="afbimg" title="Click here to view help image">
+                                                                    <img src="~/Images/help2.png" id="Img2" /></a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr class="nav_blue_color" style="display:none">
+                                                <td width="30%" align="right">
+                                                    <strong>
+                                                        <span>Facebook comments :&nbsp;</span></strong>
+                                                </td>
+                                                <td width="60%" align="left">
+                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                        <tr class="nav_blue_color">
+                                                            <td align="left" width="10%">
+                                                                <span id="lblfirstfeesession">@ViewBag.fbcomments </span>
+                                                            </td>
+                                                            <td align="left" width="90%">
+                                                                @if (ViewBag.fbcommentsmsg != null)
+                                                                {
+                                                                    <img src="~/Images/help2.png" id="imgfbcommentsmsg"  onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.fbcommentsmsg' ,320);" />
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>*@
+                                            @*<tr class="nav_blue_color">
+                                                    <td width="30%" align="right">
+                                                        <strong>
+                                                            <span >Facebook comments :&nbsp;</span></strong>
+                                                    </td>
+                                                    <td width="60%" align="left">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr class="nav_blue_color">
+                                                                <td align="left" width="10%">
+                                                                    <span id="lblff">@ViewBag.fbcomments </span>
+                                                                </td>
+                                                                <td align="left" width="90%">
+                                                                  
+                                                                        <img src="~/Images/help2.png" id="Img2" />
+                                                                      <div id="divCvv" style="display: none">
+                                            <table id="Table7" width="100%">
+                                                <tr>
+                                                    <td>
+                                                        <img src="~/Images/sc7.png" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                                                                                
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>*@
+                                            <tr class="white_color" style="display:none">
+                                                <td align="right">
+                                                    <span id="lbltwitter"><b>Twitter url :&nbsp;</b></span>
+                                                </td>
+                                                <td width="60%">
+                                                    <span id="lbltwitterurl">@Model.twitterurl</span>
+                                                </td>
+                                            </tr>
+
+
+                                        </table>
+                                    </td>
+                                    <td valign="Top">
+                                        <table id="Table4" cellspacing="1" width="100%" cellpadding="6"
+                                            class="border_style">
+                                            <tr class="tr_bgcolor">
+                                                <td colspan="2"><strong>&nbsp;Contact information</strong></td>
+                                            </tr>
+                                            <tr class="white_color">
+                                                <td align="right" width="30%">
+                                                    <span id="Label18"><b>Work phone :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%" align="Left">
+                                                    @if(!string.IsNullOrEmpty(Model.WorkPhone)){
+                                                  if(Model.WorkPhone!="--"){
+                                                    @Model.WorkPhone
+                                                  }
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr class="nav_blue_color">
+                                                <td align="right" width="30%">
+                                                    @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                                                    {
+                                                    <img src="~/Images/p.png" id="imgcell"
+                                                        onmouseover="ddrivetip('Your Cell phone will not be shown in the public profile. It will be used to send messages (either you created or system created) to your clients.',300)" onmouseout="hideddrivetip()" style="position: absolute" />
+                                                    }
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="Label17"><b>Cell phone :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%" align="Left">
+                                                 
+                                                      @Model.CellPhone.Substring(0, 3)-@Model.CellPhone.Substring(3, 3)-@Model.CellPhone.Substring(6, 4)
+                                                                                                   
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color">
+                                                <td align="right" width="30%">
+                                                    <span id="Label24"><b>Fax :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%" align="Left">
+                                                    <span id="lblContFax">@Model.Fax</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="nav_blue_color">
+                                                <td align="right">
+                                                    @if (clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper() == "YES")
+                                                    {
+                                                    <img src="~/Images/p.png" id="ImageButton1"
+                                                        onmouseover="ddrivetip(' Your email address will not be shown in the public profile. It is for us to communicate with you and send you appointment request alerts, invoice/receipts.',300)" onmouseout="hideddrivetip()" style="position: absolute" />
+                                                    }
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                            <span id="Label26"><b>Email :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%">
+                                                    <table cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr class="nav_blue_color">
+                                                            <td width="70%">
+                                                                <span id="lblContEmail">@Model.Email</span>
+                                                            </td>
+                                                            <td width="30%" align="right"></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color">
+                                                <td align="right">
+                                                    <span id="Label6"><b>Address 1 :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%">
+                                                    <span id="lblContAddress1">@Model.Address1</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="nav_blue_color">
+                                                <td align="right">
+                                                    <span id="Label8"><b>Address 2 :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%">
+                                                    <span id="lblContAddress2">@Model.Address2</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color">
+                                                <td align="right">
+                                                    <span id="Label10"><b>Zip code :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%">
+                                                    <span id="lblContZip">@Model.Zip</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="nav_blue_color">
+                                                <td align="right">
+                                                    <span id="Label12"><b>State :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%">
+                                                    <span id="lblContState">@Model.StateName</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color">
+                                                <td align="right">
+                                                    <span id="Label14"><b>City :&nbsp;</b></span>
+                                                </td>
+                                                <td width="70%">
+                                                    <span id="lblContCity">@Model.CityName</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            @*</td>
+                                            </tr>
+                                        </table>*@
+                        </div>
+                    </div>
+                  @*  <table id="TdlDownEditCancelBtn" width="98%">
+                        <tr class="background_color">
+                            <td align="Right" class="background_color">
+
+                               
+                            </td>
+                        </tr>
+                    </table>*@
+                </td>
+            </tr>
+        </table>
+        @*</td>
+            </tr>
+        </table>*@
+    </div>
+
+    <div id="viewfbimg" title="Facebook url help"></div>
+    <div id="imgPreview" title="Profile Preview"></div>
+     <div id="divRefer" title="Email to friend">
+        </div>
+    <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+        <img src="../Images/ajax-loader2.gif" alt="Processing" />
+    </div>
+    <table>
+        <tr>
+            <td style="padding-top: 100px;"></td>
+        </tr>
+    </table>
+    @{Html.RenderAction("Bottomsections", "Tools");}
+    @*  @Html.Partial("Bottomsections", "Tools")*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").addClass("active");
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").removeClass();
+            $(".referclose").live("click", function (e) {
+                e.preventDefault();
+                $('#divRefer').dialog('close');
+            });
+        });
+       
+        if ('@clsWebConfigsettings.GetConfigSettingsValue("Show_license").ToUpper()' == "YES") {
+            $("#hideLicense").show();  
+            $("#HideLicenseNo").show();
+            $("#TennisCLicenseImg").show();
+        }
+        else {
+            $("#hideLicense").hide();
+            $("#HideLicenseNo").hide();
+            $("#TennisCLicenseImg").hide();
+        }
+    </script>
+    <script type="text/javascript">
+        function fnValidateData() {
+            if (document.getElementById('txtEmailID').value == '') {
+                InlineAlert('lblErremail', 'tdemailmain', 'Please enter email');
+                document.getElementById('txtEmailID').focus();
+                return false;
+            }
+            if (document.getElementById('txtEmailID').value != '') {
+                var stremail = trim(document.getElementById('txtEmailID').value);
+                document.getElementById('txtEmailID').value = stremail;
+                if (ValidateEmail(document.getElementById('txtEmailID')) == 0) {
+                    //Glb_ShowAlert("Please enter valid email");
+                    InlineAlert('lblErremail', 'tdemailmain', 'Please enter valid email');
+                    document.getElementById('txtEmailID').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErremail', 'tdemailmain', '#FFFFFF');
+                }
+            }
+            $('#divRefer').dialog('close');
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        }
+        function updateSuccessReferToFriend(data) {
+            if (data.Success == true) {
+                //we update the table's info
+               window.location.href = "../Directory/ViewIdentifyingInfo";
+               // location.reload();
+              //  $('#dvLoading').dialog('destroy');
+               // $('#divRefer').dialog('close');
+            }
+            //else if (data.ErrorMessage == 'expire') {
+            //    window.location.href = '../Home/SessionExpire';
+            //}
+            else {
+                alert("Due to some technical problems your request will not be processed now");
+                $('#dvLoading').dialog('destroy');
+                $('#divRefer').dialog('close');
+             //   location.reload();
+            }
+        }
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+            //$('#viewfbimg').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    resizable: false,
+            //    modal: true,
+            //    position: ['middle', 40]
+            //});
+            $.ajaxSetup({ cache: false });
+            $("#afbimg").click(function () {
+                //$.ajaxSetup({ cache: false });
+                //var dialogDiv = $('#viewfbimg');
+                var viewUrl = 'Showfbhelp';
+                Displaydialog('viewfbimg', viewUrl, 'auto', 1000, 'dvLoading', null, null);
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            });
+            //$('#divRefer').dialog({
+            //    autoOpen: false,
+            //    width: 700,
+            //    resizable: false,
+            //    modal: true,
+            //    position: ['middle', 40]
+            //});
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            //$('#imgPreview').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    //                      height: 400,
+            //    resizable: false,
+            //    modal: true
+            //});
+            //$("#btnrefer").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#divRefer');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('destroy');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            $("#btnimgPreview").click(function () {
+                //linkObj = $(this);
+                //var dialogDiv = $('#imgPreview');
+                //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                // var viewUrl = linkObj.attr('href');
+                //alert("1");
+                var viewUrl = '../Directory/ProfilePreview/?randomnumber=' + '@Model.Random_number';
+                Displaydialog('imgPreview', viewUrl, 'auto', 1000, 'dvLoading', null, null);
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    $('#dvLoading').dialog('destroy');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+            });
+            $(document).ready(function () {
+                $(".closeprivew").live("click", function (e) {
+                    var dialogDiv = $('#imgPreview');
+                    dialogDiv.dialog('close');
+                });
+            });
+            $(document).ready(function () {
+               
+                @* var showele = '@ViewBag.ShowElectricians';*@
+                var showele = '@clsWebConfigsettings.GetConfigSettingsValue("ShowElectricianInPublic").ToUpper()' == "YES" ? "Y" : "N";
+                var tdschedule1 = document.getElementById('tdtabs');
+                if (showele == 'Y') {
+                    tdschedule1.className = "tab-background";
+                }
+                else {
+                    tdschedule1.className = "";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

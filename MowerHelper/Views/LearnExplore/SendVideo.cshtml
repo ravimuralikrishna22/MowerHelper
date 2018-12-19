@@ -1,0 +1,251 @@
+﻿@model Publicfaq
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+        String.prototype.trim = function () {
+            return this.replace(/^\s+|\s+$/g, "");
+        }
+
+        String.prototype.lTrim = function () {
+            return this.replace(/^\s+/g, "");
+        }
+
+        String.prototype.rTrim = function () {
+            return this.replace(/\s+$/g, "");
+        }
+
+        String.prototype.trimAll = function () {
+            return this.replace(/\s+/g, "");
+        }
+    </script>
+    <script type="text/javascript">
+        //        $(document).ready(function () {
+        //            alert("1");
+
+        function sendfaq() {
+            if (document.getElementById('txtYourEmail').value == '') {
+                alert("Enter  email id");
+                document.getElementById('txtYourEmail').focus();
+                return false;
+            }
+            if (document.getElementById('txtYourEmail').value != '') {
+                if (ValidateEmail(document.getElementById('txtYourEmail')) == 0) {
+                    alert("Enter valid email");
+                    document.getElementById('txtYourEmail').focus();
+                    return false;
+                }
+            }
+
+            if (document.getElementById('txtFriendsEmail').value == '') {
+                alert("Enter friends email");
+                document.getElementById('txtFriendsEmail').focus();
+                return false;
+            }
+            if (document.getElementById('txtFriendsEmail').value != '') {
+                if (ValidateEmail(document.getElementById('txtFriendsEmail')) == 0) {
+                    alert("Enter valid email");
+                    document.getElementById('txtFriendsEmail').focus();
+                    return false;
+                }
+            }
+            var str_Msg;
+            str_Msg = trim(document.getElementById('txtMsg').value);
+            if (str_Msg.length > 1000) {
+                alert("Please enter at most 1000 characters in the message field");
+                document.getElementById('txtMsg').focus();
+                return false;
+            }
+            if (document.getElementById('txtimgKey2').value == '') {
+                alert("Enter verification code");
+                document.getElementById('txtimgKey2').focus();
+                return false;
+            }
+            //var obj = document.getElementById('hdnkey5').value;
+            //var obj1 = obj.trimAll();
+            ////                alert(obj1);
+            ////                alert(obj);
+            //if (document.getElementById('txtimgKey2').value != obj1) {
+            //    alert("You need to enter valid Security Code to register...");
+            //    document.getElementById('txtimgKey2').focus();
+            //    return false;
+            //}
+
+            document.body.style.cursor = "wait";
+        }
+
+        //            });
+        //        });
+    </script>
+    <script type="text/javascript">
+        function change() {
+            //return redirect("../Search/AnswerFAQ");
+            $(this).closest(".dialog").dialog("close");
+        }
+
+    </script>
+    <script type="text/javascript">
+        function ValidateEmail(ctrl) {
+            if (document.layers || document.getElementById || document.all) {
+                var str = ctrl.value
+                var filter = /^([\w-]+(?:\.[\w-]+)*)@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
+                if (filter.test(str))
+                    testresults = true
+                else
+                    testresults = false
+
+                if (testresults == true) {
+                    var sindex = str.indexOf("@@");
+                    var strlength = str.length;
+                    var mailstr = str.substring(sindex, strlength);
+                    var eindex = mailstr.indexOf(".");
+                    if (eindex < 4)
+                        testresults = false
+                    else
+                        testresults = true
+                }
+
+                return (testresults)
+            }
+            else
+                return true;
+        }
+    </script>
+</head>
+<body>
+
+          @using (Ajax.BeginForm("SendVideo", "LearnExplore", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess"
+
+        }, new { @id = "updateCarForm" }))
+          {
+           @Html.AntiForgeryToken()
+    <div>               
+<div class="content-box">
+<div class="content-box-content">
+
+     <input id="hdnvid" name="hdnvid" value="@ViewBag.videoid" type="hidden" />
+     <input id="hdntitle" name="hdntitle" value="@ViewBag.Title" type="hidden" />
+                        <table width="100%" class="border_style" cellpadding="2" cellspacing="1" align="center" id="trEmailContent" runat="server" >
+                            <tr class="nav_blue_color" Height="24">
+                                <td align="right" width="40%" style="font-size:13px;">
+                                    <strong>
+                                     <label class="lbltext" id="lblYourName" style="font-weight:bold">Your Name :</label>
+                                        &nbsp;</strong></td>
+                                <td align="left" width="60%" >
+                                   
+                                    <input type="text" id="txtYourName" name="txtYourName"  class="textfield" maxlength="100" style="margin-left:4px; width:100; margin-bottom:4px; margin-top:4px;"
+                                            autocomplete="off" />
+                                </td>
+                            </tr>
+                            <tr class="white_color" Height="24">
+                                <td width="40%" align="right" style="font-size:13px;">
+                                    <font color="red">*</font><strong>
+                                        <label class="lbltext" id="lblYourEmail" style="font-weight:bold">Your Email :</label>
+                                        &nbsp;</strong> </td>
+                                <td width="60%" align="left" >
+                             
+                                    <input type="text" id="txtYourEmail" name="txtYourEmail"  class="textfield" maxlength="100" style="width: 220; margin-left:4px; margin-bottom:4px; margin-top:4px;"
+                                            autocomplete="off" />
+                                   &nbsp;
+                                </td>
+                            </tr>
+                            <tr class="nav_blue_color" Height="24">
+                                <td width="40%" align="right" style="font-size:13px;">
+                                    <strong>
+                                          <label class="lbltext" id="lblFriendsName" style="font-weight:bold">Friend's Name :</label>
+                                        &nbsp;</strong> </td>
+                                <td width="60%" align="left" >
+                               
+                                     <input type="text" id="txtFriendsName" name="txtFriendsName"  class="textfield" maxlength="100" style="width: 220; margin-left:4px; margin-bottom:4px; margin-top:4px;"
+                                            autocomplete="off" />
+                                   &nbsp;
+                                </td>
+                            </tr>
+                            <tr class="white_color" Height="24">
+                                <td width="40%" align="right" style="font-size:13px;">
+                                    <font color="red">*</font><strong>
+                                         <label class="lbltext" id="lblFriendsEmail" style="font-weight:bold">Friend's Email :</label>
+                                        &nbsp;</strong> </td>
+                                <td width="60%" align="left" >
+                           
+                                   <input type="text" id="txtFriendsEmail" name="txtFriendsEmail"  class="textfield" maxlength="100" style="width: 220; margin-left:4px; margin-bottom:4px; margin-top:4px;"
+                                            autocomplete="off" />
+                                    &nbsp;
+                                </td>
+                            </tr>
+                           
+                            <tr class="nav_blue_color"  Height="24">
+                                <td width="40%" align="right" style="font-size:13px;">
+                                    <strong>
+                                    <label class="lbltext" id="lblMsg" style="font-weight:bold">Message :</label>
+                                    &nbsp;</strong> </td>
+                                <td width="60%" align="left" >
+                                     <textarea id="txtMsg" name="txtMsg" class="text" rows="2" cols="2" maxlength="1000" style="width:500px; height: 120px; margin-left:4px; margin-bottom:4px; margin-top:4px;"></textarea>
+                                    <br />(Maximum length 1000 characters)
+                                   &nbsp;
+                                </td>
+                            </tr>
+                         <tr class="white_color" Height="24">
+                                <td width="40%" align="right" style="font-size:13px;">
+                                    <font color="red">*</font><strong>
+                                         <label class="lbltext" id="lblverificationcode" style="font-weight:bold">Type verification code :</label>
+                                        &nbsp;</strong> </td>
+                                <td width="60%" align="left" >
+                           
+                                  <input type="text" id="txtimgKey2" name="txtimgKey2"  class="textfield" maxlength="6" style=" font-family:arial; Font-Size:9pt; Width:150px; margin-left:4px"/>
+                                    <img style="padding-left:20px;width: 80px;" src="@Url.Action("ShowCaptchaImage","Home")" />
+                                </td>
+                            </tr>
+                              
+                        </table>
+               
+<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+    <tr height="25px">
+       
+            <td align="right" style="padding-right:10px; padding-top:5px; padding-bottom:5px;">
+            <input id="imgbtnSubmit" value="Submit" type="submit" onclick="return sendfaq();"  style="width: 60px;" class="button"/>
+            &nbsp;
+              <input type="button" id ="btnclose"  value="Cancel" name="btnclose" class="sendfaqclose button"  style="width: 60px;"/>
+            </td>
+    </tr>
+</table>
+</div></div>
+</div>
+ 
+          }
+
+</body>
+<script type="text/javascript">
+    function updateSuccess(data) {
+
+        if (data != '' & data.Success == true) {
+            var alertmsg = data.Object.msg;
+            var id = data.Object.Question_id;
+            alert(alertmsg);
+            window.location.href = '../../LearnExplore/Video?videoid=' + id;
+        }
+        else if (data.ErrorMessage == 'expire') {
+            window.location.href = '../Home/SessionExpire';
+        }
+        else {
+            if (data != '_Logon_') {
+                alert(data.ErrorMessage);
+            }
+            document.getElementById('txtimgKey2').focus();
+
+        }
+    }
+
+</script>
+</html>

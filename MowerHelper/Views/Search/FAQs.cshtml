@@ -1,0 +1,254 @@
+﻿@model Publicfaq
+
+@{
+    ViewBag.Title = "FAQs";
+    Layout = "~/Views/Shared/_ArticlesMaster.cshtml";
+}
+   @*<title>Electrician-Help -Find an Electrician</title>*@
+ @Scripts.Render("~/Scripts/Thscriptscript")
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    var recordId = $('#hdnsearch').val();
+                    $('#txtSearch').val(recordId);
+
+                });
+                $(document).ready(function () {
+                    var recordId = $('#hdncategory').val();
+                   // alert(recordId);
+                    if (recordId == '') {
+                        $("#ahall").addClass("selected");
+                    }
+                    else {
+                        var catid = "#cat" + recordId;
+                       // alert(catid);
+                        $(catid).addClass("selected");
+                    }
+                    //$('#Category').val(recordId);
+
+                });
+               // $(document).ready(function () {
+                   // var recordId = $('#hdnrbomost').val();
+                    //$('#rbomost').select.valueOf(recordId);
+
+               // });
+     </script>
+<input id="hdnsearch" type="hidden" value="@ViewBag.search"/>
+<input id="hdncategory" type="hidden" value="@ViewBag.category"/>
+<input id="hdnrbomost" type="hidden" value="@ViewBag.rbomost"/>
+<style type="text/css">
+    .Publicshadetabs  					{ margin:0 0 20px 0; padding:0; display:inline-block;}
+.Publicshadetabs li					{ margin:10px 2px; float:left; }
+.Publicshadetabs li a:visited			{ color: #2d2b2b; }
+.Publicshadetabs li a:hover			{ text-decoration: underline; color: #036BC0; }
+.Publicshadetabs li a.selected		{ position: relative; top:0px; background:#6CA521 url(../Images/Featured_bg2.jpg) repeat-x; border:1px solid #6CA521; border-radius:4px;
+    							  box-shadow: 3px 3px 4px #ccc; color: #fff; text-shadow: 0 2px 0 #82C041; }
+.Publicshadetabs li a.selected:hover	{ text-decoration: none; }
+.Publicshadetabs li a					{ background:#efefef; border-radius:4px; color:#333;cursor:pointer; margin:0; padding:5px 8px; text-decoration: none;  }
+</style>
+@using (Html.BeginForm("FAQs","Search"))
+{
+     @Html.AntiForgeryToken()
+          <div class="video-library">
+         
+        <div class="article-search">
+            <h4>
+                Frequently Asked Questions</h4>
+                </div>
+                 </div>
+                  <div class="article-library" id="divbottom" runat="server" >
+                  <div class="affairs">
+                   <table border="0" width="100%" align="center" style="vertical-align: top;" cellspacing="1"cellpadding="2">
+
+                       <tr>
+                           <td align="center">
+                           <label id="lblsearch" style="font-family:Arial; font-size:9pt;"><b>Topic :</b></label> 
+                           </td>
+                           <td align="left">
+                           <input name="txtSearch" class="textfield" id="txtSearch" style="width: 300px;" type="text">
+                           </td>
+                           <td align="left">
+                                  <input type="submit" id="ibtnSearch" value="Search" class="button" />
+                            
+                           </td>
+                           <td style="padding-left: 20px; font-family: Arial; font-size: 11pt;color:#044a7d;font-weight:bold;">
+                                     @Html.ActionLink("Submit A Question", "SubmitFAQ", "Search",null, new { @style="color:#044a7d;text-decoration:none;",@class="button"})
+                           </td>
+                       </tr>
+                     @*  <tr>
+                           <td colspan="3" height="10px">
+                           </td>
+                       </tr>*@
+                    
+                       @*<tr>
+                           
+                           <td align="right">
+                            <label id="Label1" style="font-family:Arial; font-size:9pt;"><b>Categories :</b></label> 
+                           </td>
+                           <td align="left" colspan="2" style="font-family: Arial;">
+                               
+                               @Html.DropDownListFor(x => Model.Category, Model.CategoryList, "--Select Category--", new { onchange = "this.form.submit()", style = "width: 380px;" })
+                              </td>
+                       </tr>*@
+                          </table><br />
+                   <div style="width:300px; float:left;">
+                       <h2>Categories</h2>
+                               <ul class="Publicshadetabs" >
+                                     @foreach (var item in ViewBag.categlist)
+                                     {
+                                         string catid = "cat" + item.Category_Id;
+                                         <li><a id="@catid" href="@Url.Action("Faqs", "Search", new { Category=item.Category_Id})">@item.Category_Name</a></li>
+                                     }
+                                  <li><a  id="ahall" href="@Url.Action("Faqs", "Search")">Show All</a></li>
+                                  @* <li><a href="#" rel="country2">Abuse </a></li>
+                                   <li><a href="#" rel="country3">Addiction</a></li>
+                                   <li><a href="#" rel="country4">Adolescent</a></li>
+                                   <li><a href="#" rel="country5">Anxiety</a></li>
+                                   <li><a href="#" rel="country6">Asperger syndrome</a></li>
+                                   <li><a href="#" rel="country7">Bipolar</a></li>
+                                   <li><a href="#" rel="country8">Bulimia</a></li>
+                                   <li><a href="#" rel="country9">Children</a></li>
+                                   <li><a href="#" rel="country10">Communication</a></li>
+                                   <li><a href="#" rel="country11">Depression</a></li>
+                                   <li><a href="#" rel="country12">Drugs</a></li>
+                                   <li><a href="#" rel="country13">Eating disorders</a></li>
+                                   <li><a href="#" rel="country14">For therapists</a></li>
+                                   <li><a href="#" rel="country15">Happiness</a></li>
+                                   <li><a href="#" rel="country16">Mental health</a></li>
+                                   <li><a href="#" rel="country17">Parenting</a></li>
+                                   <li><a href="#" rel="country18">Relationships</a></li>
+                                   <li><a href="#" rel="country19">Sadness</a></li>
+                                   <li><a href="#" rel="country20">Self esteem</a></li>
+                                   <li><a href="#" rel="country21">Sexuality</a></li>
+                                   <li><a href="#" rel="country22">Stress</a></li>
+                                   <li><a href="#" rel="country23">Therapy</a></li>
+                                   <li><a href="#" rel="country24">Treatment</a></li>
+                                   <li><a href="#" rel="country25">Wellness</a></li>
+                                   <li><a href="#" rel="country26">Women's issues</a></li>*@
+                               </ul>
+                               </div>
+                      @* <tr>
+                           <td colspan="3" height="15px">
+                           </td>
+                       </tr>*@
+ 
+    @*<table cellpadding="0" width="100%" align="center" border="0">
+        <tr>
+            <td style="font-family: Arial; font-size: 12pt; font-weight: bold; color:#044a7d;">
+            <label id="lbltitle1">Top 10 FAQs For This Topic</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <hr />
+            </td>
+        </tr>
+        @if (Convert.ToInt32(ViewBag.faquescount) > 0)
+        {
+        <tr >
+            <td align="left" style="font-family: Arial; font-size: 11pt; font-weight: bold;
+                text-align: justify;text-decoration:none;">
+                @{
+            string str = "";
+            string qno;
+            string a = "";
+            int i = 0;
+                    
+                    }
+               
+          @if (ViewBag.Faques.ToString() != null)
+          {
+              foreach (var item in ViewBag.Faques)
+              {
+                  str = item.Question;
+                  a = str.ToString();
+                  qno = item.Question_id;
+                  i = i + 1;
+                  string sno = i.ToString() + ". ";
+              <table>
+             <tr>  
+             <td style="font-family: Arial; font-size: 11pt; text-decoration:none;">
+                 <span>@sno</span>      
+                 </td>                               
+             <td style="font-family: Arial; font-size: 11pt; text-decoration:none;color:#044a7d;">
+             @Html.RouteLink(a, "AnswerFaq", new { id = qno }, new { @style="color:#044a7d;text-decoration:none;"})
+                        </td>
+             </tr><br />
+             </table>
+              }
+          }   
+            </td>
+        </tr>
+        }
+        else
+        {
+            <tr>
+             <td align="left" style="font-family: Arial; font-size: 10pt; font-weight: normal;
+                text-align: justify;">
+                <span>No FAQs found.</span>
+                </td>
+                </tr>
+
+        }
+        <tr>
+            <td height="20px">
+            </td>
+        </tr>
+    </table>*@
+    <table cellpadding="0" width="100%" align="center" border="0">
+      @*  <tr>
+            <td style="font-family: Arial; font-size: 12pt; font-weight: bold; color:#044a7d;">
+            <label id="Label2" >Recently Added FAQs To This Topic</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <hr />
+            </td>
+        </tr>*@
+        @if (Convert.ToInt32(ViewBag.recentfaqscnt) > 0)
+        {
+        <tr >
+            <td align="left" style="font-family: Arial; font-size: 11pt; font-weight: bold;
+                text-align: justify;color:#044a7d;">
+                @{
+            string str1 = null;
+            string qno1;
+            string Q1;
+            int j = 0;
+                    }
+            
+               @foreach (var item in ViewBag.recentfaqs)
+               {
+                   str1 = item.Question;
+                   qno1 = item.Question_id;
+                   Q1 = str1.ToString();
+                   j = j + 1;
+                   string sno1 = j.ToString() + ". ";
+             <table>
+             <tr>  
+             <td style="font-family: Arial; font-size: 11pt; color:#044a7d;text-decoration:none;">
+             <span>@sno1</span>
+             </td>          
+             <td style="font-family: Arial; font-size: 11pt; color:#044a7d;text-decoration:none;">  
+               @Html.RouteLink(Q1, "AnswerFaq", new { id = qno1 }, new { @style="color:#044a7d;text-decoration:none;"}) 
+             </td>
+             </tr><br />
+             </table>
+               }
+            
+            </td>
+        </tr>
+        }
+        else
+        {
+          <tr>
+             <td align="left" style="font-family: Arial; font-size: 10pt; font-weight: normal;
+                text-align: justify;">
+                <span>No FAQs found.</span>
+                </td>
+                </tr>  
+        }
+    </table>
+                  </div>
+                  </div>
+}

@@ -1,0 +1,239 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+   
+</head>
+<body>
+@*    @using (Html.BeginForm("MessageReply", "Messages", FormMethod.Post, null))
+    {*@
+@*                 @using (Ajax.BeginForm("MessageReply", "Messages", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess"
+           
+        }, new { @id = "updateCarForm" }))*@
+        @*  @using (Html.BeginForm("MessageReply", "Messages", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+          {
+
+    *@
+    @Html.AntiForgeryToken()
+    <div>
+    <input type="hidden" id="Hdn_CategoryDisplay1" name="Hdn_CategoryDisplay1" value="@ViewBag.Category" />
+
+
+     <input type="hidden" id="txt_MsgID" name="txt_MsgID" value="@ViewBag.Message_ID" />
+     <input type="hidden" id="txt_RecieverID" name="txt_RecieverID" value="@ViewBag.Reciever_ID" />
+     <input type="hidden" id="txt_RecRoleID" name="txt_RecRoleID" value="@ViewBag.ReplyToRole_ID" />
+     <input type="hidden" id="txt_SenderRoleID" name="txt_SenderRoleID" value="@ViewBag.SenderRole_ID" />
+     <input type="hidden" id="Hdn_CatID" name="Hdn_CatID" value="@ViewBag.CatID" />
+          <input type="hidden" id="Hdn_Ind" name="Hdn_Ind" value="@ViewBag.Ind" />
+
+          <input type="hidden" id="Hdn_MsgCategory_ID" name="Hdn_MsgCategory_ID" value="@ViewBag.MsgCategory_ID" />
+        <div id="divgeneralnotes" class="ModalPopup" style="width: 100%" runat="server">
+                                    <div id="Div1" class="contentmsg">
+                                        <div class="content-box">
+                                            <div class="content-box-content">
+                                                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+                                                    <tr class="nav_blue_color" height="20">
+                                                        <th align="right" width="20%">
+                                                            <strong>Orginal Message :</strong>
+                                                        </th>
+                                                        <td width="65%" align="left">
+                                                         <span id="lbl_OrginalMsgDisplay">@ViewBag.Messagebody</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" height="20">
+                                                        <th align="right">
+                                                            <strong>Sender :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                           
+                                                            <span id="lbl_SenderDisplay1">@ViewBag.Sender</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="nav_blue_color" height="20" runat="server" id="Tr2" name="Tr1">
+                                                        <th align="right">
+                                                            <strong>Category :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                            <span id="lbl_CategoryDisplay1">@ViewBag.Category</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" height="20" runat="server" id="Tr3" name="Tr2">
+                                                        <th align="right">
+                                                          <strong>Topic :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                             @Html.TextBox("txt_Topic", (string)HttpUtility.HtmlDecode(ViewBag.Subject), new { @class = "textfield", MaxLength = "50", style = "width:550px", autocomplete = "off" })
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="nav_blue_color" height="20" runat="server" id="Tr4">
+                                                        <th align="right">
+                                                            <font color="red"><b>*</b></font><strong>Message :</strong>
+                                                        </th>
+                                                        <td align="left" id="tdEMsg" runat="server">
+                                                            <asp:TextBox ID="" onkeydown="return DescEnterclick(event);" runat="server"
+                                                                TextMode="MultiLine" CssClass="textfield" MaxLength="250" Width="400" Height="150"></asp:TextBox>
+                                                                 @Html.TextArea("txt_Msg", null, 3, 3, new { @class = "textfield", style = "width:550px;height:100px;", maxlength = "1000" })
+                                                                <br />
+                                                            (Max length 8000 characters)
+                                                            &nbsp;@*<asp:Label ID="lblErrMSG" runat="server" ForeColor="Black" Font-Bold="true"></asp:Label>*@
+                                                            <span id="lblErrMSG" style="font-weight: bold; color: Black"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" height="20" runat="server" id="Tr5">
+                                                        <th align="right">
+                                                        <strong>Attachment :</strong>
+                                                        </th>
+                                                        <td align="left" id="tdErrFile" runat="server">
+                                                            @*<input id="fileAttachment" type="file" name="fileAttachment" runat="server" style="width: 300px; background-color:White;"
+                                                             onselectstart="return false;" onpaste="return false;" oncut="return false;"/>*@
+                                                      <input type="file" id="fileAttachment" name="fileAttachment"
+                                                    style="margin-left: 0px; background-color: White;" />
+                                                             &nbsp;@*<asp:Label ID="lblErrFile" runat="server" ForeColor="Black" Font-Bold="true"></asp:Label>*@
+                                                             <span id="lblErrFile" style="font-weight: bold; color: Black"></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="button" id="submit" value="Save" title="Save" class="button" onclick="return CheckOnSave();" />
+                                                          &nbsp;
+                                             @* @Html.ActionLink("Cancel", "btnClose", null, new { @class = "button", @style = "width:34px;height:14px;" })*@
+                                              <input type="button" class="close button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                    </div>
+    </div>
+         @* }*@
+     <script type="text/javascript">
+         function CheckOnSave() {
+             ClearInlineAlert('lblErrMSG', 'tdEMsg', 'White')
+             ClearInlineAlert('lblErrFile', 'tdErrFile', '#FFFFFF')
+             document.getElementById('txt_Topic').value = trim(document.getElementById('txt_Topic').value);
+             document.getElementById('txt_Msg').value = trim(document.getElementById('txt_Msg').value);
+             if (document.getElementById('txt_Msg').value == '') {
+                 //            Glb_ShowAlert('Please enter message');
+                 InlineAlert('lblErrMSG', 'tdEMsg', 'Please enter message')
+                 document.getElementById('txt_Msg').focus();
+                 return false;
+             }
+             else {
+                 ClearInlineAlert('lblErrMSG', 'tdEMsg', 'White')
+             }
+             //if (MyChars(document.getElementById('txt_Msg')) == "SpaceError") {
+             //    Glb_ShowAlert("Enter message without spaces first");
+             //    document.getElementById('txt_Msg').focus();
+             //    return false;
+             //}
+
+             if (document.getElementById('txt_Msg').value.length > 8000) {
+                 //            Glb_ShowAlert('Please enter at most 8000 characters in the message field', 'Alert', '', '');
+                 InlineAlert('lblErrMSG', 'tdEMsg', 'Please enter at most 8000 characters in the message field')
+                 document.getElementById('txt_Msg').focus(); return false;
+             }
+             else {
+                 ClearInlineAlert('lblErrMSG', 'tdEMsg', 'White')
+             }
+             var Adddata = new FormData();
+             var files = $("#fileAttachment").get(0).files;
+             if (document.getElementById('fileAttachment').value != 0) {
+                 Adddata.append("fileAttachment", files[0]);
+                 var strFilePath = document.getElementById('fileAttachment').value;
+                 var Files1 = new Array();
+                 var Files = new Array();
+                 Files = strFilePath.split('\\');
+                 var strFileName = Files[parseInt(Files.length) - 1];
+                 var strreverse = revString(strFileName);
+                 var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+                 //alert(strExtn);
+                 if (strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "PNG" || strExtn.toUpperCase() == "IFF" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TEXT" || strExtn.toUpperCase() == "TXT" || strExtn.toUpperCase() == "DOC" || strExtn.toUpperCase() == "OCX" || strExtn.toUpperCase() == "XLS" || strExtn.toUpperCase() == "LSX" || strExtn.toUpperCase() == "PPT" || strExtn.toUpperCase() == "PTX" || strExtn.toUpperCase() == "PDF" || strExtn.toUpperCase() == "WMV" || strExtn.toUpperCase() == "ASF" || strExtn.toUpperCase() == "WM" || strExtn.toUpperCase() == "AVI" || strExtn.toUpperCase() == "MPE" || strExtn.toUpperCase() == "PEG") {
+
+                 }
+                 else {
+                     //                Glb_ShowAlert('Invalid File format !!!.');
+                     InlineAlert('lblErrFile', 'tdErrFile', 'Invalid File format !!!.')
+                     document.getElementById('fileAttachment').value = '';
+                     return false;
+                 }
+
+             }
+             Adddata.append("txt_Topic", $('#txt_Topic').val());
+             Adddata.append("txt_Msg", $('#txt_Msg').val());
+             Adddata.append("txt_MsgID", '@ViewBag.Message_ID');
+             Adddata.append("txt_RecRoleID", $('#txt_RecRoleID').val());
+          @*   <input type="hidden" id="txt_RecieverID" name="txt_RecieverID" value="@ViewBag.Reciever_ID" />
+<input type="hidden" id="txt_RecRoleID" name="txt_RecRoleID" value="@ViewBag.ReplyToRole_ID" />
+     <input type="hidden" id="txt_SenderRoleID" name="txt_SenderRoleID" value="@ViewBag.SenderRole_ID" />
+     <input type="hidden" id="Hdn_CatID" name="Hdn_CatID" value="@ViewBag.CatID" />
+          <input type="hidden" id="Hdn_Ind" name="Hdn_Ind" value="@ViewBag.Ind" />*@
+             Adddata.append("txt_RecieverID", '@ViewBag.Reciever_ID');
+             Adddata.append("txt_SenderRoleID", '@ViewBag.ReplyToRole_ID');
+             Adddata.append("Hdn_CatID", '@ViewBag.CatID');
+             Adddata.append("Hdn_Ind", '@ViewBag.Ind');
+            
+       
+             var token = $('[name=__RequestVerificationToken]').val();
+             var headers = {};
+             headers['__RequestVerificationToken'] = token;
+             $.ajax({
+                 headers: headers,
+                 url: "@Url.Action("MessageReply", "Messages")",
+                 contentType: false,
+                 processData: false,
+                 data: Adddata,
+                 type: "POST",
+                 //contentType: "application/json;charset=utf-8",
+                 success: function (data) {
+                     $('#ReplyDialog').dialog('close');
+                     @*  $("#MessageFrom").load("@Url.Action("DisplayMessageFromTherapisthelp", "Messages")", function (data) { });*@
+                     $("#MessageFrom").load("@Url.Action("DisplayMessageFromHelp", "Messages")?ddlListingMsgsType=" + '@ViewBag.ddlListingMsgsType' + "&ddlrecords=" + '@ViewBag.ddlrecords' + "&page=" + '@ViewBag.page', function (data) { });
+                   @*  $("#MessageFrom").load("@Url.Action("DisplayMessageFromHelp", "Messages")?ddlListingMsgsType=" + $('#ddlListingMsgsType').val() + "&ddlrecords=" + $('#ddlrecords').val(), function (data) {  });*@
+                     //alert(JSON.stringify(data));
+                     //$('#gridcontent1').html(data);
+                 }
+
+             });
+             return true;
+         }
+    </script>
+</body>
+<script type="text/javascript">
+
+    function updateSuccess(data) {
+        //        alert("1");
+        //        alert(data.Success);
+
+
+        if (data != '' & data.Success == true) {
+            $('#updateDialog').dialog('close');
+            window.location.href = "../Messages/MessageHome";
+        }
+        else {
+            $('#updateDialog').dialog('close');
+            //            alert("Process Failed.");
+            if (data != '_Logon_') {
+                alert(data.ErrorMessage);
+            }
+
+            $("#update-message").html(data.ErrorMessage);
+            $("#update-message").show();
+        }
+    }
+    </script>
+</html>

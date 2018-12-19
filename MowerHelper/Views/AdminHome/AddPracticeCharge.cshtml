@@ -1,0 +1,247 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+           <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var nameprac = "@ViewBag.pracname";
+//            alert(nameprac);
+             document.getElementById("pracname").innerHTML =nameprac;
+            //            $("#pracname").text(nameprac);
+             //$("#txtDate").datepicker({
+             //    dateFormat: 'mm/dd/yy',
+             //    changeMonth: true,
+             //    changeYear: true,
+             //    //                showCurrentAtPos: 1,
+             //    showWeeks: true,
+             //    inline: true,
+             //    numberOfMonths: [1, 1],
+             //    yearRange: "1950:2020",
+             //    showOn: "button",
+             //    buttonImage: "../Images/calender.gif",
+             //    buttonImageOnly: true
+
+             //});
+            
+        });
+</script>
+<script type="text/javascript">
+function isValidDate(strDate) {
+        var dateStr = strDate; var datePat = /^(\d{1,2})(\/|-)(\d{1,2})\2(\d{4})$/; var month, day, year; var monthArray = new Array(); var matchArray = dateStr.match(datePat); var intShowI; var args; var strError = ""; monthArray[0] = "January"; monthArray[1] = "February"; monthArray[2] = "March"; monthArray[3] = "April"; monthArray[4] = "May"; monthArray[5] = "June"; monthArray[6] = "July"; monthArray[7] = "August"; monthArray[8] = "September"; monthArray[9] = "October"; monthArray[10] = "November"; monthArray[11] = "December"; args = IsValidDate.arguments
+        if (dateStr != "") {
+            if (matchArray == null)
+            { strError = "Please enter date in mm/dd/yyyy format."; return strError; }
+            month = matchArray[1]; day = matchArray[3]; year = matchArray[4]; if (year <= 1753)
+            { strError = "Please enter a year greater than 1753."; return strError; }
+            if (month < 1 || month > 12)
+            { strError = "Month must be between 1 and 12."; return strError; }
+            if (day < 1 || day > 31)
+            { strError = "Day must be between 1 and 31."; return strError; }
+            if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+                strError = monthArray[month - 1] + " doesn't have 31 days!"
+                return strError;
+            }
+            if (month == 2) {
+                var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)); if (day > 29 || (day == 29 && !isleap))
+                { strError = "February " + year + " doesn't have " + day + " days!"; return strError; } 
+            } 
+        }
+        return strError;
+    }
+    function ValidateChargeInfo() {
+        ClearInlineAlert('lblErrCDate', 'tdEcDate', '#FFFFFF')
+        ClearInlineAlert('lblErrCNote', 'tdECNote', '#FFFFFF')
+        ClearInlineAlert('lblErrCamount', 'tdECamount', '#FFFFFF')
+        if (document.getElementById('txtDate').value == "") {
+            //            Glb_ShowAlert("Invalid Charge Info!!! Charge date can not be empty."); 
+            InlineAlert('lblErrCDate', 'tdEcDate', 'Invalid Charge Info!!! Charge date can not be empty.')
+            document.getElementById('txtDate').focus();
+            return false;
+        }
+        else {
+            ClearInlineAlert('lblErrCDate', 'tdEcDate', '#FFFFFF')
+            var strRetAlert = isValidDate(document.getElementById('txtDate').value)
+            if (strRetAlert != "") {
+                //                Glb_ShowAlert(strRetAlert);
+                InlineAlert('lblErrCDate', 'tdEcDate', strRetAlert)
+                document.getElementById('txtDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCDate', 'tdEcDate', '#FFFFFF')
+            }
+            if (document.getElementById('txtDate').value.length > 0) {
+                var date = document.getElementById('txtDate').value;
+                var len = document.getElementById('txtDate').value.length;
+                for (var i = 0; i < len; i++) {
+                    var k = date.charAt(i); var digits = "0123456789/";
+                    if ((digits.indexOf(k, 0)) == -1) {
+                        //                        Glb_ShowAlert('Please enter valid date');
+                        InlineAlert('lblErrCDate', 'tdEcDate', 'Please enter valid date')
+                        document.getElementById('txtDate').value = '';
+                        document.getElementById('txtDate').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblErrCDate', 'tdEcDate', '#FFFFFF')
+                    }
+                }
+            }
+            var dtCur = new Date();
+            var dtGiven = new Date(document.getElementById('txtDate').value);
+            if (dtCur < dtGiven) {
+                //                Glb_ShowAlert("Invalid Charge Info!!! Charge date exceeding the current system date.");
+                InlineAlert('lblErrCDate', 'tdEcDate', "Invalid Charge Info!!! Charge date exceeding the current system date.")
+                document.getElementById('txtDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCDate', 'tdEcDate', '#FFFFFF')
+            }
+            if (document.getElementById('txtAmount').value == "") {
+                InlineAlert('lblErrCamount', 'tdECamount', "Invalid Charge Info!!! Charge Amount can not be empty.")
+                document.getElementById('txtAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCamount', 'tdECamount', '#FFFFFF')
+            }
+            if (document.getElementById('txtAmount').value != '') {
+                if (parseFloat(document.getElementById('txtAmount').value) == '0') {
+                    InlineAlert('lblErrCamount', 'tdECamount', "Invalid Charge Info!!! Charge Amount can not be zero.")
+                    document.getElementById('txtAmount').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrCamount', 'tdECamount', '#FFFFFF')
+                }
+                if (document.getElementById('txtAmount').value == '.') {
+                    InlineAlert('lblErrCamount', 'tdECamount', "Invalid Charge Info!!! Please enter valid charge amount.")
+                    document.getElementById('txtAmount').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrCamount', 'tdECamount', '#FFFFFF')
+                }
+            }
+            if (document.getElementById('txtAmount').value == "0") {
+                InlineAlert('lblErrCamount', 'tdECamount', "Invalid Charge Info!!! Charge Amount can not be zero.")
+                document.getElementById('txtAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrCamount', 'tdECamount', '#FFFFFF')
+            }
+            if (document.getElementById('txtAmount').value.length > 0) {
+                var amount = document.getElementById('txtAmount').value;
+                var len = document.getElementById('txtAmount').value.length;
+                for (var i = 0; i < len; i++) {
+                    var k = amount.charAt(i); var digits = "0123456789.";
+                    if ((digits.indexOf(k, 0)) == -1) {
+                        InlineAlert('lblErrCamount', 'tdECamount', "Invalid Charge Info!!! Please enter valid charge amount.")
+                        document.getElementById('txtAmount').value = '';
+                        document.getElementById('txtAmount').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblErrCamount', 'tdECamount', '#FFFFFF')
+                    }
+                }
+            }
+
+            if (document.getElementById('txtNotes').value != "") {
+                if (document.getElementById('txtNotes').value.length > 1000) {
+                    InlineAlert('lblErrCNote', 'tdECNote', "Invalid Charge Info!!! Charge Notes is exceeding the limit of 1000 characters.")
+                    document.getElementById('txtNotes').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrCNote', 'tdECNote', '#FFFFFF')
+                }
+            }
+        }
+//        return false;
+ }
+</script>
+</head>
+<body>
+@*    @using (Ajax.BeginForm("AddPracticeCharge", "AdminHome", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "newCSuccess"
+
+    }, new { @id = "newChgform" }))
+    {
+       *@
+           @using (Html.BeginForm("AddPracticeCharge", "AdminHome", FormMethod.Post, null))
+       {
+    <div style="width: 100%">
+            <table border="0" cellpadding="6" cellspacing="1" class="border_style" width="100%">
+                <tr class="white_color" >
+                    <td width="20%" align="right">
+                        <font color="red">*</font><strong>Provider Name :&nbsp;</strong>
+                    </td>
+                    <td align="left">
+                     <span id="pracname" ></span>
+                        
+                    </td>
+                </tr>
+                <tr class="white_color">
+                    <td width="20%" align="right">
+                        <font color="red">*</font><strong>Charge date :&nbsp;</strong>
+                    </td>
+                    <td align="left" id="tdEcDate">
+                        @Html.TextBox("txtDate", DateTime.Now.ToString("MM/dd/yyyy"), new { @class = "textfield Datefield", @style = "width:90px" })&nbsp;&nbsp;
+                        <span id="lblErrCDate" style="color: Black; font-weight: bold;"></span>
+                    </td>
+                </tr>
+                <tr class="white_color"  >
+                    <td width="20%" align="right">
+                        <font color="red">*</font><strong>Charge type :&nbsp;</strong>
+                    </td>
+                    <td align="left">
+                  
+                       @Html.DropDownList("ddlChargetype", new List<SelectListItem> { new SelectListItem { Text = "Manual Charge", Value = "1" } })
+                       
+                    </td>
+                </tr>
+                <tr class="white_color">
+                    <td width="20%" align="right">
+                        <font color="red">*</font><strong>Amount charged($) :&nbsp;</strong>
+                    </td>
+                    <td align="left" id="tdECamount">
+                        @Html.TextBox("txtAmount", null, new { @class = "textfield", @maxLength = 10, @style = "width:90px", @onkeypress = "return checkValidNumeric(txtAmount,8,2,event)" })&nbsp;&nbsp;<span
+                            id="lblunPaidamount" style="font-weight: bold; "></span><span id="lblErrCamount"
+                                style="color: Black; font-weight: bold;"></span>
+                    </td>
+                </tr>
+                <tr class="white_color">
+                    <td width="20%" align="right">
+                        <strong>Notes :&nbsp;</strong>
+                    </td>
+                    <td align="left" id="tdECNote">
+                        @Html.TextArea("txtNotes", null, 3, 3, new { @class = "textfield", @style = "width:350px;height:78px;" })&nbsp;&nbsp;(Maximum
+                        length 1000 characters)&nbsp&nbsp;<br />
+                        <span id="lblErrCNote" style="color: Black; font-weight: bold;"></span>
+                    </td>
+                </tr>
+            </table>
+            <table border="0" cellpadding="0" cellspacing="0" width="98%">
+                <tr style="height: 50px">
+                    <td align="right">
+                        <input type="submit" value="save" class="button" name="btnsave"  onclick="return ValidateChargeInfo();"/>
+                        <input type="button" name="btnCancel" class="chgclose button" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+</body>
+</html>

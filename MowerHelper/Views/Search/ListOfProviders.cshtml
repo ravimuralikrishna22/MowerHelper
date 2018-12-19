@@ -1,0 +1,1266 @@
+﻿@model MowerHelper.Models.BLL.Providers.ProviderAdvertising
+@using MowerHelper.Models.BLL.Common;
+@using MowerHelper.Models.BLL.Providers;
+@{
+    ViewBag.Title = "ListOfProviders";
+    Layout = "~/Views/Shared/__MasterPage1.cshtml";
+}
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+   <title>Mower Helper-Find an Mower Helper</title>
+@Scripts.Render("~/Scripts/Thscripts")
+@Styles.Render("~/Content/themes/base/autocomplete")
+     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var listcount = "@ViewBag.listcount"
+        if (listcount == "0") {
+            document.getElementById('map-canvas').style.display = "none";
+        }
+        else {
+            document.getElementById('map-canvas').style.display = "";
+        }
+        fnlanglat();
+        var pageno = "@ViewBag.Pagenation";
+        if (pageno != 1) {
+            $('#apage' + pageno).removeClass('pagination1');
+            $('#apage' + pageno).addClass('button');
+        }
+        else {
+            $('#apage' + pageno).addClass('button');
+        }
+        $('#txtzip').val($('#hdntextvalue').val());
+        $('#ddlRadius').val($('#hdnradius').val());
+        JqAutocomplete1('@Url.Action("Zipcodes", "Search")', "txtzip");
+     
+    });
+   
+</script>
+<script  type="text/javascript">
+    function RemovesText() {
+
+        if (document.getElementById('txtzip').value == "US City or ZIP Code")
+            document.getElementById('txtzip').value = "";
+        return false;
+    }
+
+    function AddText() {
+        if (document.getElementById('txtzip').value == "")
+            document.getElementById('txtzip').value = "US City or ZIP Code";
+        return false;
+    }   
+        
+
+</script>
+<script type="text/javascript">
+    var geocoder;
+    var map1;
+    var markersArray = [];
+
+    function fnlanglat() {
+
+        var straddress = "@ViewBag.textvalue";
+        var strzoomvalue = null;
+        if (straddress == "US City or ZIP Code") {
+            straddress = "United States";
+            strzoomvalue = 4;
+        }
+        else {
+            straddress = straddress + ",United States";
+            strzoomvalue = 10;
+        }
+        //alert(straddress);
+        //alert(strzoomvalue);
+
+        geocoder = new google.maps.Geocoder();
+         latlang = geocoder.geocode({
+
+            'address':straddress
+        },
+
+                function (results, status) {
+
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map1.setCenter(results[0].geometry.location);
+                        //marker = new google.maps.Marker({
+                        //    map: map,
+                        //    position: results[0].geometry.location
+                        //});
+                        //markersArray.push(marker);
+
+                    }
+                    //else {
+                    //    alert("Geocode was not successful for the following reason: " + status);
+                    //}
+                });
+
+        var myOptions =
+        {
+            center: latlang, zoom:strzoomvalue,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            navigationControlOptions:
+{
+    style: google.maps.NavigationControlStyle.SMALL
+}
+        };
+        map1 = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+        plotMarkers();
+    }
+
+
+    var locationsArray = new Array();
+    var totadd = "@ViewBag.totadd";
+    if (totadd != null) {
+                locationsArray = totadd.split('$');
+            }
+
+
+    function plotMarkers() {
+        for (var i = 0; i <= locationsArray.length - 2; i++) {
+
+                         codeAddresses(locationsArray[i]);
+
+                     }
+                 }
+
+                 function codeAddresses(address1) {
+                     geocoder.geocode({ 'address': address1 }, function (results, status) {
+                         //alert(status);
+                         if (status == google.maps.GeocoderStatus.OK) {
+                             var latitude1 = results[0].geometry.location.lat();
+                             var longitude1 = results[0].geometry.location.lng();
+                             var latlng1 = new google.maps.LatLng(latitude1, longitude1);
+                                     var marker = new google.maps.Marker
+                                 (
+                                  {
+                                      position: new google.maps.LatLng(latitude1, longitude1),
+                                      map: map1,
+                                      icon: '@ViewBag.imgpath'
+                                  }
+                                    );
+                             //alert(address1);
+                             var infowindow = new google.maps.InfoWindow({ content: "<div style='padding-bottom: 9pt; width:275px;'><b>" + address1 + "</b></div>" });
+                             //infowindow.open(map, marker);
+                             google.maps.event.addListener(marker, 'mouseover', function () {
+                                 infowindow.open(map1, marker);
+                             });
+                             google.maps.event.addListener(marker, 'mouseout', function () {
+                                 infowindow.close();
+                             });
+
+
+
+                         }
+                         else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+                             wait = true;
+                             setTimeout("wait = true", 2000);
+                         }
+                         //else {
+                         //    //alert("Request failed.")
+                         //    alert("Geocode was not successful for the following reason: " + status);
+                         //}
+                     });
+                 }
+
+                 //google.maps.event.addDomListener(window, 'load', fnlanglat);
+
+</script>
+<input type="hidden" name="hdntextvalue" id=hdntextvalue value="@ViewBag.textvalue" />
+<input type="hidden" name="hdnradius" id=hdnradius value="@ViewBag.Radius" />
+<br />
+@using (Html.BeginForm("ListOfProviders", "Search"))
+{
+     @Html.AntiForgeryToken()
+    <div class="content" style="padding: 0px 0px 150px 0px;">
+        
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td colspan="3" style="font-family: Arial; font-size: 9pt;">
+                    <div id="directory-search1">
+                        <div id="divdirectorysearch"   style="width: 692px; float: left; 
+            background-repeat: no-repeat; background-position: left top; padding-left: 10px; padding-right: 50px; background-image: url(@ViewBag.leftimg);">
+                            <div id="divdirectorysearch1" style="width: 682px; float: left; background-image: url(@ViewBag.rightimg);
+                background-repeat: no-repeat; background-position: right top; padding-right: 10px;">
+                                <div class="adv-search">
+                                    <table style="width: 682px;">
+                                        <tr>
+                                            <td>
+                                                <div class="text-field" style="width: 140px; height: 2px;">
+                                                    <input type="text" name="txtzip" id="txtzip" value="US City or ZIP Code" onfocus="return RemovesText();"
+                                                        onblur="return AddText();" style="height: 13px; border: 1px inset;" class="searchinput" />
+                                                    <br />
+                                                    <br />
+                                                    <br />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="directory-search">
+                                                    @Html.DropDownList("ddlRadius", new List<SelectListItem>
+
+                 {
+                    new SelectListItem{ Text="- Search Radius -", Value = "0" },
+                    new SelectListItem{ Text="5 Miles", Value = "5" },
+                    new SelectListItem{ Text="10 Miles", Value = "10" },
+                    new SelectListItem{ Text="20 Miles", Value = "20" },
+                    new SelectListItem{ Text="50 Miles", Value = "50" },
+                    new SelectListItem{ Text="100 Miles", Value = "100" },
+                    new SelectListItem{ Text="250 Miles", Value = "250" }}, new { @style = "height: 25px;" })
+                                                    &nbsp; &nbsp; &nbsp;
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <input type="submit" value="Search" id="btnSearch" class="adv-search-bt" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="adv-search-link">
+                                                    <a href="@Url.Action("ProviderSearch", "AdvancedSearch", null)" style="font-weight:bold; font-size:15px">
+                                                        <span class="rtsTxt">Advanced Search</span> </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr id="tddisplay" runat="server">
+                <td align="center" colspan="3" style="font-family: Arial; font-size: 9pt; display: none"
+                    class="norfontbig">
+                    <b>Sorry, the therapist you requested does not exist. Please search with other criteria.</b>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" colspan="3" style="font-family: Arial; font-size: 9pt; padding-left: 10px;"
+                    align="left" class="norfontbig">
+                    <b>Search Results :</b> 
+                   @* @if (ViewBag.StateNm != null & ViewBag.StateNm != "" & ViewBag.issname != null & ViewBag.id == null & ViewBag.city == null)
+                    {
+                        @Html.RouteLink((string)ViewBag.issname, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issname + " Therapists" })
+                       <label  style="font-family: Arial; font-size: 14px;">in</label>
+                        @Html.ActionLink((string)ViewBag.StateNm, "ListOfProviders", "Search", new { StateNm = ViewBag.StateNm }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.StateNm + " Therapists" })
+                    }
+                    else if (ViewBag.language != null & ViewBag.issname != null & ViewBag.id == null & ViewBag.city == null)
+                    {
+                        string lan123 = ViewBag.language + " Language";
+                        @Html.ActionLink(lan123, "ListOfProviders", "Search", new { issuesnm = ViewBag.IssueTitle, issueid = ViewBag.issueid }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Therapists" })    
+                        <label  style="font-family: Arial; font-size: 14px;">in</label>
+                        @Html.ActionLink((string)ViewBag.StateNm, "ListOfProviders", "Search", new { StateNm = ViewBag.StateNm }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.StateNm + " Therapists" })
+                    }
+                    else if (ViewBag.issname != null & ViewBag.id == null & ViewBag.city == null)
+                    {
+                        @Html.RouteLink((string)ViewBag.issname, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issname + " Therapists" })
+
+                    }
+                    else if (ViewBag.id == null & ViewBag.city == null & ViewBag.language != null)
+                    {
+                        @Html.RouteLink((string)ViewBag.language.Replace("-", " "), "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Language Therapists" })
+      
+                    }
+                    else if (ViewBag.stateid12 != null & ViewBag.StateNm != null & ViewBag.StateNm != "" & ViewBag.language != null)
+                    {
+
+                        @Html.RouteLink((string)ViewBag.language.Replace("-", " "), "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Language Therapists" })
+                        <label  style="font-family: Arial; font-size: 14px;">in </label>
+                        @Html.ActionLink((string)ViewBag.StateNm, "ListOfProviders", "Search", new { StateNm = ViewBag.StateNm }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.StateNm + " Therapists" })
+                    }
+                    else if (ViewBag.stateid12 != null & ViewBag.StateNm != null & ViewBag.StateNm != "" & ViewBag.issueid != null)
+                    {
+
+                        @Html.RouteLink((string)ViewBag.issname, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issname + " Therapists" })
+                        <label  style="font-family: Arial; font-size: 14px;">in </label>
+                        @Html.ActionLink((string)ViewBag.StateNm, "ListOfProviders", "Search", new { StateNm = ViewBag.StateNm }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.StateNm + " Therapists" })
+                    }*@
+                    @if (ViewBag.zippcode123 != null & ViewBag.cityname123 != null & ViewBag.cityname1232 != null)
+                    {
+                        string ziptext = ViewBag.zippcode123 + " in ";
+                        <span id="SearchResults4" style="font-size: 14px; font-weight: normal;">@ViewBag.text</span>   
+                        @Html.ActionLink(ziptext, "ListOfProviders", "Search", new { id = ViewBag.zippcode123 }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.zippcode123 + " Electricians" })
+                        @Html.ActionLink((string)ViewBag.cityname123, "ListOfProviders", "Search", new { city = ViewBag.textcitynm }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname123 + " Electricians" })
+                        @Html.ActionLink((string)ViewBag.staenm1, "ListOfProviders", "Search", new { StateNm = ViewBag.staenm1, stateid = ViewBag.mystateid }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.staenm1 + " Electricians" })
+                                
+                    }
+                    @*  else if (ViewBag.zippcode != null & ViewBag.issuesnm != null)
+                    {
+                        @Html.RouteLink((string)ViewBag.issuesnm, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issuesnm + " Therapists" })
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text</span>
+                        @Html.ActionLink((string)ViewBag.zippcode, "ListOfProviders", "Search", new { id = ViewBag.zippcode }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.zippcode + " Therapists" })
+             
+                    }
+                    else if (ViewBag.zippcode != null & ViewBag.language != null)
+                    {
+                        @Html.RouteLink((string)ViewBag.language, "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Language Therapists" })
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text</span>
+                        @Html.ActionLink((string)ViewBag.zippcode, "ListOfProviders", "Search", new { id = ViewBag.zippcode }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.zippcode + " Therapists" })    
+                    }
+
+                    else if (ViewBag.cityabname != null & ViewBag.issuesnm != null)
+                    {
+                        if (ViewBag.textcity.Contains("/"))
+                        {
+                            ViewBag.textcity = ViewBag.textcity.ToString().Replace("/", " ");
+                        }
+                        string stename = " " + ViewBag.staenm1;
+                        ViewBag.issue = ViewBag.issuesnm.ToString().Contains("/") ? ViewBag.issuesnm.ToString().Replace("/", "-") : ViewBag.issuesnm;
+                        @Html.RouteLink((string)ViewBag.issuesnm, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.issue.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issuesnm + " Therapists" })
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text</span>
+                        @Html.RouteLink((string)ViewBag.cityabname, "TopCityTherapists", new { city = ViewBag.textcity.ToString().Replace(" ", "-"), StateNm = ViewBag.staenm1.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityabname + " Therapists" })
+            
+                        @Html.RouteLink(stename, "ListOfProviders", new { StateNm = ViewBag.staenm1.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.staenm1 + " Therapists" })
+                                
+                    }
+                    else if (ViewBag.cityabname != null & ViewBag.language != null)
+                    {
+                        if (ViewBag.textcity.Contains("/"))
+                        {
+                            ViewBag.textcity = ViewBag.textcity.ToString().Replace("/", " ");
+                        }
+                        string title24 = ViewBag.cityabname + " Therapists";
+                        string stename4 = " " + ViewBag.staenm1;
+                        @Html.RouteLink((string)ViewBag.language.Replace("-", " "), "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Language Therapists" })
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text</span>
+                        <a id="acitywithab" href="@Url.Action("ListOfProviders", "Search", new { city = ViewBag.textcity.ToString().Replace(" ", "-") })" runat="server" title="@title24" style="font-family: Arial; font-size: 14px;">
+                            @ViewBag.cityabname
+                        </a>
+                        @Html.RouteLink(stename4, "ListOfProviders", new { StateNm = ViewBag.staenm1.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.staenm1 + " Therapists" })
+
+                    }*@
+                    else if (ViewBag.cityabname != null & ViewBag.searchcity != null & ViewBag.mystate234 != null)
+                    {
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text
+                        </span>
+                        if (ViewBag.searchcity.Contains("/"))
+                        {
+                            ViewBag.searchcity = ViewBag.searchcity.ToString().Replace("/", " ");
+                        }
+                        @Html.RouteLink((string)ViewBag.cityabname, "Cities", new { city = ViewBag.searchcity.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityabname + " Electricians" })
+                        @Html.RouteLink((string)ViewBag.mystate234, "ListOfProviders", new { StateNm = ViewBag.mystate234.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.mystate234 + " Electricians" })
+
+                    }
+                   @* else if (ViewBag.cityname01 != null & ViewBag.issuesnm != null)
+                    {
+                        if (ViewBag.searchcity.Contains("/"))
+                        {
+                            ViewBag.searchcity = ViewBag.searchcity.ToString().Replace("/", " ");
+                        }
+                        string issname12 = ViewBag.issuesnm + " ";
+                        @Html.RouteLink(issname12, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issuesnm + " Therapists" })
+                        <span  style="font-size: 14px; font-weight: normal;">in </span>
+                        @Html.ActionLink((string)ViewBag.cityname01, "ListOfProviders", "Search", new { city = ViewBag.searchcity.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname01 + " Therapists" })
+                                
+                    }
+                    else if (ViewBag.cityname01 != null & ViewBag.language != null)
+                    {
+                        if (ViewBag.searchcity.Contains("/"))
+                        {
+                            ViewBag.searchcity = ViewBag.searchcity.ToString().Replace("/", " ");
+                        }
+                        string language56 = ViewBag.language + " ";
+                        @Html.RouteLink(language56, "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Therapists" })
+                        <span  style="font-size: 14px; font-weight: normal;">in </span>
+                        @Html.ActionLink((string)ViewBag.cityname01, "ListOfProviders", "Search", new { city = ViewBag.searchcity.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname01 + " Therapists" })
+                                
+                    }*@
+                    else if (ViewBag.cityname01 != null)
+                    {
+                        ViewBag.cityname = ViewBag.cityname01.Contains("/") ? ViewBag.cityname01.ToString().Replace("/", " ") : ViewBag.cityname01;
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text
+                        </span>
+                        @Html.RouteLink((string)ViewBag.cityname01, "Cities", new { city = ViewBag.cityname.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname01 + " Electricians" })
+
+                    }
+                    else if (ViewBag.countryname != null)
+                    {
+                        string title28 = ViewBag.countryname + " Electricians";
+                        string country = ViewBag.countryname;
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text</span>
+                        <a id="acountry" runat="server" href="@Url.Action("ListOfProviders", "Search", new { countryname = ViewBag.countryname })" title="@title28" style="font-family: Arial; font-size: 14px;">
+                            @country.Replace("-", " ")
+                        </a>    
+                    }
+                    else if (ViewBag.zippcode != null)
+                    {
+                        string title29 = ViewBag.zippcode + " Electricians";
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text
+                        </span>
+           
+                        <a id="azip" href="@Url.Action("ListOfProviders", "Search", new { id = ViewBag.zippcode })" title="@title29" runat="server" style="font-family: Arial; font-size: 14px;">
+                            @ViewBag.zippcode
+                        </a>    
+                    }
+                    else if (ViewBag.zippcode123 != null & ViewBag.StateNm != null & ViewBag.city != null)
+                    {
+                        if (ViewBag.city.Contains("/"))
+                        {
+                            ViewBag.city = ViewBag.city.ToString().Replace("/", " ");
+                        }
+                        
+                        <span style="font-size: 14px; font-weight: normal;">@ViewBag.text</span>
+                        if (ViewBag.distance != "0")
+                        {
+                             @Html.RouteLink(" " + (string)ViewBag.zippcode123, "ZipcodeTherapists", new { id = ViewBag.zippcode123, distance = ViewBag.distance }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.zippcode123 + " Electricians" })
+                        }
+                        else
+                        {
+                            @Html.RouteLink(" " + (string)ViewBag.zippcode123, "ZipcodeSearch", new { id = ViewBag.zippcode123 }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.zippcode123 + " Electricians" })
+                        }
+                       @* @Html.RouteLink((string)ViewBag.zippcode123, "ZipcodeSearch", new { id = ViewBag.zippcode123 }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.zippcode123 + "Therapists" })*@
+                        <span style="font-size: 14px; font-weight: normal;">in</span>
+                        @Html.RouteLink((string)ViewBag.cityabname.Replace("-", " "), "TopCityTherapists", new { city = ViewBag.city.ToString().Replace(" ", "-"), StateNm = ViewBag.StateNm.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.cityabname + "Electricians" })
+                        <span style="font-size: 14px; font-weight: normal;">,</span>
+                        @Html.RouteLink((string)ViewBag.StateNm.Replace("-", " "), "ListOfProviders", new { StateNm = ViewBag.StateNm.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.StateNm + "Electricians" })
+                    }
+                    else if (ViewBag.StateNm != null)
+                    {
+                       
+                        <span  style="font-size: 14px; font-weight: normal;">@ViewBag.text
+                        </span>
+                        @Html.RouteLink((string)ViewBag.StateNm, "ListOfProviders", new { StateNm = ViewBag.StateNm.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.StateNm + " Electricians" })
+
+                    }
+                    else
+                    {
+                        @*<span style="font-size: 14px; font-weight: normal;">@ViewBag.text </span>
+                        string title31 = ViewBag.search2 + " Therapists"; 
+                        <a title="Schenectady Therapists" id="anCity" title="@title31" style="font-family: Arial; font-size: 14px; color:#044a7d; text-decoration:underline; " >
+                            @ViewBag.search2</a>*@
+                              
+                    }
+                   
+                </td>
+            </tr>
+            @if (ViewBag.namecity != null)
+            {
+               
+                <tr id="tblCityList">
+                    <td colspan="3" style="font-family: Arial; font-size: 9pt; padding-right: 35px;">
+                        <div style="float: left; padding: 0px 0px 15px 0px; width: 702px; margin: 0 12px;">
+                            <div id="divother" style="background-image: url(@ViewBag.citylistimg); color:#03467e;
+                                    background-repeat: repeat-x; background-position: left top;" class="contentlinksbox">
+                                <div style="width: 692px; float: left; padding: 8px 0px 8px 10px; font: 20px georgia;
+                                    font-size: 16px; color: #03467e; font-style: italic;">
+                                    <label id="" style="font-weight: bold">
+                                        City List</label>
+                                </div>
+                                <div style="width: 682px; float: left;">
+                                    <div class="gadget">
+                                        <ul class="sb_menu">
+                                            @*<a id="a2" style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                                @ViewBag.CityId
+                                            </a>*@
+                                            @{
+                int i = 0;
+                int cnt = 0;
+                int j;
+                int k = 0;
+                                            }
+                                            <table>
+                                                @for (j = 0; j <= ViewBag.rows; j++)
+                                                {
+                                                    <tr>
+                                                        @for (i = k; i <= ViewBag.namecitycount - 1; i++)
+                                                        {
+                                                            if (cnt < 4)
+                                                            {
+                                                                string text = ViewBag.namecity[i].CityName + " -" + ViewBag.namecity[i].StateName + " ( " + ViewBag.namecity[i].CountInCity + " )";
+                                                                //   string city = ViewBag.namecity[i].CityName + " (" + ViewBag.namecity[i].StateName + ")";
+                                                                //  string cityid = ViewBag.namecity[i].CityId.ToString();
+                                                                string title2 = "Find Electricians in " + ViewBag.namecity[i].CityName + ", " + ViewBag.namecity[i].StateFullName;
+                                                                // string issid123 = ViewBag.issid;
+                                                                // string language21 = ViewBag.lan1;
+                                                                //if (issid123 != null | language21 != null)
+                                                                //{
+                                                                //    ViewBag.zippcode12 = null;
+                                                                //    // cityid = null;
+                                                                //}
+                                                                if (ViewBag.namecity[i].CityName.ToString().Contains("/"))
+                                                                {
+                                                                    ViewBag.namecity[i].CityName = ViewBag.namecity[i].CityName.ToString().Replace("/", "-");
+                                                                }
+                                                                if (ViewBag.namecity[i].CityName.ToString().Contains("'"))
+                                                                {
+                                                                    ViewBag.namecity[i].CityName = ViewBag.namecity[i].CityName.ToString().Replace("'", " ");
+                                                                }
+                                                                if (ViewBag.namecity[i].CityName.ToString().Contains("."))
+                                                                {
+                                                                    ViewBag.namecity[i].CityName = ViewBag.namecity[i].CityName.ToString().Replace(".", " ");
+                                                                }
+                                                                ViewBag.displaybold = ViewBag.namecity[i].Displaybold == "Y" ? "font-weight: bold;" : "font-weight: normal;";
+                                                                <td>
+                                                                <li>
+                                                                    @if (ViewBag.zippcode != null & ViewBag.distance == null)
+                                                                    {
+                                                                        @Html.RouteLink(text, "Zipstatecity", new { id = @ViewBag.zippcode, city = @ViewBag.namecity[i].CityName.ToString().Replace(" ", "-"), StateNm = @ViewBag.namecity[i].StateFullName.ToString().Replace(" ", "-") }, new { @Style = @ViewBag.displaybold, @title = title2 })
+                                                                    }
+                                                                    else if (ViewBag.distance != null & ViewBag.zippcode != null)
+                                                                    {
+                                                                        @Html.RouteLink(text, "ZIPRadiusStateCities", new { id = @ViewBag.zippcode, distance = @ViewBag.distance, city = @ViewBag.namecity[i].CityName.ToString().Replace(" ", "-"), StateNm = @ViewBag.namecity[i].StateFullName.ToString().Replace(" ", "-") }, new { @Style = @ViewBag.displaybold, @title = title2 })
+                                                                    }
+
+                                                                    else
+                                                                    {
+                                                                        @Html.RouteLink(text, "TopCityTherapists", new { city = @ViewBag.namecity[i].CityName.ToString().Replace(" ", "-"), StateNm = @ViewBag.namecity[i].StateFullName.ToString().Replace(" ", "-") }, new { @Style = @ViewBag.displaybold, @title = title2 })
+                                                                    }
+                                                                    @* @Html.ActionLink(text.ToString(), "ListOfProviders", "Search", new { city = @ViewBag.namecity[i].CityName }, new { @title = title2 })*@
+                                                                </li>
+                                                            </td>
+                                                                    cnt = cnt + 1;
+
+                                                            }
+                                                            else
+                                                            {
+
+                                                                k = i;
+                                                                cnt = 0;
+                                                                i = ViewBag.namecitycount - 1;
+
+                                                            }
+                                                        }
+                                                    </tr>
+                                                }
+                                            </table>
+                                          @*  <a  style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                                @ViewBag.StateFullName
+                                            </a><a  style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                                @ViewBag.CountInCity
+                                            </a><a  style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                                @ViewBag.StateName
+                                            </a><a  style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                            @ViewBag.Displaybold</a>*@
+                                        </ul>
+                                    </div>
+                                    @*<asp:label forecolor="Red" visible="false" id="Label1"></asp:label>*@
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                                          
+            }
+            
+            @if (ViewBag.cityname01 != null)
+            {
+                if (ViewBag.statecount12 > 1)
+                {
+                <tr id="tblStatesList">
+                    <td colspan="3" style="font-family: Arial; font-size: 9pt; padding-right: 35px;">
+                        <div style="float: left; padding: 0px 0px 15px 0px; width: 702px; margin: 0 12px;">
+                            <div id="divother" style="background-image: url(@ViewBag.citylistimg); color:#03467e;
+                                    background-repeat: repeat-x; background-position: left top;" class="contentlinksbox">
+                                <div style="width: 692px; float: left; padding: 8px 0px 8px 10px; font: 20px georgia;
+                                    font-size: 16px; color: #03467e; font-style: italic;">
+                                    <label id="" style="font-weight: bold">
+                                        States List</label>
+                                </div>
+                                <div style="width: 682px; float: left;">
+                                    <div class="gadget">
+                                        <ul class="sb_menu">
+                                            @{
+                    int i = 0;
+                    int cnt = 0;
+                    int j;
+                    int k = 0;
+              
+                                            }
+                                            <table>
+                                                @for (j = 0; j <= ViewBag.rows; j++)
+                                                {
+                                                    <tr>
+                                                        @for (i = k; i <= ViewBag.statecount12 - 1; i++)
+                                                        {
+                                                            if (cnt < 4)
+                                                            {
+                                                               
+                                                            <td>
+                                                                <li>
+                                                                    @Html.RouteLink((string)ViewBag.states[i].StateNme1, "TopCityTherapists", new { StateNm = ViewBag.states[i].StateNme1.ToString().Replace(" ", "-"), city = @ViewBag.textvalue.ToString().Replace(" ", "-") }, new { @title = "Electricians in " + ViewBag.states[i].StateNme1 })
+                                                                    @* @Html.ActionLink(text12, "ListOfProviders", "Search", new { StateNm = text12 }, new { @title = stitle })*@
+                                                                </li>
+                                                            </td>
+                                                                cnt = cnt + 1;
+
+                                                            }
+                                                            else
+                                                            {
+
+                                                                k = i;
+                                                                cnt = 0;
+                                                                i = ViewBag.statecount12 - 1;
+
+                                                            }
+                                                        }
+                                                    </tr>
+                                                }
+                                            </table>
+                                           @* <a id="a12" style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                                @ViewBag.StateFullName
+                                            </a><a id="a13" style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                                @ViewBag.CountInCity
+                                            </a><a id="a14" style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                                @ViewBag.StateName
+                                            </a><a id="a15" style="font-family: Arial; font-weight: bold; font-size: 12pt; display: none;">
+                                            @ViewBag.Displaybold*@
+                                        </ul>
+                                    </div>
+                                    @*<asp:label forecolor="Red" visible="false" id="Label1"></asp:label>*@
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                }
+            }
+            <tr valign="top">
+                <td valign="top" colspan="3" style="padding-top: 4px; font-family: Arial; font-size: 12pt;
+                    padding-left: 10px;" align="left">
+                   @* 
+                    @if (ViewBag.StateNm != null & ViewBag.StateNm != "" & ViewBag.issname != null & ViewBag.id == null & ViewBag.city == null)
+                    {
+                        @Html.RouteLink((string)ViewBag.issname, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issname + " Therapists" })
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists</label>
+                        @Html.ActionLink((string)ViewBag.StateNm, "ListOfProviders", "Search", new { StateNm = ViewBag.StateNm }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.StateNm + " Therapists" })
+                    }
+                    else if (ViewBag.language != null & ViewBag.issname != null & ViewBag.id == null & ViewBag.city == null)
+                    {
+                        string lan123 = ViewBag.language + " Language";
+                        @Html.RouteLink(lan123, "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Therapists" })
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt; color: Black;">Therapists</label>
+                        @Html.ActionLink((string)ViewBag.StateNm, "ListOfProviders", "Search", new { StateNm = ViewBag.StateNm }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.StateNm + " Therapists" })
+                    }
+                    else if (ViewBag.issname != null & ViewBag.id == null & ViewBag.city == null)
+                    {
+                        @Html.RouteLink((string)ViewBag.issname, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issname + " Therapists" })
+                       <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists</label>
+                    }
+                    else if (ViewBag.id == null & ViewBag.city == null & ViewBag.language != null)
+                    {
+                        string lan = ViewBag.language + " Language";
+                        @Html.RouteLink(lan.Replace("-", " "), "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Language Therapists" })
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists</label>
+                    }
+                    else if (ViewBag.stateid12 != null & ViewBag.StateNm != null & ViewBag.StateNm != "" & ViewBag.language != null)
+                    {
+
+                        @Html.RouteLink((string)ViewBag.language, "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Language Therapists" })
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists in</label>
+                        @Html.ActionLink((string)ViewBag.StateNm, "ListOfProviders", "Search", new { StateNm = ViewBag.StateNm }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.StateNm + " Therapists" })
+                    }
+                    else if (ViewBag.stateid12 != null & ViewBag.StateNm != null & ViewBag.StateNm != "" & ViewBag.issueid != null)
+                    {
+                        @Html.RouteLink((string)ViewBag.issname, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issname + " Therapists" })
+                        <label style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists in</label>
+                        @Html.ActionLink((string)ViewBag.StateNm, "ListOfProviders", "Search", new { StateNm = ViewBag.StateNm }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.StateNm + " Therapists" })
+                    }*@
+                    @if (ViewBag.zippcode123 != null & ViewBag.cityname123 != null & ViewBag.cityname1232 != null)
+                    {
+                        string zipx = " " + ViewBag.zippcode123;
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Electricians in</label>
+                        @Html.ActionLink((string)ViewBag.cityname123, "ListOfProviders", "Search", new { city = ViewBag.textcitynm }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.cityname123 + " Electricians" })
+                        @Html.ActionLink((string)ViewBag.cityname1232, "ListOfProviders", "Search", new { StateNm = ViewBag.staenm1 }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.cityname1232 + " Electricians" })
+                        @Html.ActionLink(zipx.ToString(), "ListOfProviders", "Search", new { id = ViewBag.zippcode123 }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.zippcode123 + " Electricians" })
+                    }
+                    @*else if (ViewBag.issuesnm != null & ViewBag.zippcode != null)
+                    {
+                        @Html.RouteLink((string)ViewBag.issuesnm, "Issues", new { issuesnm = ViewBag.IssueTitle }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.issuesnm + " Therapists" })
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists in</label> 
+                        @Html.ActionLink((string)ViewBag.zippcode, "ListOfProviders", "Search", new { id = ViewBag.zippcode }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.zippcode + " Therapists" })  
+                   
+                    }
+                    else if (ViewBag.language != null & ViewBag.zippcode != null)
+                    {
+                        string lang2 = ViewBag.language + " Language";
+                        @Html.RouteLink(lang2.Replace("-", " "), "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.language + " Language Therapists" })
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists in</label> 
+                        @Html.ActionLink((string)ViewBag.zippcode, "ListOfProviders", "Search", new { id = ViewBag.zippcode }, new { @Style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", @title = ViewBag.zippcode + " Therapists" })  
+                    }
+                    else if (ViewBag.cityname123 != null & ViewBag.issuesnm != null)
+                    {
+                        if (ViewBag.textcity.Contains("/"))
+                        {
+                            ViewBag.textcity = ViewBag.textcity.ToString().Replace("/", " ");
+                        }
+                        string stateab67 = " " + ViewBag.statee1;
+                        ViewBag.issue = ViewBag.issuesnm.ToString().Contains("/") ? ViewBag.issuesnm.ToString().Replace("/", "-") : ViewBag.issuesnm;
+                        @Html.RouteLink((string)ViewBag.issuesnm, "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.issue.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issuesnm + " Therapists" })
+                  <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists in</label>
+                        @Html.RouteLink((string)ViewBag.cityname123, "TopCityTherapists", new { city = ViewBag.textcity.ToString().Replace(" ", "-"), StateNm = ViewBag.staenm1.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname123 + " Therapists" })
+            
+                        @Html.RouteLink(stateab67, "ListOfProviders", new { StateNm = ViewBag.staenm1.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.staenm1 + " Therapists" })
+
+                    }*@
+                    else if (ViewBag.cityname123 != null & ViewBag.language != null)
+                    {
+                        if (ViewBag.textcity.Contains("/"))
+                        {
+                            ViewBag.textcity = ViewBag.textcity.ToString().Replace("/", " ");
+                        }
+                        string isunm7 = ViewBag.language + " Language";
+                        string title75 = ViewBag.cityname123 + " Electricians";
+                        string stateab62 = " " + ViewBag.statee1;
+                        @Html.RouteLink(isunm7.Replace("-", " "), "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Language Electricians" })
+
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Electricians in</label>
+                        <a id="anccitywithab" href="@Url.Action("ListOfProviders", "Search", new { city = ViewBag.textcity.ToString().Replace(" ", "-") })" title="@title75" style="font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;">
+                            @ViewBag.cityname123
+                        </a>
+                        @Html.RouteLink(stateab62, "ListOfProviders", new { StateNm = ViewBag.staenm1.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.staenm1 + " Electricians" })
+
+                    }
+                   @* else if (ViewBag.cityname01 != null & ViewBag.issuesnm != null)
+                    {
+                        if (ViewBag.searchcity.Contains("/"))
+                        {
+                            ViewBag.searchcity = ViewBag.searchcity.ToString().Replace("/", " ");
+                        }
+                        string issname123 = ViewBag.issuesnm + " ";
+                        @Html.RouteLink(issname123.Replace("-", " "), "Issues", new { issueid = ViewBag.issueid, issuesnm = ViewBag.IssueTitle }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.issuesnm + " Therapists" })
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists in</label>
+                        @Html.ActionLink((string)ViewBag.cityname01, "ListOfProviders", "Search", new { city = ViewBag.searchcity.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname01 + " Therapists" })
+                                
+                    }
+                    else if (ViewBag.cityname01 != null & ViewBag.language != null)
+                    {
+                        if (ViewBag.searchcity.Contains("/"))
+                        {
+                            ViewBag.searchcity = ViewBag.searchcity.ToString().Replace("/", " ");
+                        }
+                        string language567 = ViewBag.language + " Language ";
+                        @Html.RouteLink(language567.Replace("-", " "), "speaks", new { language = ViewBag.language }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.language + " Therapists" })
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Therapists in</label>
+                        @Html.ActionLink((string)ViewBag.cityname01, "ListOfProviders", "Search", new { city = ViewBag.searchcity.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname01 + " Therapists" })
+                                
+                    }*@
+                    else if (ViewBag.cityname123 != null)
+                    {
+                        if (ViewBag.textcity.Contains("/"))
+                        {
+                            ViewBag.textcity = ViewBag.textcity.ToString().Replace("/", " ");
+                        }
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Electricians in</label>
+                        @Html.RouteLink((string)ViewBag.cityname123, "Cities", new { city = ViewBag.textcity.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname123 + " Electricians" })
+                        @Html.RouteLink((string)ViewBag.statee1, "ListOfProviders", new { StateNm = ViewBag.mystate234.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.mystate234 + " Electricians" })
+
+                    }
+                    else if (ViewBag.cityname01 != null)
+                    {
+                        ViewBag.cityname = ViewBag.cityname01.Contains("/") ? ViewBag.cityname01.ToString().Replace("/", " ") : ViewBag.cityname01;
+                        <label id="lblheading" style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Electricians in</label>
+                        @Html.RouteLink((string)ViewBag.cityname01, "Cities", new { city = ViewBag.cityname.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.cityname01 + " Electricians" })
+
+                    }
+
+                    else if (ViewBag.zippcode != null & ViewBag.distance != null)
+                    {
+                        string zptxt = ViewBag.zippcode + " around " + ViewBag.distance + " miles";
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Electricians in</label>
+                        @Html.RouteLink(zptxt, "ZipcodeTherapists", new { id = ViewBag.zippcode, distance = ViewBag.distance }, new { @style = "font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;", title = ViewBag.zippcode + " Electricians" })
+
+                    }
+                    else if (ViewBag.zippcode != null)
+                    {
+                        string title49 = ViewBag.zippcode + " Electricians";
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Electricians in</label>
+                        <a id="anzip" href="@Url.Action("ListOfProviders", "Search", new { id = ViewBag.zippcode })" title="@title49" style="font-family: Arial; font-weight: bold; font-size: 12pt; color:#044a7d;">
+                            @ViewBag.zippcode
+                        </a>
+                    }
+                    else if (ViewBag.zippcode123 != null & ViewBag.StateNm != null & ViewBag.city != null)
+                    {
+                        if (ViewBag.city.Contains("/"))
+                        {
+                            ViewBag.city = ViewBag.city.ToString().Replace("/", " ");
+                        }
+                        <label style="font-family: Arial; font-weight: bold; font-size: 12pt; color: Black;">Electricians in</label>
+                        @Html.RouteLink((string)ViewBag.cityabname, "TopCityTherapists", new { city = ViewBag.city.ToString().Replace(" ", "-"), StateNm = ViewBag.StateNm.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.cityabname + " Electricians" })
+                        <span style="font-size: 14px; font-weight: normal;">,</span>
+                        @Html.RouteLink((string)ViewBag.stateAb, "ListOfProviders", new { StateNm = ViewBag.StateNm.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.StateNm + " Electricians" })
+                        if (ViewBag.distance != "0")
+                        {
+                             @Html.RouteLink(" " + (string)ViewBag.zippcode123, "ZipcodeTherapists", new { id = ViewBag.zippcode123, distance = ViewBag.distance }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.zippcode123 + " Electricians" })
+                        }
+                        else
+                        {
+                            @Html.RouteLink(" " + (string)ViewBag.zippcode123, "ZipcodeSearch", new { id = ViewBag.zippcode123 }, new { @Style = "font-family: Arial; font-size: 14px;text-decoration:underline;", @title = ViewBag.zippcode123 + " Electricians" })
+                        }
+
+                        if (ViewBag.distance != "0")
+                        {
+                            <span style="font-size: 14px; font-weight: normal;">around @ViewBag.distance miles</span>
+                        }
+
+                    }
+                    else if (ViewBag.StateNm != null)
+                    {
+                        <label  style="font-family: Arial; font-weight: bold; font-size: 12pt;color: Black;">Electricians in</label>
+                        @Html.RouteLink((string)ViewBag.StateNm, "ListOfProviders", new { StateNm = ViewBag.StateNm.ToString().Replace(" ", "-") }, new { @Style = "font-family: Arial; font-size: 14px;", @title = ViewBag.statee1 + " Electricians" })
+                    }
+                </td>
+            </tr>
+                        <tr>
+                <td style="text-align:center;padding-left: 15px;">
+                    <div id='map-canvas' style="position:relative; width:94%; height:350px;"></div> 
+                </td>
+            </tr>
+            <tr valign="top">
+                <td valign="top" colspan="3" style="padding-top: 5px; font-family: Arial; font-size: 9pt;
+                    padding-left: 10px;" align="left">
+                    <span id="lblListing1" style="font-family: arial; font-size: 9pt;">@ViewBag.listing</span>
+                </td>
+            </tr>
+            @if (ViewBag.listcount > 0)
+            {
+                foreach (var item in ViewBag.list)
+                {
+                    string qn = null;
+                    int length = 0;
+                    qn = (string)item.Paragraph;
+                    if (qn != null)
+                    {
+
+                        length = qn.Length;
+                    }
+                <tr>
+                    <td colspan="3" align="center" style="font-family: Arial; font-size: 9pt;" valign="top">
+                        <div style="width: 95%;">
+                            <div align="right" style="margin-right: 53px;">
+                                @{
+                    string cityname = null;
+                    // string stateab = null;
+                    // string city123 = null;
+                                }
+                                @if (item.CityNm != null)
+                                {
+                                    // string ZIP = item.ZIPValue;
+                                    //clsCountry obj = new clsCountry();
+                                    //ProviderAdvertising objdata = new ProviderAdvertising();
+                                    //obj = objdata.GetStatecitywithZip(ZIP);
+                                    //stateab = obj.StateAbb;
+                                    if (ViewBag.citynm123 != item.CityNm)
+                                    {
+                                        cityname = item.CityNm;
+                                        cityname = cityname.ToUpper();
+                                    }
+                                    else
+                                    {
+                                        cityname = null;
+                                    }
+                                    ViewBag.citynm123 = item.CityNm;
+                                    // city123 = cityname + " (" + stateab + ")";
+                                }
+                                @if (cityname != null)
+                                {
+                                    string ctyname = cityname.Contains("/") ? cityname.Replace("/", " ") : cityname;
+                                    //string title = cityname.ToString() + " therapists";
+                                   @* <a title="@title"></a>*@
+                                    @Html.RouteLink(cityname, "Cities", new { city = ctyname.Replace(" ", "-") }, new { @Style = "font-weight: bold;", @title = cityname + " Electricians" })
+
+                                }
+                            </div>
+                            <div id="therapist-Profiles" style="margin-right: 35px;">
+                                <div id="tpbgcon">
+                                    @*<a id="ather_ID" style="font-weight: bold; font-family: Arial; font-size: 9pt; display: none">
+                                        @item.ther_ID
+                                    </a><a id="a1" style="font-family: Arial; font-size: 9pt; display: none">
+                                        @item.Billingservice_ID
+                                    </a>*@
+                                   @* <asp:label font-names="arial" font-size="9pt" id="lblColorPalet" text='<%: item("ColorPalet")%>'
+                                        visible="false"></asp:label>*@
+                                    <div style="width: 670px; float: left;">
+                                        <div style="width: 102px; float: left;" id="tdImage">
+                                            <div style="width: 92px; float: left; background-color: #FFFFFF; padding: 4px;">
+                                            @{
+                                string imgind = null;
+                                                }
+                                                     @{
+                                string domain = null;
+                               // MowerHelper.Models.Classes.clsWebConfigsettings objconfig = new MowerHelper.Models.Classes.clsWebConfigsettings();
+                                string Requesturl = null;
+                                if (Request.Url != null)
+                                {
+                                    Requesturl = Request.Url.ToString();
+                                }
+                                var strurl = Requesturl.Split('/');
+                                            }
+                                            @if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("Islocal") == "Y")
+                                            {
+                                                if (Requesturl.Contains("localhost:"))
+                                                {
+                                                    domain = strurl[0] + "//" + strurl[2] + "/";
+
+                                                }
+                                                else if (Requesturl.Contains("vbv"))
+                                                {
+                                                    domain = strurl[0] + "//" + strurl[2] + "/" + strurl[3] + "/";
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                domain = MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("PublicImageChecklocal");
+                                            }
+                                               @if (!string.IsNullOrEmpty(item.Picture))
+                                               {
+
+                                                   string str = item.Picture;
+                                                   ViewData["str"] = str;
+                                                   ViewBag.strimage = str;
+                                                   if (str.Contains(".") == true)
+                                                   {
+                                                       string[] str1 = str.Split('.');
+                                                       ViewData["ExistedLogo"] = str1[0];
+                                                       ViewBag.ExistedLogo = str1[0];
+                                                       ViewData["ExistedExtn"] = str1[1];
+                                                       ViewBag.ExistedExtn = str1[1];
+                                                   }
+
+                                                   string strings = null;
+
+                                                   //  strings = "../Attachments/Providers" + "/";
+                                                   strings = Path.Combine(Server.MapPath("~/Attachments/Providers"), str);
+                                                   if (System.IO.File.Exists(strings))
+                                                   {
+
+                                                       ViewBag.providerimage = domain + "Attachments/Providers/" + str;
+
+
+                                                   }
+                                                   //else if (Convert.ToString(item.Gender) == "Male")
+                                                   //{
+                                                   //    ViewBag.providerimage = domain + "images/male.png";
+                                                   //    //ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/male.png&Width=100&Height=80";
+                                                   //}
+                                                   //else if (Convert.ToString(item.Gender) == "Female")
+                                                   //{
+                                                   //    ViewBag.providerimage = domain + "images/female.png";
+                                                   //    //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/female.png&Width=100&Height=80";
+                                                   //}
+                                                   else
+                                                   {
+                                                       ViewBag.providerimage = domain + "images/Coach1.JPG";
+
+                                                   }
+                                               }
+                                               else
+                                               {
+                                                   //if (Convert.ToString(item.Gender) == "Male")
+                                                   //{
+                                                   //    ViewBag.providerimage = domain + "images/male.png";
+                                                   //    //ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/male.png&Width=100&Height=80";
+                                                   //}
+                                                   //else if (Convert.ToString(item.Gender) == "Female")
+                                                   //{
+                                                   //    ViewBag.providerimage = domain + "images/female.png";
+                                                   //    //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/female.png&Width=100&Height=80";
+                                                   //}
+                                                   //else
+                                                   //{
+                                                       ViewBag.providerimage = domain + "images/Coach1.JPG";
+                                                       //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/Coach1.JPG&Width=100&Height=80";
+
+                                                  // }
+
+
+                                               }
+
+
+
+                                                @if (imgind == "1")
+                                                {
+                                                     <a id="aimgprovid">
+                                                    <img id="imgProvid" src="~/@ViewBag.providerimage" style="border-style:solid; width:80px; height:100px;" />
+                                                </a>
+                                                }
+                                                else
+                                                {
+                                                     <a id="aimgprovider">
+                                                    <img id="imgProvider" src="@ViewBag.providerimage" style="border-style:solid; width:80px; height:100px;" />
+                                                </a>
+                                                }
+                                               
+                                            </div>
+                                        </div>
+                                        <div style="width: 553px; float: left; padding-left: 10px;">
+                                            <div style="width: 553px; float: left;">
+                                                <div style="width: 373px; float: left;">
+                                                    <div class="ntptitle" style="width: 373px; float: left;">
+                                                        <table align="left" width="100%">
+                                                            <tr>
+                                                                <td align="left">
+                                                                    @{
+                                                //int id = item.ProviderID;
+                    string titlepvnm = "see full profile of " + item.ProviderFullName + ", Electricians in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue;
+                    string estate = item.State_Name.ToString().Trim().Replace("/ ", "-");
+                    estate = estate.Replace("/", "-");
+                    estate = estate.Replace("'", "-");
+                     estate = estate.Replace(" ", "-");
+                     string ecity = item.CityNm.ToString().Trim().Replace("/ ", "-");
+                     ecity = ecity.Replace("/", "-");
+                     ecity = ecity.Replace("'", "-");
+                     ecity = ecity.Replace(" ", "-");
+                                                                    }
+                                                                     @Html.RouteLink((string)item.ProviderFullName, "ProviderProfile", new { @randomnumber = item.Random_number, Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-"),state=estate,city=ecity,zip=item.ZIPValue }, new { @title = "see full profile of " + item.ProviderFullName + ", Mower Helper in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue })
+                                                                  @*  @Html.RouteLink((string)item.ProviderFullName, "ProviderProfile", new { @id = item.ProviderID.ToString(), Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-") }, new { @title = "see full profile of " + item.ProviderFullName + ", Electricians in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue, @style = "font-family: Arial; font-weight: bold; font-size: 15pt; color:#044a7d;" })*@
+                                                                    @*<a href="@Url.Action("Profile", "Public", new { id = id.ToString() })" id="lnkTherapistName" title="@titlepvnm" style="font-family: Arial; font-weight: bold; font-size: 15pt; color:#044a7d;">
+                                                                  
+                                                                    
+                                                                 @item.ProviderFullName
+                                                                   
+                                                                </a>*@
+                                                                    <br />
+                                                                    <br />
+                                                                    <span id="lblBusinessName" style="font-family: arial; font-size: 9pt; font-weight: bold;">
+                                                                        @item.Businessname
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div style="width: 373px; float: left;">
+                                                        <table align="left" width="100%">
+                                                            <tr>
+                                                                <td align="left">
+                                                                    @*   @{
+                var items = item.Address.Split(new[] { "<BR />" }, StringSplitOptions.None);
+               
+                                                            }*@ @* @foreach(string item1 in items){*@ <span id="Span1" style="font-family: arial;
+                                                                font-size: 9pt; font-weight: normal;">
+                                                                @Html.Raw(item.Address)
+                                                            </span>@*  }*@ @*<a id="A4" style="font-family: Arial; font-size: 9pt; display: none">
+                                                                @item.State_Name
+                                                            </a><a id="A5" style="font-family: Arial; font-size: 9pt; display: none">
+                                                                @item.ZIPValue
+                                                            </a>*@
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div style="width: 180px; float: right;" align="right">
+                                                    <table>
+                                                        <tr>
+                                                            <td style="background-color:#1d70ab; text-align:center; height:30px; width:110px;">
+                                                      
+@Html.RouteLink("VIEW PROFILE", "ProviderProfile", new { @randomnumber = item.Random_number, Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-"),state=estate,city=ecity,zip=item.ZIPValue }, new {@style="color:#ffffff; font-weight:bold; font-size: 10pt;", @title = "see full profile of " + item.ProviderFullName + ", Mower Helper in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue })
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+
+
+
+
+                                                  @*  <a href="@Url.Action("Profile", "Public", new { id = item.ProviderID.ToString(), Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-") })" title="@titlepvnm" style="font-family: Arial; font-size: 9pt;
+                                                    font-weight: bold;" id="lnkViewProfile" >
+                                                        <img id="imgprofile" alt="" src="~/Images/viewprofile.jpg" /></a>*@
+                                                    <div id="divphones" style="width: 180px; float: left; padding: 6px 0px; padding-top: 10px;">
+                                                        <table>
+                                                            @if (item.distance != 0)
+                                                            {
+                                                            <tr align="right">
+                                                                <td>
+                                                                    <a  style="font-weight: bold; font-family: Arial; font-size: 9pt; text-align: right;">
+                                                                        @if (ViewBag.zippcode != null)
+                                                                        {
+                                                                        @item.distance <span>miles from </span>@ViewBag.zippcode
+                                                                        }
+                                                                             @if (ViewBag.zippcode123 != null)
+                                                                             {
+                                                                                  @item.distance <span>miles from </span>@ViewBag.zippcode123
+                                                                             }
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            }
+                                                            @if (item.Vmoffice != null & item.Vmoffice != "")
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="trOfficeVM" class="ntpphone" style="float: left; padding: 0px 10px;">
+                                                                            <span class="ntpphone01">Phone :</span> <a id="A6">
+                                                                                                                        @item.Vmoffice
+                                                                                                                    </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                           @* @if (item.WPExtension != null & item.WPExtension != "")
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="trExtn" class="ntpphone" style="float: left; padding: 0px 10px;">
+                                                                            <span class="ntpphone01">Extn :</span> <a id="A7">
+                                                                                                                       @item.WPExtension
+                                                                                                                   </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
+                                                            @if (item.Fax != null & item.Fax != "")
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        <div id="trFax" class="ntpphone" style="float: left; padding: 0px 10px;">
+                                                                            <span class="ntpphone01">Fax :</span> <a id="A8">
+                                                                                                                      @item.Fax
+                                                                                                                  </a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="clearme" style="display: none;">
+                                                    <img id="imgclr" alt="clear" /></div>
+                                            </div>
+                                           @* <div style="width: 553px; float: left; background-color: #f4f4f4; padding: 6px 0px;
+                                                display: none;">
+                                                <div class="ntpphone" style="float: left; padding: 0px 10px; border-right: 2px #FFFFFF solid;
+                                                    display: none;">
+                                                    <span class="ntpphone01">Mobile Phone : :</span> <a id="a0">
+                                                        @item.Vmpersonal
+                                                    </a>
+                                                </div>
+                                                <div id="trPhone" class="ntpphone" style="float: left; padding: 0px 10px; border-right: 2px #FFFFFF solid;">
+                                                    <span class="ntpphone01">Phone :</span> <a id="a10">
+                                                        @item.Phone
+                                                    </a>
+                                                </div>
+                                            </div>*@
+                                        </div>
+                                    </div>
+                                    <div id="description" style="width: 670px; float: left;">
+                                        <p>
+                                            @if (qn != null)
+                                            {
+                                                if (length > 400)
+                                                {
+                                                    qn = qn.Remove(400, qn.Length - 400) + "...";
+                                                    // qn = DietitianHelp.Models.Classes.ClsSharedMethods.trimparagraphtext(qn);
+                                                                                              
+                                                <span id="Span3" style="font-family: arial; font-size: 9pt; font-weight: normal;">
+                                                    @Html.Raw(HttpUtility.HtmlDecode(qn))
+                                                </span>
+                                                }
+                                                else
+                                                {
+                                                    //qn = DietitianHelp.Models.Classes.ClsSharedMethods.trimparagraphtext(qn);
+                                                <span id="Span4" style="font-family: arial; font-size: 9pt; font-weight: normal;">
+                                                    @Html.Raw(HttpUtility.HtmlDecode(qn))
+                                                </span>
+                                                }
+                                            }
+                                            @if (qn != null)
+                                            {
+                                                if (length > 400)
+                                                {                                                
+@* <%If qn <> Nothing Then%> 
+                                                        <%If qn.Length > 400 Then%>*@
+                                                 @Html.RouteLink("[ more ]", "ProviderProfile", new { @randomnumber = item.Random_number, Therapistname = item.PublicURL.ToString().Trim().Replace(" ", "-"),state=estate,city=ecity,zip=item.ZIPValue }, new {@style="font-family: Arial; font-size: 9pt; font-weight: bold; color:#044a7d;", @title = "see full profile of " + item.ProviderFullName + ", Mower Helper in " + item.CityNm + ", " + item.State_Name + " " + item.ZIPValue })
+                                               
+                                                }
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                }
+            }
+            @if (ViewBag.listcount > 0)
+            {
+                <tr>
+                    <td colspan="3" style="font-family: Arial; font-size: 9pt; padding-left: 10px;" align="left">
+                        <span id="lblListing2" style="font-family: arial; font-size: 9pt;">@ViewBag.listing</span>
+                    </td>
+                </tr>
+        
+                <tr>
+                    <td colspan="3" align="center" style="font-family: Arial; font-size: 9pt;">
+                        <table border="0" cellpadding="2" cellspacing="0" width="10px">
+                            <tr>
+                                @if (ViewBag.listpagingcount > 0)
+                                {
+                                    foreach (var item in ViewBag.listpaging)
+                                    {
+                                        //string id = ViewBag.id;
+                                        // string city = ViewBag.city;
+                                        int pageno = item.PageNo;
+                                        // string stateid12 = ViewBag.stateid12;
+                                        // string StateNm = ViewBag.StateNm;
+                                        string countryid = Convert.ToString(ViewBag.countryid);
+                                        //string CityNm = ViewBag.CityNm;
+                                        //string issueid = ViewBag.issueid;
+                                        //string language = ViewBag.language;
+                                        //string countryname = ViewBag.countryname;
+                                    <td>
+                                        @Html.ActionLink(pageno.ToString(), "ListOfProviders", "Search", new { @id = ViewBag.id, @city = ViewBag.city, @page = pageno.ToString(), @stateid = ViewBag.stateid12, @StateNm = ViewBag.StateNm, @countryid = countryid, @CityNm = ViewBag.CityNm, @countryname = ViewBag.countryname, @distance = ViewBag.distance }, new { @class = "pagination1", @style = "color:gray; margin:1px;", id = "apage" + pageno })
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>                                  
+                                    }
+                                }
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr id="trTopImage" runat="server">
+                    <td colspan="3" align="right" style="padding-right: 35px;">
+                        <a href="#Top" title="Top of the Electricians List" style="text-decoration: none; color: #044a7d;"
+                            class="lnkprovider">
+                            <img alt="" id="img123" src="~/images/123.gif" title="Top of the Electricians list"
+                                width="10" height="9" />
+                            Top</a>&nbsp;&nbsp;
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr id="trziplist">
+                <td colspan="3" style="font-family: Arial; font-size: 9pt;">
+                   @* @{
+            string stateid = Convert.ToString(ViewBag.stateid);
+          
+                    }*@
+                    @* @Html.RenderAction("Uctrl_Zipcodes", "Search", new { @id = state, @stateid = stateid });*@
+                    @{Html.RenderAction("Uctrl_Zipcodes", "Search", new { @id = ViewBag.textvalue, @stateid = ViewBag.stateid, @StateNm = ViewBag.statename1, @listingcount = ViewBag.listcount, @citynm = ViewBag.city1, @zip = ViewBag.id, @distance = ViewBag.distance, @stateab = ViewBag.statee1 });}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    &nbsp;
+                </td>
+            </tr>
+           
+          @*  <tr>
+                <td colspan="3">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    &nbsp;
+                </td>
+            </tr>*@
+        </table>
+    </div>
+    <table style="display: none">
+        <tr>
+            <td id="tdSiteMeter" style="width: 3px">
+            </td>
+        </tr>
+    </table>
+}

@@ -1,0 +1,155 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+  <div id="div2" >
+                                                        <div class="content">
+                                                            <div class="content-box">
+                                                            <div class="content-box-content">
+                                                            @foreach (var item in ViewBag.objinfo)
+                                                            {
+                                                            <table cellpadding="6" cellspacing="1" class="border_style" border="0" width="100%"
+                                                                align="center">
+                                                                
+                                                             
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right" width="30%">
+                                                                        <strong>Role name&nbsp:&nbsp</strong></th>
+                                                                    <td align="left">
+                                                                        &nbsp;
+                                                                        <span id="lblrole_type">@item.Rolename</span>
+                                                                        
+                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right" width="30%">
+                                                                        <strong>
+                                                                        <asp:Label ID="lbl1" ForeColor="red" Text="*" runat="server"></asp:Label>Full name&nbsp:&nbsp</strong></th>
+                                                                    <td align="left">
+                                                                        &nbsp;
+                                                                        <span id="lblFullName">@item.Full_Name</span>
+                                                                    </td>
+                                                                </tr>
+                                                                  <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<asp:Label ID="lblgender" ForeColor="red" Text="*" runat="server"></asp:Label>Gender&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                
+                                                                       &nbsp; <span id="lblgender1">@item.Gender</span>
+                                                                        
+                                                                   
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<asp:Label ID="lbl2" ForeColor="red" Text="*" runat="server"></asp:Label>Cell phone&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                
+                                                                       &nbsp; <span id="lblMobile1">@ViewBag.cellphn</span>
+                                                                        
+                                                                   
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>Phone&nbsp:&nbsp</strong></th>
+                                                                    <td align="left">
+                                                                        &nbsp;<span id="lblWorkPhone1">@ViewBag.WPhone</span>&nbsp;
+                                                                        @if (ViewBag.wphnext != null)
+                                                                        {
+                                                                        <strong><span id="lblExten">Extension : </span></strong>
+                                                                            @ViewBag.wphnext
+                                                                        }
+                                                                        @if (ViewBag.oktoleave == "Y")
+                                                                        {
+                                                                       <strong><span id="lblmessage">Message: </span></strong>
+                                                                            <label id="lblMsgph">Yes</label>
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>Fax&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                               
+                                                                     &nbsp;<span id="lblFax1">@ViewBag.Fax</span>&nbsp;
+                                                                       </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<asp:Label ID="lbl3" ForeColor="red" Text="*" runat="server"></asp:Label>E-mail
+                                                                        :&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                        &nbsp;<span id="lblemail">@item.Email</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<asp:Label ID="lbl4" ForeColor="red" Text="*" runat="server"></asp:Label>Address1
+                                                                        :&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                        &nbsp;<span id="lblAddress1">@item.Address1</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>Address2&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                        &nbsp;<span id="lblAddress2">@item.Address2</span>
+                                                                    </td>
+                                                                </tr>
+                                                               
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<asp:Label ID="lbl8" ForeColor="red" Text="*" runat="server"></asp:Label>Zip&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                        &nbsp;<span id="lblZip">@item.zip</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<asp:Label ID="lbl5" ForeColor="red" Text="*" runat="server"></asp:Label>Country&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                        &nbsp;<span id="lblCountry">@item.Country</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<asp:Label ID="lbl6" ForeColor="red" Text="*" runat="server"></asp:Label>
+                                                                        State&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                        &nbsp;<span id="lblState">@item.statename</span>
+                                                                     
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<asp:Label ID="lbl7" ForeColor="red" Text="*" runat="server"></asp:Label>City&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left">
+                                                                        &nbsp;<span id="lblCity">@item.city</span>                                                                     
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            }
+                                                            <table cellpadding="0" cellspacing="0"  border="0" width="98%"
+                                                                align="center">
+                                                                <tr >
+                                                                    <td align="right" style="padding-bottom: 5px; padding-top: 5px;">
+
+                                                                        <input type="submit" class="viewclose button" value="Close" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                         </div></div></div>
+                                                        </div>
+</body>
+</html>

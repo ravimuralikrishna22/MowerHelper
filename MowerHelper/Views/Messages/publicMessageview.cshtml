@@ -1,0 +1,30 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+</head>
+<body>
+ <div id="main-content">
+                   <table cellspacing="0" class="border_style" cellpadding="0" width="100%" align="center"
+                                    border="0">
+                                    <tr class="white_color">
+                                        <td style="width: 1000px; text-align: justify; padding-bottom: 5px; padding-left: 5px;
+                                            padding-right: 5px; padding-top: 5px; line-height: 20px" align="left">
+                                           @* <span id="lbl_CompnayName">@ViewBag.msg</span>*@
+                                            @Html.Raw(ViewBag.msg)
+                                        </td>
+                                    </tr>
+                                </table>
+       </div>
+    <div>
+        
+    </div>
+</body>
+</html>

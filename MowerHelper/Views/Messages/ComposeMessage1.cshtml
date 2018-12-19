@@ -1,0 +1,347 @@
+﻿@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+     <title>Mower Helper-Find an Mower Helper</title>
+      <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+@*       <script type="text/javascript">
+           function combobox1_ItemClick(sender, selectedIndex) {
+               var obj = combobox1.options[selectedIndex].value;
+               //           alert(obj); 
+
+               $.ajax({
+                   type: "get",
+                   contentType: "application/json;charset=utf-8",
+                   url: "../Schedule/GetPatientInfo",
+                   data: { "patientid": obj },
+                   dataType: "json",
+                   success: Result
+               });
+           }
+       </script>*@
+       <script type="text/javascript">
+
+           $(document).ready(function () {
+               $('#ddlRoles').change(function () {
+                   ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+                   ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdPractice', 'white');
+                   ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdveriuser', 'white');
+                   ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdverisuper', 'white');
+                   ValidateAlertClear('tblmain', 'lblattach', 'tdattach', 'tdattachmain', 'white');
+                   if (document.getElementById('ddlRoles').value == 'Mower helper') {
+                       document.getElementById('tdPractice').style.display = '';
+                       document.getElementById('tdveriuser').style.display = 'none';
+                       document.getElementById('tdverisuper').style.display = 'none';
+                       document.getElementById('HdnRoleid').value = "1";
+                   }
+                   else if (document.getElementById('ddlRoles').value == 'Verification Users') {
+                       document.getElementById('tdPractice').style.display = 'none';
+                       document.getElementById('tdveriuser').style.display = '';
+                       document.getElementById('tdverisuper').style.display = 'none';
+                       document.getElementById('HdnRoleid').value = "2";
+                   }
+                   else if (document.getElementById('ddlRoles').value == 'Verification supervisor') {
+                       document.getElementById('tdPractice').style.display = 'none';
+                       document.getElementById('tdveriuser').style.display = 'none';
+                       document.getElementById('tdverisuper').style.display = '';
+                       document.getElementById('HdnRoleid').value = "3";
+                   }
+                   else {
+                       document.getElementById('tdPractice').style.display = 'none';
+                       document.getElementById('tdveriuser').style.display = 'none';
+                       document.getElementById('tdverisuper').style.display = 'none';
+                       document.getElementById('HdnRoleid').value = "0";
+                   }
+
+                   return false;
+               });
+           });
+</script>
+<script language="javascript" type="text/javascript">
+    function Save() {
+        ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+        ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdPractice', 'white');
+        ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdveriuser', 'white');
+        ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdverisuper', 'white');
+        ValidateAlertClear('tblmain', 'lblattach', 'tdattach', 'tdattachmain', 'white');
+        if (document.getElementById('HdnRoleid').value == 1) {
+            ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdPractice', 'white');
+            if (document.getElementById('tdPractice').style.display == '') {
+                if (combobox1.selectedIndex() == -1) {
+                    ValidateAlert('tblmain', 'lblpatient', 'tdpatient', 'tdPractice', 'Please select Mower helper');
+                    return false;
+
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdPractice', 'white');
+                }
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdPractice', 'white');
+            }
+        }
+
+        if (document.getElementById('HdnRoleid').value == 2) {
+            ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdveriuser', 'white');
+            if (document.getElementById('tdveriuser').style.display == '') {
+                if (combobox2.selectedIndex() == -1) {
+                    ValidateAlert('tblmain', 'lblpatient', 'tdpatient', 'tdveriuser', 'Please select verification user');
+                    return false;
+
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdveriuser', 'white');
+                }
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdveriuser', 'white');
+            }
+        }
+
+        if (document.getElementById('HdnRoleid').value == 3) {
+            ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdverisuper', 'white');
+            if (document.getElementById('tdverisuper').style.display == '') {
+                if (combobox3.selectedIndex() == -1) {
+                    ValidateAlert('tblmain', 'lblpatient', 'tdpatient', 'tdverisuper', 'Please select verification supervisor');
+                    return false;
+
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdverisuper', 'white');
+                }
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblpatient', 'tdpatient', 'tdverisuper', 'white');
+            }
+        }
+
+        document.getElementById('txtTopics').value = trim(document.getElementById('txtTopics').value);
+        var str_Msg;
+        str_Msg = trim(document.getElementById('txtMessages').value);
+        document.getElementById('txtMessages').value = str_Msg;
+        if (str_Msg == '') {
+            //Glb_ShowAlert('Please enter message', 'Alert', '', '');
+            ValidateAlert('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'Please enter message');
+            document.getElementById('txtMessages').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+        }
+        //if (MyChars(document.getElementById('txtMessages')) == "SpaceError") {
+        //    //Glb_ShowAlert("Please enter message without spaces first");
+        //    ValidateAlert('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'Please enter message without spaces first');
+        //    document.getElementById('txtMessages').focus();
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+        //}
+        if (str_Msg.length > 8000) {
+            //Glb_ShowAlert('Please enter at most 8000 characters in the message field', 'Alert', '', '');
+            ValidateAlert('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'Please enter at most 8000 characters in the message field');
+            document.getElementById('txtMessages').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+        }
+        if (document.getElementById('fileAttachment').value != 0) {
+            var strFilePath = document.getElementById('fileAttachment').value;
+            var Files1 = new Array();
+            var Files = new Array();
+            Files = strFilePath.split('\\');
+            var strFileName = Files[parseInt(Files.length) - 1];
+            var strreverse = revString(strFileName);
+            var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+
+            if (strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "PNG" || strExtn.toUpperCase() == "IFF" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TEXT" || strExtn.toUpperCase() == "TXT" || strExtn.toUpperCase() == "DOC" || strExtn.toUpperCase() == "OCX" || strExtn.toUpperCase() == "XLS" || strExtn.toUpperCase() == "LSX" || strExtn.toUpperCase() == "PPT" || strExtn.toUpperCase() == "PTX" || strExtn.toUpperCase() == "PDF" || strExtn.toUpperCase() == "WMV" || strExtn.toUpperCase() == "ASF" || strExtn.toUpperCase() == "WM" || strExtn.toUpperCase() == "AVI" || strExtn.toUpperCase() == "MPE" || strExtn.toUpperCase() == "PEG") {
+                ValidateAlertClear('tblmain', 'lblattach', 'tdattach', 'tdattachmain', 'white');
+            }
+            else {
+                //Glb_ShowAlert('Invalid File format !!!.');
+                ValidateAlert('tblmain', 'lblattach', 'tdattach', 'tdattachmain', 'Invalid File format !!!.');
+                document.getElementById('fileAttachment').value = '';
+                return false;
+            }
+
+        }
+    }
+       </script>
+</head>
+<body>
+      @using (Html.BeginForm("ComposeMessage1", "Messages", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+      {
+          @Html.AntiForgeryToken()
+          <input type="hidden" id="HdnTab_ID" name="HdnTab_ID" value="@ViewBag.Tabid" />
+    <div>
+<div class="content-box">
+          <div class="content-box-content">
+                                    <div class="content-box">
+                                        <table runat="server" width="100%" class="border_style" cellspacing="1" cellpadding="0">
+                                            <tr class="white_color" id="tblto">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                    <span style="font-size: 8pt; color: red;">*</span><strong>To :</strong>
+                                                </td>
+                                                <td align="left" style="padding-left: 4px; padding-top:4px; padding-bottom:4px;">
+                                                   @{string[] sentmsgs = { "Mower helper", "Verification Users", "Verification supervisor", "To all my mower helpers", "To all my verification users", "To all my verification supervisors" };}
+                                                   @Html.DropDownList("ddlRoles", new SelectList(sentmsgs, (string)ViewBag.Prefix), new { @style = "width:300px;height:25px;font-size:13px;" })
+                                                </td>
+                                                <td align="left" id="tdPractice" style="padding-left:4px;" runat="server">
+                                                                    @Html.Obout(new ComboBox("combobox1")
+                                                           {
+                                                               Width = 400,
+                                                               MenuWidth = 400,
+                                                               Height = 200,
+                                                               EnableLoadOnDemand = true,
+                                                               OnLoadingItems = "Messages/LoadingItems1",
+                                                               EmptyText = "-- Select Mower Helper --",
+                                                               HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                                                                   @:<div class="header c1" >Mower Helper name</div>
+),
+
+                                                               ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                                            @:<div class="item c1" >@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).ProviderName)</div>
+)
+                                                           })
+                                                </td>
+                                                <td align="left" id="tdveriuser" style=" display:none; padding-left:4px;" runat="server">
+
+                                                                        @Html.Obout(new ComboBox("combobox2")
+                                                           {
+                                                               Width = 400,
+                                                               MenuWidth = 400,
+                                                               Height = 200,
+                                                               EnableLoadOnDemand = true,
+                                                               OnLoadingItems = "Messages/LoadingItems2",
+                                                               EmptyText = "-- Select verification user --",
+                                                               HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                                                                   @:<div class="header c1" >User name</div>
+),
+
+                                                               ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                                            @:<div class="item c1" >@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).ProviderName)</div>
+)
+                                                           })
+                                                </td>
+                                                <td align="left" id="tdverisuper" style=" display:none; padding-left:4px;" runat="server">
+
+                                                                        @Html.Obout(new ComboBox("combobox3")
+                                                           {
+                                                               Width = 400,
+                                                               MenuWidth = 400,
+                                                               Height = 200,
+                                                               EnableLoadOnDemand = true,
+                                                               OnLoadingItems = "Messages/LoadingItems3",
+                                                               EmptyText = "-- Select verification supervisor --",
+                                                               HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                                                                   @:<div class="header c1" >User name</div>
+),
+
+                                                               ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                                            @:<div class="item c1" >@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).ProviderName)</div>
+)
+                                                           })
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" id="tblMessageDetails1" runat="server">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                    <span style="font-size: 8pt; color: red;"></span><strong>Topic&nbsp;:</strong>
+                                                </td>
+                                                <td width="80%" class="Messagestationclass" align="left" colspan="4" style="padding-left: 4px;
+                                                    padding-top: 4px; padding-bottom: 4px;">
+                                                     @Html.TextBox("txtTopics", (string)ViewBag.Subject, new { @class = "textfield", MaxLength = "200", style = "width:600px", autocomplete = "off" })
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" style="height: 20" id="tblMessageDetails2" runat="server">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                    <span style="font-size: 8pt; color: red;">*</span><strong>Message&nbsp;:</strong>
+                                                </td>
+                                                <td width="80%" id="tdmessagesmain" class="Messagestationclass" align="left" colspan="4" style="padding-left: 4px;
+                                                    padding-top: 4px; padding-bottom: 4px;">
+                                                   @Html.TextArea("txtMessages", null, 3, 3, new { @class = "textfield", style = "width:600px;height:80px;", maxlength = "8000" })
+                                                   <br />(Maximum length 8000 characters)
+                                                           
+                                                                <br />
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" id="tblMessageDetails3" runat="server">
+                                                <td align="right" width="20%" style="padding-right: 4px;">
+                                                <img src="~/Images/help2.png" id="imglblshowcontact"  onmouseout="hideddrivetip()" onmouseover="ddrivetip('@ViewBag.showcontact' ,320);" />
+                                                    <strong>&nbsp;Attachment&nbsp;:</strong>
+                                                </td>
+                                                <td width="80%" id="tdattachmain" class="Messagestationclass" align="left" colspan="4" style="padding-left: 4px;
+                                                    padding-top: 4px; padding-bottom: 4px;">
+                                                    @*<input id="fileAttachment" onselectstart="return false;" onpaste="return false;"
+                                                        oncut="return false;" type="file" name="fileAttachment" runat="server" style="width: 300px;
+                                                        background-color: White;" />*@
+                                                         <input type="file" id="fileAttachment" name="fileAttachment"
+                                                    style="margin-left: 0px; background-color: White;" />
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                                                    </div>
+                        </div>
+                         <br />
+                         <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" id="tblmain"
+                                            style="display: none;">
+                                            <tr class="white_color" align="center">
+                                                <td id="tdtopic" height="30px" style="display: none;">
+                                                    @*<asp:Label ID="lbltopic" Font-Bold="true" ForeColor="Black" runat="server"></asp:Label>*@
+                                                    <span id="lbltopic" style="font-weight: bold; color: Black"></span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" align="center">
+                                                <td id="tdmessages" height="30px" style="display: none;">
+                                                    @*<asp:Label ID="lblmessages" Font-Bold="true" ForeColor="Black" runat="server"></asp:Label>*@
+                                                    <span id="lblmessages" style="font-weight: bold; color: Black"></span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" align="center">
+                                                <td id="tdattach" height="30px" style="display: none;">
+                                                   @* <asp:Label ID="lblattach" Font-Bold="true" ForeColor="Black" runat="server"></asp:Label>*@
+                                                    <span id="lblattach" style="font-weight: bold; color: Black"></span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" align="center">
+                                                <td id="tdpatient" height="30px" style="display: none;">
+                                                 @*   <asp:Label ID="lblpatient" Font-Bold="true" ForeColor="Black" runat="server"></asp:Label>*@
+                                                    <span id="lblpatient" style="font-weight: bold; color: Black"></span>
+                                                </td>
+                                            </tr>
+                                            <tr class="white_color" align="center">
+                                                <td id="tdreceiver" height="30px" style="display: none;">
+                                                   @* <asp:Label ID="lblreceiver" Font-Bold="true" ForeColor="Black" runat="server"></asp:Label>*@
+                                                    <span id="lblreceiver" style="font-weight: bold; color: Black"></span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnDsave" value="Save" title="Save" class="button" onclick="return Save();" />
+                                                          &nbsp;
+                                             @* @Html.ActionLink("Cancel", "btnClose", null, new { @class = "button", @style = "width:34px;height:14px;" })*@
+                                              <input type="button" class="close button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <input type="hidden" id="HdnRoleid" name="HdnRoleid" value="1" />
+       
+                    </div>
+    </div>
+      }
+</body>
+</html>

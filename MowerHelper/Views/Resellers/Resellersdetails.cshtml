@@ -1,0 +1,110 @@
+﻿@model List<MowerHelper.Models.BLL.Providers.CRMAgent>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper &#8211;Find an Mower Helper</title>
+</head>
+<body>
+        <div class="content-box">
+        <div class="content-box-content">
+        <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+                                    <tr class="white_color">
+                <td style="text-align:right; width:30%;">
+                    &nbsp; <strong>Name :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].Prefix  @Model[0].FirstName @Model[0].MI @Model[0].LastName @Model[0].Suffix</label>
+                </td>
+            </tr>
+                                    <tr class="nav_blue_color">
+                <td style="text-align:right; width:30%;">
+                    &nbsp; <strong>Company Name :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].CompanyName</label>
+                </td>
+            </tr>
+                                    <tr class="white_color">
+                <td style="text-align:right; width:30%;">
+                    &nbsp; <strong>Address 1 :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].Address1</label>
+                </td>
+            </tr>
+                        <tr class="nav_blue_color">
+                <td style="text-align:right; width:30%;">
+                    &nbsp; <strong>Address 2 :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].Address2</label>
+                </td>
+            </tr>
+                        <tr class="white_color">
+                <td style="text-align:right; width:30%;">
+                    &nbsp; <strong>Zip Code :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].ZIP</label>
+                </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:30%;">
+                    <strong>State :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].State</label>
+                    </td>
+            </tr>
+                        <tr class="nav_blue_color">
+                <td style="text-align:right; width:30%;">
+                    <strong>City :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].City</label>
+                    </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:30%;">
+                    <strong>Email :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].Email</label>
+                    </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:30%;">
+                    <strong>Work Phone :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].WorkPhone</label>
+                    </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:30%;">
+                    <strong>Cell Phone :</strong></td>
+                <td>
+                    
+                    <label>@Model[0].HomePhone</label>
+                    </td>
+            </tr>
+        </table>
+         </div>
+        </div>
+    <table  runat="server" width="100%">
+                                    <tr class="background_color">
+                                        <td align="right" style="padding-top:10px;">
+                                                <input type="button" name="btnCancel" class="close3 button" value="Cancel"  />
+                                           
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+</body>
+</html>

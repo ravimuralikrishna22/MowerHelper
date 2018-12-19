@@ -1,0 +1,134 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+        <div class="content-box">
+        <div class="content-box-content">
+        <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                    &nbsp; <strong>Date and Time :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_Date</label>
+                </td>
+            </tr>
+            <tr class="white_color" id="tr_Reciviers" runat="server">
+                <td style="text-align:right; width:20%;">
+                    <strong>Class Name :</strong></td>
+                <td >
+                    
+                    <label>@ViewBag.lbl_Class</label>
+                </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Method Name :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_Method</label>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Error Type :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_ErrorType</label>
+                    </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>File Name :</strong></td>
+                <td>
+                 
+                    <label>@ViewBag.lbl_FileName</label>
+                    </td>
+            </tr>
+            <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Page URL :</strong></td>
+                <td>
+                 
+                    <label>@ViewBag.lbl_PgUrl</label>
+                </td>
+            </tr>
+            
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;" width="20%">
+                    <strong>Line Number :</strong></td>
+                <td style="width:80%">
+                  
+                    <label>@ViewBag.lbl_LineNo</label>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Description :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_Description</label>
+                    </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Local IP Address :</strong></td>
+                <td>
+                   
+                    <label>@ViewBag.lbl_IPAddress</label>
+                </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Host Address :</strong></td>
+                <td>
+                   
+                    <label>@ViewBag.HostAddress</label>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Requested Method :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_RequestedMethod</label>
+                    </td>
+            </tr>
+            <tr class="nav_blue_color">
+                <td style="text-align:right; width:20%;">
+                   <strong>Browser Details :</strong></td>
+                <td>
+                    
+                    <label>@ViewBag.lbl_BrowserDetials</label>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td style="text-align:right; width:20%;">
+                    <strong>Reference Number :</strong></td>
+                <td>
+                   
+                    <label>@ViewBag.lbl_ReferenceNo</label>
+                    </td>
+            </tr>
+        </table>
+         </div>
+        </div>
+    <table  runat="server" width="100%">
+                                    <tr class="background_color">
+                                        <td align="right" style="padding-top:10px;">
+                                                <input type="button" name="btnCancel" class="close button" value="Cancel"  />
+                                           
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+</body>
+</html>

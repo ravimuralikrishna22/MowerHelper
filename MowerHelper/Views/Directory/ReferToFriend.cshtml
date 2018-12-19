@@ -1,0 +1,50 @@
+﻿@{
+    Layout = null;
+}
+
+
+<body>
+     @using (Ajax.BeginForm("ReferToFriend", "Directory", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccessReferToFriend",
+            OnComplete = "SessionExpireFail"
+
+        }, new { @id = "updateReferToFriend" }))
+   {
+  
+                      <input type="hidden" id="code" name="code" value="@ViewBag.code" />
+          <div id="update-message1" class="error" style="padding-left:100px;font-weight:bold;">
+        </div>
+   
+    <div>
+                                                                            <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                                                                        border="0">
+            <tr class="white_color">
+                                                                            <td width="28%" align="right">
+                                                                                 <span style="color: #ff0000">*</span> <strong>Email&nbsp;:</strong>
+                                                                            </td>
+                                                                            <td style="text-align:left" id="tdemailmain">
+                                                                                @Html.TextBox("txtEmailID", null, new { @class = "textfield", MaxLength = "100", style = "width:240px;", autocomplete = "off" })
+                                                                                &nbsp;&nbsp;
+                                                                             <span id="lblErremail" style="font-weight: bold; color: Black"></span>
+                                                                            </td>
+                                                                        </tr>
+        </table>
+        <br />
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+  
+                                             <input type="submit" id="submit" value="Send" title="Send" class="button" onclick="return fnValidateData();" />
+
+                                                          &nbsp;
+                                              <input type="button" class="referclose button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+    </div>
+                 }
+</body>
+

@@ -1,0 +1,474 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+   @* <script src="~/SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>*@
+    <style type="text/css">
+        .no-close .ui-dialog-titlebar-close
+        {
+            display: none;
+        }
+    </style>
+   
+    
+</head>
+<body>
+    @using (Ajax.BeginForm("Addnewpaymentmethod", "Technicians", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "InfoPaymentSuccess"
+
+        }, new { @id = "updateCarForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="hdnservicename" name="hdnservicename" value="@ViewBag.Billingservicename" />
+        <input type="hidden" id="CardNumber1" name="CardNumber1" />
+        <input id="hdncardnumber" type="hidden" name="hdncardnumber" /> 
+        <input type="hidden" id="HdnPractice_ID" name="HdnPractice_ID" value="@ViewBag.Practice_ID" />
+        <input type="hidden" id="HdnProvider_ID" name="HdnProvider_ID" value="@ViewBag.Provider_ID" />
+        <input type="hidden" id="ExhdnCardid" name="ExhdnCardid" value="@ViewBag.CardID" />
+        <input type="hidden" id="hdnadd1" name="hdnadd1" value="" />
+        <input type="hidden" id="hdnadd2" name="hdnadd2" value="" />
+        <input type="hidden" id="hdnzip" name="hdnzip" value="" />
+        <input type="hidden" id="hdnstate" name="hdnstate" value="" />
+        <input type="hidden" id="hdncity" name="hdncity" value="" />
+          
+        <input type="hidden" id="hdnbillserid" name="hdnbillserid" value="@ViewBag.billingservice_id" />
+          
+        <input type="hidden" id="hdnmonth" name="hdnmonth" value="@ViewBag.Totalservicefee3" />
+        <input type="hidden" id="hdnneedtopay" name="hdnneedtopay" value="@ViewBag.needtopay" />
+          
+        <input type="hidden" id="hdnctempid1" name="hdnctempid1" value="@ViewBag.ctempid1" />
+          
+        <input type="hidden" id="hdnenddate1" name="hdnenddate1" value="@ViewBag.NextmonthEnd" />
+        <input type="hidden" id="hdnvaultid" name="hdnvaultid" value="@ViewBag.vaultid" />
+          
+        <div id="update-message" class="error" style="padding-left: 250px; font-weight: bold;">
+        </div>
+        <table style="width: 100%">
+            <tr id="ccprocessdiv" style="width: 100%;">
+                <td style="width: 100%;">
+                    <div id="div10">
+                        <div class="clear"></div>
+                        <div style="font-size: 13px; padding: 0;">
+                            <table id="tblccprocess" align="center" width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style">
+                                <tr height="20" class="white_color">
+                                    <td style="text-align: center; padding-left: 90px;" colspan="2">
+                                        <table width="90%" cellpadding="6" cellspacing="1" border="0" class="border_style" style="text-align: center;">
+
+                                            <tr class="tr_bgcolor">
+                                                <td style="text-align: center; width: 15%;"><strong>Type</strong></td>
+                                                <td style="text-align: center; width: 40%;"><strong>Dates</strong></td>
+                                                <td style="text-align: center; width: 15%; display: none;"><strong>Fee</strong></td>
+                                                <td style="text-align: center; width: 30%;"><strong>Need to pay</strong></td>
+                                            </tr>
+                                            <tr class="white_color">
+                                                <td style="text-align: center;">
+
+                                                    <span id="spantype">@ViewBag.servicetype</span>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    @Html.Raw(ViewBag.currentmonthdates)
+                                                    <br />
+                                                    <br />
+                                                    @Html.Raw(ViewBag.nextmonthdates)
+                                                </td>
+                                                <td style="text-align: left; padding-left: 25px; display: none;">
+                                                    @Html.Raw(ViewBag.Remaingdaysfee)
+                                                    <br />
+                                                    <br />
+                                                    @Html.Raw(ViewBag.servicefee)
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    @Html.Raw(ViewBag.needtopayamount)
+                                                </td>
+
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                </tr>
+                                <tr class="white_color" id="row12">
+                                    <td align="right" style="width: 25%" id="TableCell28" runat="server">
+                                        <font color="red">*</font><strong>Card type :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell29" runat="server">
+                                        @Html.DropDownList("CardType", null, new { @class = "textfield", @style = "height:25px" })
+                                        &nbsp;&nbsp;&nbsp;<span id="lbcardtype" style="display: none"></span>
+                                    </td>
+                                </tr>
+                                <tr id="row10" class="nav_blue_color">
+                                    <td id="TableCell24" align="right" style="width: 25%">
+                                        <font color="red">*</font><strong>Credit card number :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell25" runat="server">
+                                        @Html.TextBox("CardNumber", (string)ViewBag.cardnumber, new { @class = "textfield", @onkeydown = "return isValidNumeric(CardNumber,16,0,event);", autocomplete = "off", @Style = "width:200px;" })
+                                        <b>Cvv :&nbsp;</b>
+                                        @Html.TextBox("txtCVV2", (string)ViewBag.cvv2, new
+                                   {
+                                       @style = "width:50px",
+                                       @class = "textfield",
+                                       @onkeypress = "return AlphaNumbers(event);"
+                                   })
+                                        <img src="~/Images/help2.png" id="Img2" style="vertical-align: middle" />
+                                        <div id="divCvv" style="display: none">
+                                            <table id="Table7" width="100%" runat="server">
+                                                <tr>
+                                                    <td>
+                                                        <img src="~/Images/cvv2.jpg" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="lblcardnumber" style="display: none"></span>
+                                    </td>
+                                </tr>
+                                <tr id="trfirstname" class="white_color">
+                                    <td id="Td1" align="Right" style="width: 25%">
+                                        <font color="red">*</font><strong>First name :</strong>&nbsp;
+                                    </td>
+                                    <td id="Td2" runat="server">
+                                        @Html.TextBox("txtfirstname", (string)ViewBag.FirstName, new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                            id="lblfirstname" style="display: none"></span>
+                                    </td>
+                                </tr>
+                                <tr id="trlastname" class="nav_blue_color">
+                                    <td id="Td3" align="Right" style="width: 25%">
+                                        <font color="red">*</font><strong>Last name :</strong>&nbsp;
+                                    </td>
+                                    <td id="Td4" runat="server">
+                                        @Html.TextBox("txtlastname", (string)ViewBag.LastName, new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                            id="lbllastname" style="display: none"></span>
+                                    </td>
+                                </tr>
+                                <tr id="row13" class="white_color">
+                                    <td id="TableCell30" align="right" style="width: 25%">
+                                        <font color="red">*</font><strong>Card expiry date :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell31" runat="server">
+                                        @Html.DropDownList("month", null, new { @class = "textfield", @style = "width:50px" })
+                                        @Html.DropDownList("year", null, new { @class = "textfield", @style = "width:100px" })
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<span id="lblExpyear" style="display: none;"></span>
+                                    </td>
+                                </tr>
+                                <tr id="row14" runat="server" class="nav_blue_color">
+                                    <td id="TableCell32" runat="server" align="right" style="width: 25%">
+
+                                        <strong>Amount :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell33" runat="server">
+                                        @Html.Hidden("hdmamount", "1")
+
+                                        <span id="spanamt">@ViewBag.needtopay</span>
+                                        @*   @if (ViewBag.regFee != null)
+                                   {
+                                   <img src="~/Images/help2.png" id="Img3" onmouseover="ddrivetip('dfsfdsf sdfsdfsdf',300)" onmouseout="hideddrivetip()" style="vertical-align:middle" />
+                                   }*@
+                                    </td>
+                                </tr>
+                                <tr class="white_color" id="row15">
+                                    <td id="TableCell34" align="right" style="width: 25%">
+                                        <font color="red">*</font><strong>Billing address 1 :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell35" runat="server">
+                                        @Html.TextBox("Address1", (string)ViewBag.Address1, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })&nbsp;&nbsp;&nbsp;&nbsp; @Html.CheckBox("chkaddress", true)&nbsp;<strong>Same as mower helper address
+                                            <br />
+                                            <span
+                                                id="lbladdress" style="display: none"></span>
+
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr id="row16" class="nav_blue_color">
+                                    <td id="TableCell36" align="right" style="width: 25%">
+                                        <strong>Address 2 :&nbsp;</strong>
+                                    </td>
+                                    <td id="TableCell37" runat="server">
+                                        @Html.TextBox("Address2", (string)ViewBag.Address2, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })
+                                    </td>
+                                </tr>
+                                 @Html.Partial("_CitiesStates", Model)
+                              
+                            </table>
+                            <br />
+                            <table width="100%">
+                                <tr id="TableRow7">
+                                    <td id="TableCell11" width="100%" align="right" style="padding-right: 10px">
+                                        <input type="submit" name="btnProcess2" id="btnProcess2" value="Process" class="button"
+                                            onclick="return CognodeProcess();" />
+                                        &nbsp;
+                             <input id="btnrenewclose" type="button" class="Paymentclose button" name="Cancel" value="Close" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr id="msgdiv" style="width: 100%; display: none">
+                <td style="width: 100%;">
+                    <span>@ViewBag.expdate</span><a id="aclick" href="#" onclick="return exclick();" style="font-weight: bold;">Click here to renewal</a>
+                </td>
+            </tr>
+        </table>
+
+        <div id="updNote" title="Process" style="display: none;">
+            <table id="tblBusyMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                <tr>
+                    <th align="center">
+                        <img id="imgp" src="~/Images/loading.gif" /><br />
+                        <font size="2"><strong>Credit card transaction is under process, it will take few minutes.&nbsp;<br />
+                                                                Kindly bear.&nbsp;</strong></font>
+                        <br />
+                        <font color="#a52a2a" size="2">Do not click either <i><b>Back</b></i> or any other button
+                                                                till the process is complete.</font>
+                    </th>
+                </tr>
+            </table>
+        </div>
+       
+    }
+    <script type="text/javascript">
+
+        function InfoPaymentSuccess(data) {
+            // alert(data);
+            if (data != '' & data.Success == true) {
+                $('#CCDialog').dialog('close');
+                //  window.location = '../Technicians/Index';
+                location.reload();
+            }
+            else if (data.ErrorMessage == 'expire') {
+                window.location.href = '../Home/SessionExpire';
+            }
+            else {
+                //$('#CCDialog').dialog('open');
+                //alert(data.ErrorMessage);
+                document.body.style.cursor = 'pointer';
+                $('#CCDialog').dialog('open');
+                document.getElementById("div10").style.display = '';
+                document.getElementById("updNote").style.display = 'none';
+                if (data != '_Logon_') {
+                    alert(data.ErrorMessage);
+                }
+                //$("#update-message").html(data.ErrorMessage);
+                //$("#update-message").show();
+            }
+        }
+    </script>
+     <script type="text/javascript">
+         $(document).ready(function () {
+
+             var objcardtype = "@ViewBag.ctype";
+            var objmonth = "@ViewBag.ExipryMonth";
+            var objyear = "@ViewBag.ExipryYear";
+            if (objcardtype != '' && objcardtype != null) {
+                //$("#CardType option:contains(" + objcardtype + ")").attr('selected', 'selected');
+                $("#CardType").val(objcardtype);
+            }
+            if (objmonth != '' && objmonth != null) {
+                $("#month").val(objmonth);
+            }
+            if (objyear != '' && objyear != null) {
+                $("#year").val(objyear);
+            }
+            var date = new Date();
+            var Nextyear = date.getFullYear() + 1;
+            $('#year').val(Nextyear);
+
+            $('#chkaddress').change(function () {
+                if (document.getElementById('chkaddress').checked == true) {
+                    //                    $('#txtfirstname').val(Hdn_Fname.value);
+                    // $('#txtlastname').val(Hdn_Lname.value);
+                    $("#Address1").attr("disabled", "disabled");
+                    $("#Address2").attr("disabled", "disabled");
+                    $("#txtZip").attr("disabled", "disabled");
+                    $("#DDState").attr("disabled", "disabled");
+                    $("#DDCity").attr("disabled", "disabled");
+                    $('#Address1').val("@ViewBag.Address1");
+                        $('#Address2').val("@ViewBag.Address2");
+                        $('#txtZip').val("@ViewBag.Zip");
+                        var Zip_code = $('#txtZip').val();
+                        if (Zip_code != '') {
+                            $.getJSON("GetStateCitiesByZip", { zipcode: Zip_code },
+                          function (data) {
+                              if (data.indexOf(",") != -1) {
+                                  var data1 = data.split(',');
+                                  $("#DDState").empty();
+                                  $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                                  $('#DDState').append($('<option > </option>').val(data1[1]).html(data1[0]));
+                                  $("select#DDState").prop('selectedIndex', 1);
+                                  $("#DDCity").empty();
+                                  $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                                  $('#DDCity').append($('<option > </option>').val(data1[3]).html(data1[2]));
+                                  $("select#DDCity").prop('selectedIndex', 1);
+                              }
+                          }
+
+                          );
+                        }
+
+                    }
+                    else {
+                        $("#Address1").removeAttr("disabled");
+                        $("#Address2").removeAttr("disabled");
+                        $("#txtZip").removeAttr("disabled");
+                        $("#DDState").removeAttr("disabled");
+                        $("#DDCity").removeAttr("disabled");
+                        //                    $('#txtfirstname').val(null);
+                        //                    $('#txtlastname').val(null);
+                        $('#Address1').val(null);
+                        $('#Address2').val(null);
+                        $('#txtZip').val(null);
+                        $('#DDState').val(0);
+                        $('#DDCity').val(0);
+                        $("#DDState").empty();
+                        $.getJSON("GetStateByZip",
+                      function (data) {
+                          $("#DDState").empty();
+                          $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                          for (i = 0; i < data.length; i++) {
+                              if (data[i].Text != '--Select State--') {
+                                  $('#DDState').append($('<option > </option>').val(data[i].Value).html(data[i].Text));
+                              }
+                          }
+                      });
+                        $("#DDCity").empty();
+                        $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                        // return false;
+                    }
+
+                })
+
+
+         @*   if ($('#txtZip').val() != '') {
+                var recordId = $('#txtZip').val();
+                var stateid = "@ViewBag.State_ID";
+                    var statename = "@ViewBag.Statename";
+                    var City_ID = "@ViewBag.City_ID";
+                    var Cityname = "@ViewBag.Cityname";
+                    //                             alert(stateid);
+                    //                             alert(statename);
+                    //                             alert(City_ID);
+                    //                             alert(City);
+                    if (recordId != '' && stateid != '' && City_ID != '') {
+                        $("#DDState").empty();
+                        $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                        $('#DDState').append($('<option > </option>').val(stateid).html(statename));
+                        $("select#DDState").prop('selectedIndex', 1);
+                        $("#DDCity").empty();
+                        $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                        $('#DDCity').append($('<option > </option>').val(City_ID).html(Cityname));
+                        $("select#DDCity").prop('selectedIndex', 1);
+                    }
+                }*@
+
+            //$('#DDState').change(function () {
+            //    var recordId = $('#DDState').val();
+            //    var recordId1 = $("#txtZip").val();
+            //    if (recordId != '' && recordId1 == '') {
+            //        // alert('a');
+            //        $.getJSON("GetCitiesByStates", { id: recordId },
+            //      function (data) {
+            //          $("#DDCity").empty();
+            //          $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+            //          for (i = 0; i < data.length; i++) {
+            //              if (data[i].Text != '--Select City--') {
+            //                  $('#DDCity').append($('<option > </option>').val(data[i].Value).html(data[i].Text));
+            //              }
+            //          }
+            //      });
+            //        // return false;
+            //    }
+            //    else if (recordId != '' && recordId1 != '') {
+            //        //alert('b');
+            //        $.getJSON("GetCitiesByZip", { id: recordId, zipcode: recordId1 },
+            //      function (data) {
+            //          $("#DDCity").empty();
+            //          $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+            //          for (i = 0; i < data.length; i++) {
+            //              if (data[i].Text != '--Select City--') {
+            //                  $('#DDCity').append($('<option > </option>').val(data[i].Value).html(data[i].Text));
+            //              }
+            //          }
+            //      });
+            //        // return false;
+            //    }
+            //    else {
+            //        // alert('c');
+            //        $("#DDCity").empty();
+            //        $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+            //        // return false;
+            //    }
+            //});
+           // $('#txtZip').change(function () {
+               
+          //  });
+        });
+    </script>
+@*    <script type="text/javascript">
+        $(function () {
+            $("#txtZip").keyup(function () {
+                if ($(this).val().length == 5) {
+                    var recordId = $('#txtZip').val();
+                    if (recordId != '') {
+                        $.getJSON("GetStateCitiesByZip", { zipcode: recordId },
+                      function (data) {
+                          if (data.indexOf(",") != -1) {
+                              var data1 = data.split(',');
+                              $("#DDState").empty();
+                              $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                              $('#DDState').append($('<option > </option>').val(data1[1]).html(data1[0]));
+                              $("select#DDState").prop('selectedIndex', 1);
+                              $("#DDCity").empty();
+                              $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                              $('#DDCity').append($('<option > </option>').val(data1[3]).html(data1[2]));
+                              $("select#DDCity").prop('selectedIndex', 1);
+                          }
+                          else {
+                              $("#DDState").empty();
+                              $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                              for (i = 0; i < data.length; i++) {
+                                  if (data[i].Text != '--Select State--') {
+                                      $('#DDState').append($('<option > </option>').val(data[i].Value).html(data[i].Text));
+                                  }
+                              }
+                              $("#DDCity").empty();
+                              $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                          }
+                      });
+                        // return false;
+                    }
+                  
+                }
+                else {
+                    $.getJSON("GetStateByZip",
+                  function (data) {
+                      $("#DDState").empty();
+                      $('#DDState').append($('<option > </option>').val(0).html("--Select State--"));
+                      for (i = 0; i < data.length; i++) {
+                          if (data[i].Text != '--Select State--') {
+                              $('#DDState').append($('<option > </option>').val(data[i].Value).html(data[i].Text));
+                          }
+                      }
+                  });
+                    $("#DDCity").empty();
+                    $('#DDCity').append($('<option > </option>').val(0).html("--Select City--"));
+                    // return false;
+                }
+            });
+
+        });
+    </script>*@
+    
+</body>
+
+</html>

@@ -1,0 +1,507 @@
+﻿@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <style type="text/css">
+           input[type="radio"]
+        {
+            margin-right: 5px;
+        }
+
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .item
+        {
+            position: relative !important;
+            display: -moz-inline-stack;
+            display: inline-block;
+            zoom: 1;
+            *display: inline;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .header
+        {
+            margin-left: 2px;
+        }
+
+        .c1
+        {
+            width: 160px;
+        }
+
+        .c2
+        {
+            margin-left: 10px;
+            width: 90px;
+        }
+          .multcolumn .ob_iCboICBC li
+        {
+            float: left;
+            width: 60px;       
+        }        
+            
+        /* For IE6 */
+        * HTML .multcolumn .ob_iCboICBC li
+        {
+           -width: 55px;
+        }        
+        * HTML  .multcolumn .ob_iCboICBC li b
+        {
+            width: 55px;
+            overflow: hidden;
+        }   
+           .multcolumn2 .ob_iCboICBC li
+        {
+            float: left;
+            width: 165px;       
+        }        
+            
+        /* For IE6 */
+        * HTML .multcolumn2 .ob_iCboICBC li
+        {
+           -width: 164px;
+        }        
+        * HTML  .multcolumn2 .ob_iCboICBC li b
+        {
+            width: 164px;
+            overflow: hidden;
+        }   
+          .confirmDialog1
+        {
+            /*background: url("../images/bg-button-green.gif") repeat-x scroll left top #459300 !important;
+            border: 1px solid #459300 !important;*/
+            background: repeat-x scroll left top #FF0000 !important;
+            border: 1px solid #FF0000 !important;
+            border-radius: 4px;
+            color: #FFFFFF !important;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Verdana,Arial,sans-serif;
+            font-size: 11px !important;
+            padding: 4px 7px !important;
+        } 
+    </style>
+    <script type="text/javascript">
+        function combobox115_Open(sender) {
+            combobox5.OpenOnFocus = true;
+        }
+        function combobox115_Focus(sender) {
+            combobox5.OpenOnFocus = false;
+
+        }
+    </script>
+</head>
+<body>    
+    @using (Ajax.BeginForm("EditAppointment", "Schedule", new AjaxOptions
+   {
+       InsertionMode = InsertionMode.Replace,
+       HttpMethod = "POST",
+       OnSuccess = "EditApptSuccess"
+
+   }, new { @id = "EditapptForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("apptstatus")
+        @Html.Hidden("hidPatientID")
+        @Html.Hidden("hidPatientLoginID")
+        @Html.Hidden("ApptId")
+        @Html.Hidden("hdnFacRef_ID")                        
+        @Html.Hidden("weekenddate")
+        @Html.Hidden("dayenddate")        
+        @Html.Hidden("ApptType")       
+        @Html.Hidden("strTime")
+        <input type="hidden" id="Hdnapt_date" name="Hdnapt_date" value="@ViewBag.aptdate" />
+        <input type="hidden" id="hdntechids" name="hdntechids" value="@ViewBag.technician_ids" />
+         <input type="hidden" id="hdntecid1" name="hdntecid1" value="@ViewBag.tecid1" />
+         <input id="hdntechpos" type="hidden" name="hdntechpos" value="@ViewBag.techpositions"/> 
+        <table class="border_style" id="tblEditAppt" runat="server" cellspacing="1" cellpadding="8"
+            width="100%" align="center" border="0">
+            <tr class="white_color" height="20" id="trprovidername" runat="server" style="display: none">
+                <td align="right" width="25%" style="font-size: 13px;">
+                    <strong>Provider name :&nbsp;</strong>
+                </td>
+                <td width="75%" style="font-size: 13px;">
+                    @ViewBag.ProvName
+                </td>
+            </tr>
+            <tr class="nav_blue_color" id="trPatientName" height="20" runat="server">
+                <td align="right" width="25%" style="font-size: 13px;">&nbsp;<strong>Client name :&nbsp;</strong>
+                </td>
+                <td width="75%" style="font-size: 13px;">
+                    @ViewBag.patname
+                </td>
+            </tr>
+            <tr id="trtechnician1" class="white_color">
+                <td width="25%" style="font-size: 13px; text-align: right">
+
+                   <font color="red">*</font> <strong>Technician name :&nbsp;</strong>
+                </td>
+                <td>
+                      @Html.Obout(new Obout.Mvc.ComboBox.ComboBox("combobox5")
+    {
+        Width = 400,
+       CssSettings = new ComboBoxCssSettings() { ItemsContainer = "ob_iCboIC multcolumn2" },
+        Height = 180,
+          AutoClose = false,
+        AllowCustomText = true,
+        AutoValidate = true,
+        AllowEdit = false,  
+           MenuWidth = 400,  
+          SelectionMode = ComboBoxSelectionMode.Multiple,
+        ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+          @:<div class="item"> @Html.CheckBox("CheckBox2")<div class="item c1">@(((MowerHelper.Models.BLL.Technicians.TechniciansInfo)item.DataItem).Technician_Name)</div></div>
+),
+       ClientSideEvents = new ComboBoxClientSideEvents()
+    {
+        OnOpen = "combobox115_Open",
+        OnFocus = "combobox115_Focus"
+    }
+    })
+                </td>
+
+            </tr>
+           @* <tr class="nav_blue_color" id="trPtnotes1" visible="false" runat="server" height="20">
+                <td align="right" width="25%" style="font-size: 13px;">
+                    <strong>Client added notes :&nbsp;</strong>
+                </td>
+                <td style="font-size: 13px;">
+                    @ViewBag.Patnote
+                </td>
+            </tr>*@
+            <tr class="nav_blue_color" height="20" id="traptype">
+                <td align="right" width="25%" style="font-size: 13px;">
+                    <strong>Appointment type :&nbsp;</strong>
+                </td>
+                <td width="75%" style="font-size: 13px;">
+                    @ViewBag.ApptType
+                </td>
+            </tr>
+            <tr class="white_color" height="20" id="trduration1">
+                <td align="right" width="25%" style="font-size: 13px;">&nbsp;<font color="red">*</font><strong>Date/Time/Duration :&nbsp;</strong>
+                </td>
+                <td width="75%" id="tdEDate" runat="server" style="font-size: 13px;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tr>
+                            <td width="20%">
+                                 @Html.TextBox("txtEApptDate", DateTime.Now.ToString("MM/dd/yyyy"), new { @class = "textfield", @style = "width:90px" })
+                            </td>
+                            <td width="25%">
+                                @Html.Obout(new ComboBox("cboEtime") {MenuWidth = 300,CssSettings = new ComboBoxCssSettings() { ItemsContainer = "ob_iCboIC multcolumn" },SelectionMode = ComboBoxSelectionMode.Single})
+                            </td>
+                            <td width="7%">
+                                @Html.DropDownList("ddlETimeMer", null, new { @class = "textfield", @style = "width:50px;" })
+                            </td>
+                            <td>
+                                @Html.DropDownList("ddlEDuration", null, new { @class = "textfield", @style = "width:50px;" })&nbsp;<strong>(Minutes)</strong>
+                            </td>
+                        </tr>
+                    </table>                  
+                </td>
+            </tr>
+            <tr id="trnotes" class="nav_blue_color" runat="server" height="20">
+                <td align="right" width="25%" style="font-size: 13px;">
+                    <strong>&nbsp;&nbsp;&nbsp;Notes :&nbsp;</strong>
+                </td>
+                <td width="75%" id="tdENotes" runat="server" style="font-size: 13px;">
+                    @Html.TextArea("txtENotes", (string)ViewBag.Aptnote, 3, 3, new { @class = "textfield", wrap = "virtual", @style = "width:350px;height:78px;" })&nbsp;&nbsp;(Maximum length 1000 characters)                                      
+                </td>
+            </tr>
+        </table>
+        <br />
+        <table border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tr style="text-align: right">
+                <td>
+                    <input type="button" name="btndelete" value="Decline" id="btncancel" class="confirmDialog1" />
+                    <input class="button" type="submit" name="Save" value="Accept" onclick="return checkpage();" />&nbsp;
+                  <input type="button" class="EditApptclose button" name="Cancel" value="Cancel" />
+
+                </td>
+            </tr>
+        </table>
+          <div id="dialog-confirm1" title="Mower Helper" style="display: none;">
+                            <p>
+                                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                                Do you want to delete appointment?
+                            </p>
+                        </div>
+    }
+</body>
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
+        $(".confirmDialog1").live("click", function (e) {
+
+            //                                            var url = $(this).attr('href');
+            $("#dialog-confirm1").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        var apptDelid = document.getElementById('ApptId').value;
+                        var fromPage = "@ViewBag.frompage";
+                        var apptdate = "@ViewBag.aptdate";
+                        window.location.href = '@Url.Action("ApptDelete", "Messages")?apptDelid=' + apptDelid + '&type=' + fromPage + '&apptdate=' + apptdate;
+
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirm1").dialog('open');
+            return false;
+        });
+
+
+
+    </script>
+<script type="text/javascript">
+
+    $(function () {
+        $("#txtEApptDate").datepicker({
+            showOn: "button",
+            buttonImage: "../Images/calender.gif",
+            buttonImageOnly: true
+        });
+    });
+    $(document).ready(function () {
+        $("#combobox5").val("@ViewBag.technician_ids");
+        $("#apptstatus").val("@ViewBag.appstatus");
+        $("#hidPatientID").val("@ViewBag.hidPatientID");
+        $("#hidPatientLoginID").val("@ViewBag.hidPatientLoginID");
+        $("#ApptId").val("@ViewBag.apptid");
+        $("#hdnFacRef_ID").val("@ViewBag.facRefId");
+        $("#hidTreckingID").val("@ViewBag.hidTreckingID");
+
+        var apptdate = "@ViewBag.aptdate";
+       @* var patnote = "@ViewBag.Patnote";
+        if (patnote == "") {
+            document.getElementById('trPtnotes1').style.display = "none";
+        }*@
+        if (apptdate != "") {
+            $("#txtEApptDate").val(apptdate);
+        }
+       @* $("#ddlEhr2").val("@ViewBag.gethour");
+        $("#ddlEmin2").val("@ViewBag.getmin");*@
+        $("#ddlETimeMer").val("@ViewBag.getAMPM");
+        $("#ddlEDuration").val("@ViewBag.getDuration");
+
+        $("#ddEAuto").val("@ViewBag.ddEAuto");
+    });
+</script>
+<script type="text/javascript">
+    function checkpage() {
+        var apptType1 = "@ViewBag.ApptType";
+        if (apptType1 == "Client") {
+            if (combobox5.selectedIndex() != -1) {
+
+                //                   alert('Selected item: ' + ComboBox1.options[ComboBox1.selectedIndex()].text);
+
+            }
+            //else {
+            //    alert("please select the Technician");
+            //    document.getElementById('combobox5_SelectedText').focus();
+            //    return false;
+            //}
+        }
+        if (document.getElementById('txtEApptDate').value == 0 || document.getElementById('txtEApptDate').value == '' || document.getElementById('txtEApptDate').value == 'mm/dd/yyyy') {
+            alert('Please enter the appointment date.');
+            document.getElementById('txtEApptDate').focus();
+            return false;
+        }
+        if (document.getElementById('txtEApptDate').value != '' && document.getElementById('txtEApptDate').value != 'mm/dd/yyyy') {
+            var Dateid = document.getElementById('txtEApptDate').value;
+            var Dat = Dateid.split("/");
+            var myDat = new Date(Dat[2], Dat[0] - 1, Dat[1]);
+            var yearid = Dat[2];
+            var Monthid = Dat[0];
+            var MyId = Dat[1];
+            var CurDt = new Date();
+            var DatePat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+            var matchArray = Dateid.match(DatePat);
+            if (matchArray == null) {
+                alert('The date format!!! should be like mm/dd/yyyy');
+                document.getElementById('txtEApptDate').focus();
+                return false;
+            }
+            if (yearid < 1900 || yearid > 2060) {
+                alert('Please enter a valid 4 digit year between 1900 and 2060');
+                document.getElementById('txtEApptDate').focus();
+                return false;
+            }
+            if (Monthid > 12 || Monthid == 0) {
+                alert('Please enter a valid month');
+                document.getElementById('txtEApptDate').focus();
+                return false;
+            }
+            if (MyId > 31 || MyId == 0) {
+                alert('Please enter a valid day');
+                document.getElementById('txtEApptDate').focus();
+                return false;
+            }
+            if (Monthid == 2 && MyId == 29 && (yearid % 4 != 0 || yearid % 100 == 0 && yearid % 400 != 0)) {
+                alert('Please enter a valid day');
+                document.getElementById('txtEApptDate').focus();
+                return false;
+            }
+            if (((Monthid == 4 || Monthid == 6 || Monthid == 9 || Monthid == 11) && MyId == 31) || (Monthid == 2 && (MyId == 30 || MyId == 31))) {
+                alert('Please enter a valid day');
+                document.getElementById('txtEApptDate').focus();
+                return false;
+            }
+        }
+        var EnteredDate;
+        EnteredDate = document.getElementById('txtEApptDate').value;
+        EnteredDate = new Date(EnteredDate);
+        //if ((document.getElementById('ddlEhr2').value == '') || (document.getElementById('ddlEhr2').value == "00")) {
+        //    alert('Please choose the appointment time.');
+        //    document.getElementById('ddlEhr2').focus();
+        //    return (false);
+        //}
+        if (document.getElementById('ddlEDuration').value == '') {
+            alert('Please choose the appointment duration.');
+            document.getElementById('ddlEDuration').focus();
+            return (false);
+        }
+        if (document.getElementById('txtENotes').value.length > 1000) {
+            alert('Please enter at most 1000 characters in the notes field');
+            document.getElementById('txtENotes').focus();
+            return false;
+        }
+    }
+</script>
+    <script type="text/javascript">
+        var preventCheckBoxesSelection = false;
+
+        $(document).ready(function () {
+            Obout.Mvc.Interface.OboutDropDownList.prototype.setValueOld = Obout.Mvc.Interface.OboutDropDownList.prototype.setValue;
+            Obout.Mvc.Interface.OboutDropDownList.prototype.setValue = function (param1, param2, param3) {
+                this.setValueOld(param1, param2, param3);
+
+                if (!preventCheckBoxesSelection) {
+                    updateCheckBoxesSelection();
+                }
+            }
+
+            window.setTimeout(attachCheckBoxesOnClickHandlers, 250);
+            window.setTimeout(updateCheckBoxesSelection, 250);
+        });
+
+        function updateCheckBoxesSelection() {
+            for (var i = 0; i < combobox5.options.length; i++) {
+                var item = combobox5.getItemByIndex(i);
+                var checkbox = item.getElementsByTagName('INPUT')[0];
+                checkbox.checked = (',' + combobox5.value() + ',').indexOf(',' + combobox5.options[i].value + ',') != -1;
+            }
+        }
+
+        function updateItemsSelection() {
+            preventCheckBoxesSelection = true;
+
+            var arrSelectedValues = new Array();
+            var arrSelectedPositions = new Array();
+            for (var i = 0; i < combobox5.options.length; i++) {
+                var item = combobox5.getItemByIndex(i);
+                var checkbox = item.getElementsByTagName('INPUT')[0];
+                if (checkbox.checked) {
+                    arrSelectedValues.push(combobox5.options[i].value);
+                    arrSelectedPositions.push(i);
+                }
+
+                combobox5._dropDownList.unselectItemByIndex(i);
+            }
+
+
+            combobox5.value(arrSelectedValues.join(','));
+            var hdnpos = arrSelectedPositions.join(',');
+            document.getElementById("hdntechpos").value = hdnpos;
+            preventCheckBoxesSelection = false;
+        }
+
+        function handleCheckBoxClick(e) {
+            if (!e) { e = window.event; }
+            if (!e) { return false; }
+            e.cancelBubble = true;
+            if (e.stopPropagation) { e.stopPropagation(); }
+
+            updateItemsSelection();
+
+            return true;
+        }
+
+        function attachCheckBoxesOnClickHandlers() {
+            if (typeof (combobox5) == 'undefined' || typeof (combobox5.ItemsContainer) == 'undefined') {
+                window.setTimeout(attachCheckBoxesOnClickHandlers, 250);
+                return;
+            }
+
+            var checkboxes = combobox5.ItemsContainer.getElementsByTagName('INPUT');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].onclick = function (e) { return handleCheckBoxClick(e); }
+            }
+        }
+    </script>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             var apptType = "@ViewBag.ApptType";
+             var techcnt1 = '@ViewBag.techcnt1';
+             if (apptType == "Client") {
+                 $("#trPatientName").show();
+             }
+             else {
+                 $("#trPatientName").hide();
+             }
+             var Roleid = '@Session["Roleid"]';
+             if (Roleid != 8) {
+
+                 if (techcnt1 > 1) {
+
+                     $("#trtechnician1").show();
+
+                 }
+                 else {
+
+                     $("#trtechnician1").hide();
+
+                     $('#tblEditAppt tr[id="traptype"]').removeClass("nav_blue_color");
+                     $('#tblEditAppt tr[id="traptype"]').addClass("white_color");
+                     $('#tblEditAppt tr[id="trduration1"]').removeClass("white_color");
+                     $('#tblEditAppt tr[id="trduration1"]').addClass("nav_blue_color");
+                     $('#tblEditAppt tr[id="trnotes"]').removeClass("nav_blue_color");
+                     $('#tblEditAppt tr[id="trnotes"]').addClass("white_color");
+                 }
+             }
+             else {
+                 $("#trtechnician1").hide();
+
+                 $('#tblEditAppt tr[id="traptype"]').removeClass("nav_blue_color");
+                 $('#tblEditAppt tr[id="traptype"]').addClass("white_color");
+                 $('#tblEditAppt tr[id="trduration1"]').removeClass("white_color");
+                 $('#tblEditAppt tr[id="trduration1"]').addClass("nav_blue_color");
+                 $('#tblEditAppt tr[id="trnotes"]').removeClass("nav_blue_color");
+                 $('#tblEditAppt tr[id="trnotes"]').addClass("white_color");
+             }
+
+         });
+    </script>
+</html>

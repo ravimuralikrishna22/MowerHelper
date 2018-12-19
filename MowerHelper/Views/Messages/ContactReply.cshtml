@@ -1,0 +1,235 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            document.getElementById('trerrorfrom').style.display = "none";
+            document.getElementById('tremail').style.display = "none";
+            document.getElementById('trsub1').style.display = "none";
+            document.getElementById('trmsg1').style.display = "none";
+            document.getElementById('btnsubmit').style.display = "none";
+
+     });
+        function CheckReply() {
+            document.getElementById('trfname').style.display = "none";
+            document.getElementById('trlname').style.display = "none";
+            document.getElementById('trmail').style.display = "none";
+            document.getElementById('trphone').style.display = "none";
+            document.getElementById('trsub').style.display = "none";
+            document.getElementById('trmsg').style.display = "none";
+            document.getElementById('replystatus').style.display = "none";
+
+            document.getElementById('trerrorfrom').style.display = "";
+            document.getElementById('tremail').style.display = "";
+            document.getElementById('trsub1').style.display = "";
+            document.getElementById('trmsg1').style.display = "";
+            document.getElementById('btnsubmit').style.display = "";
+            document.getElementById('btnreply').style.display = "none";
+        }
+
+        function Validate() {
+            var from = trim(document.getElementById('txtfrom').value);
+            document.getElementById('txtfrom').value = from;
+            if (document.getElementById('txtfrom').value == '') {
+                document.getElementById('lblErrfrom').style.display = '';
+                document.getElementById('lblErrfrom').innerHTML = 'Please enter from';
+                document.getElementById('tdfrom').bgColor = "orange";
+                document.getElementById('txtfrom').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdfrom').bgColor = "White";
+                document.getElementById('lblErrfrom').style.display = 'none';
+
+            }
+
+
+            var email = trim(document.getElementById('txtEmail').value);
+            document.getElementById('txtEmail').value = email;
+            if (document.getElementById('txtEmail').value == '') {
+                document.getElementById('lblErremail').style.display = '';
+                document.getElementById('lblErremail').innerHTML = 'Please enter reply to';
+                document.getElementById('tdemail').bgColor = "orange";
+                document.getElementById('txtEmail').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdemail').bgColor = "White";
+                document.getElementById('lblErremail').style.display = 'none';
+
+            }
+
+
+            var sub = trim(document.getElementById('txtSubject').value);
+            document.getElementById('txtSubject').value = sub;
+            if (document.getElementById('txtSubject').value == '') {
+                document.getElementById('lblErrsub').style.display = '';
+                document.getElementById('lblErrsub').innerHTML = 'Please enter subject';
+                document.getElementById('tdsub').bgColor = "orange";
+                document.getElementById('txtSubject').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdsub').bgColor = "White";
+                document.getElementById('lblErrsub').style.display = 'none';
+
+            }
+
+
+            var msg = trim(document.getElementById('txtMsg').value);
+            document.getElementById('txtMsg').value = msg;
+            if (document.getElementById('txtMsg').value == '') {
+                document.getElementById('lblErrmsg').style.display = '';
+                document.getElementById('lblErrmsg').innerHTML = 'Please enter message';
+                document.getElementById('tdmsg1').bgColor = "orange";
+                document.getElementById('txtMsg').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdmsg1').bgColor = "White";
+                document.getElementById('lblErrmsg').style.display = 'none';
+
+            }
+        }
+    </script>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        var status = $('#Hdnstatus').val();
+                        if (status == 'Sent') {
+                            document.getElementById('btnreply').style.display = "none";
+                        }
+                        else {
+                            document.getElementById('btnreply').style.display = "";
+
+                        }
+
+                    });
+    </script>
+</head>
+<body>
+      @using (Html.BeginForm("ContactReply", "Messages", null, FormMethod.Post))
+      {
+          @Html.AntiForgeryToken()
+<input type="hidden" id="Hdncontid" name="Hdncontid" value="@ViewBag.contid" />
+          <input type="hidden" id="Hdnstatus" name="Hdnstatus" value="@ViewBag.ReplyStatus_Ind" />
+ <div class="content-box">
+                                            <div class="content-box-content">
+                                                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+                                                    <tr class="white_color" id="trfname" runat="server">
+                                                        <th align="right" width="20%">
+                                                            <strong>First Name :</strong>
+                                                        </th>
+                                                        <td width="65%" align="left">
+                                                            <span>@ViewBag.ContactFirstName</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" id="trlname" runat="server">
+                                                        <th align="right">
+                                                            <strong>Last Name :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                            <span>@ViewBag.ContactLastName</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" id="trmail" runat="server">
+                                                        <th align="right">
+                                                            <strong>Mail :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                            <span>@ViewBag.ContactMail</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" id="trphone" runat="server">
+                                                        <th align="right">
+                                                            <strong>Phone Number :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                            <span>@ViewBag.ContactPhone</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" id="trsub" runat="server">
+                                                        <th align="right">
+                                                            <strong>Contact Subject :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                            <span>@ViewBag.ContactSubject</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" id="trmsg" runat="server">
+                                                        <th align="right">
+                                                            <strong>Contact Message :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                            <span>@ViewBag.ContactMessage</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="white_color" id="replystatus" runat="server">
+                                                        <th align="right">
+                                                            <strong>Reply Status :</strong>
+                                                        </th>
+                                                        <td align="left">
+                                                            <span>@ViewBag.ReplyStatus_Ind</span>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr height="10" class="white_color" id="trerrorfrom" runat="server">
+                                                        <th align="right" width="22%">
+                                                            <font color="red">*</font><strong>From :</strong>&nbsp;
+                                                        </th>
+                                                        <td align="left" id="tdfrom" runat="server" width="78%">
+                                                            @Html.TextBox("txtfrom", (string)ViewBag.strOutMailId, new { @class = "textfield", MaxLength = "50", style = "width:280px", autocomplete = "off" })
+                                                            &nbsp;&nbsp; <span id="lblErrfrom" style="font-weight: bold; color: Black"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="10" class="white_color" id="tremail" runat="server">
+                                                        <th align="right" width="22%">
+                                                            <font color="red">*</font><strong>Reply To :</strong>&nbsp;
+                                                        </th>
+                                                        <td align="left" id="tdemail" runat="server" width="78%">
+                                                            @Html.TextBox("txtEmail", (string)ViewBag.ContactMail, new { @class = "textfield", MaxLength = "50", style = "width:280px", autocomplete = "off" })
+                                                            &nbsp;&nbsp; <span id="lblErremail" style="font-weight: bold; color: Black"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="10" class="white_color" id="trsub1" runat="server">
+                                                        <th align="right" width="22%">
+                                                            <font color="red">*</font><strong>Subject :</strong>&nbsp;
+                                                        </th>
+                                                        <td align="left" id="tdsub" runat="server" width="78%">
+                                                            @Html.TextBox("txtSubject", (string)ViewBag.ContactSubject, new { @class = "textfield", MaxLength = "50", style = "width:280px", autocomplete = "off" })
+                                                            &nbsp;&nbsp; <span id="lblErrsub" style="font-weight: bold; color: Black"></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="10" class="white_color" id="trmsg1" runat="server">
+                                                        <th align="right" width="22%">
+                                                            <font color="red">*</font><strong>Message:</strong>&nbsp;
+                                                        </th>
+                                                        <td align="left" id="tdmsg1" runat="server" width="78%">
+                                                            @Html.TextArea("txtMsg", null, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })
+                                                            &nbsp;&nbsp;(Maximum length upto 1000 characters)
+                                                              <br /><span id="lblErrmsg" style="font-weight: bold; color: Black"></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="button" id="btnreply" value="Reply" title="Save" class="button" onclick="return CheckReply();" />
+                                             <input type="submit" id="btnsubmit" value="Save" title="Save" class="button" onclick="return Validate();" />
+                                                          &nbsp;
+                                              <input type="button" class="close button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+      }
+</body>
+</html>

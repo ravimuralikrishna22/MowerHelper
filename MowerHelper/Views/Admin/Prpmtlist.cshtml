@@ -1,0 +1,106 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css">
+.Date { width:8%; }
+.ChgTo { width:20%;}
+.chgAmt { width:12%; }
+.ModeOf{ width:15%; }
+.cDel{ width:5%; }
+</style>
+</head>
+<body>
+      @{string heading1;
+        if (Request["g2sort"] == "Transaction_Date" && Request["g2sortdir"] == "ASC")
+           {
+               heading1 = "Date ▲";
+           }
+        else if (Request["g2sort"] == "Transaction_Date" && Request["g2sortdir"] == "DESC")
+           {
+               heading1 = "Date ▼";
+           }
+           else
+           {
+               heading1 = "Date ▼";
+           }
+                                            }
+                                            @{string Pmtpagesize = (ViewBag.Pmtpagesize == null ? "10" : ViewBag.Pmtpagesize);
+                                              WebGrid Paygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Pmtpagesize), fieldNamePrefix: "g2", pageFieldName: "p2");}
+                                            @{WebGrid grid = Paygrid.Bind(rowCount: Convert.ToInt32(ViewBag.Paytotrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["g2p2"] == null ? "1" : Request["g2p2"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Transaction_Date", heading1, style: "Date"), grid.Column("PaidByName", "Paid by", style: "ChgTo"), grid.Column("PaymentMode", "Payment mode", style: "ModeOf"), grid.Column("", "Notes",
+                                                  format:@<text>
+                                                         @{string chgNote = (string)item.Notes;
+                                                           if( chgNote != null)
+                                                           {
+                                                           if (chgNote.Length > 100  )
+                                                           {
+                                                               count = count + 1;
+                                                               chgNote = chgNote.Substring(0, 100);
+                                                           
+                                                           <span>@chgNote</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 500px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Notes </h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4" width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:5px; padding-top: 5px;" align="left"> <span>@item.Notes</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                            else
+                                                           {
+                                                               <span>@item.Notes</span>
+                                                           }
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@item.Notes</span>
+                                                           }
+                                                           }
+                                                
+                                                </text>
+                                                
+),
+
+grid.Column("Transaction_Amount", "Amount($)", style: "chgAmt",canSort:false))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                 @* if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }*@
+                                              }
+                                              else
+                                              {
+                                                <table id="tblpaymenterror" width="100%" style="display: ;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td valign="middle" align="center" height="25px">
+                                                                <span id="lblPayments" class="errormsg" style="font-weight: bold;">No payments found</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                               
+                                              }
+                                            }
+    
+</body>
+</html>

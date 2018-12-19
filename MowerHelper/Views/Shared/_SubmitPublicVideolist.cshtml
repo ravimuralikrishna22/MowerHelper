@@ -1,0 +1,42 @@
+﻿ <style>
+.gridAltRow td{padding: 6px;}
+.gridRow td { padding: 6px; }
+.CPTCodewidth{width:10%;}  
+.Description {width:80%;}
+.ProviderFee {width:10%; }
+</style>
+ <script type="text/javascript">
+        var obj = "@ViewBag.title";
+        if (obj != null) {
+            document.getElementById("container-grid").style.display = 'none';
+        }
+</script>
+<div id="searchResults">
+       @{
+           WebGrid totgrid1 = new WebGrid(rowsPerPage: 10, ajaxUpdateContainerId: "searchResults");}
+                                            @{WebGrid grid = totgrid1.Bind(Model, rowCount: Convert.ToInt32(ViewBag.totalrec1), autoSortAndPage: false);
+                                              if (ViewBag.totalrec1 != 0)
+  {
+@grid.GetHtml(htmlAttributes: new { id = "grid" },
+              tableStyle: "gridTable", headerStyle: "gridHead", footerStyle: "gridFooter", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow", selectedRowStyle: "select",
+        columns:
+        grid.Columns(
+              grid.Column("Sino", "#", style: "width: 700px;", canSort: false),
+         grid.Column("Title", "Title", canSort: false, format: @<text><a  href="#"    id="asid @item.Sino" onclick="return selected('@item.Title','@item.PublicVideo_ID');">@item.Title</a></text>),
+                   grid.Column("Video_Description", "Description name", canSort: false)
+
+                            )
+
+                            )
+    }
+    else{
+      <table id="tblOutMsg" width="98%" align="Center">
+            <tr id="troutmsg">
+                <td align="center" height="60px" valign="Middle" style="padding-left:200px;">
+                    <span id="lblOutputMsg" style="font-weight: bold;" class="errormsg">No records found.</span>
+                </td>
+            </tr>
+        </table>   
+    }
+    }
+    </div>

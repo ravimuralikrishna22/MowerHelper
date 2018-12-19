@@ -1,0 +1,220 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css">
+             .dvLoading .ui-dialog-titlebar{display:none;}  
+             </style>
+       @* <script type="text/javascript">
+            $(document).ready(function () {
+                $('#divviewcomments').dialog({
+                    autoOpen: false,
+                    width: 900,
+                    resizable: false,
+                    modal: true,
+                    close: function () { $('.ddlactionclass').val(0); }
+                });
+            });
+    </script>*@
+                  <script type="text/javascript">
+                      function ddlchange(dId, questionid) {
+                          if (dId == "1") {
+                              window.location.href = "../AdminFaqs/EditFaq?questionid=" + questionid;
+                              $('.ddlactionclass').val(0);
+                          }
+                          if (dId == "2") {
+                              var url = "../AdminFaqs/DeleteFaq?questionid=" + questionid;
+                              $("#dialog-confirm").dialog({
+                                  autoOpen: false,
+                                  height: 170,
+                                  width: 350,
+                                  show: { effect: 'drop', direction: "up" },
+                                  modal: true,
+                                  buttons: {
+                                      "Yes": function () {
+                                          $(this).dialog("close");
+                                          window.location = url;
+
+                                      },
+                                      "No": function () {
+                                          $(this).dialog("close");
+
+                                      }
+                                  }
+                              });
+                              $("#dialog-confirm").dialog('open');
+                              $('.ddlactionclass').val(0);
+                              return false;
+                           //   window.location.href = "../Profiles/Changestatus?verification_User_Id=" + verification_User_Id + '&Login_ID=' + Login_ID + '&status=' + dId; ;
+                            
+                          }
+                          if (dId == "3") {
+                              window.location.href = "../AdminFaqs/ResetFaq?questionid=" + questionid;
+                              $('.ddlactionclass').val(0);
+                          }
+                          if (dId == "4") {
+                              //var dialogDiv = $('#divviewcomments');
+                              //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                              var viewUrl = "../AdminFaqs/viewcomments?questionid=" + questionid;
+                              $('.ddlactionclass').val(0);
+                              Displaydialog('divviewcomments', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                              //$.get(viewUrl, function (data) {
+                              //    dialogDiv.html(data);
+                              //    $('#dvLoading').dialog('close');
+                              //    dialogDiv.dialog('open');
+                              //    $('.ddlactionclass').val(0);
+                              //});
+                              //return false;
+                          }
+                      }
+    </script>
+</head>
+<body>
+
+    <div>
+        <div id="main-content" style="padding-top:0px">
+
+         
+          <br />
+      
+        <div class="content-box">
+
+      
+        <div class="content-box-header"><h3>Question list</h3>
+        <ul style="list-style:none!important; padding-right:5px;" class="content-box-tabs"> 
+        <li style="padding:0px; margin:0px;">
+    <a id="lnkAddnew" href="@Url.Action("AddNewFaq","AdminFaqs",null)" style=" color:#0066CC; font-weight:bold; font-size:15px;">Add new question</a>
+                            &nbsp;
+                             
+                       
+                  </li></ul>
+        </div>
+        <div class="content-box-content">
+
+        <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+            <tr class="bg_none">
+                <td align="center" colspan="2">
+                  @{
+              WebGrid Docgrid = new WebGrid(rowsPerPage: 10);}
+                                            @{WebGrid grid = Docgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totalrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] ?? "1");
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("Sino", "#", style: "width: 700px;", canSort: false),
+                                                  grid.Column("Question", "Question", canSort: false),
+                                                   grid.Column("Category_Name", "Category name", canSort: false),
+                                                   grid.Column("AvailableTo", "Available to", canSort: false, format:@<text>
+                                                   @{
+                                                       string text=item.AvailableTo;
+                                                       string[] text1=text.Split(',');
+                                                         
+                                                       }
+                                                       <label>@text1[0]</label>
+                                                   </text>
+                                                    
+                                                    
+                                                    ),
+                                                    grid.Column("Rating", "Rating", canSort: false, format:@<text>
+                                                   @{
+                                                       string rating = item.Rating;
+                                                       string[] rating1 = rating.Split('.');
+                                                         
+                                                       }
+                                                       <label>@rating1[0]</label>
+                                                   </text>
+                                                    
+),
+                                                    grid.Column("countstring", "Comments", canSort: false),
+                                                    grid.Column("Createdon", "Created on", canSort: false, format:@<text>
+                                                   @{
+                                                       string Create = item.Createdon;
+                                                       string[] Create1 = Create.Split(' ');
+                                                         
+                                                       }
+                                                       <label>@Create1[0]</label>
+                                                   </text>
+                                                    
+),
+                                                    grid.Column("Status", "Status", canSort: false),
+                                                  grid.Column("Action", canSort: false, style: "action", format: @<text>
+                                                                      @{
+                                                                          
+                                                                         
+                                                                               @Html.DropDownList("DDLAction", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select action--", Value = "0" },
+                                                               new SelectListItem{ Text="Edit", Value = "1" },
+                                                               new SelectListItem{ Text="Delete", Value = "2" },
+                                                                new SelectListItem{ Text="Reset rating", Value = "3" },
+                                                                 new SelectListItem{ Text="View comments", Value = "4" }
+                                                              },
+                                                                                    new { @class = "ddlactionclass", onchange = "return ddlchange(this.value, '" + item.Question_id + "')", style = "font-family:arial;font-size:13px;height:20px;width:160px;" }) 
+                                                                          
+
+                                                                         }
+                                                                           
+                                                                           
+                                                 
+                                                 
+                                                 
+                                                 </text>)
+                                                  )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div>    
+                                                <br />
+
+
+
+                                              }
+                                              else
+                                              {
+                                                <table cellspacing="0" id="tblnorecords" runat="server" cellpadding="0" width="100%" border="0" align="center">
+     <tr class="white_color" runat="server">
+                <td align="center" height="25px" valign="middle" width="100%">
+                  <label id="" style="font-weight:bold; font-size:13px;">No Faqs found.</label>
+                   </td>
+        </tr>
+     </table>
+                                              }
+                                              }  
+   
+                </td>
+            </tr>
+            </table>
+            
+            </div></div>    
+          
+    
+      
+       
+                
+  
+        </div>
+    </div>
+     <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete Question?
+            </p>
+        </div>
+     <div id="divviewcomments" title="View Comments" ></div>
+           <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>   
+   
+</body>
+</html>

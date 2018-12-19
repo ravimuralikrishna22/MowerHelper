@@ -1,0 +1,121 @@
+﻿@{
+    Layout = null;
+}
+
+@*<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PatientNotes</title>*@
+    <style type="text/css">
+                  tr.gridHead th:nth-child(1) { width: 10%; }
+          tr.gridHead th:nth-child(2) { width: 80%; }
+          tr.gridHead th:nth-child(3) { width: 10%; }
+          tr.gridRow td:nth-child(2) { width: 200px;height:20px;text-align:left; }
+          tr.gridAltRow td:nth-child(2) { width: 200px;height:20px;text-align:left; }
+        .divLoading .ui-dialog-titlebar{display:none;} 
+    </style>
+   @* <script type="text/javascript">
+        function cancel() {
+            window.location.href = '@Url.Action("ViewProviderProfessionalInfo", "ProfileMaintenance")';
+         }
+    </script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#notesList").load("@Url.Action("DisplayClientNotesList", "Clients")");
+            $(".close1").live("click", function (e) {
+                var dialogDiv = $('#NoteSummaryDialog');
+                dialogDiv.dialog('close');
+            });
+        });
+
+    </script>
+    @*<script type="text/javascript">
+
+        var linkObj;
+        $(function () {
+
+            $('#NoteSummaryDialog').dialog({
+                autoOpen: false,
+                width: 850,
+                resizable: false,
+                modal: true
+
+            });
+
+            $(".NoteSummaryLink").click(function () {
+                linkObj = $(this);
+                var dialogDiv = $('#NoteSummaryDialog');
+                var viewUrl = linkObj.attr('href');
+                $('#divLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    $('#divLoading').dialog('close');
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            });
+        });
+
+    </script>*@
+
+<script type="text/javascript">
+    $(".confirmDialog3").live("click", function (e) {
+
+        var url = $(this).attr('href');
+        $("#dialog-confirm3").dialog({
+            autoOpen: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            buttons: {
+                "Yes": function () {
+                    $(this).dialog("close");
+                    window.location = url;
+
+                },
+                "No": function () {
+                    $(this).dialog("close");
+
+                }
+            }
+        });
+        $("#dialog-confirm3").dialog('open');
+        return false;
+    });
+
+    </script>
+@*</head>
+<body>*@
+@*    @using (Html.BeginForm("ClientDocument", "Clients", FormMethod.Post, null))
+    {
+          *@<div id="notesList">
+            <img src="../Images/ajax-loader2.gif" alt="Processing" style="margin-left:250px"/>
+              </div>
+
+       
+                                
+        <div id="NoteSummaryDialog" title="Notes">
+    </div>
+        <div id="divLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+        <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+               You can not archive transaction notes.
+            </p>
+        </div>
+        <div id="dialog-confirm3" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to archive note?
+            </p>
+        </div>
+@*    }*@
+    
+@*</body>
+</html>*@

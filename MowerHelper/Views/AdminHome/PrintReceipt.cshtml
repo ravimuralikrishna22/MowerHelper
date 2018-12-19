@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+     <link href="~/Content/style.css" rel="stylesheet" type="text/css" media="all" />
+     <script type="text/javascript">
+         function Printpage() {
+             window.print();
+             return false;
+         }
+         function cancelPage() {
+             var proid = document.getElementById('hdnproid').value;
+             var proname = document.getElementById('hdnproname').value;
+             window.location = '../AdminHome/AdminLevelTransactionsList?pracId=' + proid + '&pracname=' + proname;
+             return false;
+         }
+    </script>
+</head>
+<body>
+    <div id="main-content">
+        <input type ="hidden" id="hdnproid" name="hdnproid" value="@ViewBag.proid" />
+             <input type ="hidden" id="hdnproname" name="hdnproname" value="@ViewBag.proname" />
+     <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="background_color">
+                    <td align="right">
+                        <input type="button" value="Print" class="button" name="btnPrint"  onclick="return Printpage();"/>&nbsp;&nbsp;
+                        <input type="button" name="btnPrintCancel" class="button" value="Close"  onclick="return cancelPage();"/>
+                    </td>
+                </tr>
+            </table> 
+            <br />
+            <br />
+    <table id="tblMain" style="border-width:0px;width:80%;" cellpadding="1" cellspacing="1" align="Center" border="0">
+	<tbody><tr class="background_color" valign="bottom">
+		<td style="width:300px;"><font size="5"><b>Practice-Solutions,Inc.</b></font><br>Mesa, Arizona,<br>85209</td>
+        <td align="center">
+						<h3>Receipt</h3>
+					</td>
+                    <td style="width:200px;" align="right">
+						<b>Receipt Number:</b>
+						<span id="lblReceiptnumber">@ViewBag.recid</span>
+						<br>
+						<b>Receipt Date:</b>
+						<span id="lblReceiptdate">@ViewBag.recDate</span></td>
+	</tr>
+</tbody></table>
+@Html.Raw(ViewBag.invoiceprview);
+    </div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+   @* <script src="~/SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>*@
+    
+    @*<script type="text/javascript">
+        $(function () {
+            $("#txtMobile1_Edit").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtMobile2_Edit").focus();
+                }
+            });
+            $("#txtMobile2_Edit").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtMobile3_Edit").focus();
+                }
+            });
+
+        });
+    </script>*@
+  
+ @*   <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>*@
+</head>
+<body>
+    @*@using (Html.BeginForm("EditNotes", "Notes", FormMethod.Post, null))
+    {*@
+      @using (Ajax.BeginForm("EditNotes", "Notes", new AjaxOptions
+      {
+          InsertionMode = InsertionMode.Replace,
+          HttpMethod = "POST",
+          OnSuccess = "EditNoteSuccess",
+          OnComplete = "SessionExpireFail"
+
+
+      }, new { @id = "EditNoteForm" }))
+      {
+        @Html.AntiForgeryToken()
+             @Html.Hidden("dt_filter")
+             @Html.Hidden("sortdir")
+             @Html.Hidden("txt_ToDate")
+             @Html.Hidden("txt_FromDate")
+             @Html.Hidden("sort")
+             @Html.Hidden("page")
+         
+       <input type="hidden" id="Hdnpatname" name="Hdnpatname" value="@ViewBag.patientname" />
+        <input type="hidden" id="HdnPID_Edit" name="HdnPID_Edit" value="@ViewBag.PID" />
+        <input type="hidden" id="HdnNID_Edit" name="HdnNID_Edit" value="@ViewBag.NID" />
+        
+        <input type="hidden" id="HdnEmail" name="HdnEmail" value="@ViewBag.Email" />
+        <input type="hidden" id="HdnCmode" name="HdnCmode" value="@ViewBag.CommunicationMode" />
+        <div class="content-box">
+            @*            <div class="content-box-header">
+                <h3><asp:Label ID="lblheading" runat="server"></asp:Label></h3>
+                <div class="clear"></div>
+            </div>*@
+            <div class="content-box-content">
+                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                    border="0">
+                    <tr height="20" class="white_color" id="TrNoteType_Edit" runat="server" style="display: none;">
+                        <th align="right" width="22%">&nbsp;&nbsp;<font color="red">*</font><strong>Note type :</strong>&nbsp;
+                        </th>
+                        <td align="left" width="78%">
+                            @{
+          bool str1 = false;
+          bool str2 = false;
+                            }
+                            @if (ViewBag.type != null)
+                            {
+                                if (ViewBag.type.ToString() == "1")
+                                {
+                                    str1 = true;
+                                    str2 = false;
+                                }
+                                else
+                                {
+                                    str1 = false;
+                                    str2 = true;
+                                }
+                            }
+                            @Html.RadioButton("RBPatient_Edit", "1", str1, new { @GroupName = "NoteType" })Patient&nbsp;
+                                @Html.RadioButton("RBNonPatient_Edit", "1", str2, new { @GroupName = "NoteType" })Non-patient
+                        </td>
+                    </tr>
+                    <tr id="trpatient_Edit" runat="server" class="white_color">
+                        <th align="right" width="22%">
+                            <strong>Client :</strong>&nbsp;
+                        </th>
+                        <td align="left" width="78%">
+                            <label id="lblpatient3">@ViewBag.patientname</label>
+                        </td>
+                    </tr>
+                    <tr height="10" class="white_color" id="trnotedate_Edit" runat="server" style="display:none">
+                        <th align="right" width="22%"><font color="red">*</font>
+                            <strong>Note date :</strong>&nbsp;
+                        </th>
+                        <td align="left" id="tdNDate_Edit" runat="server" width="78%">
+                            @Html.TextBox("txt_Date_Edit", (string)ViewBag.Notes_Date, new { @class = "textfield Datefield", MaxLength = "10", style = "width:80px", autocomplete = "off" })&nbsp;&nbsp;
+                                <span id="lblNoteDate_Edit" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr height="20" id="trnotes_Edit" runat="server" class="white_color">
+                        <th align="right" width="22%">
+                            <font color="red">*</font><strong>Note :</strong>&nbsp;
+                        </th>
+                        <td align="left" id="tdNotes_Edit" runat="server" width="78%">
+                            
+                            @Html.TextArea("txtNotes_Edit", (string)HttpUtility.HtmlDecode(ViewBag.Notes), 3, 3, new { @class = "textfield", style = "width:350px;height:80px;" })
+                            &nbsp;&nbsp; (Maximum length upto 1000 characters) 
+                           <br />
+                            <span id="lblErrNote_Edit" style="font-weight: bold; color: Black"></span>
+
+                        </td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                            <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Validate_Edit();" />
+                            &nbsp;
+                                              <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+   @* }*@
+      }
+    <script type="text/javascript">
+        //$(function () {
+        //    $("#txt_Date_Edit").datepicker({
+        //        dateFormat: 'mm/dd/yy',
+        //        changeMonth: true,
+        //        changeYear: true,
+        //        //                showCurrentAtPos: 1,
+        //        showWeeks: true,
+        //        inline: true,
+        //        numberOfMonths: [1, 1],
+        //        yearRange: "1950:2020",
+        //        showOn: "button",
+        //        buttonImage: "../Images/calender.gif",
+        //        buttonImageOnly: true
+
+        //    });
+           
+        //});
+        $(document).ready(function () {
+         
+            //document.getElementById('trnotedate_Edit').style.display = "";
+            document.getElementById('trnotes_Edit').style.display = "";
+
+            if (document.getElementById('Hdnpatname').value == "") {
+                document.getElementById('trpatient_Edit').style.display = "none";
+            }
+            else {
+                document.getElementById('trpatient_Edit').style.display = "";
+            }
+
+
+
+        });
+        function EditNoteSuccess(data) {
+            if (data != '' & data.Success == true)
+            {
+                $('#dvLoading').dialog('close');
+                $('#NoteSummaryDialog').dialog('close');
+                //window.location.href = '../Notes/ProfileNotes';
+               
+                //$("#gridcontent1").load('../Notes/DisplayProfileNotes');
+                if ($('#page').val() == "" || $('#page').val() == "undefined")
+                {
+                    $('#page').val("1")
+                }
+                
+                var startDate = new Date('@ViewBag.txt_FromDate');
+                //var endDate = new Date($('#txt_ToDate').val());
+                var currentDate = new Date($('#txt_Date_Edit').val());
+                //if (startDate < currentDate && currentDate < endDate) {
+                //alert(startDate);
+                //alert(currentDate);
+                   
+                var cc = parseInt('@ViewBag.RecPerPage');
+                //alert(cc);
+                if ($('#page').val() > 1) {                   
+                    if (cc == 1)
+                    {
+                        $('#page').val(parseInt($('#page').val()) - 1);
+                    }
+                    else if (startDate <= currentDate || cc > 1) {
+                        //// Do something
+                        //alert($('#page').val() + "in");
+
+                    }
+                    else {
+                        $('#page').val(parseInt($('#page').val()) - 1);
+                        //alert($('#txt_FromDate').val());
+                        //alert($('#page').val() + 'out');
+                    }
+                }
+                //alert($('#sort').val());
+                //alert($('#sortdir').val());
+                if ('@ViewBag.txtcustomer' == null || '@ViewBag.txtcustomer' == "")
+                {
+                    $('#HdnPID_Edit').val(null);
+                    $('#Hdnpatname').val(null);
+                }
+                $('#divLoading2').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                $("#gridcontent1").load('../Notes/DisplayProfileNotes?dt_filter=' + $('#dt_filter').val() + '&txt_FromDate=' + $('#txt_FromDate').val() + '&txt_ToDate=' +
+                    $('#txt_ToDate').val() + '&page=' + $('#page').val() + '&rdoActiveArchive=' + $("input[name=rdoActiveArchive]:checked").val() +
+                    '&txtnotes=' + $('#txtnotes').val() + '&sort=' + $('#sort').val() + '&sortdir=' + $('#sortdir').val()+
+                     '&hdnnoteclientid=' + $('#HdnPID_Edit').val() + '&txtcustomer=' + escape($('#Hdnpatname').val()), function (data) { $('#divLoading2').dialog('close'); });
+               
+                //+ '&txtcustomer=' + $('#Hdnpatname').val()
+             }
+
+            else
+            {
+                $('#dvLoading').dialog('close');
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>

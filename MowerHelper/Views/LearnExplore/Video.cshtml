@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "Video";
+    Layout = "~/Views/Shared/_ArticlesMaster.cshtml";
+}
+
+
+ @Scripts.Render("~/Scripts/Thscriptscript")
+ @Styles.Render("~/Content/themes/base/PublicjqueryCSS")
+   @Scripts.Render("~/ThScripts/Thjquerycripts")
+            <script type="text/javascript">
+                function cancelclick() {
+                    window.location.href = "@Url.Action("Videos", "LearnExplore")";
+    }
+
+</script>
+@using (Html.BeginForm("Video", "LearnExplore"))
+{
+     @Html.AntiForgeryToken()
+     <h1 style="padding-bottom: 15px;   color: #292929; font: italic 20px georgia; margin: 0;">
+        Learn &amp; Explore</h1>
+    <div class="article-library">
+        <ul>
+            <li><a id="imgarticle" runat="server" href="@Url.Action("Articles","LearnExplore")" >ARTICLE LIBRARY</a></li>
+            <li><a id="A1" name="IMgvideo" style="font-family: Arial; font-size: 9pt; color: Blue;
+                font-weight: bold" href="@Url.Action("ArticlesIndex","LearnExplore")">ARTICLE INDEX</a> </li>
+            <li><a id="IMgvideo" name="IMgvideo" style="font-family: Arial; font-size: 9pt; color: Blue;
+                font-weight: bold" href="@Url.Action("Videos", "LearnExplore")" class="current">VIDEO LIBRARY</a></li>
+                   </ul>
+        <div class="affairs" style="padding:20px 0px 200px 0px;">
+                <table cellpadding="0" width="100%" align="center" border="0">
+              <tr height="20px">
+                    <td colspan="2" align="right" style="font-family: Arial; font-size: 12pt; font-weight: bold; color:#044a7d;cursor: pointer;">
+   <a href="#" onclick="return Displaydialog('sendemaildialog','@Url.Action("SendVideo", new { vid = ViewBag.videoid})','auto',900,'dvLoading',null,null);" class="sendemail" title="Click here to Send Email">Send this link to a friend</a>
+  </td>
+                </tr>
+                     <tr >
+                            <td id="tdvideo" style="padding-left:50px;padding-top:50px; height:300px;">
+                                <div>
+                                    @Html.Raw(ViewBag.path)
+                                </div>                         
+                            </td>
+                        </tr>
+        <tr >
+            <td align="left" style="font-family: Arial; font-size: 10pt; font-weight: normal;
+                text-align: justify;">
+   
+              <table>
+             <tr>  
+                                        
+             <td >
+            <span style="font-family: Arial; font-size: 10pt; font-weight: bold; color:black;
+                text-align: justify;">@ViewBag.Title</span>
+                        </td>
+             </tr>
+                  <tr> 
+                      <td>     
+                          <h5> 
+                      <span>@ViewBag.datestrng</span></h5>    </td>
+                  </tr>
+                   <tr>  
+                                        
+             <td >
+            <span style="font-family: Arial; font-size: 10pt; font-weight: bold; color:black;
+                text-align: justify;">@ViewBag.Title</span>
+                        </td>
+             </tr>
+                  <tr style="padding-top:10px; padding-bottom:25px;">
+                     
+                      <td style="padding-top: 10px; padding-bottom: 25px;">
+                        
+                              <span id="Span3" style="font-family: arial; font-size: 9pt; font-weight: normal;">
+                                 @Html.Raw(ViewBag.Video_Description)
+                              </span>
+                                              
+
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                           <br />
+                                                                             @*  <p> <span id="Authordesc" runat="server" style="line-height: 20px">
+                                                                                   @ViewBag.AuthorFulldesc
+                                                                                </span></p>*@
+                      </td>
+                  </tr>
+                     @if (ViewBag.relatedlinkcount > 0)
+                     {
+                  
+                             <tr id="trref" runat="server">
+                    <td style="font-family: Arial; font-size: 12pt; color: #044a7d" class="bluemenu1">
+                        Related Videos
+                    </td>
+                </tr>
+                <tr id="trref1" runat="server">
+                    <td>
+                        <hr />
+                    </td>
+                </tr>
+             
+                <tr id="trref2" runat="server">
+                    <td style="font-family: Arial; font-size: 9pt;" id="tdlinks" runat="server">
+                        <table>
+                                <tr>
+                                <td>
+                                    
+                                    
+                                        @foreach (var item1 in ViewBag.relatedlinks)
+                                        {
+                                            int filepath = item1["ChildVideo_ID"];
+                                            string str = item1["Title"];
+                                            string text = str.ToString();
+                                            //string fileext = System.IO.Path.GetExtension(item1["Publicvideo_ID"]);
+                                          //  string path = item1["ImagepathSuffix"] + "AdminTutorialVideo" + fileext;
+                                           
+                                      
+                                          <table>
+                                        <tr>
+                                        <td>                                           
+                                     @Html.ActionLink(str, "Video", new { @videoid = filepath}, new { @class = "openDialog", @data_dialog_id = "aboutlDialog" })                  
+                                   
+                                        </td>
+                                        </tr>                                                                                
+                                        </table>    
+                                        }
+                                      
+                                </td>
+                            </tr>
+                        </table>
+                       
+                    </td>
+                </tr>
+             
+                     }
+              
+                    <tr>
+                   <td colspan="2" height="30px">
+                    </td>
+                </tr>
+                     <tr>
+                      <td style="padding-left:500px;">
+                          <input type="button" class="button" id="btncancel" name="btncancel" value="Cancel" onclick="return cancelclick();" />
+                      </td>
+                  </tr>
+             </table>
+        
+            </td>
+        </tr>
+        
+    </table>
+            
+          
+        </div>
+     
+    </div>
+    <div id="sendemaildialog" title="Send this link to a friend" style="position:relative;">
+    </div>
+       <script type="text/javascript">
+
+           var linkObj;
+           $(function () {
+
+               //$('#sendemaildialog').dialog({
+               //    autoOpen: false,
+               //    width: 900,
+               //    resizable: false,
+               //    modal: true,
+               //    close: function () { document.getElementById('tdvideo').style.display = '' },
+               //});
+
+               //$(".sendemail").click(function () {
+               //    //change the title of the dialog
+               //    document.getElementById('tdvideo').style.display = 'none';
+               //    linkObj = $(this);
+               //    var dialogDiv = $('#sendemaildialog');
+               //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+               //    var viewUrl = linkObj.attr('href');
+               //    $.get(viewUrl, function (data) {
+               //        dialogDiv.html(data);
+               //        $('#dvLoading').dialog('close');
+               //        dialogDiv.dialog('open');
+
+               //    });
+               //    return false;
+               //});
+
+           });
+</script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".sendfaqclose").live("click", function (e) {
+                document.getElementById('tdvideo').style.display = ''
+                var dialogDiv = $('#sendemaildialog');
+                dialogDiv.dialog('close');
+                return false;
+            });
+        });
+    </script>
+}

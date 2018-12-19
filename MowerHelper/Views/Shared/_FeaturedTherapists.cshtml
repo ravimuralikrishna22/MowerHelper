@@ -1,0 +1,161 @@
+﻿@{
+    Layout = null;
+}
+
+@*<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>*@
+   
+      @*  @RenderBody()*@
+      <div style="width: 208px; float: left; padding: 0px 15px 0px 15px;">
+      @if (ViewBag.FeaturedListcount > 0)
+      {
+          foreach(var item in ViewBag.FeaturedList ){     
+              string imgind=null;    
+                            <div id="divline" style="width: 208px; float: left; padding-top: 10px; background-image: url(@ViewBag.img12ind);
+                                background-repeat: repeat-x; background-position: bottom left; padding-bottom: 10px;">
+                                <div style="width: 42px; height:40px; float: left; border: 1px #006600 solid;">
+                                                                             @{
+                                        string domain = null;
+                                       // MowerHelper.Models.Classes.clsWebConfigsettings objconfig = new MowerHelper.Models.Classes.clsWebConfigsettings();
+                                        string Requesturl = null;
+                                        if (Request.Url != null){
+                                            Requesturl = Request.Url.ToString();
+                                        }
+                                        var strurl = Requesturl.Split('/');
+                                            }
+                                            @if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("Islocal") == "Y")
+                    {
+                        if (Requesturl.Contains("localhost:"))
+                        {
+                            domain = strurl[0] + "//" + strurl[2] + "/";
+
+                        }
+                        else if (Requesturl.Contains("vbv"))
+                        {
+                            domain = strurl[0] + "//" + strurl[2] + "/" + strurl[3] + "/";
+
+                        }
+                    }
+                    else
+                    {
+                        domain = MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("PublicImageChecklocal");
+                    }
+                                               @if (!DBNull.Value.Equals(item["Picture"]) && item["Picture"] != null)
+                                            {
+                                                
+                                                string str = item["Picture"];
+                                                ViewData["str"] = str;
+                                                ViewBag.strimage = str;
+                                                if (str.Contains(".") == true)
+                                                {
+                                                    string[] str1 = str.Split('.');
+                                                    ViewData["ExistedLogo"] = str1[0];
+                                                    ViewBag.ExistedLogo = str1[0];
+                                                    ViewData["ExistedExtn"] = str1[1];
+                                                    ViewBag.ExistedExtn = str1[1];
+                                                }
+
+                                                string strings = null;
+
+                                                //  strings = "../Attachments/Providers" + "/";
+                                                strings = Path.Combine(Server.MapPath("~/Attachments/Providers"), str);
+                                                if (System.IO.File.Exists(strings))
+                                                {
+                                                      ViewBag.providerimage1 = domain + "Attachments/Providers/" + str;
+                                                }
+                                               //else if (Convert.ToString(item["gender"]) == "Male")
+                                               // {
+                                               //     ViewBag.imageavail = "Y";
+                                               //     ViewBag.providerimage1 = domain + "images/male.png";
+                                               //     //ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/male.png&Width=100&Height=80";
+                                               // }
+                                               // else if (Convert.ToString(item["gender"]) == "Female")
+                                               // {
+                                               //     ViewBag.imageavail = "Y";
+                                               //     ViewBag.providerimage1 = domain + "images/female.png";
+                                               //     //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/female.png&Width=100&Height=80";
+                                               // }
+                                                else
+                                                {
+                                                    //imgind = "1";
+                                                    ViewBag.providerimage1 = domain + "images/Coach1.JPG";
+                                                   
+                                                }
+                                               }
+                                             else
+                    {
+                        //if (Convert.ToString(item["gender"]) == "Male")
+                        //{
+                      
+                        //    ViewBag.providerimage1 = domain + "images/male.png";
+                        //    //ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/male.png&Width=100&Height=80";
+                        //}
+                        //else if (Convert.ToString(item["gender"]) == "Female")
+                        //{
+                          
+                        //    ViewBag.providerimage1 = domain + "images/female.png";
+                        //  //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/female.png&Width=100&Height=80";
+                        //}
+                        //else
+                        //{
+                            ViewBag.providerimage1 = domain + "images/Coach1.JPG";
+                          //  ViewBag.providerimage = "Common/GenerateImage?strImgPath=../../images/Coach1.JPG&Width=100&Height=80";
+
+                       // }
+
+
+                    }
+                    @if (imgind=="1"){
+                        <img width="42px" height="40px" alt="@item["ProviderName"]" src="~/@ViewBag.providerimage1" />
+                    }
+                    else
+                    {
+                        <img width="42px" height="40px" alt="@item["ProviderName"]" src="@ViewBag.providerimage1" />
+                    }
+                                    
+                                    
+                                </div>
+                                <div style="width: 160px; float: right;">
+                                    <div class="featured" style="width: 160px; float: left; padding: 0px; margin: 0px;">
+                                         @{
+                                        string elestate = null;
+                                        string elecity = null;
+                                        elestate = item["l_state"].ToString().Trim().Replace("/ ", "-");
+                                        elestate = elestate.ToString().Trim().Replace(" ", "-");
+                                        elestate = elestate.Replace("/", "-");
+                                        elecity = item["l_City"].ToString().Trim().Replace("/ ", "-");
+                                        elecity = elecity.ToString().Trim().Replace(" ", "-");
+                                        elecity = elecity.Replace("/", "-");
+                                                }
+                                        @Html.RouteLink((string)item["ProviderName"], "ProviderProfile", new { @randomnumber = item["Random_number"], Therapistname = item["PublicURL"].ToString().Trim().Replace(" ", "-"),state=elestate,city=elecity,zip=item["l_zipcode"] }, new { @title = "see full profile of " + item["ProviderName"] + ", Mower Helper in " + item["l_City"] + ", " + item["l_state"] + " " + item["l_zipcode"] })
+                                 @*  @Html.RouteLink((string)item["ProviderName"], "ProviderProfile", new { @id = item["Provider_ID"], Therapistname = item["PublicURL"].ToString().Trim().Replace(" ", "-") }, new { @title = "see full profile of " + item["ProviderName"] + ", Therapist in " + item["l_City"] + ", " + item["l_state"] + " " + item["l_zipcode"] })*@
+                                      
+                                    </div>
+                                    <div class="featured" style="width: 160px; float: left; padding-top: 5px;">
+                                        @item["Address"]
+                                    </div>
+                                </div>
+                                <div class="clearme">
+                                 <img id="imgspace2" alt="" src="@ViewBag.speacer" width="1" height="1" /></div>
+                            </div>
+                            @*@Html.Hidden((string)item.Provider_ID)
+                          
+                            @Html.Hidden((string)item.CityName)
+                            @Html.Hidden((string)item.StateName)
+                            @Html.Hidden((string)item.Zip)*@
+          }
+      }
+      else
+      {
+                            <span style="color: Red;">No Featured Electricians Found</span>
+                            
+                            } 
+                        </div>
+@*    
+</body>
+</html>*@

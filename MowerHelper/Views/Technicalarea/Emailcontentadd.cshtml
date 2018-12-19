@@ -1,0 +1,220 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@{
+    Layout = null;
+}
+@using Obout.Mvc.HTMLEditor;
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+              @Styles.Render("~/Content/themes/base/jqueryCSS")
+      @Scripts.Render("~/Scripts/Thscriptscript")
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $('#DDLCategory').change(function () {
+                var recordId = $('#DDLCategory').val();
+                //                var recordId1 = $("#txt_Zip").val();
+                if (recordId != '') {
+                    // alert('a');
+                    $.getJSON("GetCitiesByStates", { id: recordId },
+                    function (data) {
+                        $("#DDLCategorysub").empty();
+                        $('#DDLCategorysub').append($('<option > </option>').val(0).html("--Select Subcategory--"));
+                        for (i = 0; i < data.length; i++) {
+                            if (data[i].Text != '--Select Subcategory--') {
+                                $('#DDLCategorysub').append($('<option > </option>').val(data[i].Value).html(data[i].Text));
+                            }
+                        }
+                    });
+                    // return false;
+                }
+                else {
+                    //alert('c');
+                    $("#DDLCategorysub").empty();
+                    $('#DDLCategorysub').append($('<option > </option>').val(0).html("--Select Subcategory--"));
+                    // return false;
+                }
+            });
+
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+                    $("#Menu0").removeClass();
+                    $("#Menu1").removeClass();
+                    $("#Menu2").removeClass();
+                    $("#Menu3").addClass("active");
+                });
+    </script>
+            <script type="text/javascript">
+                function Validate() {
+
+
+                    document.getElementById('tdcat').bgColor = "White";
+                    document.getElementById('lblErrcat').style.display = 'none';
+                    document.getElementById('tdsubcat').bgColor = "White";
+                    document.getElementById('lblErrsubcat').style.display = 'none';
+                    document.getElementById('tdsub').bgColor = "White";
+                    document.getElementById('lblErrsub').style.display = 'none';
+                    document.getElementById('tdbody').bgColor = "White";
+                    document.getElementById('lblErrbody').style.display = 'none';
+
+                    if (document.getElementById('DDLCategory').selectedIndex == 0) {
+                        document.getElementById('lblErrcat').style.display = '';
+                        document.getElementById('lblErrcat').innerHTML = 'Please select category.';
+
+                        document.getElementById('tdcat').bgColor = "orange";
+                        document.getElementById('DDLCategory').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('tdcat').bgColor = "White";
+                        document.getElementById('lblErrcat').style.display = 'none';
+
+                    }
+                    if (document.getElementById('DDLCategorysub').selectedIndex == 0) {
+                        document.getElementById('lblErrsubcat').style.display = '';
+                        document.getElementById('lblErrsubcat').innerHTML = 'Please select subcategory.';
+
+                        document.getElementById('tdsubcat').bgColor = "orange";
+                        document.getElementById('DDLCategorysub').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('tdsubcat').bgColor = "White";
+                        document.getElementById('lblErrsubcat').style.display = 'none';
+
+                    }
+                    var footer = trim(document.getElementById('txtFooter').value);
+                    document.getElementById('txtFooter').value = footer;
+
+                    var title = trim(document.getElementById('txtSubjectTitle').value);
+                    document.getElementById('txtSubjectTitle').value = title;
+                    if (document.getElementById('txtSubjectTitle').value == '') {
+                        document.getElementById('lblErrsub').style.display = '';
+                        document.getElementById('lblErrsub').innerHTML = 'Please enter email msg subject';
+                        document.getElementById('tdsub').bgColor = "orange";
+                        document.getElementById('txtSubjectTitle').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('tdsub').bgColor = "White";
+                        document.getElementById('lblErrsub').style.display = 'none';
+
+                    }
+
+                    var title = trim(document.getElementById('txtSubjectText').value);
+                    document.getElementById('txtSubjectText').value = title;
+                    if (document.getElementById('txtSubjectText').value == '') {
+                        document.getElementById('lblErrbody').style.display = '';
+                        document.getElementById('lblErrbody').innerHTML = 'Please enter email msg body';
+                        document.getElementById('tdbody').bgColor = "orange";
+                        document.getElementById('txtSubjectText').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('tdbody').bgColor = "White";
+                        document.getElementById('lblErrbody').style.display = 'none';
+
+                    }
+
+
+                }
+    </script>
+                <script type="text/javascript">
+         function cancel() {
+            window.location.href = "@Url.Action("Emailcontent", "Technicalarea")"; 
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("Emailcontentadd", "Technicalarea", FormMethod.Post, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+        <div id="main-content">
+        @Html.Partial("_NavigationTool")
+    <div class="content-box">
+    <div class="content-box-header">
+
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="70%" align="left">
+                    <h3>
+                      Add  E-mail message</h3>
+                </td>
+               
+            </tr>
+        </table>
+     </div>
+       <div class="content-box-content">
+           <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+               border="0">
+               <tr height="10" runat="server" class="white_color">
+                   <th align="right" width="30%">
+                       <b><font color="red">*</font></b> <strong>E-mail Category :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="tdcat" runat="server" width="70%">
+                                          @if (Model.StateList != null)
+                                                                                         {
+                                                                            @Html.DropDownList("DDLCategory", Model.StateList, "--Select category--", new { @style = "width:270px;height:25px;font:13px;" })
+                                                                                         }
+                                                                                          &nbsp;&nbsp;&nbsp <span id="lblErrcat" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+               <tr height="10" runat="server" class="white_color">
+                   <th align="right" width="30%">
+                       <b><font color="red">*</font></b> <strong>E-mail subcategory :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="tdsubcat" runat="server" width="70%">
+  @Html.DropDownList("DDLCategorysub", Model.CityList, new { @style = "width:310px;height:25px;font:13px;" })
+   &nbsp;&nbsp;&nbsp <span id="lblErrsubcat" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <strong>E-mail Msg footer :</strong>&nbsp;
+                   </th>
+                   <td align="left">
+                       @Html.TextBox("txtFooter", null, new { @class = "textfield", style = "width:280px", autocomplete = "off" })
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <b><font color="red">*</font></b><strong>E-mail Msg subject :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="tdsub" runat="server">
+                       @Html.TextBox("txtSubjectTitle", null, new { @class = "textfield", style = "width:280px", autocomplete = "off" })
+                         &nbsp;&nbsp;&nbsp <span id="lblErrsub" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <b><font color="red">*</font></b> <strong>E-mail Msg body :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="tdbody" runat="server">
+                     @*  @Html.TextArea("txtSubjectText", null, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })*@
+                        @Html.Obout(new Obout.Mvc.HTMLEditor.Editor("txtSubjectText") { ShowQuickFormat = false, Height = 225, Template = "example", Submit = false, ModeSwitch = false, ShowWaitMessage = true, NoDrop = true, DefaultContextMenu = false })
+                       &nbsp;&nbsp;&nbsp <span id="lblErrbody" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+           </table>
+                                                                                     
+      </div></div>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Validate();" />
+                                                          &nbsp;
+                                              <input value="Cancel" type="button" class="button" style="width: 60px;" id="btnclose1" onclick="return cancel();"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+      </div>
+        Html.RenderAction("Bottomsections", "Tools");
+    }
+</body>
+</html>

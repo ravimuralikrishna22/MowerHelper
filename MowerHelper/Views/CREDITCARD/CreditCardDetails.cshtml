@@ -1,0 +1,509 @@
+﻿@{
+    Layout = null;
+}
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+<!DOCTYPE html>
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+       @Styles.Render("~/Content/themes/base/TherpistStyles")
+
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+
+
+    <style type="text/css">
+        .ui-datepicker-trigger{ margin-left: 5px; vertical-align: middle; }
+        .Date{ width:20%;}
+        .Paid{ width:15%;}
+        .Status{ width:7%;}
+    </style>
+    <script type="text/javascript">
+        function ComboBoxPr_ItemClick(sender, selectedIndex) {
+            if (ComboBoxPr.selectedIndex() != -1) {
+                var obj = ComboBoxPr.options[selectedIndex].value;
+                //   alert(obj);
+                document.getElementById("hdnPrid").value = obj;
+                document.getElementById("hdnname").value = ComboBoxPr.options[selectedIndex].text;
+
+            }
+        }
+        function cancelbutton() {
+            window.location = "../AdminHome/Tools";
+            return false;
+        }
+        $(document).ready(function () {
+            var ddlrec = "@ViewBag.Summarypagesize";
+            var ddldate = "@ViewBag.setDt";
+            $("#ddlrecords").val(ddlrec);
+            $("#dt_filter").val(ddldate);
+            if (ddldate == "Custom") {
+                document.getElementById('tddaterange').style.display = '';
+                var fdate = "@ViewBag.frmdate";
+                var tDate = "@ViewBag.todate";
+                $('#txt_FromDate').val(fdate);
+                $('#txt_ToDate').val(tDate);
+            }
+            else {
+                document.getElementById('tddaterange').style.display = 'none';
+
+            }
+            //$("#txt_FromDate,#txt_ToDate").datepicker({
+            //    dateFormat: 'mm/dd/yy',
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    //                showCurrentAtPos: 1,
+            //    showWeeks: true,
+            //    inline: true,
+            //    numberOfMonths: [1, 1],
+            //    yearRange: "1950:2020",
+            //    showOn: "button",
+            //    buttonImage: "../Images/calender.gif",
+            //    buttonImageOnly: true
+
+            //});
+            $('#dt_filter').change(function () {
+                if (document.getElementById('dt_filter').value == 'Custom') {
+                    document.getElementById('tddaterange').style.display = '';
+                  
+                    $('#MaximumMonth').show();
+                    $('#txt_FromDate').val("");
+                    $('#txt_ToDate').val("");
+                }
+                else {
+                    $('#MaximumMonth').hide();
+                    document.getElementById('tddaterange').style.display = 'none';
+                    $('#txt_FromDate').val("");
+                    $('#txt_ToDate').val("");
+                }
+                return false;
+            });
+            //$("#btnSearch").click(function () {
+            //    if ($("#dt_filter option:selected").val() == "Custom") {
+
+            //        if ($('#txt_FromDate').val() == '') {
+            //            alert("Please enter from date");
+            //            $('#txt_FromDate').focus();
+            //            return false;
+            //        }
+            //        if ($('#txt_ToDate').val() == '') {
+            //            alert("Please enter to date");
+            //            $('#txt_ToDate').focus();
+            //            return false;
+            //        }
+            //    }
+            //    document.forms.item(0).submit();
+            //});
+
+            //$("#txt_FromDate").on('change keyup paste mouseup', function () {
+            //    //  alert("1");
+            //    if ($(this).val().length == 10) {
+            //        //alert("2");
+            //        if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+            //        var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+            //        // alert(St);
+            //        var targetDate = new Date(St);
+            //        targetDate.setDate(targetDate.getDate() + 365);
+            //        //   alert(targetDate);
+            //        var todaydate = new Date();
+            //        todaydate.setDate(todaydate.getDate());
+            //        var dd = todaydate.getDate();
+            //        var mm = todaydate.getMonth() + 1; //January is 0!
+            //        var yyyy = todaydate.getFullYear();
+            //        var today = mm + '/' + dd + '/' + yyyy;
+            //        var dd1 = targetDate.getDate();
+            //        var mm1 = targetDate.getMonth() + 1;
+            //        var yyyy1 = targetDate.getFullYear();
+            //        var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+            //        //  alert(target1);
+            //        if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+            //        else { document.getElementById('txt_ToDate').value = target1; return false; }
+            //    }
+            //});
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        });
+        Date.prototype.days = function (to) {
+            return Math.abs(Math.floor(to.getTime() / (3600 * 24 * 1000)) - Math.floor(this.getTime() / (3600 * 24 * 1000)))
+
+        }
+        function validDateserach() {
+            if (document.getElementById("dt_filter").value == "0") {
+                alert("Please select date");
+                document.getElementById("dt_filter").focus();
+                return false;
+            }
+            if (document.getElementById('dt_filter').value == 'Custom') {
+              
+                var CDate = new Date(); var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear(); var FromDate = document.getElementById('txt_FromDate').value;
+                if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == 'mm/dd/yyyy') {
+                    alert('Please select from date'); document.getElementById('txt_FromDate').focus(); return false;
+                }
+                if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+                if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == 'mm/dd/yyyy') {
+                    alert('Please select to date'); document.getElementById('txt_ToDate').focus(); return false;
+                }
+                if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) { return false; }
+                var St = document.getElementById('txt_FromDate').value; St = new Date(St); var En = document.getElementById('txt_ToDate').value
+                En = new Date(En);
+                if (St > En) { alert("From date should not be greater than to date"); return false; }
+                var frmdt1 = new Date(document.getElementById('txt_FromDate').value);
+                var tdt1 = new Date(document.getElementById('txt_ToDate').value);
+                var diffdate = new Date(frmdt1).days(new Date(tdt1));
+                if (diffdate > 365) {
+                    alert("maximum 12 months is allowed");
+                    return false;
+                }
+            }
+            //document.forms.item(0).submit();
+         //localhost:49219/CREDITCARD/CreditCardDetails?hdnPrid=50&hdnname=Jack+Dawson&ComboBoxPr_SelectedText=Jack+Dawson&ComboBoxPr_SelectedIndex=4&ComboBoxPr=50&dt_filter=30&txt_FromDate=&txt_ToDate=&ddlrecords=10
+            if (document.getElementById('ComboBoxPr_SelectedIndex').value != '-1' && document.getElementById('dt_filter').value != 'Custom') {
+
+                window.location.href = '@Url.Action("CCTransactionsLedger", "CREDITCARD")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ComboBoxPr_SelectedText=' + document.getElementById('ComboBoxPr_SelectedText').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&ComboBoxPr_SelectedIndex=' + document.getElementById('ComboBoxPr_SelectedIndex').value + '&ComboBoxPr=' + document.getElementById('ComboBoxPr').value;// + '&hdnPrid=' + document.getElementById('hdnPrid').value + '&hdnname=' + document.getElementById('hdnname').value;
+                }
+                else if (document.getElementById('dt_filter').value == 'Custom' && document.getElementById('ComboBoxPr_SelectedIndex').value == '-1') {
+
+                    window.location.href = '@Url.Action("CCTransactionsLedger", "CREDITCARD")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txt_FromDate=' + document.getElementById('txt_FromDate').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value + '&dt_filter=' + document.getElementById('dt_filter').value;
+        }
+        else if (document.getElementById('ComboBoxPr_SelectedIndex').value != '-1' && document.getElementById('dt_filter').value == 'Custom') {
+
+            document.forms.item(0).submit();
+        }
+        else {
+
+            window.location.href = '@Url.Action("CCTransactionsLedger", "CREDITCARD")?ddlrecords=' + document.getElementById('ddlrecords').value + '&dt_filter=' + document.getElementById('dt_filter').value;//+ '&ComboBoxPr_SelectedText=' + document.getElementById('ComboBoxPr_SelectedText').value + '&ComboBoxPr_SelectedIndex=' + document.getElementById('ComboBoxPr_SelectedIndex').value;
+            }
+        }
+    </script>
+</head>
+<body>
+ @using (Html.BeginForm("CCTransactionsLedger", "CREDITCARD", FormMethod.Get, null))
+ {
+    <div>
+        @{Html.RenderAction("Topsection", "Tools");}
+    </div>
+    @Html.Hidden("hdnPrid")
+     @Html.Hidden("hdnname")
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+         <table cellpadding="0" cellspacing="1" width="100%" align="center" border="0">
+            <tr class="background_color" style="height:40px;">
+                @*<td align="right" width="9%">
+                      <strong>Practice name :&nbsp;</strong>
+                </td>*@
+                <td align="left" width="26%" style="padding-left:5px;">
+                        @Html.Obout(new Obout.Mvc.ComboBox.ComboBox("ComboBoxPr")
+                   {
+                       Width = 300,
+                       MenuWidth = 300,
+                       Height = 200,
+                       EnableLoadOnDemand = true,
+                       OnLoadingItems = "CREDITCARD/LoadingItems1",
+                       EmptyText = "-- Select Mower Helper --",
+                       HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                      @:<div class="header c1" >Practice name</div>
+),
+
+                       ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                       @:<div class="item c1" >@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).PracticeName)</div>
+),
+                       ClientSideEvents = new ComboBoxClientSideEvents()
+                       {
+                           OnSelectedIndexChanged = "ComboBoxPr_ItemClick"
+                       }
+                   }
+                                             )
+                </td>
+                <td width="8%" align="right"> <strong>Date range&nbsp;:&nbsp; </strong></td>
+                        <td id="Td2" align="left" valign="middle"  width="45%" colspan="2" runat="server" class="background_color" >
+                        @*<uc1:DateSearch ID="dt_filter" runat="server"></uc1:DateSearch>*@
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr class="background_color">
+                                    <td align="left" width="25%">
+                                        @Html.DropDownList("dt_filter", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                               new SelectListItem{ Text="All" ,Value="All"},
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                                    </td>
+                                    @Html.Partial("_CustomDate")
+                                    <td id="MaximumMonth" style="position:absolute;right:330px;top:105px;display:none;"> <span>(Maximum 12 months)</span></td>
+                                @*    <td id="tddaterange" runat="server" style="display:none" align="left">
+                                    <strong>&nbsp;&nbsp;From&nbsp;:&nbsp;</strong>
+                                                              <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield" maxlength="10" style="width: 75px;" />
+                                                             &nbsp;&nbsp;<strong>&nbsp;To :&nbsp;</strong>
+                                                             <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield" maxlength="10" style="width: 75px;" />&nbsp;&nbsp;
+                                         <span>(Maximum 12 months)</span>
+                                    </td>*@
+                                </tr>
+                            </table>
+                          </td>
+                <td align="center" >                 
+                                @*<input type="submit" class="button" name="btnSearch" id="btnSearch" value="Search" />*@
+                   <a id="btnSearch" href="#" onclick="javascript:return validDateserach();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                    &nbsp;&nbsp;<input class="button" type="button" name="btnCancel" id="btnCancel" value="Cancel" style="vertical-align:top" onclick="return cancelbutton();"/>
+                </td>
+            </tr>
+        </table> 
+        <br />
+          <table align="center" cellspacing="0" style="padding-bottom: 5px;" cellpadding="0"
+                        width="98%" border="0">
+                        <tr class="background_color">
+                            <td align="center" width="70%" style="font-size:12px;">
+                                <font color="red">*</font><b>Note :&nbsp;Credit card transactions can be refunded only with in 60 days from transaction date.</b>
+                            </td>
+                            
+                        </tr>
+                    </table>
+                    <div class="content-box">
+                        <div class="content-box-header" >
+                        <table style="float: left;" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td align="left" width="70%">
+                            <h3>
+                                <span id="lblheader">Credit card transactions</span>
+                            </h3>
+                            </td>
+                           <td align="right">
+                                <ul style="list-style: none!important; padding-right: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                        @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                    </li>
+                                </ul>
+                            </td>
+                            </tr>
+                            </table>
+                             <script>$("#ddlrecords").change(function () {
+    if (document.getElementById('ComboBoxPr_SelectedIndex').value != '-1' && document.getElementById('dt_filter').value != 'Custom') {
+
+        window.location.href = '@Url.Action("CCTransactionsLedger", "CREDITCARD")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ComboBoxPr_SelectedText=' + document.getElementById('ComboBoxPr_SelectedText').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&ComboBoxPr_SelectedIndex=' + document.getElementById('ComboBoxPr_SelectedIndex').value + '&ComboBoxPr=' + document.getElementById('ComboBoxPr').value;// + '&hdnPrid=' + document.getElementById('hdnPrid').value + '&hdnname=' + document.getElementById('hdnname').value;
+        }
+        else if (document.getElementById('dt_filter').value == 'Custom' && document.getElementById('ComboBoxPr_SelectedIndex').value == '-1') {
+
+            window.location.href = '@Url.Action("CCTransactionsLedger", "CREDITCARD")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txt_FromDate=' + document.getElementById('txt_FromDate').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value + '&dt_filter=' + document.getElementById('dt_filter').value;
+                }
+                else if (document.getElementById('ComboBoxPr_SelectedIndex').value != '-1' && document.getElementById('dt_filter').value == 'Custom') {
+
+                    document.forms.item(0).submit();
+                }
+                else {
+
+                    window.location.href = '@Url.Action("CCTransactionsLedger", "CREDITCARD")?ddlrecords=' + document.getElementById('ddlrecords').value + '&dt_filter=' + document.getElementById('dt_filter').value;//+ '&ComboBoxPr_SelectedText=' + document.getElementById('ComboBoxPr_SelectedText').value + '&ComboBoxPr_SelectedIndex=' + document.getElementById('ComboBoxPr_SelectedIndex').value;
+        }
+                             });</script>
+                        </div>
+                        <div class="content-box-content">
+                         @{string heading1;
+                           if (Request["sort"] == "Tran_Date" && Request["sortdir"] == "ASC")
+                           {
+                               heading1 = "Date  ▲";
+                           }
+                           else if (Request["sort"] == "Tran_Date" && Request["sortdir"] == "DESC")
+                           {
+                               heading1 = "Date  ▼";
+                           }
+                           else
+                           {
+                               heading1 = "Date  ▼";
+                           }
+             
+                    }
+                    @{string Summarypagesize = (ViewBag.Summarypagesize == null ? "10" : ViewBag.Summarypagesize);
+                      WebGrid Summarygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Summarypagesize));}
+                    @{WebGrid grid = Summarygrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                      if (grid.TotalRowCount != 0)
+                      {
+                          int count = 0;
+                          string pager = grid.Pager().ToString();
+                          string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                          string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                          string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                          columns: grid.Columns(grid.Column("Tran_Date", heading1), grid.Column("Paidby", "Paid by", canSort: false), grid.Column("PaidTo", "Paid to", canSort: false), 
+                          //grid.Column("strx_card_num", "Credit card number", canSort: false),
+                          //grid.Column("ccholdername", "Holder name", canSort: false),
+                          grid.Column("strStrCardType", "Credit card type", canSort: false),
+                                                                                grid.Column("", "Amount", style: "Status", canSort: false, format:@<text>@{
+                                                                                    string Status_Ind = (string)item.IsRefundable_Ind;
+                                                                                    if (Status_Ind == "Y")
+                                                                                    {
+                                                                                    @Html.Label("lblamount1",(string)item.totalamount)
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                         @Html.Label("lblamount2",(string)item.transactionAmount)
+                                                                                    }
+                              }</text>),
+                          grid.Column("refundAmount", "Refunded", canSort: false,style:"Status"), grid.Column("View transaction data", "Process details", style: "Paid", canSort: false, format:@<text>@*@Html.ActionLink("View transaction data", "ViewRequestResponse", new { tranid = (int)item.Transaction_ID }, new { @class = "ViewResponsediv" })*@ <a href="#" class = "ViewResponsediv" onclick="return Displaydialog('divView','@Url.Action("ViewRequestResponse",new { tranid = (int)item.Transaction_ID })',450,1000,'dvLoading',null,null);">View transaction data</a></text>),
+                                                      grid.Column("Refund", "Refund", style: "Paid", canSort: false, format:@<text>@{
+                                                          string Status_Ind = (string)item.IsRefundable_Ind;
+                                                          string Refund_Ind = (string)item.Refund_ind;
+                                                          if (Status_Ind == null || Status_Ind == "0" || Status_Ind == "Y")
+                                                          {
+                                                              if (Refund_Ind == "Y")
+                                                          {
+                                                       //@Html.ActionLink("Refund", "GetrefundDetails", new { tranid = (int)item.Transaction_ID, PaymentID = (int)item.PaymentTransID,PaymentTransID=(int)item.PaymentTransID,paypaltransactionid=(string)item.paypaltransactionid,paypalsaletransactionid=(string)item.paypalsaletransactionid }, new { @class = "Refundlink" })
+                                                                  <a href="#" class = "Refundlink" onclick="return Displaydialog('refundDialog','@Url.Action("GetrefundDetails",new { tranid = (int)item.Transaction_ID, PaymentID = (int)item.PaymentTransID,PaymentTransID=(int)item.PaymentTransID,paypaltransactionid=(string)item.paypaltransactionid,paypalsaletransactionid=(string)item.paypalsaletransactionid })','auto',1000,'dvLoading',null,null);">Refund</a>
+                                                                      
+                                                                  }
+                                                              else
+                                                                  {
+                                                                         @Html.ActionLink("Non-Refundable", "GetrefundDetails", null, new { @class = "Refundlink1" })
+                                                                  }
+                                                          }
+                                                          if (Status_Ind == "N")
+                                                          {
+                                  @Html.ActionLink("Refunded", "GetrefundDetails", null, new { @class = "Refundlink2" })
+                                                          }
+                              }</text>),
+                                      grid.Column("StatusCode", "Status", canSort: false,style:"Status", format:@<text>@if (@item.StatusCode == 1)
+                                                                                            {<span>Success</span>}
+                                                                                            else if (@item.StatusCode == 0)
+                                                                                            {<span>Fail</span>}</text>))).ToString();
+                          gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                        @(new HtmlString(gridhtml))
+                          if (newpager != "")
+                          {
+                        <br />
+                                               
+                        <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                        <br />
+                          }
+                      }
+                      else
+                      {
+                         <table cellpadding="0" cellspacing="0" align="center" border="0" width="100%">
+                        <tr id="trmsg1" class="background_color">
+			<td align="center" height="25px" valign="middle">
+                                <span id="lbloutmsg" class="errormsg" style="font-size:13px;font-weight:bold;">No creditcard transactions found.</span></td>
+		</tr>
+		</table>
+                      }
+                    }
+
+
+
+                           
+                        </div>
+                    </div>
+    </div>
+    <div>
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+     
+ }
+    <div id="divView" title="Request data:">
+    </div>
+         <div id="refundDialog" title="Credit card refund process">
+    </div>
+    <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+        <img src="../Images/ajax-loader2.gif" alt="Processing" />
+    </div>
+</body>
+<script type="text/javascript">
+    $.ajaxSetup({ cache: false });
+    var linkObj;
+    $(document).ready(function () {
+        if ($("#dt_filter :selected").text() == "Custom") {
+
+            $('#MaximumMonth').show();
+        }
+        //$('#divView').dialog({
+
+        //    autoOpen: false,
+        //    width: 1000,
+        //    resizable: false,
+        //    height: 450,
+        //    modal: true
+        //});
+
+
+        //$(".ViewResponsediv").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#divView');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+
+        //$('#refundDialog').dialog({
+
+        //    autoOpen: false,
+        //    width: 1000,
+        //    resizable: false,
+        //    modal: true
+        //});
+        //$(".Refundlink").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#refundDialog');
+        //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+
+        $(".Refundlink1").click(function () {
+            alert("Credit card transactions can be refunded with in 60 days of duration from transaction date.");
+            return false;
+        });
+        $(".Refundlink2").click(function () {
+            alert("This transaction was already refunded");
+            return false;
+        });
+
+        $(".close").live("click", function (e) {
+            e.preventDefault();
+            $(this).closest(".dialog").dialog("close");
+
+        });
+        $(".respclose").live("click", function (e) {
+            e.preventDefault();
+            $('#divView').dialog('close');
+        });
+
+    });
+    $(".refundclose").live("click", function (e) {
+        e.preventDefault();
+        $('#refundDialog').dialog('close');
+    });
+</script>
+<script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</html>

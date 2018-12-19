@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+}
+
+@*<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>practicepmtlist</title>
+</head>
+<body>*@
+    @{string heading1;
+             if (Request["g2sort"] == "Transaction_Date" && Request["g2sortdir"] == "ASC")
+             {
+                 heading1 = "Date  ▲";
+             }
+             else if (Request["g2sort"] == "Transaction_Date" && Request["g2sortdir"] == "DESC")
+             {
+                 heading1 = "Date  ▼";
+             }
+             else
+             {
+                 heading1 = "Date  ▼";
+             }
+             
+         }
+          @{string Summarypagesize = (ViewBag.Summarypagesize == null ? "10" : ViewBag.Summarypagesize);
+            WebGrid SummaryPaygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Summarypagesize), fieldNamePrefix: "g2", pageFieldName: "p2");}
+                                            @{WebGrid grid = SummaryPaygrid.Bind(rowCount: ViewBag.totrec, source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["g2p2"] == null ? "1" : Request["g2p2"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Transaction_Date", heading1, style: "Date"), grid.Column("PaidByName", "Paid by", style: "Date", canSort: false), grid.Column("PaymentMode", "Payment mode", style: "Date", canSort: false), grid.Column("Notes", "Notes", style: "Date", canSort: false), grid.Column("Transaction_Amount", "Transaction amount", style: "Date", canSort: false, format:@<text>@*@Html.ActionLink((string)item.Transaction_Amount, "AdminviewTransaction", new { tranid = (int)item.Transaction_ID }, new { @class = "ViewPaydiv" })*@ <a href="#" onclick="return Displaydialog('divView','AdminviewTransaction?tranid='+'@item.Transaction_ID',350,1000,'dvLoading',null,null);" class="ViewPaydiv">@item.Transaction_Amount</a></text>),grid.Column("", "Delete", style: "cDel", canSort: false,format:@<text>@Html.ActionLink(" ", "DelAdminTran", new { tId = (int)item.Transaction_ID },new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;width:8%;", @class = "confirmDialog" })</text>))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                                <div class="gridFooter" style="text-align:center">@(new HtmlString(newpager))</div> 
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdPayment" runat="server" width="100%">
+                            <tr><td align="center" valign="middle" height="25px"><span id="lblPayment" class="errormsg" style="font-size:13px;font-weight:bold;">No Payments found</span></td></tr>
+                        </table>
+                                               
+                                              }
+                                              }
+@*</body>
+</html>*@

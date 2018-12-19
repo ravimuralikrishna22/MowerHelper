@@ -1,0 +1,108 @@
+﻿@{
+    Layout = null;
+    int totrec = ViewBag.totrec;
+}
+<!DOCTYPE html>
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" media="all" />
+    @Styles.Render("~/Content/themes/base/jqueryCSS")
+    @Scripts.Render("~/ThScripts/ThJquery")
+    <script type="text/javascript">
+        function cancelPage() {
+            var proid = document.getElementById('hdnproid').value;
+            var proname = document.getElementById('hdnproname').value;
+            window.location = '../AdminHome/AdminLevelTransactionsList?pracId=' + proid + '&pracname=' + proname;
+            return false;
+        }
+    </script>
+</head>
+<body>
+    @using(Html.BeginForm("InvoiceWizardList", "AdminHome", FormMethod.Post, null))
+    {
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div>
+        <div id="main-content">
+        @Html.Partial("_NavigationTool")
+              <input type ="hidden" id="hdnproid" name="hdnproid" value="@ViewBag.proid" />
+             <input type ="hidden" id="hdnproname" name="hdnproname" value="@ViewBag.proname" />
+            @* <h3>under construction......................</h3>*@
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="background_color" style="height: 40px">
+                    <td align="left" style="padding-left: 20px">
+                        <strong>Mower helper name&nbsp;:&nbsp;</strong>@ViewBag.proname
+                    </td>
+                </tr>
+                <tr class="background_color">
+                    <td align="left" style="padding-left: 20px">
+                        <strong>From Date&nbsp;:&nbsp;</strong>@ViewBag.fromdate&nbsp;&nbsp;&nbsp;<strong>To
+                            Date&nbsp;:&nbsp;</strong>@ViewBag.ToDate
+                    </td>
+                </tr>
+            </table>
+            <div style="height: 10px">
+            </div>
+            <div class="content-box">
+                <div class="content-box-header">
+                    <h3>
+                        Invoice Wizard List</h3>
+                </div>
+                <div class="clear">
+                </div>
+                <div class="content-box-content">
+                    @{string Summarypagesize = ("10");
+                      WebGrid Summarygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Summarypagesize));}
+                    @{WebGrid grid = Summarygrid.Bind(rowCount: ViewBag.totrec, source: Model, autoSortAndPage: false);
+                      if (grid.TotalRowCount != 0)
+                      {
+                          int count = 0;
+                          string pager = grid.Pager().ToString();
+                          string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                          string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                          string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                          columns: grid.Columns(grid.Column("Transaction_Amount", "Amount", style: "Date", canSort: false), grid.Column("Transaction_Date", "Transaction Date", style: "Date"), grid.Column("ChargeType", "Transaction Type", style: "Date", canSort: false), grid.Column("Notes", "Notes", style: "Date", canSort: false))).ToString();
+                          gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                        @(new HtmlString(gridhtml))
+                          if (newpager != "")
+                          {
+                        <br />
+                                               
+                        <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                        <br />
+                          }
+                      }
+                      else
+                      {
+<table id="tdcharge" runat="server" width="100%">
+                            <tr><td align="center" valign="middle" height="25px"><span id="lblCharges" class="errormsg" style="font-size:13px;font-weight:bold;">No New Charges found.Invoice will not be generated</span></td></tr>
+                        </table>
+                                               
+                      }
+                    }
+                </div>
+            </div>
+            <div style="height: 20px">
+            </div>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr class="background_color">
+                    <td align="right">
+               @if (totrec != 0)
+               {
+                        <input type="submit" value="Proceed" class="button" name="btnProceed" />
+               }
+                        &nbsp; &nbsp;<input type="button" name="btnProceedCancel" class="button" value="Cancel" onclick="return cancelPage();" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    
+        <div>
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+    }
+</body>
+</html>

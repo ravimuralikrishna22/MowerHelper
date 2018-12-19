@@ -1,0 +1,276 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+      @Styles.Render("~/Content/styles")
+             @Styles.Render("~/Content/themes/base/TherpistStyles")
+                 @Scripts.Render("~/Scripts/Thscriptscript")
+    <script type="text/javascript">
+        $(function () {
+            $('#chkactive').change(function () {
+                if (document.getElementById('chkactive').checked == true) {
+                    document.getElementById('chkinactive').checked = false;
+                }
+            });
+            $('#chkinactive').change(function () {
+                if (document.getElementById('chkinactive').checked == true) {
+                    document.getElementById('chkactive').checked = false;
+                }
+            });
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+               $("#Menu0").removeClass();
+               $("#Menu1").removeClass();
+               $("#Menu2").removeClass();
+               $("#Menu3").addClass("active");
+           });
+    </script>
+    <script type="text/javascript">
+        function Validate() {
+            ValidateAlertClear('tblmain', 'lbltitle', 'tdlbltitle', 'tdmaintitle', 'white');
+            ValidateAlertClear('tblmain', 'lbldesc', 'tdlbldesc', 'tdmaindesc', 'White');
+            ValidateAlertClear('tblmain', 'lblupload', 'tdlblupload', 'tdmainupload', 'white');
+            ValidateAlertClear('tblmain', 'lbltime', 'tdlbltime', 'tdmaintime', 'white');
+            if (document.getElementById('txtTitle').value == '') {
+                //Glb_ShowAlert("Enter media title")
+                ValidateAlert('tblmain', 'lbltitle', 'tdlbltitle', 'tdmaintitle', 'Please enter media title');
+                document.getElementById('txtTitle').focus();
+                return false;
+            }
+            if (MyChars(document.getElementById('txtTitle')) == 'SpaceError') {
+                //Glb_ShowAlert('Enter media title without Space');
+                ValidateAlert('tblmain', 'lbltitle', 'tdlbltitle', 'tdmaintitle', 'Please enter media title without Space');
+                document.getElementById('txtTitle').focus();
+                return false;
+            }
+
+            var stranswer = '';
+            stranswer = trim(document.getElementById('txtDescription').value);
+            if (stranswer == '') {
+                //Glb_ShowAlert('Enter description');
+                ValidateAlert('tblmain', 'lbldesc', 'tdlbldesc', 'tdmaindesc', 'Please enter description');
+                document.getElementById('txtDescription').focus();
+                return false;
+            }
+
+            if (stranswer != "") {
+                if (stranswer.length > 500) {
+                    //Glb_ShowAlert("Description can be up to 500 characters");
+                    ValidateAlert('tblmain', 'lbldesc', 'tdlbldesc', 'tdmaindesc', 'Description can be up to 500 characters');
+                    document.getElementById('txtDescription').focus();
+                    return false;
+                }
+            }
+            if (document.getElementById('FileUpLoad').value == '' && document.getElementById('lblName').innerHTML == '') {
+            
+                //Glb_ShowAlert('Please select a file name');
+//                document.getElementById('tblmain').style.display = '';
+//                document.getElementById('lblupload').innerHTML = "Please select a file name";
+//                document.getElementById('tdupload').style.display = '';
+//                document.getElementById('tdupload').bgColor = "orange";
+                //                document.getElementById('tduploadmain').bgColor = "orange";
+                ValidateAlert('tblmain', 'lblupload', 'tdlblupload', 'tdmainupload', 'Please select a file name');
+                return false;
+            }
+            if (document.getElementById("FileUpLoad").style.display == '') {
+                if (document.getElementById('FileUpLoad').value != "") {
+                    var str = document.getElementById('FileUpLoad').value;
+                    var Strr = str.toUpperCase();
+                    //                     if ((Strr.indexOf(".DOC") == -1) && (Strr.indexOf(".DOCX") == -1) && (Strr.indexOf(".TXT") == -1) && (Strr.indexOf(".XLS") == -1) && (Strr.indexOf(".PPS") == -1) && (Strr.indexOf(".PPT") == -1) && (Strr.indexOf(".PDF") == -1) && (Strr.indexOf(".XLSX") == -1) && (Strr.indexOf(".PPTX") == -1) && (Strr.indexOf(".ZIP") == -1) && (Strr.indexOf(".RAR") == -1)) {
+                    if ((Strr.indexOf(".3G2") == -1) && (Strr.indexOf(".SWF") == -1) && (Strr.indexOf(".3GP") == -1) && (Strr.indexOf(".4XM") == -1) && (Strr.indexOf(".AJP") == -1) && (Strr.indexOf(".FLC") == -1) && (Strr.indexOf(".M2TS") == -1) && (Strr.indexOf(".MOV") == -1) && (Strr.indexOf(".SSA") == -1) && (Strr.indexOf(".VQA") == -1) && (Strr.indexOf(".WM") == -1) && (Strr.indexOf(".WMV") == -1) && (Strr.indexOf(".RMX") == -1) && (Strr.indexOf(".M4P") == -1) && (Strr.indexOf(".AMR") == -1) && (Strr.indexOf(".MIDI") == -1) && (Strr.indexOf(".M3U") == -1) && (Strr.indexOf(".RP") == -1) && (Strr.indexOf(".RJS") == -1) && (Strr.indexOf(".WMDB") == -1) && (Strr.indexOf(".XMA") == -1) && (Strr.indexOf(".AIFC") == -1) && (Strr.indexOf(".SMIL") == -1) && (Strr.indexOf(".VDU") == -1) && (Strr.indexOf(".WAVE") == -1) && (Strr.indexOf(".PNG") == -1) && (Strr.indexOf(".SD2") == -1) && (Strr.indexOf(".MPG") == -1) && (Strr.indexOf(".VP7") == -1) && (Strr.indexOf(".AU") == -1) && (Strr.indexOf(".3GPP2") == -1) && (Strr.indexOf(".AMC") == -1) && (Strr.indexOf(".AIFF") == -1) && (Strr.indexOf(".JFIF") == -1) && (Strr.indexOf(".SGI") == -1) && (Strr.indexOf(".PLS") == -1) && (Strr.indexOf(".SDP") == -1) && (Strr.indexOf(".SDV") == -1) && (Strr.indexOf(".AMV") == -1) && (Strr.indexOf(".ASF") == -1) && (Strr.indexOf(".ASS") == -1) && (Strr.indexOf(".AVI") == -1) && (Strr.indexOf(".BIK") == -1) && (Strr.indexOf(".DPG") == -1) && (Strr.indexOf(".DSV") == -1) && (Strr.indexOf(".MKV") == -1) && (Strr.indexOf(".MODD") == -1) && (Strr.indexOf(".MXF") == -1) && (Strr.indexOf(".WAV") == -1) && (Strr.indexOf(".TS") == -1) && (Strr.indexOf(".MP3") == -1) && (Strr.indexOf(".MPE") == -1) && (Strr.indexOf(".RT") == -1) && (Strr.indexOf(".RMP") == -1) && (Strr.indexOf(".3DMF") == -1) && (Strr.indexOf(".QCP") == -1) && (Strr.indexOf(".QT") == -1) && (Strr.indexOf(".SF2") == -1) && (Strr.indexOf(".DV") == -1) && (Strr.indexOf(".DVF") == -1) && (Strr.indexOf(".DVX") == -1) && (Strr.indexOf(".FLV") == -1) && (Strr.indexOf(".GVI") == -1) && (Strr.indexOf(".MSWMM") == -1) && (Strr.indexOf(".PVA") == -1) && (Strr.indexOf(".SCM") == -1) && (Strr.indexOf(".MP2") == -1) && (Strr.indexOf(".AIF") == -1) && (Strr.indexOf(".HDMOV") == -1) && (Strr.indexOf(".HDV") == -1) && (Strr.indexOf(".HEU") == -1) && (Strr.indexOf(".HEU") == -1) && (Strr.indexOf(".IVF") == -1) && (Strr.indexOf(".M2P") == -1) && (Strr.indexOf(".MJP") == -1) && (Strr.indexOf(".MMV") == -1) && (Strr.indexOf(".AIFF") == -1) && (Strr.indexOf(".MPEG") == -1) && (Strr.indexOf(".RAM") == -1) && (Strr.indexOf(".MOD") == -1) && (Strr.indexOf(".MOFF") == -1) && (Strr.indexOf(".MP4") == -1) && (Strr.indexOf(".MPB") == -1) && (Strr.indexOf(".MPG") == -1) && (Strr.indexOf(".MVB") == -1) && (Strr.indexOf(".MVE") == -1) && (Strr.indexOf(".NSV") == -1) && (Strr.indexOf(".OGV") == -1) && (Strr.indexOf(".SMK") == -1) && (Strr.indexOf(".SMV") == -1) && (Strr.indexOf(".SRT") == -1) && (Strr.indexOf(".STR") == -1) && (Strr.indexOf(".SUB") == -1) && (Strr.indexOf(".SVI") == -1) && (Strr.indexOf(".TOD") == -1) && (Strr.indexOf(".VID") == -1) && (Strr.indexOf(".VOD") == -1) && (Strr.indexOf(".VP6") == -1) && (Strr.indexOf(".RMM") == -1) && (Strr.indexOf(".RA") == -1) && (Strr.indexOf(".RAX") == -1) && (Strr.indexOf(".RV") == -1) && (Strr.indexOf(".RVX") == -1) && (Strr.indexOf(".RM") == -1) && (Strr.indexOf(".MQV") == -1) && (Strr.indexOf(".MPEG-4") == -1) && (Strr.indexOf(".RMJ") == -1) && (Strr.indexOf(".RMS") == -1) && (Strr.indexOf(".3GPP") == -1) && (Strr.indexOf(".BMP") == -1) && (Strr.indexOf(".DLS") == -1) && (Strr.indexOf(".GSM") == -1) && (Strr.indexOf(".JPEG") == -1) && (Strr.indexOf(".MPEG-1") == -1) && (Strr.indexOf(".MPEG-2") == -1) && (Strr.indexOf(".M4B") == -1) && (Strr.indexOf(".M4V") == -1) && (Strr.indexOf(".PICS") == -1) && (Strr.indexOf(".PICT") == -1)) {
+                        // clearalerts();
+                        //Glb_ShowAlert("Please select only doc,docx,txt,xls,pps,ppt,pdf,zip,rar, GIF, PNG, JPG files for document file");
+                        ValidateAlert('tblmain', 'lblupload', 'tdlblupload', 'tdmainupload', 'Please select video File');
+                        return false;
+                    }
+                }
+            }
+
+            if (parseInt(document.getElementById('txtmins').value) > 59) {
+                //Glb_ShowAlert("Please Enter Minutes less than 60")
+                ValidateAlert('tblmain', 'lbltime', 'tdlbltime', 'tdmaintime', 'Please enter minutes less than 60');
+                document.getElementById('txtmins').focus();
+                return false;
+            }
+
+        }
+       
+
+    </script>
+    <script type="text/javascript">
+        function CancelAction() {
+            window.location.href = "../AdminFaqs/TutorialsHome";
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("EditMedia", "AdminFaqs", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+ <div>
+   @{Html.RenderAction("Topsection", "Tools");}
+ </div>
+        <input type="hidden" id="hdnHelpmedia_ID" name="hdnHelpmedia_ID" value="@ViewBag.Helpmedia_ID" />
+          <div id="body-wrapper">
+          <div id="main-content"> 
+        @Html.Partial("_NavigationTool")
+           <div class="content-box">  
+           <div class="content-box-header">
+                <h3>Edit Media</h3>
+                <div class="clear"></div>
+            </div>
+              <div class="content-box-content">
+            <table class="border_style" cellspacing="1" cellpadding="4" width="100%" align="center"
+                border="0">
+               
+                <tr height="30" class="white_color">
+                    <td align="center" colspan="2">
+                      @if (ViewBag.outmsg != null & ViewBag.outmsg !="")
+                                                                {
+                                                                   
+                                                                         <span ID="lblOutMsg" class="errormsg" style="color:Red;font-size:15px;font-weight:bold;">@ViewBag.outmsg </span>
+                                                                 
+                                                                }
+                  @*  <label id="lblerrormessage" style="font-weight:bold;"></label>*@
+                       @* <asp:Label ID="lblerrormessage" Font-Bold="true" runat="server" Visible="false"></asp:Label>*@
+                    </td>
+                </tr>
+                <tr class="white_color" height="40">
+                    <th style="height: 22px" align="right">
+                        <font color="red"><b>*</b></font><strong>Media title&nbsp;:&nbsp;</strong></th>
+                    <td style="height: 22px" width="60%" id="tdmaintitle">
+                        &nbsp; @Html.TextBox("txtTitle", (string)ViewBag.txtTitle, new { @class = "textfield", maxlength = "50", style = "width:350px; height:16px;" })
+                        @*<input type="text" id="txtTitle" name="txtTitle" maxlength="50" class="textfield" style="width:350px; height:16px;" />*@
+                       @* <asp:TextBox ID="txtTitle" runat="server" Height="16px" MaxLength="50" Width="350px" CssClass="textfield"
+                            ></asp:TextBox>*@
+                            </td>
+                </tr>
+                <tr class="nav_blue_color" height="40">
+                    <th style="height: 22px" align="right">
+                        <font color="red"><b>*</b></font><strong>Description&nbsp;:&nbsp;</strong> </th>
+                    <td style="height: 22px" width="60%" id="tdmaindesc">
+                    @Html.TextArea("txtDescription", (string)ViewBag.txtDescription, 2, 2, new { @class = "textfield", maxlength = "500", style = "width:500px;height:150px;" })
+                   @* <textarea id="txtDescription" name="txtDescription" class="text" rows="2" cols="2" maxlength="500" style="width:500px; height: 150px;"></textarea>*@
+      @*                  @Html.Obout(new Obout.Mvc.HTMLEditor.Editor("txtDescription") { ShowQuickFormat = false, Height = 225, Template = "example", Submit = false, ModeSwitch = false, ShowWaitMessage = true, NoDrop = true, DefaultContextMenu = false })*@
+                        
+                        (Maximum length 500 characters)
+                    </td>
+                </tr>
+                <tr class="white_color">
+                 
+                                
+                                    <th valign="top" align="right">
+                              <input type="hidden" id="hdnlblname" name="hdnlblname" value="@ViewBag.lblName" />   <label id="lblName">@ViewBag.lblName</label> &nbsp;&nbsp; &nbsp;&nbsp;<font color="red"><b>*</b></font><strong>&nbsp;Replace with new file :</strong> </th>
+                          
+                   <td style="height: 15px" align="Left" id="tdmainupload">
+                            <table cellspacing="1" cellpadding="1" id="tblFiles" width="100%" border="0">
+                                <tr id="attachcheck">
+                                    <td id="tdupload">
+                                        <div id="inputsPlace">
+                                            <div id="div1">
+                                                <input type="checkbox" id="check1" style="display:none;" />
+                                                 <input type="file" id="FileUpLoad" onselectstart="return false;" style="background-color: White;"
+                                onpaste="return false;" onkeypress="return false;" onkeydown="return false;"
+                                onkeyup="return false;" runat="server" name="FileUpLoad" />
+                                                &nbsp;&nbsp;(Maximum file
+                                                size : 10mb)
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                  @*  <td>
+
+
+                        &nbsp;<input type="file" id="LogoFile" name="LogoFile"
+                                                    style="margin-left: 0px; background-color: White;" />
+                                                    </td>*@
+                </tr>
+                <tr class="nav_blue_color" id="displaypr" runat="server" height="40">
+                    <th style="height: 25px" align="right">
+                        <font color="red"><b></b></font><strong>Display &nbsp;to provider&nbsp;:&nbsp;</strong> </th>
+                    <td style="height: 25px" width="60%">
+                    @{
+        bool active = false;
+        bool inactive = false;
+        if (ViewBag.chkactive=="true")
+        {
+            active = true;
+            inactive = false;
+        }
+        else{
+            active = false;
+            inactive = true;
+        }
+                        }
+
+                        &nbsp;@Html.RadioButton("chkactive", "Yes", active)&nbsp Active
+                        @Html.RadioButton("chkinactive", "No", inactive)&nbsp Inactive
+                        @*<asp:RadioButton ID="chkactive" runat="Server" GroupName="c" Text="&nbsp;Active" ValidationGroup="Disp1" />
+                        <asp:RadioButton ID="chkinactive" GroupName="display" runat="Server" Text="&nbsp;Inactive"
+                            Checked="True" ValidationGroup="Disp1" />*@</td>
+                </tr>
+                <tr class="white_color">
+                    <th valign="top" align="right">
+                        <strong>Time &nbsp;:</strong> </th>
+                    <th align="left" id="tdmaintime">
+                        &nbsp;
+                         @Html.TextBox("txtHours", (string)ViewBag.txtHours, new { @class = "textfield", maxlength = "2", style = "width:20px;" })
+                       
+                        @*<asp:TextBox ID="txtHours" MaxLength="2"  runat="server" Width="20px" onkeypress="return AlphaNumbers(event);" CssClass="textfield"></asp:TextBox>*@
+                        <b>:</b>
+                          @Html.TextBox("txtmins", (string)ViewBag.txtmins, new { @class = "textfield", maxlength = "2", style = "width:20px;" })
+                           @*  <asp:TextBox ID="txtmins" MaxLength="2"  runat="server" Width="20px" onkeypress="return AlphaNumbers(event);" CssClass="textfield"></asp:TextBox>*@
+                        <b>:</b>
+                        @*<input type="text" id="txsecs" name="txsecs" maxlength="2" class="textfield" style="width:20px;" />*@
+                       @* <asp:TextBox Visible="false" ID="txsecs"  MaxLength="2" runat="server" Width="20px" CssClass="textfield"></asp:TextBox>*@
+                        (HH:MM)</th>
+                </tr>
+            </table>
+                <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain" runat="server"
+                    style="display: none;">
+                    <tr class="white_color" align="center">
+                        <td id="tdlbltitle" height="30px" style="display: none;">
+                            <asp:Label ID="lbltitle" runat="server" Font-Bold="true" ForeColor="Black"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlbldesc" height="30px" style="display: none;">
+                            <asp:Label ID="lbldesc" runat="server" Font-Bold="true" ForeColor="Black"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblupload" height="30px" style="display: none;">
+                            <asp:Label ID="lblupload" runat="server" Font-Bold="true" ForeColor="Black"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlbltime" height="30px" style="display: none;">
+                            <asp:Label ID="lbltime" runat="server" Font-Bold="true" ForeColor="Black"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+                </div>  </div>
+            <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                <tr  height="40">
+                    <td align="right" style="padding-right:10px;">
+                                  <input type="submit" id="btnSave2" name="btnSave2" value="Save" onclick="return Validate();" class="button" />
+                                       <input type="submit" id="btnCancel2" name="btnCancel2" value="Cancel" onclick="retrn CancelAction();" class="button" />
+                       @*    <asp:Button ID="btnSave2" runat="server" Text="Save" class="button" />
+                              <asp:Button ID="btnCancel2" runat="server" Text="Cancel" class="button" />*@
+                            </td>
+                </tr>
+            </table>
+          
+             </div></div>
+          <div>   @{Html.RenderAction("Bottomsections", "Tools");}</div>
+    }
+</body>
+</html>

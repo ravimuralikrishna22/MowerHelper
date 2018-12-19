@@ -1,0 +1,943 @@
+﻿@model List< MowerHelper.Models.BLL.Admin.Admin_postajob >
+@using MowerHelper.Models.Classes
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+@*       @Styles.Render("~/Content/themes/base/jqueryCSS")
+            @Scripts.Render("~/Scripts/Thscriptscript")
+             @Scripts.Render("~/ThScripts/Thjquerycripts")*@
+              <script type="text/javascript">
+                  $(function () {
+                      $("#txtZip").keyup(function () {
+                          if ($(this).val().length == 5) {
+                              $("#DDState").focus();
+                          }
+                      });
+                      var gender = "@Model[0].Gender";
+                   
+                      $("#hdngender").val(gender);
+                      if (gender == "Male") {
+                          document.getElementById('rbtmale').checked = true;
+                          document.getElementById('rbtFemale').checked = false;
+                      }
+                      else {
+                          document.getElementById('rbtFemale').checked = true;
+                          document.getElementById('rbtmale').checked = false;
+                      }
+                  });
+       </script>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             $("#trCountry").hide();
+            
+             
+       
+         });
+    </script>
+    <script type="text/javascript">
+        function clearalerts1() {
+            
+            document.getElementById('tdname1').bgColor = 'White'; 
+            document.getElementById('tblmain').style.display = 'none'; 
+            document.getElementById('tdlblname').style.display = 'none'; 
+            document.getElementById('lblfirstname').style.display = 'none'; 
+            document.getElementById('tdlbllastname').style.display = 'none'; 
+            document.getElementById('lbllastname').style.display = 'none'; 
+            document.getElementById('tdgender1').bgColor = 'White'; ;
+            document.getElementById('tdlblgender').style.display = 'none'; 
+            document.getElementById('lblgender12').style.display = 'none'; 
+            document.getElementById('tdfax1').bgColor = 'White'; 
+            document.getElementById('tdlblfax').style.display = 'none'; 
+            document.getElementById('lblfax').style.display = 'none';
+            document.getElementById('tdadd1').bgColor = 'White'; 
+            document.getElementById('tdlbladdress').style.display = 'none'; 
+            document.getElementById('lbladdress').style.display = 'none'; 
+            document.getElementById('tdzip').bgColor = 'White'; 
+            document.getElementById('tdlblzip').style.display = 'none'; 
+            document.getElementById('lblzip').style.display = 'none';
+            
+           
+            //document.getElementById('tdcountry1').bgColor = 'White'; 
+            //document.getElementById('tdlblcountry').style.display = 'none'; 
+            //document.getElementById('lblcountry').style.display = 'none';
+            document.getElementById('tdstate').bgColor = 'White'; 
+            document.getElementById('tdlblstate').style.display = 'none';
+            document.getElementById('lblstate').style.display = 'none';
+            document.getElementById('tdcity').bgColor = 'White';
+            document.getElementById('tdlblcity').style.display = 'none'; 
+            document.getElementById('lblcity').style.display = 'none';
+            document.getElementById('tdemail1').bgColor = 'White';
+            document.getElementById('tdlblemail').style.display = 'none';
+            document.getElementById('lblemail').style.display = 'none';
+            document.getElementById('tdcellphn1').bgColor = 'White';
+            document.getElementById('tdlblmobile').style.display = 'none';
+            document.getElementById('lblmobile').style.display = 'none';
+            document.getElementById('tdworkphn1').bgColor = 'White';
+            document.getElementById('tdlblwork').style.display = 'none';
+            document.getElementById('lblwork').style.display = 'none';
+          
+        }
+        function Validate() {
+            clearalerts1();
+            if (document.getElementById('txt_FirstName').value == '' || document.getElementById('txt_FirstName').value == 'First Name') {
+               
+                
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblname').style.display = '';
+                document.getElementById('tdlblname').bgColor = 'Orange';
+                document.getElementById('lblfirstname').style.display = '';
+                document.getElementById('lblfirstname').innerHTML = 'Please enter first name';
+                document.getElementById('tdname1').bgColor = 'Orange';
+                document.getElementById('txt_FirstName').focus();
+               // Glb_ShowAlert("Please enter the first name.");
+                //document.getElementById('txt_FirstName').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdname1').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblname').style.display = 'none';
+                document.getElementById('lblfirstname').style.display = 'none';
+            }
+
+            if (document.getElementById('txt_FirstName').value != '') {
+                if (MyChars(document.getElementById('txt_FirstName')) == "SpaceError") {
+                   
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblname').style.display = '';
+                    document.getElementById('tdlblname').bgColor = 'Orange';
+                    document.getElementById('lblfirstname').style.display = '';
+                    document.getElementById('lblfirstname').innerHTML = 'Enter first name without spaces first';
+                    document.getElementById('tdname1').bgColor = 'Orange';
+                    document.getElementById('txt_FirstName').focus();
+//                    Glb_ShowAlert("Enter first name without spaces first");
+//                    document.getElementById('txt_FirstName').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdname1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblname').style.display = 'none';
+                    document.getElementById('lblfirstname').style.display = 'none';
+                }
+            }
+            if (document.getElementById('txt_MI').value != '') {
+
+                if (MyChars(document.getElementById('txt_MI')) == "SpaceError") {
+                   
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblname').style.display = '';
+                    document.getElementById('tdlblname').bgColor = 'Orange';
+                    document.getElementById('lblfirstname').style.display = '';
+                    document.getElementById('lblfirstname').innerHTML = 'Enter middle initial. without spaces first';
+                    document.getElementById('tdname1').bgColor = 'Orange';
+                    document.getElementById('txt_MI').focus();
+
+                   // Glb_ShowAlert("Enter middle initial. without spaces first");
+                   // document.getElementById('txt_MI').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdname1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblname').style.display = 'none';
+                    document.getElementById('lblfirstname').style.display = 'none';
+                }
+            }
+            if (document.getElementById('txt_MI').value != 0) {
+                if (MyChars(document.getElementById('txt_MI')) == 'InvalidCharAtFirstError') {
+                  
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblname').style.display = '';
+                    document.getElementById('tdlblname').bgColor = 'Orange';
+                    document.getElementById('lblfirstname').style.display = '';
+                    document.getElementById('lblfirstname').innerHTML = 'Enter middle initial. with characters at first';
+                    document.getElementById('tdname1').bgColor = 'Orange';
+                    document.getElementById('txt_MI').focus();
+
+                  //  Glb_ShowAlert('Enter middle initial. with characters at first');
+                  //  document.getElementById('txt_MI').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdname1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblname').style.display = 'none';
+                    document.getElementById('lblfirstname').style.display = 'none';
+                }
+            }
+            if (document.getElementById('txt_MI').value != 0) {
+                if (document.getElementById('txt_MI').value == 'MI') {
+                    document.getElementById('txt_MI').value = '';
+                }
+
+            }
+            if (document.getElementById('txt_LastName').value == '' || document.getElementById('txt_LastName').value == 'Last Name') {
+               
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblname').style.display = '';
+                document.getElementById('tdlblname').bgColor = 'Orange';
+                document.getElementById('lblfirstname').style.display = '';
+                document.getElementById('lblfirstname').innerHTML = 'Please enter the last name.';
+                document.getElementById('tdname1').bgColor = 'Orange';
+                document.getElementById('txt_LastName').focus();
+                //Glb_ShowAlert("Please enter the last name.");
+               // document.getElementById('txt_LastName').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdname1').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblname').style.display = 'none';
+                document.getElementById('lblfirstname').style.display = 'none';
+            }
+            if (document.getElementById('txt_LastName').value != '') {
+                if (MyChars(document.getElementById('txt_LastName')) == "SpaceError") {
+                   
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblname').style.display = '';
+                    document.getElementById('tdlblname').bgColor = 'Orange';
+                    document.getElementById('lblfirstname').style.display = '';
+                    document.getElementById('lblfirstname').innerHTML = 'Enter last name without spaces first';
+                    document.getElementById('tdname1').bgColor = 'Orange';
+                    document.getElementById('txt_LastName').focus();
+                    //Glb_ShowAlert("Enter last name without spaces first");
+                   // document.getElementById('txt_LastName').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdname1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblname').style.display = 'none';
+                    document.getElementById('lblfirstname').style.display = 'none';
+                }
+            }
+            if (document.getElementById('rbtmale').checked == false && document.getElementById('rbtFemale').checked == false) {
+               
+                global_variable += " Gender " + ",";
+            }
+            if (document.getElementById('rbtmale').checked != false && document.getElementById('rbtmale').checked != null) {
+              
+                document.getElementById("hdngender").value="Male";
+                if (document.getElementById('ddl_prefix').selectedIndex == 4 || document.getElementById('ddl_prefix').selectedIndex == 5 || document.getElementById('ddl_prefix').selectedIndex == 2) {
+                  
+                   
+                    //Glb_ShowAlert("Please select proper gender");
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblname').style.display = '';
+                    document.getElementById('tdlblname').bgColor = 'Orange';
+                    document.getElementById('lblgender12').style.display = '';
+                    document.getElementById('lblgender12').innerHTML = 'Please select proper gender';
+                    document.getElementById('tdgender1').bgColor = 'Orange';
+                    return false;
+                }
+                else {
+                    document.getElementById('tdgender1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblgender').style.display = 'none';
+                    document.getElementById('lblgender12').style.display = 'none';
+                }
+
+            }
+
+            else if (document.getElementById('rbtFemale').checked != null && document.getElementById('rbtFemale').checked != false) {
+
+              
+                if (document.getElementById('ddl_prefix').selectedIndex == 3) {
+                  
+
+                    //Glb_ShowAlert("Please select proper gender");
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblgender').style.display = '';
+                    document.getElementById('tdlblname').bgColor = 'Orange';
+                    document.getElementById('lblgender12').style.display = '';
+                    document.getElementById('lblgender12').innerHTML = 'Please select proper gender';
+                    document.getElementById('tdgender1').bgColor = 'Orange';
+                    return false;
+                }
+                else {
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblgender').style.display = 'none';
+                    document.getElementById('tdgender1').bgColor = 'White';
+                    document.getElementById('lblgender12').style.display = 'none';
+                }
+                document.getElementById("hdngender").value = "Female";
+            }
+            var Controls, ContactFlag
+            Controls = '';
+            ContactFlag = 0;
+            if (document.getElementById('txtMobile1').value == '' && document.getElementById('txtMobile2').value == '' && document.getElementById('txtMobile3').value == '') {
+                if (IsValidPhone(document.getElementById('txtMobile1').value + document.getElementById('txtMobile2').value + document.getElementById('txtMobile3').value) == 'false') {
+                   
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblmobile').style.display = '';
+                    document.getElementById('tdlblmobile').bgColor = 'Orange';
+                    document.getElementById('lblmobile').style.display = '';
+                    document.getElementById('lblmobile').innerHTML = 'Please enter Cell phone no.';
+                    document.getElementById('tdcellphn1').bgColor = 'Orange';
+                    document.getElementById('txtMobile1').focus();
+                    //Glb_ShowAlert("Please enter Cell phone no.")
+                   // document.getElementById('txtMobile1').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdcellphn1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblmobile').style.display = 'none';
+                    document.getElementById('lblmobile').style.display = 'none';
+                }
+            }
+            else {
+                if (document.getElementById('txtMobile1').value != '' || document.getElementById('txtMobile2').value != '' || document.getElementById('txtMobile3').value != '') {
+                    if (IsValidPhone(document.getElementById('txtMobile1').value + document.getElementById('txtMobile2').value + document.getElementById('txtMobile3').value) == 'false') {
+                       
+                        document.getElementById('tblmain').style.display = '';
+                        document.getElementById('tdlblmobile').style.display = '';
+                        document.getElementById('tdlblmobile').bgColor = 'Orange';
+                        document.getElementById('lblmobile').style.display = '';
+                        document.getElementById('lblmobile').innerHTML = 'Please enter valid Cell phone no.';
+                        document.getElementById('tdcellphn1').bgColor = 'Orange';
+                        document.getElementById('txtMobile1').focus();
+                        //Glb_ShowAlert("Please enter valid Cell phone no.")
+                       // document.getElementById('txtMobile1').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('tdcellphn1').bgColor = 'White';
+                        document.getElementById('tblmain').style.display = 'none';
+                        document.getElementById('tdlblmobile').style.display = 'none';
+                        document.getElementById('lblmobile').style.display = 'none';
+                    }
+                }
+            }
+            if (document.getElementById('txtWorkPhone1').value != '' || document.getElementById('txtWorkPhone2').value != '' || document.getElementById('txtWorkPhone3').value != '') {
+                if (IsValidPhone(document.getElementById('txtWorkPhone1').value + document.getElementById('txtWorkPhone2').value + document.getElementById('txtWorkPhone3').value) == 'false') {
+                   
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblwork').style.display = '';
+                    document.getElementById('tdlblwork').bgColor = 'Orange';
+                    document.getElementById('lblwork').style.display = '';
+                    document.getElementById('lblwork').innerHTML = 'Please enter valid phone No.';
+                    document.getElementById('tdworkphn1').bgColor = 'Orange';
+                    document.getElementById('txtWorkPhone1').focus();
+                   
+                    //Glb_ShowAlert("Please enter valid phone No.")
+                   // document.getElementById('txtWorkPhone1').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdworkphn1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblwork').style.display = 'none';
+                    document.getElementById('lblwork').style.display = 'none';
+                }
+            }
+
+            if (document.getElementById('txtFax1').value != '' || document.getElementById('txtFax2').value != '' || document.getElementById('txtFax3').value != '') {
+                if (IsValidPhone(document.getElementById('txtFax1').value + document.getElementById('txtFax2').value + document.getElementById('txtFax3').value) == 'false') {
+                   
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblfax').style.display = '';
+                    document.getElementById('tdlblfax').bgColor = 'Orange';
+                    document.getElementById('lblfax').style.display = '';
+                    document.getElementById('lblfax').innerHTML = 'Please enter valid fax no.';
+                    document.getElementById('tdfax1').bgColor = 'Orange';
+                    document.getElementById('txtFax1').focus();
+
+                    // Glb_ShowAlert("Please enter valid fax no.")
+                    // document.getElementById('txtFax1').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdfax1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblfax').style.display = 'none';
+                    document.getElementById('lblfax').style.display = 'none';
+                }
+            }
+            if (document.getElementById('txtEmail').value == "") {
+               
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblemail').style.display = '';
+                document.getElementById('tdlblemail').bgColor = 'Orange';
+                document.getElementById('lblemail').style.display = '';
+                document.getElementById('lblemail').innerHTML = 'Please enter email';
+                document.getElementById('tdemail1').bgColor = 'Orange';
+                document.getElementById('txtEmail').focus();
+
+                // Glb_ShowAlert("Please enter email");
+                // document.getElementById('txtEmail').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdemail1').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblemail').style.display = 'none';
+                document.getElementById('lblemail').style.display = 'none';
+            }
+            if (document.getElementById('txtEmail').value != "") {
+                if (ValidateEmail(document.getElementById('txtEmail')) == 0) {
+                   
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblemail').style.display = '';
+                    document.getElementById('tdlblemail').bgColor = 'Orange';
+                    document.getElementById('lblemail').style.display = '';
+                    document.getElementById('lblemail').innerHTML = 'Please enter valid email';
+                    document.getElementById('tdemail1').bgColor = 'Orange';
+                    document.getElementById('txtEmail').focus();
+                    //Glb_ShowAlert("Please enter valid email")
+                   // document.getElementById('txtEmail').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdemail1').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblemail').style.display = 'none';
+                    document.getElementById('lblemail').style.display = 'none';
+                    ContactFlag = 1;
+                }
+            }
+            var str_Address1;
+            str_Address1 = trim(document.getElementById('txtAddress1').value);
+            document.getElementById('txtAddress1').value = str_Address1;
+            if (str_Address1 == '') {
+               
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlbladdress').style.display = '';
+                document.getElementById('tdlbladdress').bgColor = 'Orange';
+                document.getElementById('lbladdress').style.display = '';
+                document.getElementById('lbladdress').innerHTML = 'Please enter address 1';
+                document.getElementById('tdadd1').bgColor = 'Orange';
+                document.getElementById('txtAddress1').focus();
+
+                // Glb_ShowAlert("Please enter address 1");
+                // document.getElementById('txtAddress1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdadd1').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlbladdress').style.display = 'none';
+                document.getElementById('lbladdress').style.display = 'none';
+            }
+            if (document.getElementById('txtZip').value == '') {
+                alert("empty");
+                clearalerts1();
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblzip').style.display = '';
+                document.getElementById('tdlblzip').bgColor = 'Orange';
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Please enter zip';
+                document.getElementById('tdzip').bgColor = 'Orange';
+                document.getElementById('txtZip').focus();
+                // Glb_ShowAlert("Please enter zip");
+                //document.getElementById('txtZip').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblzip').style.display = 'none';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+            if (document.getElementById('txtZip').value != '') {
+                if (document.getElementById('txtZip').value.length != 5) {
+                    clearalerts1();
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblzip').style.display = '';
+                    document.getElementById('tdlblzip').bgColor = 'Orange';
+                    document.getElementById('lblzip').style.display = '';
+                    document.getElementById('lblzip').innerHTML = 'Enter valid zip';
+                    document.getElementById('tdzip').bgColor = 'Orange';
+                    document.getElementById('txtZip').focus();
+
+                   // Glb_ShowAlert('Enter valid zip');
+                    //document.getElementById('txtZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdzip').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblzip').style.display = 'none';
+                    document.getElementById('lblzip').style.display = 'none';
+                }
+                if (fnStringFieldValidate(document.getElementById('txtZip'), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 0) {
+                    clearalerts1();
+                    document.getElementById('tblmain').style.display = '';
+                    document.getElementById('tdlblzip').style.display = '';
+                    document.getElementById('tdlblzip').bgColor = 'Orange';
+                    document.getElementById('lblzip').style.display = '';
+                    document.getElementById('lblzip').innerHTML = 'Invalid zip code!!! zip code must be in alphanumeric only.';
+                    document.getElementById('tdzip').bgColor = 'Orange';
+                    document.getElementById('txtZip').focus();
+
+                   // Glb_ShowAlert("Invalid zip code!!! zip code must be in alphanumeric only.");
+                   // document.getElementById('txtZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdzip').bgColor = 'White';
+                    document.getElementById('tblmain').style.display = 'none';
+                    document.getElementById('tdlblzip').style.display = 'none';
+                    document.getElementById('lblzip').style.display = 'none';
+                }
+            }
+
+
+
+            //if (document.getElementById('ddl_country').selectedIndex == 0) {
+            //    /*Controls=Controls+"State"+"<br>"*/
+            //    clearalerts1();
+            //    document.getElementById('tblmain').style.display = '';
+            //    document.getElementById('tdlblcountry').style.display = '';
+            //    document.getElementById('tdlblcountry').bgColor = 'Orange';
+            //    document.getElementById('lblcountry').style.display = '';
+            //    document.getElementById('lblcountry').innerHTML = 'Please select country';
+            //    document.getElementById('tdcountry1').bgColor = 'Orange';
+            //    document.getElementById('ddl_country').focus();
+            //   // Glb_ShowAlert("Please select country")
+            //   // document.getElementById('ddl_Country').focus();
+            //    return false;
+            //}
+            //else {
+            //    document.getElementById('tdcountry1').bgColor = 'White';
+            //    document.getElementById('tblmain').style.display = 'none';
+            //    document.getElementById('tdlblcountry').style.display = 'none';
+            //    document.getElementById('lblcountry').style.display = 'none';
+            //}
+            if (document.getElementById('DDState').selectedIndex == 0) {
+                clearalerts1();
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblstate').style.display = '';
+                document.getElementById('tdlblstate').bgColor = 'Orange';
+                document.getElementById('lblstate').style.display = '';
+                document.getElementById('lblstate').innerHTML = 'Please select state';
+                document.getElementById('tdstate').bgColor = 'Orange';
+                document.getElementById('DDState').focus();
+                /*Controls=Controls+"State"+"<br>"*/
+                // Glb_ShowAlert("Please select state")
+                //document.getElementById('DDState').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdstate').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblstate').style.display = 'none';
+                document.getElementById('lblstate').style.display = 'none';
+            }
+            if (document.getElementById('DDCity').selectedIndex == 0) {
+                clearalerts1();
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblcity').style.display = '';
+                document.getElementById('tdlblcity').bgColor = 'Orange';
+                document.getElementById('lblcity').style.display = '';
+                document.getElementById('lblcity').innerHTML = 'Please select city';
+                document.getElementById('tdcity').bgColor = 'Orange';
+                document.getElementById('DDCity').focus();
+
+               // Glb_ShowAlert("Please select city")
+               // document.getElementById('DDCity').focus();
+                return false;
+                // Controls=Controls+"City"+"<br>" 
+            }
+            else {
+                document.getElementById('tdcity').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblcity').style.display = 'none';
+                document.getElementById('lblcity').style.display = 'none';
+            }
+
+            
+
+        }
+    </script>
+    <script type="text/javascript">
+        function checkgendermale() {
+            if (document.getElementById("rbtmale").checked == true) {
+                document.getElementById("rbtFemale").checked = false;
+                document.getElementById('hdngender').value = "Male";
+            }
+        }
+        function checkgenderfemale() {
+            if (document.getElementById("rbtFemale").checked == true) {
+                document.getElementById("rbtmale").checked = false;
+                document.getElementById('hdngender').value = "Female";
+            }
+        }
+    </script>
+</head>
+
+<body>
+ @using (Ajax.BeginForm("VerificationusersEdit", "Profiles", new AjaxOptions
+ {
+     InsertionMode = InsertionMode.Replace,
+     HttpMethod = "POST",
+     OnSuccess = "updateSuccess",
+     OnComplete = "SessionExpireFail"
+
+ }, new { @id = "updateCarForm" }))
+ {
+    <div>
+        <div >
+                                                        <div class="content">
+                                                                  
+                                                            <div class="content-box">
+                                                            <div class="content-box-content">
+                                                             <input type="hidden" id="hdngender" name="hdngender" />
+                                                            <input type ="hidden" id="hdnveriuserid" name="hdnveriuserid" value="@ViewBag.veriuserid" />
+                                                            <input type="hidden" id="hdnloginid" name="hdnloginid" value="@ViewBag.loginid" />
+                                                            <table cellpadding="6" cellspacing="1" class="border_style" border="0" width="100%"
+                                                                align="center">
+                                                                
+                                                             
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right" width="30%">
+                                                                        <strong>Role name&nbsp:&nbsp</strong></th>
+                                                                    <td align="left">
+                                                                        &nbsp;
+                                                                        <span id="lblrole_type1">@ViewBag.role</span>
+                                                                        
+                                                                        
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right" width="30%">
+                                                                        <strong>
+                                                                     <span id="lbl1" style="color:Red;">*</span>Full name&nbsp:&nbsp</strong></th>
+                                                                    <td align="left" id="tdname1">
+                                                                        &nbsp;
+                                                                          @{string[] PreArray = { " ", "Dr", "Miss", "Mr", "Mrs", "Ms" };}
+                                                                            @Html.DropDownList("ddl_prefix", new SelectList(PreArray, (string)ViewBag.prefix), new { @style = "width:62px;height:22px;font-size:13px;" })
+                                                                           
+                                                                            @Html.TextBox("txt_FirstName", (string)@Model[0].FirstName, new { @class = "textfield", MaxLength = "50", style = "width:140px;" })
+                                                                           
+                                                                           @Html.TextBox("txt_MI", (string)@Model[0].MI, new { @class = "textfield", MaxLength = "1", style = "width:25px;" })
+                                                                            
+                                                                            @Html.TextBox("txt_LastName", (string)@Model[0].LastName, new { @class = "textfield", MaxLength = "50", style = "width:140px;" })
+                                                                    </td>
+                                                                </tr>
+                                                                 <tr class="white_color" height="30">
+                                                                    <th align="right" width="30%">
+                                                                        <strong>
+                                                                     <span id="lbl123" style="color:Red;">*</span>Gender&nbsp:&nbsp</strong></th>
+                                                                    <td align="left" id="tdgender1">
+                                                                        &nbsp;
+                                                                          @Html.RadioButton("rbtmale", "Male", true, new { @onchange = "return checkgendermale();", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })&nbsp;Male &nbsp;
+                                                                          @Html.RadioButton("rbtFemale", "Female", new { @onchange = "return checkgenderfemale();", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })&nbsp;Female
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<span id="lbl2" style="color:Red;">*</span>Cell phone&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left" id="tdcellphn1">
+                                                                
+                                                                       &nbsp; @*<span id="lblMobile1">@ViewBag.cellphn</span>*@
+                                                                           @Html.TextBox("txtMobile1",!string.IsNullOrEmpty(Model[0].CellPhone)?Model[0].CellPhone.Substring(0, 3) :"", new
+                                                                      {
+                                                                          @class = "textfield",
+                                                                          MaxLength = "3",
+                                                                          style = "width:30px;",
+                                                                          onkeypress = "return AlphaNumbers(event);",
+                                                                          autocomplete = "off"
+                                                                      })
+                                                                            -
+                                                                            @Html.TextBox("txtMobile2", !string.IsNullOrEmpty(Model[0].CellPhone)?Model[0].CellPhone.Substring(3, 3) :"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off"
+                                                                       })
+                                                                            -
+                                                                           @Html.TextBox("txtMobile3", !string.IsNullOrEmpty(Model[0].CellPhone)?Model[0].CellPhone.Substring(6, 4) :"", new
+                                                                      {
+                                                                          @class = "textfield",
+                                                                          MaxLength = "4",
+                                                                          style = "width:40px;",
+                                                                          onkeypress = "return AlphaNumbers(event);",
+                                                                          autocomplete = "off"
+                                                                      })
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>Phone&nbsp:&nbsp</strong></th>
+                                                                    <td align="left" id="tdworkphn1">
+                                                                        &nbsp;  @Html.TextBox("txtWorkPhone1", !string.IsNullOrEmpty(Model[0].WorkPhone)?Model[0].WorkPhone.Substring(0, 3) :"", new { @class = "textfield", MaxLength = "3", style = "width:30px;", onkeypress = "return AlphaNumbers(event);", autocomplete = "off" })
+                                                                            -
+                                                                            @Html.TextBox("txtWorkPhone2", !string.IsNullOrEmpty(Model[0].WorkPhone)?Model[0].WorkPhone.Substring(3, 3) :"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off"
+                                                                       })
+                                                                           -
+                                                                            @Html.TextBox("txtWorkPhone3", !string.IsNullOrEmpty(Model[0].WorkPhone)?Model[0].WorkPhone.Substring(6, 4) :"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "4",
+                                                                           style = "width:40px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off"
+                                                                       })
+                                                                       <span> Extension: </span>
+                                                                        @Html.TextBox("txtWorkPhoneExtn", (string)Model[0].WorkPhoneExtn, new
+                                                                   {
+                                                                       @class = "textfield",
+                                                                       MaxLength = "5",
+                                                                       style = "width:40px;",
+                                                                       onkeypress = "return AlphaNumbers(event);",
+                                                                       autocomplete = "off"
+                                                                   })
+                                                                       @{ bool StrContCLMsg = false;
+                                                                          //bool StrConMToText = false;
+                                                                                 }
+                                                                            @*   @if (Model[0].WPLeaveMsg_Ind != null)
+                                                                               {*@
+                                                                                   @if (Model[0].WPLeaveMsg_Ind == "Y")
+                                                                                   {
+                                                                                       StrContCLMsg = true;
+                                                                                   }
+                                                                                   else
+                                                                                   {
+                                                                                       StrContCLMsg = false;
+
+                                                                                   }
+                                                                             @*  }*@
+                                                                               @Html.CheckBox("chkMsg", StrContCLMsg)
+                                                                            <strong>Ok to text</strong>
+                                                                      
+                                                                      
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>Fax&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left" id="tdfax1">
+                                                               
+                                                                     &nbsp; @Html.TextBox("txtFax1", !string.IsNullOrEmpty(Model[0].Fax)?Model[0].Fax.Substring(0, 3) :"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off"
+                                                                       })
+                                                                            -
+                                                                            @Html.TextBox("txtFax2", !string.IsNullOrEmpty(Model[0].Fax)?Model[0].Fax.Substring(3, 3) :"", new
+                                                                       {
+                                                                           @class = "textfield",
+                                                                           MaxLength = "3",
+                                                                           style = "width:30px;",
+                                                                           onkeypress = "return AlphaNumbers(event);",
+                                                                           autocomplete = "off"
+                                                                       })
+                                                                           -
+                                                                           @Html.TextBox("txtFax3", !string.IsNullOrEmpty(Model[0].Fax)?Model[0].Fax.Substring(6, 4) :"", new
+                                                                      {
+                                                                          @class = "textfield",
+                                                                          MaxLength = "4",
+                                                                          style = "width:40px;",
+                                                                          onkeypress = "return AlphaNumbers(event);",
+                                                                          autocomplete = "off"
+                                                                      })&nbsp;
+                                                                       </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<span id="lbl3" style="color:Red;">*</span>E-mail
+                                                                        :&nbsp</strong> </th>
+                                                                    <td align="left" id="tdemail1">
+                                                                        &nbsp; @Html.TextBox("txtEmail", (string)Model[0].Email, new { @class = "textfield", MaxLength = "100", style = "width:270px;", autocomplete = "off" })
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<span id="lbl4" style="color:Red;">*</span>Address1
+                                                                        :&nbsp</strong> </th>
+                                                                    <td align="left" id="tdadd1">
+                                                                        &nbsp; @Html.TextBox("txtAddress1", (string)@Model[0].Address1, new { @class = "textfield", MaxLength = "100", style = "width:270px;", autocomplete = "off" })
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>Address2&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left" id="tdadd2">
+                                                                        &nbsp; @Html.TextBox("txtAddress2", (string)@Model[0].Address2, new { @class = "textfield", MaxLength = "100", style = "width:270px;", autocomplete = "off" })
+                                                                    </td>
+                                                                </tr>
+                                                                @Html.Partial("_CitiesStates",null, new ViewDataDictionary { { "Zip", @Model[0].zip }, { "State_ID", @Model[0].State_ID }, { "City_ID", @Model[0].City_ID }, { "Statename", @Model[0].statename }, { "Cityname", @Model[0].city } })
+                                                              @*  <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<span id="lbl5" style="color:Red;">*</span>Zip&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left" id="tdzip">
+                                                                        &nbsp;@Html.TextBox("txtZip", (string)ViewBag.Zip, new { @class = "textfield", MaxLength = "5", style = "width:50px;", onkeydown = "return checkValidNumeric1(event);", autocomplete = "off" })
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<span id="lbl6" style="color:Red;">*</span>Country&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left" id="tdcountry1">
+                                                                        &nbsp; @Html.DropDownList("ddl_country", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select Country-- ", Value = "0" },
+                                                               new SelectListItem{ Text="United States", Value = "1", Selected =true }
+                                                              },
+new { style = "font-family:arial;font-size:13px;height:22px;width:270px;", onkeypress = "return fnsetfocus(event,'btnNext')", autocomplete = "off" })
+&nbsp;&nbsp;&nbsp;
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="nav_blue_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<span id="lbl7" style="color:Red;">*</span>
+                                                                        State&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left" id="tdstate">
+                                                                        &nbsp;   @if (Model.StateList != null)
+                                                                                 {
+                                                                            @Html.DropDownList("DDState", Model.StateList, "--Select State--", new { @style = "width:270px;height:25px;font-size:13px;" })
+                                                                                 }
+                                                                     
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="white_color" height="30">
+                                                                    <th align="right">
+                                                                        <strong>&nbsp;<span id="lbl8" style="color:Red;">*</span>City&nbsp:&nbsp</strong> </th>
+                                                                    <td align="left" id="tdcity1">
+                                                                        &nbsp; @Html.DropDownList("DDCity", Model.CityList, new { @style = "width:270px;height:25px;font-size:13px;" })                                                                    
+                                                                    </td>
+                                                                </tr>*@
+                                                            </table>
+                                                            <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain"
+                    style="display: none;">
+                    <tr class="white_color" align="center">
+                        <td id="tdlblname" height="30px" style="display: none;">
+                        <label id="lblfirstname" style="font-weight:bold; color:Black; display:none;"></label>
+                            
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlbllastname" height="30px" style="display: none;">
+                          <label id="lbllastname" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                   
+                   <tr class="white_color" align="center">
+                        <td id="tdlblgender" height="30px" style="display: none;">
+                        <label id="lblgender12" style="font-weight:bold; color:Black; display:none;"></label>
+                            
+                        </td>
+                    </tr>
+                  
+                    <tr class="white_color" align="center">
+                        <td id="tdlbladdress" height="30px" style="display: none;">
+                            <label id="lbladdress" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblfax" height="30px" runat="server" style="display: none;">
+                        <label id="lblfax" style="font-weight:bold; color:Black; display:none;"></label>
+                          
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblzip" height="30px" runat="server" style="display: none;">
+                        <label id="lblzip" style="font-weight:bold; color:Black; display:none;"></label>
+                          
+                        </td>
+                    </tr>
+                     
+                     <tr class="white_color" align="center">
+                        <td id="tdlblcountry" height="30px" style="display: none;">
+                          <label id="lblcountry" style="font-weight:bold; color:Black; display:none;"></label>
+                            
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblstate" height="30px" style="display: none;">
+                          <label id="lblstate" style="font-weight:bold; color:Black; display:none;"></label>
+                            
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblcity" height="30px" style="display: none;">
+                         <label id="lblcity" style="font-weight:bold; color:Black; display:none;"></label>
+                            
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblemail" height="30px" style="display: none;">
+                         <label id="lblemail" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                    
+                    <tr class="white_color" align="center">
+                        <td id="tdlblmobile" height="30px" style="display: none;">
+                         <label id="lblmobile" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdlblwork" height="30px" style="display: none;">
+                          <label id="lblwork" style="font-weight:bold; color:Black; display:none;"></label>
+                           
+                        </td>
+                    </tr>
+                    
+                   
+                  
+                </table>
+                                                            <table cellpadding="0" cellspacing="0"  border="0" width="98%"
+                                                                align="center">
+                                                                <tr >
+                                                                    <td align="right" style="padding-bottom: 5px; padding-top: 5px;">
+                                                                    <input type="submit" class="button" value="Save" onclick="return Validate();" />
+                                                                        <input type="button" class="veditclose button" value="Close" />
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                           
+                                                         </div></div></div>
+                                                        </div>
+    </div>
+ }
+</body>
+<script type="text/javascript">
+
+    function updateSuccess(data) {
+        //        alert("1");
+        //        alert(data.Success);
+
+
+        if (data != '' & data.Success == true) {
+            window.location.href = '../Profiles/ApproveProviders';
+        }
+        //else if (data.ErrorMessage == 'expire') {
+        //    window.location.href = '../Home/SessionExpire';
+        //}
+        else {
+              document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblemail').style.display = '';
+            document.getElementById('tdlblemail').bgColor = 'Orange';
+            document.getElementById('lblemail').style.display = '';
+            document.getElementById('lblemail').innerHTML = data.ErrorMessage;
+            document.getElementById('tdemail1').bgColor = 'Orange';
+            document.getElementById('txtEmail').focus();
+            return false;
+        }
+    }
+    </script>
+</html>

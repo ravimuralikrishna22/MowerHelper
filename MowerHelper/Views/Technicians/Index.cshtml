@@ -1,0 +1,1317 @@
+﻿@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    @Styles.Render("~/Content/themes/base/jqueryCSS")
+    @*  @Scripts.Render("~/Scripts/Thscriptscript")*@
+    <link href="~/Content/themes/base/jquery.ui.autocomplete.css" rel="stylesheet" type="text/css" />
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    <script src="~/SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function searchclick() {
+            var lastname = document.getElementById('txtname12').value;
+            window.location.href = '@Url.Action("Index", "Technicians")?lastname=' + lastname;
+        }
+        $(document).ready(function () {
+
+            var billingchange_ind = "@ViewBag.billingchange_ind";
+            if (billingchange_ind == 'N') {
+                document.getElementById("lnktechnician").style.display = '';
+                document.getElementById("lnkccinfo").style.display = 'none';
+
+            }
+            else {
+
+                document.getElementById("lnkccinfo").style.display = '';
+                document.getElementById("lnktechnician").style.display = 'none';
+            }
+            var alert111 = document.getElementById('hdnalert').value;
+            var Tid = document.getElementById('hdntid').value;
+            if (alert111 != '' && alert111 != null) {
+
+                //$('#lbldes').text(alert111);
+
+                var url = $(this).attr('href');
+                $("#dialog-confirm1").dialog({
+                    message: 'Are you absolutely sure you want to destroy the alien planet?',
+                    autoOpen: false,
+                    height: 170,
+                    width: 550,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    buttons: {
+                        "Yes": function () {
+                            //$(this).dialog("close");
+                            //window.location = url;
+                            window.location = '../Technicians/DeleteTechInfo?Technician_id=' + Tid + '&Reassigned=' + "Y";
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+
+                        }
+                    }
+                });
+                $("#dialog-confirm1").dialog('open');
+                document.getElementById('hdnalert').value = '';
+                document.getElementById('hdntid').value = '';
+                return false;
+
+
+
+
+
+            }
+            $('#txtname12').val($('#hdnlname').val());
+        });
+    </script>
+    <style type="text/css">
+        .gridTable
+        {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("Index", "Technicians", FormMethod.Get, null))
+    {
+        <input type="hidden" id="hdnlname" name="hdnlname" value="@ViewBag.lastnm" />
+        <input type="hidden" id="hdnalert" name="hdnalert" value="@ViewBag.alert" />
+        <input type="hidden" id="hdntid" name="hdntid" value="@ViewBag.Tid" />
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div>
+        
+        <div id="main-content">
+
+            <table width="100%" cellpadding="0" cellspacing="0">
+                @if (Session["roleid"].ToString() != "1")
+                {
+                    <tr id="trtabs" runat="server">
+                        <td width="100%" class="navigation">
+                            <div class="admin-tab">
+                                <a class="inadmin-link" id="adocument1" href="../OfficeExpenses/ExpenseLedger"><span>My Business Expenses</span>
+                                </a>
+                            </div>
+                            <div class="admin-tab">
+                                <a class="inadmin-link" id="adocument" href="../Notes/ProfileNotes"><span>Notes</span>
+                                </a>
+                            </div>
+
+                            <div class="admin-tab">
+                                <a class="inadmin-link" id="adocument2" href="../Common/PasswordManagement"><span>Password Management</span>
+                                </a>
+                            </div>
+                            <div class="admin-tab">
+                                <a class="inadmin-link" id="adocument3" href="../Admin/FT_servicesTransaction"><span>Mower Helper Transactions</span>
+                                </a>
+                            </div>
+                            @if (ViewBag.Showtask == "Y")
+                            {
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" id="adocument4" href="../Task/TaskList"><span>Tasks</span>
+                                    </a>
+                                </div>
+                            }
+                            <div class="admin-link">
+                                <a class="admin-link" id="adocument5" href="@Url.Action("Index", "Technicians")" ><span>Technicians</span>
+                                </a>
+                            </div>
+                            <div class="admin-tab">
+                                <a class="inadmin-link" href="../Admin/FTservices_addnewpayment" id="acontent"><span>Payment method</span>
+                                </a>
+                            </div>
+                            @if (ViewBag.Showforums == "Y")
+                            {
+                                <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Forums/ForumsHome" id="acontent5"><span>Forums</span>
+                                    </a>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+                @if (Session["roleid"].ToString() == "1")
+                {
+                    <tr id="trtabs" runat="server">
+                        <td width="100%" class="navigation">
+                            <div class="admin-tab">
+                                <a class="inadmin-link" id="admincust" href="../Clients/ClientsHome"><span>Clients</span>
+                                </a>
+                            </div>
+                            <div class="admin-tab">
+                                <a class="inadmin-link" id="admintask" href="../Task/TaskList"><span>Tasks </span>
+                                </a>
+                            </div>
+
+                            <div class="admin-tab">
+                                <a class="admin-link" id="adminnote" href="ProfileNotes"><span>Notes</span>
+                                </a>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+                <tr class="background_color">
+                    <td id="tdtabs" class="tab-background" width="100%">
+                        <table id="tblsearch" runat="server" width="90%" align="center">
+                            <tr class="background_color" id="trsearch123">
+
+                                <td id="tdmultiprovider" style="text-align: right; padding-left: 2px; width: 40%">
+                                    <b>Last name :</b>&nbsp;
+                                </td>
+                                <td id="tdname123" align="left" width="13%">
+                                    <input type="text" id="txtname12" name="txtname12" onkeypress="return fnsetfocus(event,'btnsearch123')" />
+                                </td>
+                                <td>
+                                    @*<input type="button" id="btnsearch123" name="btnsearch123" value="Search" style="width:60px;" class="button" onclick="return searchclick();" />*@
+                                    <a id="lnkSearch" href="#" onclick="return searchclick();" title="Search">
+                                        <img alt="" id="" src="~/Images/search_button_green.png" style="width: 30px; border-width: 0px;" /></a>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="content-box">
+                            <div class="content-box-header" runat="server" style="height: 25px">
+                                <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                    <tr>
+                                        <td width="60%" align="left">
+                                            <h3>Technicians</h3>
+                                        </td>
+                                        <td width="40%" align="center">
+                                            <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                <li>
+                                                    <a id="lnkccinfo" href="#" onclick="return Displaydialog('CCDialog','@Url.Action("Addnewpaymentmethod", "Technicians")','auto',850,'dvLoading',null,null);" style="color: #0066CC;font-weight:bold;font-size:14px;">Add  new technician&nbsp;&nbsp;</a>
+                                                </li>
+                                            </ul>
+                                            <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+
+                                                <li>
+                                                    <a id="lnktechnician" href="#" onclick="return Displaydialog('AddTechnicianDialog','@Url.Action("AddNewTechnician", "Technicians")','auto',850,'dvLoading',null,null);" style="color: #0066CC;font-weight:bold;font-size:14px;">Add  new technician&nbsp;&nbsp;</a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="content-box-content">
+                                @{WebGrid NotesGrid = new WebGrid(rowsPerPage: 10);}
+                                @{WebGrid grid = NotesGrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                  if (grid.TotalRowCount != 0)
+                                  {
+                                      int count = 0;
+                                      string pager = grid.Pager().ToString();
+                                      string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                      string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                      string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                      columns: grid.Columns(grid.Column("First_Name", "First name", canSort: false),
+                                       grid.Column("Last_Name", "Last name", canSort: true),
+                                       grid.Column("Phonenumber", "Phone number", canSort: false),
+                                       grid.Column("Email", "Email", canSort: false),
+                                        grid.Column("Access", "Access", canSort: false),
+                                       grid.Column("", "Edit", canSort: false,
+                                      format:@<text>
+                                    <a href="@Url.Action("EditTechnician", "Technicians", new { Technician_id = (int)item.Technician_id })" class = "Technicianedit1", title = "Click here to edit technician information" >
+                                        <img src="~/Images/edit.gif" />
+                                    </a>
+                                    @* @Html.ActionLink(" ", "EditTechnician", new { Technician_id = (int)item.Technician_id },
+                    new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "Technicianedit1", @title = "Click here to edit technician information" })*@
+
+                                    </text>),
+
+                                         grid.Column("", "Delete", canSort: false, style: "date",
+                                      format:@<text>
+                                    <a href="@Url.Action("DeleteTechInfo", "Technicians", new { Technician_id = (int)item.Technician_id, Reassigned = "N" })" class = "confirmDialog", title = "Click here to delete technician information" >
+                                        <img src="~/Images/cross.png" />
+                                    </a>
+                                    @* @Html.ActionLink(" ", "DeleteTechInfo", new { Technician_id = (int)item.Technician_id, Reassigned = "N" },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog", @title = "Click here to delete technician information" })*@
+                                    </text>)
+
+                                     )).ToString();
+                                      gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                    @(new HtmlString(gridhtml))
+                                    <br />
+                                    <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                    <br />
+
+
+
+                                  }
+                                  else
+                                  {
+                                    <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                        <tr id="trcpterror" class="white_color">
+                                            <td align="center" height="25px" valign="middle" colspan="2">
+                                                <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">No technicians found</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                  }
+                                }
+                            </div>
+                        </div>
+                        <br />
+                        <div id="AddNoteDialog" title="Add note"></div>
+                        <div id="NoteSummaryDialog" title="Edit notes"></div>
+                        <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+                            <img src="../Images/ajax-loader2.gif" alt="Processing" />
+                        </div>
+                        <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+                            <p>
+                                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                                Do you want to delete technician?
+                            </p>
+                        </div>
+
+                        <div id="dialog-confirm1" title="Mower Helper" style="display: none;">
+                            <p>
+                                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                                @*  @Html.Label(@ViewBag.Tid, new { id="lbldes" } )*@
+                                <label id="lbldes">@ViewBag.alert</label>
+
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            @{Html.RenderAction("Bottomsections", "Tools");}
+        </div>
+      
+        <div id="CCDialog" title="Payment information">
+        </div>
+        <div id="AddTechnicianDialog" title="Add new technician"></div>
+        <div id="EditTechnicianDialog" title="Edit technician"></div>
+    }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            var roleid = '@Session["roleid"]';
+            if (roleid == "1") {
+                $("#Menu0").addClass("active");
+                $("#Menu1").removeClass();
+                $("#Menu2").removeClass();
+                $("#Menu3").removeClass();
+            }
+            else {
+                $("#Menu0").removeClass();
+                $("#Menu1").removeClass();
+                $("#Menu2").removeClass();
+                $("#Menu3").removeClass();
+                $("#Menu4").addClass("active");
+
+            }
+        });
+        $(document).ready(function () {
+            $(".Paymentclose").live("click", function (e) {
+                e.preventDefault();
+                $('#CCDialog').dialog('close');
+            });
+            $(".closetech").live("click", function (e) {
+                var dialogDiv = $('#AddTechnicianDialog');
+                dialogDiv.dialog('close');
+            });
+            $(".closeedit").live("click", function (e) {
+                var dialogDiv = $('#EditTechnicianDialog');
+                dialogDiv.dialog('close');
+            });
+            $('#CCDialog').dialog({
+                autoOpen: false,
+                width: 850,
+                resizable: false,
+                dialogClass: 'no-close',
+                position: ['middle', 40],
+                modal: true
+            });
+            //$("#lnkccinfo").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#CCDialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('destroy');
+            //        dialogDiv.dialog('open');
+            //        return false;
+            //    });
+            //    return false;
+            //});
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        var linkObj;
+        $(function () {
+
+            //$('#AddTechnicianDialog').dialog({
+            //    autoOpen: false,
+            //    width: 850,
+            //    //                      height: 400,
+            //    resizable: false,
+            //    modal: true,
+            //    position: ['middle', 100]
+            //});
+            $('#EditTechnicianDialog').dialog({
+                autoOpen: false,
+                width: 850,
+                //                      height: 400,
+                resizable: false,
+                modal: true,
+                position: ['middle', 100]
+            });
+            //$("#lnktechnician").click(function () {
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#AddTechnicianDialog');
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+            $(".Technicianedit").click(function () {
+                linkObj = $(this);
+                var dialogDiv = $('#EditTechnicianDialog');
+                var viewUrl = linkObj.attr('href');
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(".confirmDialog").live("click", function (e) {
+
+            var url = $(this).attr('href');
+            $("#dialog-confirm").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.location = url;
+
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog('open');
+            return false;
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            JqAutocomplete('@Url.Action("GetClientlastname", "Technicians")', "txtname12");
+        
+        });
+    </script>
+    @* add Technician*@
+    <script type="text/javascript">
+        function fnStringFieldValidate(strActualString, strValidValues) {
+            var iStringLength
+            var iCount
+            var iIndex
+            var strActString = strActualString.value; iStringLength = strActualString.value.length
+            for (iCount = 0; iCount < iStringLength; iCount++) {
+                strChar = strActString.charAt(iCount); iIndex = strValidValues.indexOf(strChar.toUpperCase(), 0); if (iIndex == -1)
+                    return false;
+            }
+        }
+        function Clearfirstname() {
+            if (document.getElementById('txtFirstName').value == 'First Name') {
+                document.getElementById('txtFirstName').value = '';
+            }
+        }
+        function Clearlastname() {
+            if (document.getElementById('txtLastName').value == 'Last Name') {
+                document.getElementById('txtLastName').value = '';
+            }
+        }
+        function AddTechclearalerts() {
+            ClearInlineAlert('lblname', 'tdnm1', '#FFFFFF');
+            ClearInlineAlert('lblmobile', 'tdmbile1', '#FFFFFF');
+            ClearInlineAlert('lblemail', 'tdemail', '#FFFFFF');
+            ClearInlineAlert('lblpwd', 'tdpwd', '#FFFFFF');
+            ClearInlineAlert('lblCpwd', 'tdCpwd', '#FFFFFF');
+        }
+        function Validate12() {
+            var strfirstname = trim(document.getElementById('txtFirstName').value);
+            document.getElementById('txtFirstName').value = strfirstname;
+            if (document.getElementById('txtFirstName').value == '' || document.getElementById('txtFirstName').value == 'First Name') {
+                AddTechclearalerts();
+                InlineAlert('lblname', 'tdnm1', 'Please enter first name');
+                document.getElementById('txtFirstName').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblname', 'tdnm1', '#FFFFFF');
+            }
+            var strlastname = trim(document.getElementById('txtLastName').value);
+            document.getElementById('txtLastName').value = strlastname;
+            if (document.getElementById('txtLastName').value == '' || document.getElementById('txtLastName').value == 'Last Name') {
+                AddTechclearalerts();
+                InlineAlert('lblname', 'tdnm1', 'Please enter last name');
+                document.getElementById('txtLastName').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblname', 'tdnm1', '#FFFFFF');
+
+            }
+            if (document.getElementById('txtMobile1').value == '' && document.getElementById('txtMobile2').value == '' && document.getElementById('txtMobile3').value == '') {
+                AddTechclearalerts();
+                InlineAlert('lblmobile', 'tdmbile1', 'Please enter phone number');
+                document.getElementById('txtMobile1').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblmobile', 'tdmbile1', '#FFFFFF');
+            }
+
+            if (document.getElementById('txtMobile1').value != '' || document.getElementById('txtMobile2').value != '' || document.getElementById('txtMobile3').value != '') {
+                AddTechclearalerts();
+                if (IsValidPhone(document.getElementById('txtMobile1').value + document.getElementById('txtMobile2').value + document.getElementById('txtMobile3').value) == 'false') {
+                    AddTechclearalerts();
+                    InlineAlert('lblmobile', 'tdmbile1', 'Please enter valid phone number');
+                    document.getElementById('txtMobile1').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblmobile', 'tdmbile1', '#FFFFFF');
+                }
+            }
+            if (document.getElementById('txtMobile1').value != "" || document.getElementById('txtMobile2').value != "" || document.getElementById('txtMobile3').value != "") {
+                AddTechclearalerts();
+                if (fnStringFieldValidate(document.getElementById('txtMobile1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtMobile2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtMobile3'), "0123456789") == 0) {
+                    AddTechclearalerts();
+                    InlineAlert('lblmobile', 'tdmbile1', 'Invalid phone number!!! phone number must be in numeric only.');
+                    document.getElementById('txtMobile1').focus();
+
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblmobile', 'tdmbile1', '#FFFFFF');
+                }
+
+            }
+
+
+            var stremail = trim(document.getElementById('txtEmail').value);
+            document.getElementById('txtEmail').value = stremail;
+
+            if (document.getElementById('txtEmail').value == '') {
+                InlineAlert('lblemail', 'tdemail', 'Please enter email');
+                document.getElementById('txtEmail').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblemail', 'tdemail', '#FFFFFF');
+            }
+            if (document.getElementById('txtEmail').value != '') {
+                if (ValidateEmail(document.getElementById('txtEmail')) == 0) {
+                    InlineAlert('lblemail', 'tdemail', 'Please enter valid email');
+                    document.getElementById('txtEmail').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblemail', 'tdemail', '#FFFFFF');
+                }
+            }
+
+            if (MyChars(document.getElementById("txtpwd")) == "BlankError") {
+                AddTechclearalerts();
+                InlineAlert('lblpwd', 'tdpwd', 'Please enter password');
+                document.getElementById("txtpwd").focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblpwd', 'tdpwd', '#FFFFFF');
+            }
+            if (MyChars(document.getElementById("txtpwd")) == "SpaceError") {
+                AddTechclearalerts();
+                InlineAlert('lblpwd', 'tdpwd', 'Please enter password without spaces first');
+                document.getElementById("txtpwd").focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblpwd', 'tdpwd', '#FFFFFF');
+            }
+
+            if (MyChars(document.getElementById("txtCpwd")) == "BlankError") {
+                AddTechclearalerts();
+                InlineAlert('lblCpwd', 'tdCpwd', 'Please enter confirm password');
+                document.getElementById("txtCpwd").focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblCpwd', 'tdCpwd', '#FFFFFF');
+            }
+            if (MyChars(document.getElementById("txtCpwd")) == "SpaceError") {
+                AddTechclearalerts();
+                InlineAlert('lblCpwd', 'tdCpwd', 'Please enter confirm password without spaces');
+                document.getElementById("txtCpwd").focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblCpwd', 'tdCpwd', '#FFFFFF');
+            }
+
+
+            if (document.getElementById("txtCpwd").value != document.getElementById("txtpwd").value) {
+                AddTechclearalerts();
+                InlineAlert('lblCpwd', 'tdCpwd', 'Please enter confirm password entry correctly');
+                document.getElementById("txtCpwd").focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblCpwd', 'tdCpwd', '#FFFFFF');
+            }
+
+        }
+    </script>
+
+    @* CCProcess*@
+    <script type="text/javascript">
+        var Cards = new makeArray(8);
+        Cards[0] = new CardType("MasterCard", "51,52,53,54,55", "16");
+        var MasterCard = Cards[0];
+        Cards[1] = new CardType("Visa", "4", "13,16");
+        var Visa = Cards[1];
+        Cards[2] = new CardType("AmExCard", "34,37", "15");
+        var AmExCard = Cards[2];
+        Cards[3] = new CardType("DinersClubCard", "30,36,38", "14");
+        var DinersClubCard = Cards[3];
+        Cards[4] = new CardType("DiscoverCard", "6011", "16");
+        var DiscoverCard = Cards[4];
+        Cards[5] = new CardType("enRouteCard", "2014,2149", "15");
+        var enRouteCard = Cards[5];
+        Cards[6] = new CardType("JCBCard", "3088,3096,3112,3158,3337,3528,3530,3566", "16");
+        var JCBCard = Cards[6];
+        var LuhnCheckSum = Cards[7] = new CardType();
+
+        /*************************************************************************\
+        CheckCardNumber(form)
+        function called when users click the "check" button.
+        \*************************************************************************/
+        function CheckCardNumber() {
+            var tmpyear;
+
+            if (document.getElementById('CardNumber1').value.length == 0) {
+                Glb_ShowAlert("Please enter a Card Number.");
+                document.getElementById('CardNumber').focus();
+                return false;
+            }
+            var oldccno = '@ViewBag.cardnumber';
+            var newcno = document.getElementById('CardNumber1').value;
+            if (oldccno != null) {
+                if (oldccno == newcno) {
+                    document.getElementById('lblcardnumber').style.display = '';
+                    document.getElementById('lblcardnumber').innerHTML = 'Please re enter your full credit card number to save.';
+                    document.getElementById('CardNumber').focus();
+                    document.getElementById('TableCell25').bgColor = "orange";
+                    return false;
+                }
+            }
+            if (document.getElementById('CardNumber1').value.length > 0) {
+                var ccnum = document.getElementById('CardNumber1').value;
+                var sum = 0;
+                var mods = ccnum.length % 2;
+                var i = 0;
+                while (i < ccnum.length) {
+                    var digit = parseInt(ccnum.charAt(i));
+                    if (i % 2 == mods)
+                        digit = digit * 2;
+                    if (digit > 9) {
+                        digit = digit - 9;
+                    }
+                    sum += digit;
+                    i += 1;
+                }
+                if ((sum % 10) != 0) {
+                    //                    Glb_ShowAlert("This is not a valid credit card number.");
+                    document.getElementById('lblcardnumber').style.display = '';
+                    document.getElementById('lblcardnumber').innerHTML = 'This is not a valid credit card number.';
+                    document.getElementById('CardNumber').focus();
+                    document.getElementById('TableCell25').bgColor = "orange";
+                    return false;
+                }
+            }
+
+            /*if (form.ExpYear.value.length == 0) {
+            Glb_ShowAlert("Please enter the Expiration Year.");
+            form.ExpYear.focus();
+            return;
+            }
+
+            if (form.ExpYear.value > 96)
+            tmpyear = "19" + form.ExpYear.value;
+            else if (form.ExpYear.value < 21)
+            tmpyear = "20" + form.ExpYear.value;
+            else {
+            Glb_ShowAlert("The Expiration Year is not valid.");
+            return;
+            }*/
+            tmpyear = document.getElementById('year').options[document.getElementById('year').selectedIndex].value;
+            tmpmonth = document.getElementById('month').options[document.getElementById('month').selectedIndex].value;
+            card = document.getElementById('CardType').options[document.getElementById('CardType').selectedIndex].text;
+            if (card == "American Express") {
+                card = "AmExCard";
+            }
+            var retval = eval(card + ".checkCardNumber(\"" + document.getElementById('CardNumber1').value +
+"\", " + tmpyear + ", " + tmpmonth + ");");
+            cardname = "";
+            //            alert(retval);
+            if (retval)
+
+                // comment this out if used on an order form
+                //Glb_ShowAlert("This card number appears to be valid.");
+                return true;
+
+            else {
+                // The cardnumber has the valid luhn checksum, but we want to know which
+                // cardtype it belongs to.
+                for (var n = 0; n < Cards.size; n++) {
+                    //                    alert("1");
+                    //                    alert(form.CardNumber1.value);
+                    //                    alert(tmpyear);
+                    //                    alert(tmpmonth);
+                    //                    alert(Cards[0]);
+                    if (Cards[n].checkCardNumber(document.getElementById('CardNumber1').value, tmpyear, tmpmonth)) {
+                        // alert("1.1");
+                        cardname = Cards[n].getCardType();
+                        //  alert(cardname);
+                        break;
+                    }
+                }
+                //  alert(cardname.length);
+                //                alert(cardname);
+                if (cardname.length > 0) {
+                    //                    alert(cardname.length);
+                    //                    alert("well");
+                    //Glb_ShowAlert("This is  " + cardname + " number,not  " + card + " number.");
+                    //                    Glb_ShowAlert("Please verify the card type.");
+                    //                    alert("Please verify the card type.");
+                    //                    return false;
+                    document.getElementById('lbcardtype').style.display = '';
+                    //                    alert("1");
+                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    //                    alert("2");
+                    document.getElementById('TableCell29').bgColor = "orange";
+                    //                    alert("3");
+                    document.getElementById('CardType').focus();
+                    //                    alert("4");
+                    return false;
+                }
+                else {
+                    //                    alert('76');
+                    document.getElementById('lbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('TableCell29').bgColor = "white";
+                    Glb_ShowAlert("This card number is not valid.");
+                    document.getElementById('CardNumber').focus();
+                    return false;
+                }
+            }
+
+            // The following line doesn't work in IE3, you need to change it
+            // to something like "(new CardType())...".
+            // if (!CardType().isExpiryDate(tmpyear, tmpmonth)) {
+
+        }
+
+        /*************************************************************************\
+        Object CardType([String cardtype, String rules, String len, int year, 
+        int month])
+        cardtype    : type of card, eg: MasterCard, Visa, etc.
+        rules       : rules of the cardnumber, eg: "4", "6011", "34,37".
+        len         : valid length of cardnumber, eg: "16,19", "13,16".
+        year        : year of expiry date.
+        month       : month of expiry date.
+        eg:
+        var VisaCard = new CardType("Visa", "4", "16");
+        var AmExCard = new CardType("AmEx", "34,37", "15");
+        \*************************************************************************/
+        function CardType() {
+            var n;
+            var argv = CardType.arguments;
+            var argc = CardType.arguments.length;
+
+            this.objname = "object CardType";
+
+            var tmpcardtype = (argc > 0) ? argv[0] : "invalid card";
+            var tmprules = (argc > 1) ? argv[1] : "0,1,2,3,4,5,6,7,8,9";
+            var tmplen = (argc > 2) ? argv[2] : "13,14,15,16,19";
+
+            this.setCardNumber = setCardNumber;  // set CardNumber method.
+            this.setCardType = setCardType;  // setCardType method.
+            this.setLen = setLen;  // setLen method.
+            this.setRules = setRules;  // setRules method.
+            this.setExpiryDate = setExpiryDate;  // setExpiryDate method.
+
+            this.setCardType(tmpcardtype);
+            this.setLen(tmplen);
+            this.setRules(tmprules);
+            if (argc > 4)
+                this.setExpiryDate(argv[3], argv[4]);
+
+            this.checkCardNumber = checkCardNumber;  // checkCardNumber method.
+            this.getExpiryDate = getExpiryDate;  // getExpiryDate method.
+            this.getCardType = getCardType;  // getCardType method.
+            this.isCardNumber = isCardNumber;  // isCardNumber method.
+            this.isExpiryDate = isExpiryDate;  // isExpiryDate method.
+            this.luhnCheck = luhnCheck; // luhnCheck method.
+            return this;
+        }
+
+        /*************************************************************************\
+        boolean checkCardNumber([String cardnumber, int year, int month])
+        return true if cardnumber pass the luhncheck and the expiry date is
+        valid, else return false.
+        \*************************************************************************/
+        function checkCardNumber() {
+            // alert('5');
+            var argv = checkCardNumber.arguments;
+            var argc = checkCardNumber.arguments.length;
+            var cardnumber = (argc > 0) ? argv[0] : this.cardnumber;
+            var year = (argc > 1) ? argv[1] : this.year;
+            var month = (argc > 2) ? argv[2] : this.month;
+            //  alert(cardnumber);
+            this.setCardNumber(cardnumber);
+            this.setExpiryDate(year, month);
+
+            if (!this.isCardNumber())
+                return false;
+            //            if (!this.isExpiryDate())
+            //                return false;
+            return true;
+        }
+        /*************************************************************************\
+        String getCardType()
+        return the cardtype.
+        \*************************************************************************/
+        function getCardType() {
+            return this.cardtype;
+        }
+        /*************************************************************************\
+        String getExpiryDate()
+        return the expiry date.
+        \*************************************************************************/
+        function getExpiryDate() {
+            return this.month + "/" + this.year;
+        }
+        /*************************************************************************\
+        boolean isCardNumber([String cardnumber])
+        return true if cardnumber pass the luhncheck and the rules, else return
+        false.
+        \*************************************************************************/
+        function isCardNumber() {
+            var argv = isCardNumber.arguments;
+            var argc = isCardNumber.arguments.length;
+            // alert(argv);
+            // alert(argc);
+            var cardnumber = (argc > 0) ? argv[0] : this.cardnumber;
+            //  alert(cardnumber);
+            if (!this.luhnCheck())
+                return false;
+
+            for (var n = 0; n < this.len.size; n++)
+                if (cardnumber.toString().length == this.len[n]) {
+                    for (var m = 0; m < this.rules.size; m++) {
+                        var headdigit = cardnumber.substring(0, this.rules[m].toString().length);
+                        if (headdigit == this.rules[m])
+                            return true;
+                    }
+                    return false;
+                }
+            // return false;
+        }
+
+        /*************************************************************************\
+        boolean isExpiryDate([int year, int month])
+        return true if the date is a valid expiry date,
+        else return false.
+        \*************************************************************************/
+        function isExpiryDate() {
+            var argv = isExpiryDate.arguments;
+            var argc = isExpiryDate.arguments.length;
+
+            year = argc > 0 ? argv[0] : this.year;
+            month = argc > 1 ? argv[1] : this.month;
+
+            if (!isNum(year + ""))
+                return false;
+            if (!isNum(month + ""))
+                return false;
+            today = new Date();
+            expiry = new Date(year, month);
+            if (today.getTime() > expiry.getTime())
+                return false;
+            else
+                return true;
+        }
+
+        /*************************************************************************\
+        boolean isNum(String argvalue)
+        return true if argvalue contains only numeric characters,
+        else return false.
+        \*************************************************************************/
+        function isNum(argvalue) {
+            argvalue = argvalue.toString();
+
+            if (argvalue.length == 0)
+                return false;
+
+            for (var n = 0; n < argvalue.length; n++)
+                if (argvalue.substring(n, n + 1) < "0" || argvalue.substring(n, n + 1) > "9")
+                    return false;
+
+            return true;
+        }
+
+        /*************************************************************************\
+        boolean luhnCheck([String CardNumber])
+        return true if CardNumber pass the luhn check else return false.
+        Reference: http://www.ling.nwu.edu/~sburke/pub/luhn_lib.pl
+        \*************************************************************************/
+        function luhnCheck() {
+            var argv = luhnCheck.arguments;
+            var argc = luhnCheck.arguments.length;
+
+            var CardNumber = argc > 0 ? argv[0] : this.cardnumber;
+
+            if (!isNum(CardNumber)) {
+                return false;
+            }
+
+            var no_digit = CardNumber.length;
+            var oddoeven = no_digit & 1;
+            var sum = 0;
+
+            for (var count = 0; count < no_digit; count++) {
+                var digit = parseInt(CardNumber.charAt(count));
+                if (!((count & 1) ^ oddoeven)) {
+                    digit *= 2;
+                    if (digit > 9)
+                        digit -= 9;
+                }
+                sum += digit;
+            }
+            if (sum % 10 == 0) {
+                // alert("true");
+                return true;
+            }
+            else {
+                //alert("false");
+                return false;
+            }
+        }
+
+        /*************************************************************************\
+        ArrayObject makeArray(int size)
+        return the array object in the size specified.
+        \*************************************************************************/
+        function makeArray(size) {
+            this.size = size;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setCardNumber(cardnumber)
+        return the CardType object.
+        \*************************************************************************/
+        function setCardNumber(cardnumber) {
+            this.cardnumber = cardnumber;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setCardType(cardtype)
+        return the CardType object.
+        \*************************************************************************/
+        function setCardType(cardtype) {
+            this.cardtype = cardtype;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setExpiryDate(year, month)
+        return the CardType object.
+        \*************************************************************************/
+        function setExpiryDate(year, month) {
+            this.year = year;
+            this.month = month;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setLen(len)
+        return the CardType object.
+        \*************************************************************************/
+        function setLen(len) {
+            // Create the len array.
+            if (len.length == 0 || len == null)
+                len = "13,14,15,16,19";
+
+            var tmplen = len;
+            n = 1;
+            while (tmplen.indexOf(",") != -1) {
+                tmplen = tmplen.substring(tmplen.indexOf(",") + 1, tmplen.length);
+                n++;
+            }
+            this.len = new makeArray(n);
+            n = 0;
+            while (len.indexOf(",") != -1) {
+                var tmpstr = len.substring(0, len.indexOf(","));
+                this.len[n] = tmpstr;
+                len = len.substring(len.indexOf(",") + 1, len.length);
+                n++;
+            }
+            this.len[n] = len;
+            return this;
+        }
+
+        /*************************************************************************\
+        CardType setRules()
+        return the CardType object.
+        \*************************************************************************/
+        function setRules(rules) {
+            // Create the rules array.
+            if (rules.length == 0 || rules == null)
+                rules = "0,1,2,3,4,5,6,7,8,9";
+
+            var tmprules = rules;
+            n = 1;
+            while (tmprules.indexOf(",") != -1) {
+                tmprules = tmprules.substring(tmprules.indexOf(",") + 1, tmprules.length);
+                n++;
+            }
+            this.rules = new makeArray(n);
+            n = 0;
+            while (rules.indexOf(",") != -1) {
+                var tmpstr = rules.substring(0, rules.indexOf(","));
+                this.rules[n] = tmpstr;
+                rules = rules.substring(rules.indexOf(",") + 1, rules.length);
+                n++;
+            }
+            this.rules[n] = rules;
+            return this;
+        }
+
+        //function exclick() {
+        //    document.getElementById('msgdiv').style.display = 'none';
+        //    document.getElementById('ccprocessdiv').style.display = '';
+
+        //}
+    </script>
+    <script type="text/javascript">
+        function clearalerts() {
+            document.getElementById('lbcardtype').style.display = 'none';
+            document.getElementById('TableCell29').bgColor = "white";
+            document.getElementById('TableCell25').bgColor = "White";
+            document.getElementById('lblcardnumber').style.display = 'none';
+            document.getElementById('Td2').bgColor = "white";
+            document.getElementById('lblfirstname').style.display = 'none';
+            document.getElementById('Td4').bgColor = "White";
+            document.getElementById('lbllastname').style.display = 'none';
+            document.getElementById('TableCell31').bgColor = "white";
+            document.getElementById('lblExpyear').style.display = 'none';
+            document.getElementById('TableCell35').bgColor = "white";
+            document.getElementById('lbladdress').style.display = 'none';
+            document.getElementById('tdzip').bgColor = "white";
+            document.getElementById('lblzip').style.display = 'none';
+            document.getElementById('tdstate').bgColor = "White";
+            document.getElementById('lblstate').style.display = 'none';
+            document.getElementById('tdcity').bgColor = "white";
+            document.getElementById('lblcity').style.display = 'none';
+
+        }
+        function CognodeProcess() {
+            $("#update-message").hide();
+            //            document.getElementById('hdnadd1').value = document.getElementById('Address1').value;
+            //            document.getElementById('hdnadd2').value = document.getElementById('Address2').value;
+            //            document.getElementById('hdnzip').value = document.getElementById('Zip').value;
+            //            alert(document.getElementById('hdnzip').value);
+            //            document.getElementById('hdnstate').value = document.getElementById('ddlstate').value;
+            //            alert(document.getElementById('ddlstate').value);
+            //            document.getElementById('hdncity').value = document.getElementById('ddlcity').value;
+            //            alert(document.getElementById('hdncity').value);
+            var my_str = document.getElementById('CardNumber').value;
+            var str = "*";
+            if (my_str.indexOf(str) == -1) {
+                clearalerts()
+                document.getElementById('CardNumber1').value = document.getElementById('CardNumber').value;
+            }
+            else {
+                if (document.getElementById('CardNumber1').value == '') {
+                    clearalerts()
+                    document.getElementById('CardNumber1').value = document.getElementById('CardNumber').value;
+                }
+                else if (document.getElementById('CardNumber1').value != '' && document.getElementById('CardNumber').value != '') {
+                    clearalerts()
+                    if (document.getElementById('hdncardnumber').value != document.getElementById('CardNumber').value) {
+                        clearalerts()
+                        //				                Glb_ShowAlert("Please enter valid Credit Card Number");
+                        document.getElementById('lblcardnumber').style.display = '';
+                        document.getElementById('lblcardnumber').innerHTML = 'Please enter valid Credit Card Number';
+                        document.getElementById('TableCell25').bgColor = "orange";
+                        document.getElementById('CardNumber').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('TableCell25').bgColor = "White";
+                        document.getElementById('lblcardnumber').style.display = 'none';
+                    }
+                }
+            }
+            if (document.getElementById('CardNumber').value == '') {
+                clearalerts()
+                //                 alert('5')
+                //Glb_ShowAlert("Please enter credit card number");
+                //					    document.frmCreditCard.lblcardnumber.style.display = z
+                document.getElementById('lblcardnumber').style.display = '';
+                document.getElementById('lblcardnumber').innerHTML = 'Please enter credit card number';
+                document.getElementById('TableCell25').bgColor = "orange";
+                document.getElementById('CardNumber').focus();
+                return false;
+            }
+            else {
+                document.getElementById('TableCell25').bgColor = "White";
+                document.getElementById('lblcardnumber').style.display = 'none';
+            }
+            var StrCardValue;
+            StrCardValue = document.getElementById('CardNumber').value;
+            //            alert(StrCardValue);
+            if (StrCardValue.length < 13) {
+                clearalerts()
+                document.getElementById('lblcardnumber').style.display = '';
+                //                Glb_ShowAlert("Please enter 13 Digit Card Number");
+                document.getElementById('lblcardnumber').innerHTML = 'Please enter 13 Digit Card Number';
+                document.getElementById('TableCell25').bgColor = "orange";
+                document.getElementById('CardNumber').focus();
+                return false;
+            }
+            else {
+                document.getElementById('TableCell25').bgColor = "White";
+                document.getElementById('lblcardnumber').style.display = 'none';
+            }
+
+            if (CheckCardNumber() == true) {
+                var strfirstname = trim(document.getElementById('txtfirstname').value);
+                document.getElementById('txtfirstname').value = strfirstname;
+                if (MyChars(document.getElementById('txtfirstname')) == 'BlankError') {
+                    clearalerts()
+                    //						    Glb_ShowAlert("Please enter first name");
+                    document.getElementById('lbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('TableCell29').bgColor = "white";
+                    document.getElementById('lblfirstname').style.display = '';
+                    document.getElementById('lblfirstname').innerHTML = 'Please enter first name';
+                    document.getElementById('Td2').bgColor = "orange";
+                    document.getElementById('txtfirstname').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Td2').bgColor = "white";
+                    document.getElementById('lblfirstname').style.display = 'none';
+                }
+
+                if (MyChars(document.getElementById('txtfirstname')) == "NumError") {
+                    clearalerts()
+                    //						    Glb_ShowAlert("Please enter first name in alphabets");
+                    document.getElementById('lbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('TableCell29').bgColor = "white";
+                    document.getElementById('lblfirstname').style.display = '';
+                    document.getElementById('lblfirstname').innerHTML = 'Please enter first name in alphabets';
+                    document.getElementById('Td2').bgColor = "orange";
+                    document.getElementById('txtfirstname').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Td2').bgColor = "white";
+                    document.getElementById('lblfirstname').style.display = 'none';
+                }
+
+
+                var strlastname = trim(document.getElementById('txtlastname').value);
+                document.getElementById('txtlastname').value = strlastname;
+                if (MyChars(document.getElementById('txtlastname')) == 'BlankError') {
+                    clearalerts()
+                    //						    Glb_ShowAlert("Please enter Last Name");
+                    document.getElementById('lbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('TableCell29').bgColor = "white";
+                    document.getElementById('lbllastname').style.display = '';
+                    document.getElementById('lbllastname').innerHTML = 'Please enter Last Name';
+                    document.getElementById('Td4').bgColor = "orange";
+                    document.getElementById('txtlastname').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Td4').bgColor = "White";
+                    document.getElementById('lbllastname').style.display = 'none';
+
+                }
+
+                if (MyChars(document.getElementById('txtlastname')) == "NumError") {
+                    clearalerts()
+                    //						    Glb_ShowAlert("Please enter last name in alphabets");
+                    document.getElementById('lbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    document.getElementById('TableCell29').bgColor = "white";
+                    document.getElementById('lbllastname').style.display = '';
+                    document.getElementById('lbllastname').innerHTML = 'Please enter last name in alphabets';
+                    document.getElementById('Td4').bgColor = "orange";
+                    document.getElementById('txtlastname').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Td4').bgColor = "White";
+                    document.getElementById('lbllastname').style.display = 'none';
+                }
+                var tmpyear = document.getElementById('year').value;
+                var tmpmonth = document.getElementById('month').value;
+                //            alert(tmpyear);
+                //            alert(tmpmonth);
+
+                var today = new Date();
+                var expiry = new Date(tmpyear, tmpmonth);
+                //            alert(today);
+                //            alert(expiry);
+                if (today.getTime() > expiry.getTime()) {
+                    clearalerts();
+                    document.getElementById('lbcardtype').style.display = 'none';
+                    document.getElementById('TableCell29').bgColor = "white";
+                    document.getElementById('lblExpyear').style.display = '';
+                    document.getElementById('lblExpyear').innerHTML = 'This card has already expired';
+                    document.getElementById('TableCell31').bgColor = "orange";
+                    return false;
+                }
+                else {
+                    document.getElementById('TableCell31').bgColor = "white";
+                    document.getElementById('lblExpyear').style.display = 'none';
+                }
+
+
+                var str_BAddress1;
+                str_BAddress1 = trim(document.getElementById('Address1').value);
+                document.getElementById('Address1').value = str_BAddress1;
+                if (str_BAddress1 == '') {
+                    clearalerts()
+                    //                    Glb_ShowAlert("Please enter billing address");
+                    document.getElementById('lbladdress').style.display = '';
+                    document.getElementById('lbladdress').innerHTML = 'Please enter billing address';
+                    document.getElementById('TableCell35').bgColor = "orange";
+                    document.getElementById('Address1').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('TableCell35').bgColor = "white";
+                    document.getElementById('lbladdress').style.display = 'none';
+                }
+
+                if (document.getElementById('txtZip').value == '') {
+                    clearalerts()
+                    //						Glb_ShowAlert("Please enter zip");
+                    document.getElementById('lblzip').style.display = '';
+                    document.getElementById('lblzip').innerHTML = 'Please enter zip';
+                    document.getElementById('tdzip').bgColor = "orange";
+                    document.getElementById('txtZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdzip').bgColor = "white";
+                    document.getElementById('lblzip').style.display = 'none';
+
+                }
+
+                if (document.getElementById('txtZip').value.length != 5) {
+                    clearalerts()
+                    //						Glb_ShowAlert("Please enter valid zip");
+                    document.getElementById('lblzip').style.display = '';
+                    document.getElementById('lblzip').innerHTML = 'Please enter valid zip';
+                    document.getElementById('tdzip').bgColor = "orange";
+                    document.getElementById('txtZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdzip').bgColor = "white";
+                    document.getElementById('lblzip').style.display = 'none';
+                }
+                if (document.getElementById('ddlstate').selectedIndex == 0) {
+                    clearalerts()
+                    //						Glb_ShowAlert("Please select state");
+                    document.getElementById('lblstate').style.display = '';
+                    document.getElementById('lblstate').innerHTML = 'Please select state';
+                    document.getElementById('tdstate').bgColor = "orange";
+                    document.getElementById('ddlstate').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdstate').bgColor = "White";
+                    document.getElementById('lblstate').style.display = 'none';
+                }
+
+                if (document.getElementById('ddlcity').selectedIndex == 0) {
+                    clearalerts()
+                    //					    Glb_ShowAlert("Please select city");
+                    document.getElementById('lblcity').style.display = '';
+                    document.getElementById('lblcity').innerHTML = 'Please select city';
+                    document.getElementById('tdcity').bgColor = "orange"
+                    document.getElementById('ddlcity').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdcity').bgColor = "white";
+                    document.getElementById('lblcity').style.display = 'none';
+                }
+            }
+            else {
+                return false;
+            }
+            document.getElementById('hdnadd1').value = document.getElementById('Address1').value;
+            document.getElementById('hdnadd2').value = document.getElementById('Address2').value;
+            document.getElementById('hdnzip').value = document.getElementById('txtZip').value;
+            //            alert(document.getElementById('hdnzip').value);
+            document.getElementById('hdnstate').value = document.getElementById('ddlstate').value;
+            //            alert(document.getElementById('ddlstate').value);
+            document.getElementById('hdncity').value = document.getElementById('ddlcity').value;
+            //            alert(document.getElementById('hdncity').value);
+            document.body.style.cursor = 'wait';
+            //                  }       
+            //            document.getElementById("tblProcess").style.display = 'none';
+            document.getElementById("div10").style.display = 'none';
+            document.getElementById("updNote").style.display = '';
+            //            $("#updateDialog").dialog({
+            //                modal: true,
+            //                width: 500,
+            //                resizable: false,
+            //                closeOnEscape: false,
+            //                open: function (event, ui) { $(".ui-dialog-titlebar").hide(); }
+
+            //            });
+
+        }
+    </script>
+</body>
+</html>

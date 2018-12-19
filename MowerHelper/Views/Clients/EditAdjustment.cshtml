@@ -1,0 +1,281 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>    
+</head>
+<body>
+     @using (Ajax.BeginForm("EditAdjustment", "Clients", new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "editAdjSuccess"
+
+}, new { @id = "newAdjform" }))
+    {
+        @Html.Hidden("trAdjId")
+        @Html.Hidden("plId")
+        @Html.Hidden("patAdjId")
+        @Html.Hidden("ToRefType_ID")
+        @Html.Hidden("FrmRef_ID")
+        @Html.Hidden("FrmRefType_ID")
+        @Html.Hidden("frm")
+        @Html.Hidden("dt_filter")
+          <input type="hidden" id="hdnregdate" name="hdnregdate" value="@ViewBag.regdate" />
+        <table border="0" cellpadding="6" cellspacing="1" class="border_style" width="100%">
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <strong>Client name :&nbsp;</strong>
+                </td>
+                <td>
+                    <span id="lblAdjto"></span>
+                </td>
+            </tr>
+            @* <tr id="trrefAdj" class="white_color" style="display:none">
+                <td width="20%" align="right">
+                   <strong>Credit to :&nbsp;</strong>
+                </td>
+                <td>
+                    <span id="lblRefAdjto"></span>
+                </td>
+            </tr>*@
+            <tr class="white_color" style="display:none">
+                <td width="20%" align="right">
+                    <strong>Adjustment direction :&nbsp;</strong>
+                </td>
+                <td>
+                    <span id="lblAdjustmentType"></span>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <font color="red">*</font><strong>Type of adjustment :&nbsp;</strong>
+                </td>
+                <td>
+                    <span id="lblTransactonType"></span>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <font color="red">*</font><strong>Date of adjustment :&nbsp;</strong>
+                </td>
+                <td id="tdEAdjDate1">
+                    @Html.TextBox("txtAdjDate", DateTime.Now.ToString("MM/dd/yyyy"), new { @class = "textfield", @style = "width:90px" })&nbsp;&nbsp;<span id="lblErrEdate1" style="color:Black;font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <font color="red">*</font><strong>Adjustment amount :&nbsp;</strong>
+                </td>
+                <td id="tdEAdjAmount1">
+                    @Html.TextBox("txtAdjAmount", null, new { @class = "textfield", @style = "width:90px", @onkeypress = "return checkValidNumeric(txtAdjAmount,8,2,event)" })&nbsp;&nbsp;<span id="lblErrEamount1" style="color:Black;font-weight:bold;"></span>
+                </td>
+            </tr>
+            <tr class="white_color">
+                <td width="20%" align="right">
+                    <strong>Notes :&nbsp;</strong>
+                </td>
+                <td id="tdEAdjNote">
+                    @Html.TextArea("txtNotes", (string)ViewBag.adjustmentnotes, 3, 3, new { @class = "textfield", @style = "width:350px;height:78px;" })&nbsp;&nbsp;<img src="~/Images/help2.png" id="Img3" onmouseover="ddrivetip('@ViewBag.adjENote',300)" onmouseout="hideddrivetip()" style="vertical-align:middle" />&nbsp;&nbsp;(Maximum
+                    length 1000 characters)<br /><span id="lblErrENote" style="color:Black;font-weight:bold;"></span>
+                </td>
+            </tr>
+        </table>
+        @Html.Raw(ViewBag.editPaydist)
+        <table border="0" cellpadding="0" cellspacing="0" width="98%">
+            <tr style="height: 50px">
+                <td align="right">
+                    <input type="submit" value="save" class="button" name="btnsave" onclick="return ValidateAdjustmentInfo();" />
+                    <input type="button" name="btnCancel" class="EAdjclose button" value="Cancel" />
+                </td>
+            </tr>
+        </table>
+    }
+</body>
+<script type="text/javascript">
+    function isValidDate(strDate) {
+        var dateStr = strDate; var datePat = /^(\d{1,2})(\/|-)(\d{1,2})\2(\d{4})$/; var month, day, year; var monthArray = new Array(); var matchArray = dateStr.match(datePat); var intShowI; var args; var strError = ""; monthArray[0] = "January"; monthArray[1] = "February"; monthArray[2] = "March"; monthArray[3] = "April"; monthArray[4] = "May"; monthArray[5] = "June"; monthArray[6] = "July"; monthArray[7] = "August"; monthArray[8] = "September"; monthArray[9] = "October"; monthArray[10] = "November"; monthArray[11] = "December"; args = IsValidDate.arguments
+        if (dateStr != "") {
+            if (matchArray == null)
+            { strError = "Please enter date in mm/dd/yyyy format."; return strError; }
+            month = matchArray[1]; day = matchArray[3]; year = matchArray[4]; if (year <= 1753)
+            { strError = "Please enter a year greater than 1753."; return strError; }
+            if (month < 1 || month > 12)
+            { strError = "Month must be between 1 and 12."; return strError; }
+            if (day < 1 || day > 31)
+            { strError = "Day must be between 1 and 31."; return strError; }
+            if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+                strError = monthArray[month - 1] + " doesn't have 31 days!"
+                return strError;
+            }
+            if (month == 2) {
+                var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)); if (day > 29 || (day == 29 && !isleap))
+                { strError = "February " + year + " doesn't have " + day + " days!"; return strError; }
+            }
+        }
+        return strError;
+    }
+    $("#txtAdjDate").datepicker({
+        dateFormat: 'mm/dd/yy',
+        changeMonth: true,
+        changeYear: true,
+        //                showCurrentAtPos: 1,
+        showWeeks: true,
+        inline: true,
+        numberOfMonths: [1, 1],
+        yearRange: "1950:2020",
+        showOn: "button",
+        buttonImage: "../Images/calender.gif",
+        buttonImageOnly: true
+
+    });
+    $(document).ready(function () {
+        var patadjname = "@ViewBag.patadjName";
+            $("#lblAdjto").html(patadjname);
+            @*var refadj = "@ViewBag.EAdjRefName";
+            if (refadj != null && refadj != "") {
+                document.getElementById("trrefAdj").style.display = "";
+                $("#lblRefAdjto").html(refadj);
+            } else {
+                document.getElementById("trrefAdj").style.display = "none";
+            }*@
+            var adjDirection = "@ViewBag.adjuDirection";
+            $("#lblAdjustmentType").html(adjDirection);
+            var AdjDate = "@ViewBag.dAdj";
+            $("#txtAdjDate").val(AdjDate);
+            var adjAmt = "@ViewBag.AdjAmount";
+            $("#txtAdjAmount").val(adjAmt);
+            var adjtrType = "@ViewBag.lblTransactonType";
+            $("#lblTransactonType").html(adjtrType);
+        });
+        function ValidateAdjustmentInfo() {
+            if (document.getElementById('txtAdjDate').value == '') {
+                //                Glb_ShowAlert('Please enter date');
+                InlineAlert('lblErrEdate1', 'tdEAdjDate1', 'Please enter date')
+                document.getElementById('txtAdjDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrEdate1', 'tdEAdjDate1', '#FFFFFF')
+            }
+            var strRetAlert = isValidDate(document.getElementById('txtAdjDate').value)
+            if (strRetAlert != "") {
+                //                Glb_ShowAlert(strRetAlert);
+                InlineAlert('lblErrEdate1', 'tdEAdjDate1', strRetAlert)
+                document.getElementById('txtAdjDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrEdate1', 'tdEAdjDate1', '#FFFFFF')
+            }
+            if (document.getElementById('txtAdjDate').value.length > 0) {
+                var date = document.getElementById('txtAdjDate').value;
+                var len = document.getElementById('txtAdjDate').value.length;
+                for (var i = 0; i < len; i++) {
+
+                    var k = date.charAt(i);
+                    var digits = "0123456789/";
+                    if ((digits.indexOf(k, 0)) == -1) {
+                        //                        Glb_ShowAlert('Please enter valid date');
+                        InlineAlert('lblErrEdate1', 'tdEAdjDate1', 'Please enter valid date')
+                        document.getElementById('txtAdjDate').value = '';
+                        document.getElementById('txtAdjDate').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblErrEdate1', 'tdEAdjDate1', '#FFFFFF')
+                    }
+                }
+            }
+            var dtCur = new Date();
+            var dtGiven = new Date(document.getElementById('txtAdjDate').value);
+            if (dtCur < dtGiven) {
+                //                Glb_ShowAlert("Invalid charge info!!! charge date exceeding the current date.");
+                InlineAlert('lblErrEdate1', 'tdEAdjDate1', 'Invalid charge info!!! charge date exceeding the current date.')
+                document.getElementById('txtAdjDate').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrEdate1', 'tdEAdjDate1', '#FFFFFF')
+            }
+            var St = new Date(document.getElementById('hdnregdate').value);
+            var En = new Date(document.getElementById('txtAdjDate').value);
+            if (St > En) {
+                St = St.getDate() + "/" + St.getMonth() + "/" + St.getYear();
+                En = En.getDate() + "/" + En.getMonth() + "/" + En.getYear();
+                if (St == En) {
+
+                }
+                else {
+                    //                    Glb_ShowAlert("Transaction date should be greater than patient register date")
+                    InlineAlert('lblErrEdate1', 'tdEAdjDate1', 'Transaction date should be greater than client register date')
+                    document.getElementById('txtAdjDate').focus();
+                    return false;
+                }
+            }
+            if (document.getElementById('txtAdjAmount').value == '' || document.getElementById('txtAdjAmount').value == '.' || document.getElementById('txtAdjAmount').value == '0') {
+
+                InlineAlert('lblErrEamount1', 'tdEAdjAmount1', 'Please enter valid amount')
+                document.getElementById('txtAdjAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrEamount1', 'tdEAdjAmount1', '#FFFFFF')
+            }
+            if (document.getElementById('txtAdjAmount').value == '') {
+
+                InlineAlert('lblErrEamount1', 'tdEAdjAmount1', 'Invalid payment info!!! payment amount can not be empty.')
+                document.getElementById('txtAdjAmount').focus();
+                return false;
+            }
+            else {
+                ClearInlineAlert('lblErrEamount1', 'tdEAdjAmount1', '#FFFFFF')
+            }
+            if (document.getElementById('txtAdjAmount').value != '') {
+                if (parseFloat(document.getElementById('txtAdjAmount').value) == '0') {
+
+                    InlineAlert('lblErrEamount1', 'tdEAdjAmount1', 'Invalid payment info!!!.')
+                    document.getElementById('txtAdjAmount').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrEamount1', 'tdEAdjAmount1', '#FFFFFF')
+                }
+            }
+            if (document.getElementById('txtAdjAmount').value.length > 0) {
+                var amount = document.getElementById('txtAdjAmount').value;
+                var len = document.getElementById('txtAdjAmount').value.length;
+                for (var i = 0; i < len; i++) {
+
+                    var k = amount.charAt(i);
+                    var digits = "0123456789.";
+                    if ((digits.indexOf(k, 0)) == -1) {
+
+                        InlineAlert('lblErrEamount1', 'tdEAdjAmount1', 'Please enter valid amount')
+                        document.getElementById('txtAdjAmount').value = '';
+                        document.getElementById('txtAdjAmount').focus();
+                        return false;
+                    }
+                    else {
+                        ClearInlineAlert('lblErrEamount1', 'tdEAdjAmount1', '#FFFFFF')
+                    }
+                }
+            }
+            if (document.getElementById('txtNotes').value != "") {
+                if (document.getElementById('txtNotes').value.length > 1000) {
+
+                    InlineAlert('lblErrENote', 'tdEAdjNote', 'Invalid payment info!!! notes is exceeding the limit of 1000 characters.')
+                    document.getElementById('txtNotes').focus();
+                    return false;
+                }
+                else {
+                    ClearInlineAlert('lblErrENote', 'tdEAdjNote', '#FFFFFF')
+                }
+            }
+        }
+    </script>
+</html>

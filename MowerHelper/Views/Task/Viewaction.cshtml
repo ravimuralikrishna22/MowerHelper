@@ -1,0 +1,170 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+
+
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" media="all" />
+
+    <style type="text/css">
+        
+        .lastaction
+        {
+            width: 20px;
+        }
+        .comments
+        {
+            width: 100px;
+        }
+      .editaction
+        {
+            width: 5px;
+        }
+        .deleteaction
+        {
+            width: 5px;
+        }
+       
+    </style>
+    <script type="text/javascript">
+        $(".confirmDialogonActions").live("click",
+        function (e) {
+            var url = $(this).attr('href');
+            $("#dialog-confirmonActions").dialog({
+                autoOpen: false,
+                height: 170,
+                width: 350,
+                show: { effect: 'drop', direction: "up" },
+                modal: true,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog("close");
+                        window.location = url;
+
+                    },
+                    "No": function () {
+                        $(this).dialog("close");
+
+                    }
+                }
+            });
+            $("#dialog-confirmonActions").dialog('open');
+            return false;
+        });
+        var linkObj;
+
+        $(function () {
+            //$('#updateDialogonActions').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+
+
+
+            //$(".EditDialogonActions").click(function () {
+            //    //change the title of the dialog
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#updateDialogonActions');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+        });
+    </script>
+    <script type="text/javascript">
+
+        $.ajaxSetup({ cache: false });
+
+        $(document).ready(function () {
+
+
+            $(".Editactionclose").live("click", function (e) {
+                $('#updateDialogonActions').dialog("close");
+            });
+        });
+    </script>
+
+</head>
+
+
+<body>
+    @using (Html.BeginForm("Viewaction", "Task", FormMethod.Post, null))
+    {
+        <input type="hidden" id="hdnsearch" name="hdnsearch" value="@ViewBag.Actionitemtitle" />
+         <input type="hidden" id="hdnTaskId" name="hdnTaskId" value="@ViewBag.TaskId" />
+        <input type="hidden" id="hdnTitle" name="hdnTitle" value="@ViewBag.actionitem" />
+                <div class="content-box-content">
+                <div id="gridcontent">
+
+                                 @{WebGrid grid = new WebGrid(Model, rowsPerPage: 5, ajaxUpdateContainerId: "gridcontent");
+                                                                            
+                                                if (grid.TotalRowCount != 0)
+                                                {
+                                                 
+                                                 
+                                                           @grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow", footerStyle: "gridFooter",
+                                                  columns: grid.Columns(
+                                       grid.Column("LastAction", "LastAction", style: "lastaction", canSort: false, format: @<text>@(@item.LastAction.ToString("dd/MM/yyyy") == "01/01/0001" ? String.Empty : @item.LastAction.ToString("dd/MM/yyyy"))</text>),
+
+                                      grid.Column("Actionitemtitle", "Comments", canSort: false, style: "comments"),
+
+                                                  grid.Column("", "Edit", canSort: false, style: "editaction",
+                                                  format: @<text>@*@Html.ActionLink(" ", "Editaction", new { Action_id = (int)item.Actionitem_id },
+                                   new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditDialogonActions", @title = "Click here to Edit action" })*@
+                                 <a href="#" class="EditDialogonActions" title = "Click here to Edit action" style="background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;" onclick="return Displaydialog('updateDialogonActions','@Url.Action("Editaction", new { Action_id = (int)item.Actionitem_id })','auto',900,'dvLoading',null,null);"> </a></text>),
+                                                  grid.Column("", "Delete", canSort: false, style: "deleteaction",
+                                                  format: @<text>@Html.ActionLink(" ", "Deleteaction", new { Action_id = (int)item.Actionitem_id },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialogonActions", @title = "Click here to delete contact" })</text>)
+                                                  ));
+                                    <br />
+                                    <br />
+                                                }
+                                                else
+                                                {
+                                    <table id="divoutmsg" width="100%">
+                                        <tr class="background_color">
+                                            <td align="center" valign="middle" height="25px">
+                                               No actions found
+                                            </td>
+                                        </tr>
+                                    </table>
+                                                }
+    }
+    </div>
+
+                         <div id="updateDialogonActions" title="Edit action">
+    </div>
+             <div id="dialog-confirmonActions" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete action?
+            </p>
+        </div>
+                </div>
+                        <table border="0" cellpadding="5" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td width="66%">
+                        </td>
+                        <td align="right" width="64%">
+
+                            &nbsp;
+                           <input type="button" class="actionclose1 button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+    }
+</body>
+</html>

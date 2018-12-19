@@ -1,0 +1,348 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+     @Styles.Render("~/Content/themes/base/jqueryCSS")
+    @Scripts.Render("~/ThScripts/ThJquery")
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+//        $(document).ready(function () {
+
+//            $("#ddlInvoiceYear").val("@ViewBag.ddlyear");
+//            document.getElementById('@ViewBag.monthName').bgColor = "#549E00";
+////            document.getElementById('@ViewBag.monthName').style.color = "white";
+//        });
+//        function invoiceCancel() {
+//            window.location = '../Admin/FT_servicesTransaction';
+//        }
+        $(document).ready(function () {
+            if (@Session["roleid"].ToString() == "1") {
+                $("#tdtabs").removeClass("tab-background");
+                $("#tdddl").addClass("background_color");
+            }
+            $("#ddlInvoiceYear").val("@ViewBag.ddlyear");
+            document.getElementById('@ViewBag.monthName').bgColor = "#549E00";
+            //            document.getElementById('@ViewBag.monthName').style.color = "white";
+            $("#ddlInvoiceYear").change(function () {
+                window.location = '../Admin/PracticeServicesInvoice?ddlInvoiceYear=' + $("#ddlInvoiceYear").val();
+            });
+
+        });
+        function invoiceCancel() {
+          //  alert(@Session["roleid"].ToString());
+         if (@Session["roleid"].ToString() != "1") {
+            window.location = '../Admin/FT_servicesTransaction';
+        }
+         else{
+             var proid=document.getElementById('hdnproid').value;
+             var proname=document.getElementById('hdnproname').value;
+             window.location = '../AdminHome/AdminLevelTransactionsList?pracId=' +proid +'&pracname=' +proname;
+        }
+        }
+
+        function selctlnk(obj,obj1)
+        {
+            window.location = '../Admin/PracticeServicesInvoice?ddlInvoiceYear=' + $("#ddlInvoiceYear").val() + '&monthName=' + obj + '&monthFull=' + obj1;
+        }
+    </script>
+</head>
+<body>
+@*@Html.BeginForm("PracticeServicesInvoice","Admin",FormMethod.Get,InsertionMode.Replace){*@
+@{Html.RenderAction("Topsection", "Tools");}
+    <div id="main-content">
+        @if (Session["RoleID"].ToString() == "1")
+            {
+        @Html.Partial("_NavigationTool")
+            }
+        <input type ="hidden" id="hdnproid" name="hdnproid" value="@ViewBag.proid" />
+             <input type ="hidden" id="hdnproname" name="hdnproname" value="@ViewBag.proname" />
+          <table width="100%" cellpadding="0" cellspacing="0">
+                 @if (Session["roleid"].ToString() != "1")
+                     {
+                            <tr id="trtabs" runat="server">
+                                <td width="100%" class="navigation">
+                                   
+                                 @*   <div class="admin-tab">
+                                        <a class="inadmin-link" id="acontent2"  href="../Billing/TransactionDisplay"><span>Customer Transactions</span>
+                                        </a>
+                                    </div>*@
+                                 @*   <div class="admin-tab">
+                                        <a class="inadmin-link" id="avideo" href="VideoAudioFiles" ><span>Video/Audio Files</span>
+                                        </a>
+                                    </div>*@
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument1" href="../OfficeExpenses/ExpenseLedger" ><span>My Business Expenses</span>
+                                        </a>
+                                    </div>
+                                   @* <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument" href="../Notes/ProfileNotes"><span>Notes</span>
+                                        </a>
+                                    </div>*@
+                                    
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument2" href="../Common/PasswordManagement" ><span>Password Management</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="admin-link" id="adocument3" href="FT_servicesTransaction" ><span>Mower Helper Transactions</span>
+                                        </a>
+                                    </div>
+                                                                         @if (ViewBag.Showtask == "Y")
+                                     {
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument4" href="../Task/TaskList" ><span>Tasks</span>
+                                        </a>
+                                    </div>
+                                                                         }
+                                     <div class="admin-tab" style="display:none;">
+                                        <a class="inadmin-link" id="adocument5" href="@Url.Action("Index","Technicians")" ><span>Technicians</span>
+                                        </a>
+                                    </div>
+                                     <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Admin/FTservices_addnewpayment" id="acontent"><span>Payment method</span>
+                                    </a>
+                                </div>
+                                     <div class="admin-tab">                                        
+                                        <a class="inadmin-link" href="../Messages/MessageFromHelp" id="amsgcontent"><span>Messages</span></a>
+                                    </div>
+                                     @if(ViewBag.Showforums=="Y"){
+                                      <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Forums/ForumsHome" id="acontent5"><span>Forums</span>
+                                    </a>
+                                </div>
+                                    }
+                                </td>
+                            </tr>
+                 }
+                        <tr class="background_color">
+                            <td id="tdtabs" class="tab-background" width="100%">
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                     <tr id="tdddl">
+                                <td width="50%" align="right">
+                                 @Html.DropDownList("ddlInvoiceYear")
+                                </td>
+                                <td width="3%"></td>
+                                 <td align="left" >
+                                <input type="button" class="button" value="Cancel" name="btnInvoiceCancel" onclick="return invoiceCancel();" />
+                                </td>
+                                </tr>
+                                </table>
+                                <br />
+                                <table border="0" cellpadding="1" cellspacing="1" width="100%" class="border_style" >
+                              
+                                    <tr class="white_color" height="30">
+		<td  id="ThMonth1"  runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth1" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">January</asp:linkbutton>*@
+          @*  @Html.ActionLink("January", "PracticeServicesInvoice", "Admin", new { @monthName = 1, @monthFull="January" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk1" href="#" onclick="selctlnk('1','January')"; style = "color:DodgerBlue;font-weight:bold;">January</a>
+            </td>
+		<td id="ThMonth2" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth2" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">February</asp:linkbutton>*@
+            @* @Html.ActionLink("February", "PracticeServicesInvoice", "Admin", new { @monthName = 2, @monthFull = "February" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+              <a id="lnk2" href="#" onclick="selctlnk('2','February')"; style = "color:DodgerBlue;font-weight:bold;">February</a>
+             </td>
+		<td id="ThMonth3" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth3" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">March</asp:linkbutton>*@
+            @* @Html.ActionLink("March", "PracticeServicesInvoice", "Admin", new { @monthName = 3, @monthFull = "March" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+              <a id="lnk3" href="#" onclick="selctlnk('3','March')"; style = "color:DodgerBlue;font-weight:bold;">March</a>
+             </td>
+		<td id="ThMonth4" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth4" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">April</asp:linkbutton>*@
+            @*@Html.ActionLink("April", "PracticeServicesInvoice", "Admin", new { @monthName = 4, @monthFull = "April" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk4" href="#" onclick="selctlnk('4','April')"; style = "color:DodgerBlue;font-weight:bold;">April</a>
+            </td>
+		<td id="ThMonth5" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth5" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">May</asp:linkbutton>*@
+            @*@Html.ActionLink("May", "PracticeServicesInvoice", "Admin", new { @monthName = 5, @monthFull = "May" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk5" href="#" onclick="selctlnk('5','May')"; style = "color:DodgerBlue;font-weight:bold;">May</a>
+            </td>
+		<td id="ThMonth6" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth6" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">June</asp:linkbutton>*@
+           @* @Html.ActionLink("June", "PracticeServicesInvoice", "Admin", new { @monthName = 6, @monthFull = "June" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+            <a id="lnk6" href="#" onclick="selctlnk('6','June')"; style = "color:DodgerBlue;font-weight:bold;">June</a>
+            </td></tr>
+	                                <tr class="gray" height="30">
+		<td id="ThMonth7" style="WIDTH: 218px" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth7" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">July</asp:linkbutton>*@
+            @*@Html.ActionLink("July", "PracticeServicesInvoice", "Admin", new { @monthName = 7, @monthFull = "July" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk7" href="#" onclick="selctlnk('7','July')"; style = "color:DodgerBlue;font-weight:bold;">July</a>
+            </td>
+		<td id="ThMonth8" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth8" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">August</asp:linkbutton>*@
+            @*@Html.ActionLink("August", "PracticeServicesInvoice", "Admin", new { @monthName = 8, @monthFull = "August" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk8" href="#" onclick="selctlnk('8','August')"; style = "color:DodgerBlue;font-weight:bold;">August</a>
+            </td>
+		<td id="ThMonth9" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth9" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true"> September</asp:linkbutton>*@
+            @*@Html.ActionLink("September", "PracticeServicesInvoice", "Admin", new { @monthName = 9, @monthFull = "September" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk9" href="#" onclick="selctlnk('9','September')"; style = "color:DodgerBlue;font-weight:bold;">September</a>
+            </td>
+		<td id="ThMonth10" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth10" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">October</asp:linkbutton>*@
+           @* @Html.ActionLink("October", "PracticeServicesInvoice", "Admin", new { @monthName = 10, @monthFull = "October" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk10" href="#" onclick="selctlnk('10','October')"; style = "color:DodgerBlue;font-weight:bold;">October</a>
+            </td>
+		<td id="ThMonth11" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth11" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true"> November</asp:linkbutton>*@
+            @*@Html.ActionLink("November", "PracticeServicesInvoice", "Admin", new { @monthName = 11, @monthFull = "November" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk11" href="#" onclick="selctlnk('11','November')"; style = "color:DodgerBlue;font-weight:bold;">November</a>
+            </td>
+		<td id="ThMonth12" runat="server" align="center">
+			@*<asp:linkbutton id="lnkMonth12" onclick="MonthName_Click" runat="server" ForeColor="DodgerBlue" Font-Bold="true">December</asp:linkbutton>*@
+            @*@Html.ActionLink("December", "PracticeServicesInvoice", "Admin", new { @monthName = 12, @monthFull = "December" }, new { @style = "color:DodgerBlue;font-weight:bold;" })*@
+             <a id="lnk12" href="#" onclick="selctlnk('12','December')"; style = "color:DodgerBlue;font-weight:bold;">December</a>
+            </td></tr>
+                                </table>
+                           
+                           <br />
+                           <br />
+                           <div class="content-box">
+        <div class="content-box-header"><h3>List of invoices for the month of @ViewBag.monthFull  @ViewBag.ddlyear</h3>
+       
+        </div>
+         <div class="clear"></div>
+         <div class="content-box-content">
+          @{string heading1;
+            if (Request["sort"] == "Invoice_Date" && Request["sortdir"] == "ASC")
+           {
+               heading1 = "Invoice Date ▲";
+           }
+            else if (Request["sort"] == "Invoice_Date" && Request["sortdir"] == "DESC")
+           {
+               heading1 = "Invoice Date ▼";
+           }
+           else
+           {
+               heading1 = "Invoice Date ▼";
+           }
+                                            }
+                                            @{string Chgpagesize = (ViewBag.chgpagesize == null ? "5" : ViewBag.chgpagesize);
+                                              WebGrid Chggrid = new WebGrid(rowsPerPage: Convert.ToInt32(Chgpagesize));}
+                                            @{WebGrid grid = Chggrid.Bind(rowCount: Convert.ToInt32(ViewBag.Instotrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Invoice_Date", heading1, style: "Date"), grid.Column("InvoiceNo", "Invoice No", style: "ChgTo"), grid.Column("FromDate", "Invoice Start Date", style: "chgtype"), grid.Column("ToDate", "Invoice End Date"),
+
+                                                  grid.Column("InvoiceCharges", "Invoice Charges", style: "chgAmt", canSort: false), grid.Column("InvoicePaments", "Invoice Payments", canSort: false),
+                                                  grid.Column("PrevBalance", "Previous Balance", canSort: false), grid.Column("InvoiceBalance", "Invoice Balance", canSort: false),grid.Column("Action", canSort: false, style: "width: 10%;", format: @<text> 
+                                                  @{
+                                                      
+                                                      if (Session["roleid"].ToString() == "1")
+                                                      {
+                                                            @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                                  new SelectListItem{Text="Select",Value="s",Selected=true},                                                                 
+                                                                  new SelectListItem{ Text="View", Value = "v" },
+                                                                  new SelectListItem{Text="Regenerate",Value="R"},
+                                                              },
+      new { @class = "ddlactionclass",onchange = "return ddlchange(this.value, '" + item.Invoice_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:100px;" })
+                                                     
+                                                  }
+                                                  else{
+                                                       @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                                  new SelectListItem{Text="Select",Value="s",Selected=true},                                                                 
+                                                                  new SelectListItem{ Text="View", Value = "v" },                                                                
+                                                                 
+                                                              },
+      new { @class = "ddlactionclass",onchange = "return ddlchange(this.value, '" + item.Invoice_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:100px;" })
+                                                  }
+                                                        }
+                                                  </text>)
+                                                 )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdcharge" runat="server" width="100%">
+                            <tr><td align="center" valign="middle" height="25px"><span id="lblCharges" class="errormsg" style="font-size:13px;font-weight:bold;">There are no invoices for the selected time period</span></td></tr>
+                        </table>
+                                            
+                                              }
+                                            }
+
+         </div>
+        </div>
+
+                            </td>
+                        </tr>
+
+
+          </table>
+    </div>
+    @if(@ViewBag.Instotrec!=5)
+    {
+    <div style="height:230px"></div>
+    }
+@{Html.RenderAction("Bottomsections", "Tools");}
+@*}*@
+ <script type="text/javascript">
+     $(document).ready(function () {
+
+         $("#ddlInvoiceYear").val("@ViewBag.ddlyear");
+         document.getElementById('@ViewBag.monthName').bgColor = "#549E00";
+         document.getElementById('@ViewBag.monthName').style.color = "white";
+     });
+    </script>
+      <script type="text/javascript">
+          $(document).ready(function () {
+              var TopIndex = '@Session["TopIndex"]';
+              var roleid='@Session["roleid"]';
+              if(roleid!=1){
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").removeClass();
+                  $("#Menu3").removeClass();
+                  $("#Menu4").addClass("active");
+              }
+              else{
+                  $("#Menu0").removeClass();
+                  $("#Menu1").removeClass();
+                  $("#Menu2").removeClass();
+                  $("#Menu3").addClass("active");
+              }
+          });
+          function ddlchange(ddlid,ivid)
+          {
+              if(ddlid == "v")
+              {
+                  window.location="../Admin/InvoiceWizardpreview?ivid="+ ivid;
+              }
+              if(ddlid=="R")
+              {
+                  var retval=confirm("Do you really want to Re-Generate Invoice");
+                  if(retval==true)
+                  {
+                      window.location= "../Admin/RegenerateInvoice?ivid="+ ivid; 
+                  }
+                  else{
+                      $('.ddlactionclass').val('s');
+                      return false;
+                  }
+              }
+          }
+    </script>
+</body>
+</html>

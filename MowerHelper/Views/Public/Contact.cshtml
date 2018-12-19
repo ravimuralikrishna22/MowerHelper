@@ -1,0 +1,724 @@
+﻿@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_ProviderProfileMaster.cshtml";
+}
+
+   <html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <title>Mower Helper-Find an Mower Helper</title>
+@Styles.Render("~/content/ProviderProfile/css")
+@Styles.Render("~/Content/themes/base/jqueryCSS")
+@Scripts.Render("~/Scripts/Thscriptscript")
+   
+<style type="text/css">
+.dvLoading .ui-dialog-titlebar{display:none;}
+H4 {
+    color: #333;
+    font: italic 14px Georgia,"Times New Roman",Times,serif;
+    margin: 0 0 5px;
+}
+
+.text-center {
+    text-align: center;
+}
+.right_text_part p {
+    color: #333;
+    line-height: 18px;
+}
+
+p {
+    color: #333;
+    font: 0.8em/20px Arial,Helvetica,sans-serif;
+    margin: 12px 0 0;
+    text-align: left;
+}
+H3 {
+    color: #000;
+    font: italic 17px Georgia,"Times New Roman",Times,serif;
+    margin: 0;
+    padding: 10px 0 0;
+}
+
+H2 span {
+    color: #000;
+}
+
+H2 {
+    color: #024681;
+    font: italic 22px Georgia,"Times New Roman",Times,serif;
+}
+</style>
+   <script type="text/javascript">
+       $(document).ready(function () {
+           var comment = document.getElementById('hdncomments').value;
+           var fburl = document.getElementById('hdnfburl').value;
+           var ul = document.getElementById('ultabs');
+           var shosch1 = '@ViewBag.showschedule';
+            var shoschcog = '@ViewBag.Showschedulecog';
+            var ul = document.getElementById('ultabs');
+            if (comment == 'Y' && shosch1 == 'Y' && shoschcog == 'Y') {
+                if (fburl != "" && fburl != null) {
+                    document.getElementById('licomment').style.display = '';
+                    document.getElementById('lischedule').style.display = '';
+                    ul.setAttribute("style", "width:628px;");
+                }
+                else {
+                    document.getElementById('licomment').style.display = 'none';
+                    document.getElementById('lischedule').style.display = '';
+                    ul.setAttribute("style", "width:498px;");
+                }
+            }
+            else if (comment == 'Y') {
+                if (fburl != "" && fburl != null) {
+                    document.getElementById('licomment').style.display = '';
+                    document.getElementById('lischedule').style.display = 'none';
+                    ul.setAttribute("style", "width:498px;");
+                }
+                else {
+                    document.getElementById('licomment').style.display = 'none';
+                    document.getElementById('lischedule').style.display = 'none';
+                    ul.setAttribute("style", "width:364px;");
+                }
+            }
+            else if (shosch1 == 'Y' && shoschcog == 'Y') {
+                document.getElementById('lischedule').style.display = '';
+                document.getElementById('licomment').style.display = 'none';
+                ul.setAttribute("style", "width:498px;");
+            }
+
+            else {
+                document.getElementById('licomment').style.display = 'none';
+                document.getElementById('lischedule').style.display = 'none';
+                ul.setAttribute("style", "width:364px;");
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        function Category() {
+            this.Yourname = "";
+            this.YourEmail = "";
+            this.Vrificationcode = "";
+            this.Message = "";
+            this.Providerid = "";
+            this.MobileText = "";
+            this.PracticeId = "";
+            this.ProviderEmail = "";
+            this.Subject = "";
+            this.randomnumber = "";
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //            alert("1");
+            $('#btnSend').click(function () {
+
+                var _blnInd = true;
+                if (document.getElementById('txtEmail').value == '') {
+                    var _blnInd = false;
+                    alert("Enter  email id");
+                    document.getElementById('txtEmail').focus();
+                    return false;
+                }
+                if (document.getElementById('txtEmail').value != '') {
+                    var _blnInd = false;
+                    if (ValidateEmail(document.getElementById('txtEmail')) == 0) {
+                        var _blnInd = false;
+                        alert("Enter valid email");
+                        document.getElementById('txtEmail').focus();
+                        return false;
+                    }
+                }
+                if (document.getElementById('txtphone1').value != '' || document.getElementById('txtphone2').value != '' || document.getElementById('txtphone3').value != '') {
+                    var _blnInd = false;
+                    if (IsValidPhone(document.getElementById('txtphone1').value + document.getElementById('txtphone2').value + document.getElementById('txtphone3').value) == 'false') {
+                        var _blnInd = false;
+                        alert("Please enter valid phone number");
+                       
+                        document.getElementById('txtphone1').focus();
+                        return false;
+                    }
+                }
+                if (document.getElementById('txtphone1').value != "" || document.getElementById('txtphone2').value != "" || document.getElementById('txtphone3').value != "") {
+                    var _blnInd = false;
+                    if (fnStringFieldValidate(document.getElementById('txtphone1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtphone2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtphone3'), "0123456789") == 0) {
+                        var _blnInd = false;
+                        alert("Invalid phone number!!! phone number must be in numeric only.");
+                        document.getElementById('txtphone1').focus();
+                        return false;
+                    }
+
+                }
+                if (document.getElementById('txtimgKey2').value == '') {
+                    var _blnInd = false;
+                    alert("Enter verification code");
+                    document.getElementById('txtimgKey2').focus();
+                    return false;
+                }
+                if (_blnInd = true) {
+                    var cnt = new Category();
+                    cnt.Yourname = $("#txtYourname").val();
+                    cnt.YourEmail = $("#txtEmail").val();
+                    var ph1 = $("#txtphone1").val() + $("#txtphone2").val() + $("#txtphone3").val();
+                    cnt.MobileText = ph1;
+                    cnt.Subject = $("#ddlSubject").val();
+                    cnt.Vrificationcode = $("#txtimgKey2").val();
+                    cnt.Message = $("#txtMsg").val();
+                    cnt.PracticeId = $("#hdnpracticeid").val();
+                    cnt.Providerid = $("#hdnproviderid1").val();
+                    cnt.ProviderEmail = $("#hdnprovideremil12").val();
+                    cnt.randomnumber = $("#hdnrandom").val();
+                    var postData = JSON.stringify(cnt);
+                    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                    $.ajax({
+                        url: '@Url.Action("ContactWithTherapist", "Public")',
+                        type: 'POST',
+                        data: JSON.stringify(cnt), //you can serialize a form here as well OR simply put in the name value pairs of your data, ex. myTextBox='something'
+                        dataType: 'json',
+                        processData: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            $('#dvLoading').dialog('close');
+                            if (data == '1') {
+                                alert('Your mail has been sent successfully.');
+                                window.location.href = window.location.href = '@Url.RouteUrl("ProviderProfile",new { randomnumber = ViewBag.rnum, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })';
+
+                            }
+                            else if (data == '2') {
+                                alert("Please Configure Mail.");
+                                window.location.href = window.location.href = '@Url.RouteUrl("ProviderProfile",new { randomnumber = ViewBag.rnum, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })';
+
+                            }
+                            else if (data == '3') {
+                                alert("You need to enter valid Security Code to register ..");
+                              @*  window.location.href = '@Url.RouteUrl("ProviderContact", new { id = ViewBag.id, Therapistname =ViewBag.businessnm1})';*@
+                                //window.location.href = "../Contact" + "/" + cnt.Providerid; ;
+                            }
+                            else if (data.ErrorMessage == 'false') {
+                                alert('Session is expired. You will be redirected to session expired page');
+                                window.location = '@Url.Action("SessionExpire", "Home")';
+                            }
+                        }
+                        // error: function () { alert("You need to enter valid Security Code to register..."); window.location.href = "contact"; }
+                    });
+                    // $.post('Submitcontact', postData, recipeSuccess);
+                    // document.body.style.cursor = 'wait';
+
+                }
+            });
+        });
+        function ValidateEmail(ctrl) {
+            if (document.layers || document.getElementById || document.all) {
+                var str = ctrl.value;
+                var filter = /^([\w-]+(?:\.[\w-]+)*)@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
+                var testresults;
+                if (filter.test(str))
+                    testresults = true;
+                else
+                    testresults = false;
+
+                if (testresults == true) {
+                    var sindex = str.indexOf("@@");
+                    var strlength = str.length;
+                    var mailstr = str.substring(sindex, strlength);
+                    var eindex = mailstr.indexOf(".");
+                    if (eindex < 4)
+                        testresults = false;
+                    else
+                        testresults = true;
+                }
+
+                return (testresults);
+            }
+            else
+                return true;
+        }
+
+        $(function () {
+        $("#txtphone1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtphone2").focus();
+            }
+        });
+        $("#txtphone2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtphone3").focus();
+            }
+        });
+        });
+    </script>
+</head>
+<body>
+<div id="main">
+
+    <input type="hidden" id="hdnproviderid1" name="hdnproviderid1" value="@ViewBag.ProviderID" />
+    <input type="hidden" id="hdnprovideremil12" name="hdnprovideremil12" value="@ViewBag.provideremail" />
+    <input type="hidden" id="hdnpracticeid" name="hdnpracticeid" value="@ViewBag.practiceid" />
+     <input type="hidden" id="hdncomments" name="hdncomments" value="@ViewBag.fbcomments" />
+    <input type="hidden" id="hdnfburl" name="hdnfburl" value="@ViewBag.facebookurl" />
+     <input type="hidden" id="hdnrandom" name="hdnrandom" value="@ViewBag.id" />
+    <div id="content">
+        <div class="profile_yellow_bg">
+        
+        <div class="right_partbg">
+            <div class="right_text_part">
+            	<div class="profile_img">
+                
+               
+              @if (ViewBag.providerimage != null)
+              {
+                 
+                       <img src="@ViewBag.providerimage" width="120" height="150" alt="img">
+               
+              }
+               <h4 class="text-center">@Html.Raw(ViewBag.ProviderName)</h4>
+                <h4 class="text-center" style="font-weight:normal; margin:0 0 5px 0;">@Html.Raw(ViewBag.address)</h4>
+                <p class="text-center" style="font-size:13px;">
+                       @if (ViewBag.Vmoffice != "" && ViewBag.Vmoffice!=null)
+                    {
+                    <strong style="color:hsl(0, 0%, 20%);">Phone :</strong> @ViewBag.Vmoffice
+                       }
+              @*   @if (ViewBag.webextension != null & ViewBag.webextension != "")
+                 {
+                <strong style="color:hsl(0, 0%, 20%);"> Ext : </strong>@ViewBag.webextension
+                 }*@
+                     @*  @if (ViewBag.cellphone != null)
+                   {
+                 <br><strong style="color:hsl(0, 0%, 20%);">Cell Phone :</strong> @ViewBag.cellphone
+                   }*@
+                   @if (ViewBag.fax != null)
+                   {
+                 <br><strong style="color:hsl(0, 0%, 20%);">Fax :</strong> @ViewBag.fax
+                   }
+                 </p>
+              @*    @if (ViewBag.Address2 != null)
+                  {
+                     <p class="text-center" style="font-size:13px;"><strong style="color:hsl(0, 0%, 20%);">Additional Office :</strong> @Html.Raw(ViewBag.Address2)  </p>
+                  }*@
+                <div class="iner_bg">
+                <ul class="content_ul1">
+                	     @*  <li>
+                     @Html.RouteLink("Print this profile", "PrintProviderProfile", new { id = ViewBag.id, Therapistname = ViewBag.businessnm1 })
+                    </li>*@
+                    <li>
+                     @Html.RouteLink("Send this link to a friend", "Sendmailtofriend", new {  randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })
+                    </li>                
+               @if (ViewBag.Personalwebsite == "1" & ViewBag.Webaddress != null)
+               {
+                   string title1 = "Visit the website of " + ViewBag.ProviderName;
+                 //  string id9 = ViewBag.id;
+                 //  string url = ViewBag.lnkPersonalNavigateUrl;
+                   
+                	<li> <a id="lnkPersonalwebsite" title="@title1" target="_blank" href="@Url.Action("visitmywebsite", "Public", new { id = ViewBag.ProviderID, url = ViewBag.lnkPersonalNavigateUrl })"> Visit My Website</a></li>
+               }
+              @*   @if (ViewBag.NavigateUrl != null)
+                 {
+                     string title2 = "Get directions to office of " + ViewBag.ProviderName;
+                   <li>  <a id="directtofs" target="_blank" title="@title2" href="@ViewBag.NavigateUrl">Directions To Office</a></li>
+                 }*@
+                                      
+                                        @if (ViewBag.videocnt > 0)
+                                        {
+                                            //string id3 = ViewBag.id;
+                                            //string title3 = "video greetings of " + ViewBag.ProviderName;
+                    <li>   @Html.RouteLink("Video/Audio Greeting", "ProviderGreetings", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1, state=ViewBag.estatenm,city=ViewBag.ecity, zip = ViewBag.zipvalue }, new { @title = "video greetings of " + ViewBag.ProviderName })</li>
+                                        }
+                                      @*   @if (Convert.ToString(ViewBag.showschedule) == "Y" && ViewBag.Showschedulecog == "Y")
+                                          {
+                    <li>  @Html.RouteLink("Schedule", "ElectricianSchedule", new { id = ViewBag.id, Therapistname = ViewBag.businessnm1 }, new { @title = "schedule of " + ViewBag.ProviderName })</li>
+                                          }*@
+                   @*  @if (ViewBag.doccount > 0)
+                     {
+                        // string id = ViewBag.id;
+                        // string title4 = "view documents of " + ViewBag.ProviderName;
+                        // string praid = Convert.ToString(ViewBag.practiceid);
+                         <li>   @Html.RouteLink("Documents", "ProviderDocuments", new { id = ViewBag.id, Therapistname = ViewBag.businessnm1 }, new { @title = "view documents of " + ViewBag.ProviderName })</li>
+                     }*@
+                </ul>
+              </div>
+              
+              </div> 
+            </div>
+            <br />
+            <div class="world_mp" style="height:auto">
+              @*  <div class="follow_us iner_bg" style="text-align:center;">
+                 @if (ViewBag.lnkregclss != "graymenu")
+                 {
+                    <a href="@Url.Action("PatientRegistration", "Public", null)" class="@ViewBag.lnkregclss" runat="server"  onmouseover = "this.style.textDecoration='underline';" onmouseout = "this.style.textDecoration='none';" style="text-decoration: none; font-family:Arial; color:hsl(0, 0%, 20%); font-weight:bold; font-size:14px;" target="_parent" id="lnkRegisterwiththistherapistpractice">
+                        Register with this therapist/practice</a>
+                 }
+                 else
+                 {
+                    <a  class="@ViewBag.lnkregclss" runat="server" style="text-decoration: none; font-family:Arial; font-weight:bold; font-size:14px; color:hsl(0, 0%, 20%);" target="_parent" id="lnkRegisterwiththistherapistpractice1">
+                        Register with this therapist/practice</a>
+                 }
+                        @if (ViewBag.noservice != null)
+                        {
+                        <label id="lblNoService" style="color:Red;">@ViewBag.noservice</label>
+                        }
+            
+                <div class="clear"></div>    
+                </div>*@
+                <div class="social-media" style="padding-left:60px;">
+                  @if (ViewBag.twitterurl != null)
+                  {
+                     
+                <a id="atwitter" target="_blank"  style="height:25px; width:25px;" href="@ViewBag.twitterurl">
+                 <img alt="" id="imgtwitter" src="~/Images/icon-twitter.jpg" style="height:25px; width:25px;" />&nbsp;
+                </a>
+                  }
+                  else
+                  {
+                       <a id="atwitter" target="_blank"  style="height:25px; width:25px;">
+                 <img alt="" id="imgtwitter" src="~/Images/icon-twitter.jpg" style="height:25px; width:25px;" />&nbsp;
+                </a>
+                  }
+                          @if (ViewBag.facebookurl != null)
+                          {
+                    
+                                <a id="afacebook" target="_blank"  style="height:25px; width:25px;" href="@ViewBag.facebookurl">
+                <img alt="" id="imgfacebook" src="~/Images/icon-fb.jpg" style="height:25px; width:25px;" />&nbsp;&nbsp;
+                </a>
+                          }
+                          else
+                          {
+                               <a id="afacebook" target="_blank"  style="height:25px; width:25px;">
+                <img alt="" id="imgfacebook" src="~/Images/icon-fb.jpg" style="height:25px; width:25px;" />&nbsp;&nbsp;
+                </a>
+                          }
+                          </div>
+                <div class="right_text_part">
+                	<h3>Easy Access :</h3>
+                    <p style="font-size:13px;"><strong style="color:hsl(0, 0%, 20%);">Nearby Towns : </strong></p>
+                      @if (ViewBag.Dtlistcitescount > 0)
+                      {
+
+                          int i = 0;
+                          int cnt = 0;
+                          int j;
+                          int k = 0;          
+                    <ul class="content_ul4">
+                     @for (i = k; i <= ViewBag.Dtlistcitescount - 1; i++)
+                     {
+                         if (cnt < 2)
+                         {
+                             string city = ViewBag.DtlistCities[i].CityName + " ";
+                             //   string title5 = "Therapists in " + ViewBag.DtlistCities[i].CityName + ", " + ViewBag.DtlistCities[i].StateName;
+                             string ctynme = ViewBag.DtlistCities[i].CityName;
+                             string ctynme3 = ctynme.Trim().Replace(" ", "-");
+                               <li>@Html.RouteLink((string)ViewBag.DtlistCities[i].CityName, "Cities", new { city = city.Trim().ToString() }, new { @style = "font-family:Arial; font-size:9pt; color:hsl(0, 0%, 20%);;", @title = "Electricians in " + ViewBag.DtlistCities[i].CityName + ", " + ViewBag.DtlistCities[i].StateName })
+                                 <label id="lblState" style="font-family:Arial; font-size:9pt;">@ViewBag.DtlistCities[i].StateName</label></li>
+                             cnt = cnt + 1;
+
+                         }
+                         else
+                         {
+
+                             k = i;
+                             cnt = 0;
+                             i = ViewBag.Dtlistcitescount - 1;
+
+                         }
+                     }
+                    
+                    </ul>
+                      }
+                    <div class="clear"></div>
+                      @if (ViewBag.DtlistZIPCodescount > 0)
+                      {
+                          int l = 0;
+                          int cnt1 = 0;
+                          int m;
+                          int n = 0;
+                    <p style="font-size:13px;"><strong style="color:hsl(0, 0%, 20%);">Nearby ZIP Codes : </strong></p>
+                   
+                    <ul class="content_ul2">
+                     @for (m = 0; m <= ViewBag.rows2; m++)
+                     {
+
+
+                         for (l = m; l <= ViewBag.DtlistZIPCodescount - 1; l++)
+                         {
+                             if (cnt1 < 2)
+                             {
+                                 string id2 = ViewBag.DtlistZIPCodes[l].ZIPCode;
+                                 //string title6 = "Therapists in " + ViewBag.DtlistZIPCodes[l].ZIPCode;
+                                                           
+                                                          <li> @Html.RouteLink(id2, "ZipcodeSearch", new { id = id2.Trim().ToString() }, new { @title = "Electricians in " + ViewBag.DtlistZIPCodes[l].ZIPCode, @style = "font-family:Arial; font-size:9pt; color:hsl(0, 0%, 20%);" })</li>
+                                                                
+
+                                 cnt1 = cnt1 + 1;
+
+                             }
+                             else
+                             {
+
+                                 n = l;
+                                 cnt1 = 0;
+                                 l = ViewBag.DtlistZIPCodescount - 1;
+
+                             }
+                         }
+
+                     }
+                    
+                    </ul>
+                    <div class="clear"></div>
+                      }
+                </div>
+        	</div>
+            <br><br><br>
+            
+        </div>
+        
+        <div class="center_part" style="width:700px;">
+        	
+                  	
+            @{
+                string countrytitle = "Electricians in " + ViewBag.country;
+                string statetitle = "Electricians in " + ViewBag.statenm;
+                string citytitle = "Electricians in " + ViewBag.citynm;
+                string countrynm1 = ViewBag.country;
+                string country = countrynm1.Trim().Replace(" ", "-");
+                string statename = "» " + ViewBag.StateNm;
+                string cityname = "» " + ViewBag.citynm;
+                                       // string cty = ViewBag.citynm;
+                    }
+                    <table width="100%" >
+                    <tr>
+                    <td style="text-align:left;">
+                    
+                                   @if (ViewBag.previousrecord != null)
+                                   {
+                                       string prepronm = ViewBag.preproname;
+                            @Html.RouteLink("« Previous Profile", "ProviderProfile", new { randomnumber = ViewBag.previousrecord, Therapistname = ViewBag.preproname, state=ViewBag.estatenm,city=ViewBag.ecity, zip = ViewBag.nextprezip }, new { @class = "previes", @title = prepronm })
+                                   }
+                    </td>
+                     <td style="text-align:center;">
+                     <div class="directory_right">
+ 
+             
+              @Html.RouteLink(countrynm1, "International", new { countryname = country }, new { @title = countrytitle, @style = "float:left; padding:0 6px; color:#02559B; font:bold 13px Arial,Helvetica,sans-serif;" })
+              
+              
+            
+               @Html.RouteLink(statename, "ListOfProviders", new { StateNm = ViewBag.StateNm }, new { @title = statetitle, @style = "float:left; padding:0 6px; color:#02559B; font:bold 13px Arial,Helvetica,sans-serif; " })
+               
+                 @Html.RouteLink(cityname, "TopCityTherapists", new { StateNm = ViewBag.StateNm, city = ViewBag.citynm }, new { @title = citytitle, @style = "float:left; padding:0 6px; color:#02559B; font:bold 13px Arial,Helvetica,sans-serif;" })
+               
+            
+            </div>
+                    </td>
+                     <td style="text-align:right;">
+                 @if (ViewBag.nextrecord != null)
+                 {
+                     string nextpronm = ViewBag.nextprovnme;
+                      
+                            @Html.RouteLink("Next Profile »", "ProviderProfile", new { randomnumber = ViewBag.nextrecord, Therapistname = ViewBag.nextprovnme, state=ViewBag.estatenm,city=ViewBag.ecity, zip = ViewBag.nextprezip }, new { @class = "previes", @title = ViewBag.nextprovnme })
+                   
+                 }
+                    </td>
+                    </tr>
+                    </table>
+      		
+            <div class="clear"></div>
+            
+            <div style="width:671px;border-bottom:1px solid #cfdede;border-right:1px solid #cfdede; float:left;padding:2px 0 4px 0;">
+            <div class="clear"></div>   
+          <div class="statement-nav">
+           <ul id="ultabs" >
+          
+                        <li>
+                         @Html.RouteLink("Profile", "ProviderProfile", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })</li>
+                          <li> @Html.RouteLink("Services", "Providerservices", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })</li>
+                          <li>  @Html.RouteLink("Contact", "ProviderContact", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue }, new { @class = "current" })</li>
+               <li id="lischedule">  @Html.RouteLink("Schedule", "ElectricianSchedule", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })</li>
+               <li id="licomment">  @Html.RouteLink("Comments", "ProviderComments", new { randomnumber = ViewBag.id, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })</li>
+                          @* <li>  @Html.RouteLink("Directions", "ProviderDirections", new { id = ViewBag.id, Therapistname = ViewBag.businessnm1 })</li>*@
+            </ul>
+            </div>
+           <br /><br />
+          
+            @{
+                string providernm = ViewBag.ProviderName;
+                string businessnm = ViewBag.BusinessName;
+                ViewBag.nm = providernm.Contains(businessnm) ? null : "1";
+                }
+              
+                     <h2 style="margin:0;"><span>@ViewBag.ProviderName</span> </h2>
+           
+              @if (ViewBag.nm != null)
+              {
+                <h4 style="color:#333"><strong>@ViewBag.BusinessName</strong></h4>
+              }
+            <div class="statement-content">
+          @*  <p style="font-size:13px;" ><strong>Contact :</strong></p>*@
+           @*   <span style="text-align: justify; font-family: Arial; font-size: 13pt;" id="lblPersonalStatement"
+                                                runat="server">@Html.Raw(HttpUtility.HtmlDecode(ViewBag.desc))</span>*@
+                                                
+                                                    @if (ViewBag.contactinfo != "Y")
+                                                    {
+                                                        string contactinfo = ViewBag.ProviderName + " would like to hear from you but prefers to be contacted by phone.";
+                                                        string contactphone = "Please Call :&nbsp; " + ViewBag.Vmoffice;
+                                                      
+                                                                           <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                        <tr id="tblProviderDetails" runat="server">
+                            <td style="font-family: Arial; font-size: 9pt;">
+                                <table bgcolor="White" border="0" cellpadding="5" cellspacing="0" width="100%">
+                                    <tr id="trContactForm" >
+                                        <td bgcolor="#E4E4E4" style="font-family: Arial; font-size: 9pt;">
+                                            <table border="0" cellpadding="2" cellspacing="0" width="100%" style="padding-bottom: 9pt;">
+                                                <tr>
+                                                    <td>
+                                                     <a name="Contact"><span class="blockhead" style="font-family: Arial; font-size: 9pt;
+                                                            border-bottom: solid 1px #CCCCCC;">Contact :</span> </a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                     <table id="tblhidecontact">
+                                                            <tr>
+                                                                <td>
+                                                                <label id="lblcontactinfo" style="font-size:13px;">@contactinfo</label>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                <label id="lblvontactphone" style="font-size:13px;">@Html.Raw(contactphone)</label>
+                                                                   
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        </td>
+                                                        </tr>
+                                                        </table>
+                                                        </td>
+                                                        </tr>
+                                                        </table>
+                                                        </td>
+                                                        </tr>
+                                                        </table>
+                                                      
+                                                    }
+                                                    else
+                                                    {
+                                                          <div id="main-content">
+            <div class="content-box">
+                <div class="content-box-header">
+                 <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                        <tr>
+                            <td width="100%" style="padding:0px;">
+                                <h3 style="padding:0 0px 0 10px;">Contact</h3>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="content-box-content">
+                                                        <table id="tblshowcontact" class="border_style" cellspacing="1" cellpadding="6" width="100%" border="0">
+                                                            <tr class="White_color" style="height:30px;">
+                                                                <td style="font-family: Arial; font-size: 10pt; padding-left: 2px; text-align:right; width:50%;">
+                                                                  <span style="font-weight:bold; ">  Your Name :&nbsp;</span>
+                                                                </td>
+                                                                 <td style="font-family: Arial; font-size: 9pt; padding-left: 5px; width:50%;">
+                                                                <input type="text" id="txtYourname"  class="textfield" maxlength="100" style="width:200px; font-size:9pt; font-family:Arial" autocomplete="off" />
+                                                                 
+                                                                </td>
+                                                            </tr>
+                                                          
+                                                          
+                                                            <tr class="nav_blue_color" style="height:30px;">
+                                                                <td style="font-family: Arial; font-size: 10pt; padding-left: 2px; text-align:right;" class="block">
+                                                                    <font color="red"><b>&nbsp;*</b></font> <span style="font-weight:bold; ">Your Email :&nbsp;</span>
+                                                                </td>
+                                                                 <td style="padding-left: 5px;">
+                                                                   
+                                                                    <input type="text" id="txtEmail"  class="textfield"style="width:200px; font-size:9pt; font-family:Arial" autocomplete="off" />
+                                                                </td>
+                                                            </tr>
+                                                           
+                                                            <tr class="White_color" style="height:30px;">
+                                                                <td style="font-family: Arial; font-size: 10pt; padding-left: 2px; text-align:right;" class="block">
+                                                                     <span style="font-weight:bold; ">Your Phone Number :&nbsp;</span>
+                                                                </td>
+                                                                 <td style="padding-left: 5px;">
+                                                                
+                                                                        @* <input type="text" id="txtPhone" maxlength="15"  class="textfield" style="width:150px; font-size:9pt; font-family:Arial" autocomplete="off" />*@
+                                                                     <input type="text" id="txtphone1" name="txtphone1" autocomplete="off" style="width: 30px" maxlength="3" class="textfield" />-
+                                                                      <input type="text" id="txtphone2" autocomplete="off" name="txtphone2" style="width: 30px" maxlength="3" class="textfield" />-
+                                                                      <input type="text" id="txtphone3" autocomplete="off" name="txtphone3"  style="width: 40px" maxlength="4" class="textfield" />&nbsp;
+                                                                </td>
+                                                            </tr>
+                                                           
+                                                          
+                                                            <tr class="nav_blue_color" style="height:30px;">
+                                                                <td style="font-family: Arial; font-size: 10pt; padding-left: 2px; text-align:right;" class="block">
+                                                                     <span style="font-weight:bold; ">Subject :&nbsp;</span>
+                                                                </td>
+                                                                <td style="font-family: Arial; font-size: 9pt; padding-left: 5px;">
+                                                                 
+                                                                              
+                                        <select name="ddlSubject" class="textfield" id="ddlSubject" style="width: 150px; font-family:Arial; font-size:9pt;">
+	<option  value="1">Appointment Request</option>
+	<option value="2">More Information</option>
+    <option value="3">Other</option>
+                                      </select>                          </td>
+                                                            </tr>
+                                                          
+                                                          
+                                                            <tr class="White_color" style="height:30px;">
+                                                                <td style="font-family: Arial; font-size: 10pt; padding-left: 2px; text-align:right;" class="block">
+                                                                     <span style="font-weight:bold; ">Type Verification Image :&nbsp;</span>
+                                                                </td>
+                                                                 <td style="padding-left: 5px;">
+                                                                 
+                                                                         <input type="text" id="txtimgKey2"  class="textfield" maxlength="100" style=" font-family:arial; Font-Size:9pt; Width:150px;"/>
+            
+                                  
+                                 @*  <span   style="width:60px; height:40px;background-color:transparent;font-size:16px;" >@ViewBag.captcha</span>*@
+                                       @*<input type="hidden" id="hdnkey" name="hdnkey" value="@ViewBag.captcha" />*@
+                                                                     <img style="padding-left:20px;width: 80px;" src="@Url.Action("ShowCaptchaImage", "Home")" />
+                                                                </td>
+                                                            </tr>
+                                                         
+                                                            <tr class="nav_blue_color" style="height:150px;">
+                                                                <td style="font-family: Arial; font-size: 10pt; padding-left: 2px; text-align:right;">
+                                                                    <span style="font-weight:bold; "> Message :&nbsp;</span>
+                                                                </td>
+                                                                  <td style="font-family: Arial; font-size: 9pt; padding-left: 5px;">
+                                                                         <textarea id="txtMsg" class="text" rows="2" cols="2" maxlength="1000" style="width:380px; height: 120px; margin-bottom:4px; margin-top:4px; margin-right:4px;"></textarea>
+                                                                </td>
+                                                            </tr>
+                                                           
+                                                            <tr class="White_color" style="height:30px;">
+                                                            <td></td>
+                                                                <td>
+                                              &nbsp;
+                                                                         <input id="btnSend" value="Send Message" class="button" style="width:105px"/>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                          </div>
+                                                        </div></div>
+                                                    }
+                                                </div>   
+        </div>
+          </div>
+        <div class="clear"></div>    
+        </div>
+        <div class="clear"></div>
+    </div>
+    
+</div>
+
+
+ <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     @*  <span style="font-weight: bold;">Processing</span>*@
+        <img src="~/Images/Ajax-Processing.gif" alt="Processing"  />
+    </div>
+
+
+
+
+</body>
+</html>

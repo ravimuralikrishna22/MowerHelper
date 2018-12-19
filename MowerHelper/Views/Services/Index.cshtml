@@ -1,0 +1,237 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+     <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css" >
+        .dvLoading .ui-dialog-titlebar{display:none;}
+    </style>
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" media="all" />
+           @Styles.Render("~/Content/themes/base/TherpistStyles")
+         @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+   @Scripts.Render("~/ThScripts/ThAjaxscripts")
+
+
+    
+</head>
+<body>
+    @using (Html.BeginForm("Index", "Services", FormMethod.Get, null))
+    {
+        Html.RenderAction("Topsection", "Tools");
+        <br />
+
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+        <div class="content-box">
+            <div class="content-box-header">
+
+                    <h3>
+                       Manage services</h3>
+                <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+@*@Html.ActionLink("Add new service", "AddNewService", null, new { @class = "clsservice", @style = "color:#0066CC;font-size:14px;font-weight:bold;" })*@
+                    <a href="#" class="clsservice" style = "color:#0066CC;font-size:14px;font-weight:bold;" onclick="return Displaydialog('UpdserviceDialog','@Url.Action("AddNewService")','auto',1000,'dvLoading',null,null);">Add new service</a>
+</ul> 
+     </div>
+     <div class="content-box-content">
+          @{string Chgpagesize = (ViewBag.pagesize == null ? "10" : ViewBag.pagesize);
+            WebGrid Chggrid = new WebGrid(rowsPerPage: Convert.ToInt32(Chgpagesize));}
+                                            @{WebGrid grid = Chggrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                 columns: grid.Columns(
+
+                                grid.Column("BillingServiceTitle", "Service Name", canSort: true),
+
+                                grid.Column("BillingServiceDescription", "Description", canSort: false, format:@<text>
+                                            @{
+                                                <span>@Html.Raw(item.BillingServiceDescription)</span>
+                                            }
+                                            </text>
+),
+                                                      //grid.Column("Billing_ServiceType_ID", "Billing Service TypeID", canSort: false),
+
+   grid.Column("", "Edit", canSort: false,
+                                                  format:@<text>@*@Html.ActionLink(" ", "Editservice", new { bservid = item.BillingService_ID },
+                    new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditDialog", @title = "Click here to Edit expenses" })*@
+                                            <a href="#" class = "EditDialog" title = "Click here to Edit expenses" style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;" onclick="return Displaydialog('Editservicedialog','@Url.Action("Editservice", new { bservid = item.BillingService_ID })','auto',900,'dvLoading',null,null);"> </a></text>),
+ grid.Column("", "Delete", style: "cDel", canSort: false,
+                                                    format:@<text>@Html.ActionLink(" ", "DeleteServiceInfo", new { bservid = item.BillingService_ID},
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;width:8%;", @class = "confirmDialog" })</text>))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />                                               
+                                                <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>                                                 
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdcharge" runat="server" width="100%">
+                            <tr><td align="center" valign="middle" height="25px"><span id="lblCharges" class="errormsg" style="font-size:13px;font-weight:bold;">No services found</span></td></tr>
+                        </table>                                               
+                                              }
+                                            }
+
+
+
+
+  </div>
+ 
+    
+    </div>
+
+    </div>
+         
+                    <div id="UpdserviceDialog" title="Add service">
+      </div>
+                @*<div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>*@
+
+        <script type="text/javascript">
+            var linkObj;
+            $(function () {
+                //$('#UpdserviceDialog').dialog({
+                //    autoOpen: false,
+                //    width: 1000,
+                //    //                    height: 500,
+                //    resizable: false,
+                //    modal: true
+
+                //});
+
+
+                //$(".clsservice").click(function () {
+                //    //change the title of the dialog
+                //    linkObj = $(this);
+                //    var dialogDiv = $('#UpdserviceDialog');
+                //    //  $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                //    var viewUrl = linkObj.attr('href');
+                //    $.get(viewUrl, function (data) {
+                //        dialogDiv.html(data);
+                //        $('#dvLoading').dialog('close');
+                //        dialogDiv.dialog('open');
+                //    });
+                //    return false;
+                //});
+
+
+
+            });
+    </script>
+                                              if (grid.Rows.Count <= 9)
+                                              {
+                                                  if (grid.Rows.Count <= 4)
+                                                  {
+            <table id="tblbottom" runat="server">
+        <tr>
+   <td style="padding-top: 370px;"></td>
+  </tr></table>
+                                                  }
+                                                  else
+                                                  {
+      <table id="tblbottom1" runat="server">
+        <tr>
+   <td style="padding-top: 200px;"></td>
+  </tr></table>
+                                                  }
+                                              }
+                                              Html.RenderAction("Bottomsections", "Tools");
+
+
+    }
+               <div id="Editservicedialog" title="Edit service"></div>   
+        <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+     <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to delete the service?
+            </p>
+        </div>
+</body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            var roleid = '@Session["roleid"]';
+            if (roleid != 1) {
+                $("#Menu0").removeClass();
+                $("#Menu1").addClass("active");
+                $("#Menu2").removeClass();
+                $("#Menu3").removeClass();
+            }
+            else {
+                $("#Menu0").removeClass();
+                $("#Menu1").removeClass();
+                $("#Menu2").removeClass();
+                $("#Menu3").addClass("active");
+            }
+            $(".confirmDialog").live("click", function (e) {
+
+                var url = $(this).attr('href');
+                $("#dialog-confirm").dialog({
+                    autoOpen: false,
+                    height: 170,
+                    width: 350,
+                    show: { effect: 'drop', direction: "up" },
+                    modal: true,
+                    buttons: {
+                        "Yes": function () {
+                            $(this).dialog("close");
+                            window.location = url;
+
+                        },
+                        "No": function () {
+                            $(this).dialog("close");
+
+                        }
+                    }
+                });
+                $("#dialog-confirm").dialog('open');
+                return false;
+            });
+        });
+        //$(".EditDialog").click(function () {
+        //    linkObj = $(this);
+        //    var dialogDiv = $('#Editservicedialog');
+        //    // $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //    var viewUrl = linkObj.attr('href');
+        //    $.get(viewUrl, function (data) {
+        //        dialogDiv.html(data);
+        //        //  $('#dvLoading').dialog('close');
+        //        dialogDiv.dialog('open');
+        //    });
+        //    return false;
+        //});
+
+        //$('#Editservicedialog').dialog({
+        //    autoOpen: false,
+        //    width: 900,
+        //    resizable: false,
+        //    modal: true
+
+        //});
+        $(".editservclose").live("click", function (e) {
+            e.preventDefault();
+            $('#Editservicedialog').dialog('close');
+        });
+        $(".addservclose").live("click", function (e) {
+            e.preventDefault();
+            $('#UpdserviceDialog').dialog('close');
+        });
+    </script>
+</html>

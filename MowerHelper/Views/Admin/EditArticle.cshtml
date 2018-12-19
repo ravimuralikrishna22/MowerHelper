@@ -1,0 +1,1049 @@
+﻿@model MowerHelper.Models.Classes.StateCity
+@using Obout.Mvc.HTMLEditor;
+@using Obout.Mvc.ComboBox;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+         <title>Mower Helper-Find an Mower Helper</title>
+    <style type="text/css">
+       .multcolumn .ob_iCboICBC li
+        {
+            float: left;
+            width: 60px;
+          
+        }
+        
+        .longbg .ob_iCboICBC li
+        {
+            float: left;
+            width: 135px;
+        }
+        
+        /* For IE6 */
+        * HTML .multcolumn .ob_iCboICBC li
+        {
+            -width: 55px;
+        }
+        
+        * HTML  .multcolumn .ob_iCboICBC li b
+        {
+            width: 55px;
+            overflow: hidden;
+        }
+      
+    </style>
+                <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+          @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+     @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    <link href="~/Content/themes/base/jquery.ui.autocomplete.css" rel="stylesheet" type="text/css" />
+
+
+             <script type="text/javascript">
+                 function endsWith(str, suffix) {
+                     return str.indexOf(suffix, str.length - suffix.length) !== -1;
+                 }
+             </script>
+    <script type="text/javascript">
+        function ddlchange() {
+            document.getElementById('hdncat').value = document.getElementById('ddlCategory').value
+            //if (document.getElementById('hdncat').value != "0") {
+                document.getElementById('Addindex').style.display = "";
+                var ddllistCat = document.getElementById('ddlCategory').value;
+                var hdnartid = trim(document.getElementById('hdnartid').value);
+                window.location.href = '@Url.Action("EditArticle", "Admin")?ddllistCategory=' + ddllistCat + '&Article_ID=' + hdnartid;
+@*            }
+            else {
+                document.getElementById('Addindex').style.display = "none";
+                var hdnartid = trim(document.getElementById('hdnartid').value);
+                window.location.href = '@Url.Action("EditArticle", "Admin")?Article_ID=' + hdnartid;
+            }*@
+        }
+        $(document).ready(function () {
+            var setcat = "@ViewBag.ddlcat";
+            $("#ddlCategory").val(setcat);
+            if (setcat != null && setcat != "") {
+                document.getElementById('Addindex').style.display = "";
+            }
+            else {
+                document.getElementById('Addindex').style.display = "none";
+            }
+
+
+            //$('#divaddcategory').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+            //$('#divaddindex').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+            //$('#divaddvideo').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+
+            //$('#divaddFAQ').dialog({
+            //    autoOpen: false,
+            //    width: 900,
+            //    resizable: false,
+            //    modal: true
+
+            //});
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        });
+    </script>
+     <script type="text/javascript">
+         $(function () {
+
+             //$("#Addcategory").click(function () {
+             //    linkObj = $(this);
+             //    var dialogDiv = $('#divaddcategory');
+             //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+             //    var viewUrl = linkObj.attr('href');
+             //    $.get(viewUrl, function (data) {
+             //        dialogDiv.html(data);
+             //        $('#dvLoading').dialog('close');
+             //        dialogDiv.dialog('open');
+             //    });
+             //    return false;
+             //});
+
+             $("#Addindex").click(function () {
+                 //linkObj = $(this);
+                 //var dialogDiv = $('#divaddindex');
+                 //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                 //var viewUrl = linkObj.attr('href');
+                 var pcatid = document.getElementById('ddlCategory').value;
+                 var viewUrl = '../Admin/AddNewIndex?Parentcatid=' + pcatid;
+                 Displaydialog('divaddindex', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                 //$.get(viewUrl, function (data) {
+                 //    dialogDiv.html(data);
+                 //    $('#dvLoading').dialog('close');
+                 //    dialogDiv.dialog('open');
+                 //});
+                 //return false;
+             });
+
+             $("#adots").click(function () {
+                 //                alert("1");
+                 //linkObj = $(this);
+                 //var dialogDiv = $('#divaddvideo');
+                 //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                 var media = document.getElementById('hndmediaid').value;
+
+                 var delmeid = document.getElementById('hdndelmeid').value;
+                 //                Action("AddNewCategory","AdminFaqs",null)
+                 var viewUrl = "../AdminFaqs/Videolist?media=" + media + "&delmeid=" + delmeid;
+                 //  var viewUrl = linkObj.attr('href');
+                 //               var viewUrl = "../Profiles/Verifyuserview?verification_User_Id=" + verification_User_Id + '&Login_ID=' + Login_ID;
+                 Displaydialog('divaddvideo', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                 //$.get(viewUrl, function (data) {
+                 //    dialogDiv.html(data);
+                 //    $('#dvLoading').dialog('close');
+                 //    dialogDiv.dialog('open');
+                 //});
+                 //return false;
+             });
+
+
+             $(".mediaclose").click(function () {
+                 $('#divaddvideo').dialog('close');
+             });
+             $("#arelfaq").click(function () {
+                 //                alert("1");
+                 //linkObj = $(this);
+                 //var dialogDiv = $('#divaddFAQ');
+                 //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                 var checklist1 = document.getElementById('hdnchecklist1').value;
+                 var checklist2 = document.getElementById('hdnchecklist2').value;
+                 var checklist4 = document.getElementById('hdnchecklist4').value;
+                 var faq = document.getElementById('hdnfaqid').value;
+
+                 var delfaqid = document.getElementById('hdndelfaqid').value;
+                 var viewUrl = "../Admin/RelatedArticles?checklist1=" + checklist1 + "&checklist2=" + checklist2 + "&checklist4=" + checklist4 + "&faq=" + faq + "&delfaqid=" + delfaqid;
+                 Displaydialog('divaddFAQ', viewUrl, 'auto', 900, 'dvLoading', null, null);
+                 //$.get(viewUrl, function (data) {
+                 //    dialogDiv.html(data);
+                 //    $('#dvLoading').dialog('close');
+                 //    dialogDiv.dialog('open');
+                 //});
+                 //return false;
+             });
+         });
+</script>
+
+<script type="text/javascript">
+
+    function AddarticleSuccess(data) {
+        if (data.Success == true) {
+            window.location.href = '@Url.Action("Articles", "Admin")';
+        }
+        else {
+
+            if (data != '_Logon_') {
+                alert(data.ErrorMessage);
+            }
+        }
+    }
+
+    function AddcategorySuccess(data) {
+        if (data.Success == true) {
+            var hdnartid = trim(document.getElementById('hdnartid').value);
+            window.location.href = '@Url.Action("EditArticle", "Admin")?Article_ID=' + hdnartid;
+        }
+        //else if (data.ErrorMessage == 'expire') {
+        //    window.location.href = '../Home/SessionExpire';
+        //}
+        else {
+
+            if (data != '_Logon_') {
+                alert(data.ErrorMessage);
+            }
+            $('#NewCatdiv').dialog('open');
+        }
+    }
+
+    function AddindexSuccess(data) {
+        if (data.Success == true) {
+            $('#divaddindex').dialog('close');
+            var parentdropdownid = data.Object.parentdropdownid;
+            var hdnartid = trim(document.getElementById('hdnartid').value);
+            window.location.href = '@Url.Action("EditArticle", "Admin")?ddllistCategory=' + parentdropdownid + '&Article_ID=' + hdnartid;
+        }
+        //else if (data.ErrorMessage == 'expire') {
+        //    window.location.href = '../Home/SessionExpire';
+        //}
+        else {
+
+            if (data != '_Logon_') {
+                alert(data.ErrorMessage);
+            }
+            $('#divaddindex').dialog('open');
+        }
+    }
+</script>
+<script type="text/javascript">
+    function selected(obj, meid) {
+        document.getElementById('DataList1').style.display = '';
+        var delvideoid = document.getElementById('hdndelmeid').value;
+
+        if (delvideoid != "" && delvideoid != null) {
+            var str = delvideoid;
+            //alert(delvideoid);
+            var suffix = ",";
+            var con = endsWith(str, suffix);
+
+            if (con != true) {
+                str = str + ",";
+            }
+
+            var term = meid + ","; // for the term "World",
+            //alert(term);
+            var index = str.indexOf(term); // and get its index.
+            if (index != -1) {
+                //                alert(index);
+
+                document.getElementById('hdndelmeid').value = str.replace(term, '');
+
+            }
+            else {
+
+            }
+
+        }
+        var table = document.getElementById("DataList1");
+        var row = document.createElement("tr");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        td4.setAttribute("style", "display:none;");
+        if (document.getElementById('hdncnt').value != '' && document.getElementById('hdncnt').value != null) {
+
+            var cnt1 = document.getElementById('hdncnt').value;
+
+            var cnt3 = 1;
+
+            var cnt2 = cnt1++;
+            document.getElementById('hdncnt').value = +cnt2;
+            if (document.getElementById('hndmediaid').value != "" && document.getElementById('hndmediaid').value != null) {
+                var str1 = document.getElementById('hndmediaid').value;
+                var suffix1 = ",";
+                var con1 = endsWith(str1, suffix1);
+                if (con1 != true) {
+                    document.getElementById('hndmediaid').value = document.getElementById('hndmediaid').value + ',' + meid;
+                }
+                else {
+                    document.getElementById('hndmediaid').value = document.getElementById('hndmediaid').value + meid;
+                }
+            }
+            else {
+                document.getElementById('hndmediaid').value = meid;
+            }
+            //            alert(document.getElementById('hndmediaid').value);
+        }
+        else {
+            var cnt = 1;
+            document.getElementById('hdncnt').value = cnt;
+            document.getElementById('hndmediaid').value = meid;
+        }
+
+        var obj2 = document.createElement("span");
+        obj2.setAttribute("id", "lbl2");
+        obj2.innerHTML = obj;
+
+        // <input type="hidden" id="hndmediaid" name="hndmediaid"/>  
+        td2.appendChild(obj2);
+
+        var obj3 = document.createElement("img");
+        obj3.setAttribute("src", "../Images/cross.png");
+        obj3.setAttribute("id", meid);
+        obj3.setAttribute("onclick", "deleteRow(this,id)");
+        td3.appendChild(obj3);
+        var obj4 = document.createElement("input");
+        obj4.setAttribute("type", "hidden");
+        var hdnid = "hdn" + meid;
+        obj4.setAttribute("id", hdnid);
+        obj4.setAttribute("name", hdnid);
+        obj4.setAttribute("value", obj);
+        td4.appendChild(obj4)
+        row.appendChild(td2);
+        row.appendChild(td3);
+        row.appendChild(td4);
+        table.appendChild(row);
+        //        document.getElementById('lbl1').innerhtml = 1;
+        //        document.getElementById('lbl2').innerhtml = obj;
+        $('#divaddvideo').dialog('close');
+    }
+
+    function selected1(obj, faqid) {
+        document.getElementById('dlFaqs').style.display = '';
+        var delfaqid = document.getElementById('hdndelfaqid').value;
+        if (delfaqid != "" && delfaqid != null) {
+            var str = delfaqid;
+            //alert(delvideoid);
+            var suffix = ",";
+            var con = endsWith(str, suffix);
+            if (con != true) {
+                str = str + ",";
+            }
+
+            var term = faqid + ","; // for the term "World",
+            //alert(term);
+            var index = str.indexOf(term); // and get its index.
+            if (index != -1) {
+                //                alert(index);
+
+                document.getElementById('hdndelfaqid').value = str.replace(term, '');
+
+            }
+            else {
+
+            }
+
+        }
+        var table = document.getElementById("dlFaqs");
+        var row = document.createElement("tr");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        if (document.getElementById('hdncnt').value != '' && document.getElementById('hdncnt').value != null) {
+
+            var cnt1 = document.getElementById('hdncnt').value;
+
+            var cnt3 = 1;
+
+            var cnt2 = cnt1++;
+            document.getElementById('hdncnt').value = +cnt2;
+            var str1 = document.getElementById('hdnfaqid').value;
+            var suffix1 = ",";
+            var con1 = endsWith(str1, suffix1);
+            if (con1 != true) {
+                document.getElementById('hdnfaqid').value = document.getElementById('hdnfaqid').value + ',' + faqid;
+            }
+            else {
+                document.getElementById('hdnfaqid').value = document.getElementById('hdnfaqid').value + faqid;
+            }
+            //            alert(document.getElementById('hndmediaid').value);
+        }
+        else {
+            var cnt = 1;
+            document.getElementById('hdncnt').value = cnt;
+            document.getElementById('hdnfaqid').value = faqid;
+        }
+
+        var obj2 = document.createElement("span");
+        obj2.setAttribute("id", "lbl4");
+        obj2.innerHTML = obj;
+
+        td2.appendChild(obj2);
+
+        var obj3 = document.createElement("img");
+        obj3.setAttribute("src", "../Images/cross.png");
+        obj3.setAttribute("id", faqid);
+        obj3.setAttribute("onclick", "deleteRow1(this,id)");
+        td3.appendChild(obj3);
+        var obj4 = document.createElement("input");
+        obj4.setAttribute("type", "hidden");
+        var hdnid = "hdnfaq" + faqid;
+        obj4.setAttribute("id", hdnid);
+        obj4.setAttribute("name", hdnid);
+        obj4.setAttribute("value", obj);
+        td4.appendChild(obj4)
+        row.appendChild(td2);
+        row.appendChild(td3);
+        row.appendChild(td4);
+        table.appendChild(row);
+        //        document.getElementById('lbl1').innerhtml = 1;
+        //        document.getElementById('lbl2').innerhtml = obj;
+        $('#divaddFAQ').dialog('close');
+    }
+    function cancelclick() {
+
+        window.location.href = "../Admin/Articles";
+    }
+</script>
+<script type="text/javascript">
+    function deleteRow(btn, id) {
+        // document.getElementById('DataList1').style.display = 'none';
+        if (document.getElementById('hdndelmeid').value != "" && document.getElementById('hdndelmeid').value != null) {
+            var meid12 = document.getElementById('hdndelmeid').value;
+            var suffix = ",";
+            var condition = endsWith(meid12, suffix);
+            if (condition != true) {
+                document.getElementById('hdndelmeid').value = document.getElementById('hdndelmeid').value + "," + id;
+            }
+            else {
+                document.getElementById('hdndelmeid').value = document.getElementById('hdndelmeid').value + id;
+            }
+        }
+        else {
+            document.getElementById('hdndelmeid').value = id;
+        }
+        var dellist = document.getElementById('hdndelmeid').value;
+
+        if (dellist != "" && dellist != null) {
+            var medi3 = dellist.split(",");
+
+            for (var i = 0, len = medi3.length; i < len; i++) {
+                var media = document.getElementById('hndmediaid').value;
+
+                var suffix = ",";
+                var condition = endsWith(media, suffix);
+
+                if (condition != true) {
+                    media = media + ",";
+
+                }
+
+                if (medi3[i] != "" && medi3[i] != null) {
+                    if (media.indexOf(medi3[i]) > -1) {
+                        var text = medi3[i] + ",";
+                        media = media.replace(text, '');
+                        document.getElementById('hndmediaid').value = media;
+                    }
+                }
+
+            }
+        }
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+    function deleteRow1(btn, id) {
+        // document.getElementById('dlFaqs').style.display = 'none';
+        if (document.getElementById('hdndelfaqid').value != "" && document.getElementById('hdndelfaqid').value != null) {
+            var faq12 = document.getElementById('hdndelfaqid').value;
+            var suffix = ",";
+            var condition = endsWith(faq12, suffix);
+            if (condition != true) {
+                document.getElementById('hdndelfaqid').value = document.getElementById('hdndelfaqid').value + "," + id;
+            }
+            else {
+                document.getElementById('hdndelfaqid').value = document.getElementById('hdndelfaqid').value + id;
+            }
+        }
+        else {
+            document.getElementById('hdndelfaqid').value = id;
+        }
+
+
+
+        var dellist = document.getElementById('hdndelfaqid').value;
+
+        if (dellist != "" && dellist != null) {
+            var faq3 = dellist.split(",");
+
+            for (var i = 0, len = faq3.length; i < len; i++) {
+                var faq = document.getElementById('hdnfaqid').value;
+
+                var suffix = ",";
+                var condition = endsWith(faq, suffix);
+
+                if (condition != true) {
+                    faq = faq + ",";
+
+                }
+
+                if (faq3[i] != "" && faq3[i] != null) {
+                    if (faq.indexOf(faq3[i]) > -1) {
+                        var text = faq3[i] + ",";
+                        faq = faq.replace(text, '');
+                        document.getElementById('hdnfaqid').value = faq;
+                    }
+                }
+
+            }
+        }
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+</script>
+  <script type="text/javascript">
+      $(function () {
+
+          document.getElementById('hdnchecklist1').value = "False";
+          document.getElementById('hdnchecklist2').value = "False";
+          document.getElementById('hdnchecklist4').value = "False";
+      });
+      function changechecklist1() {
+          if (document.getElementById('chklist1').checked == true) {
+              document.getElementById('hdnchecklist1').value = "True";
+              document.getElementById('chklist2').checked = false;
+              document.getElementById('chklist4').checked = false;
+              document.getElementById("chklist2").disabled = true;
+              document.getElementById("chklist4").disabled = true;
+          }
+          else {
+              document.getElementById('hdnchecklist1').value = "False";
+              document.getElementById("chklist2").disabled = false;
+              document.getElementById("chklist4").disabled = false;
+          }
+      }
+      function changechecklist2() {
+          if (document.getElementById('chklist2').checked == true) {
+              document.getElementById('hdnchecklist2').value = "True";
+          }
+          else {
+              document.getElementById('hdnchecklist2').value = "False";
+          }
+      }
+      function changechecklist4() {
+          if (document.getElementById('chklist4').checked == true) {
+              document.getElementById('hdnchecklist4').value = "True";
+          }
+          else {
+              document.getElementById('hdnchecklist4').value = "False";
+          }
+      }
+</script>
+<script language="javascript" type="text/javascript">
+    function clearalerts() {
+        document.getElementById('tblmain').style.display = 'none';
+
+
+        document.getElementById('tdartindex').bgColor = 'White';
+        document.getElementById('tderrorartindex').style.display = 'none';
+
+        document.getElementById('tdartname').bgColor = 'White';
+        document.getElementById('tderrorartname').style.display = 'none';
+
+        document.getElementById('tdartdes').bgColor = 'White';
+        document.getElementById('tderrorartdesc').style.display = 'none';
+
+    }
+    function ValidateArticle() {
+        if (document.getElementById('ddlCategory').value != 0) {
+            if (document.getElementById('ComboIndexlist').value == '') {
+                clearalerts();
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tderrorartindex').style.display = '';
+                document.getElementById('tderrorartindex').bgColor = 'Orange';
+                document.getElementById('lblerrorartindex').style.display = '';
+                document.getElementById('lblerrorartindex').innerHTML = 'Please select article index';
+                document.getElementById('tdartindex').bgColor = 'Orange';
+                document.getElementById('ComboIndexlist').focus();
+                return false;
+            }
+        }
+        var artname = trim(document.getElementById('txtArticleName').value);
+        document.getElementById('txtArticleName').value = artname;
+        if (document.getElementById('txtArticleName').value == '') {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tderrorartname').style.display = '';
+            document.getElementById('tderrorartname').bgColor = 'Orange';
+            document.getElementById('lblerrorartname').style.display = '';
+            document.getElementById('lblerrorartname').innerHTML = 'Please select article name';
+            document.getElementById('tdartname').bgColor = 'Orange';
+            document.getElementById('txtArticleName').focus();
+            return false;
+        }
+
+        var artdesc = oboutGetEditor("txtArticleDesc").getContent();
+        //var artdesc = trim(document.getElementById('txtArticleDesc').value);
+        //document.getElementById('txtArticleDesc').value = artdesc;
+        if (artdesc == '') {
+            clearalerts();
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tderrorartdesc').style.display = '';
+            document.getElementById('tderrorartdesc').bgColor = 'Orange';
+            document.getElementById('lblerrorartdesc').style.display = '';
+            document.getElementById('lblerrorartdesc').innerHTML = 'Please enter article description';
+            document.getElementById('tdartdes').bgColor = 'Orange';
+            //document.getElementById('txtArticleDesc').focus();
+            return false;
+        }
+    }
+</script>
+  <script type="text/javascript">
+      $(document).ready(function () {
+          $(".mediaclose").live("click", function (e) {
+              var dialogDiv = $('#divaddvideo');
+              dialogDiv.dialog('close');
+              return false;
+          });
+          $(".faqclose").live("click", function (e) {
+              var dialogDiv = $('#divaddFAQ');
+              dialogDiv.dialog('close');
+              return false;
+          });
+
+      });
+      function ComboBoxPr_ItemClick(sender, selectedIndex) {
+          //alert("1");
+      }
+    </script>
+                    <script type="text/javascript">
+
+                        //$(function () {
+                        //    $("#txt_Date").datepicker({
+                        //        showOn: "button",
+                        //        buttonImage: "../Images/calender.gif",
+                        //        buttonImageOnly: true
+                        //    });
+                        //});
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+@*            var setcat = "@ViewBag.ParentCategory_ID";
+            $("#ddlCategory").val(setcat);*@
+
+
+            var setindex = "@ViewBag.articleindexvalue";
+            $("#ComboIndexlist").val(setindex);
+
+            var faqcount = "@ViewBag.relatedfaqcount";
+            if (faqcount > 0) {
+                document.getElementById('dlFaqs').style.display = '';
+            }
+            else {
+                document.getElementById('dlFaqs').style.display = 'none';
+            }
+
+
+            var linkcount = "@ViewBag.relatedlinkcount";
+            if (linkcount > 0) {
+                document.getElementById('DataList1').style.display = '';
+            }
+            else {
+                document.getElementById('DataList1').style.display = 'none';
+            }
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            JqAutocomplete('@Url.Action("GetProviderNames", "Admin")', 'txtauthor', 'hdnproviderid');
+         
+
+        });
+
+
+
+        function ClearImage() {
+            if (document.getElementById('flLogo').value != 0) {
+                //alert('2');
+
+                document.getElementById('lnkClear').style.display = '';
+            }
+        }
+        function RemoveMozila() {
+            // alert('5');
+            var who = document.getElementById("flLogo");
+            who.value = "";
+            var who2 = who.cloneNode(false);
+            who2.onchange = who.onchange;
+            who.parentNode.replaceChild(who2, who);
+            document.getElementById('lnkClear').style.display = 'none';
+        }
+        function RemoveImage() {
+            var who = document.getElementById("providerimage");
+            document.getElementById("tdimage").style.display = 'none';
+            document.getElementById('strimage').value = '';
+            document.getElementById('ExistedLogo').value = '';
+            document.getElementById('ExistedExtn').value = '';
+        }
+    </script>
+</head>
+<body>
+
+@*     @using (Ajax.BeginForm("EditArticle", "Admin", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "AddarticleSuccess"
+
+        }, new { @id = "updateCarForm" }))
+{
+
+ *@
+
+       @using (Html.BeginForm("EditArticle", "Admin", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+       {
+    <div>
+
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div> 
+
+
+   <div id="main-content"> 
+        @Html.Partial("_NavigationTool")
+               @Html.Hidden("strimage", (string)ViewBag.strimage)
+          @Html.Hidden("ExistedLogo", (string)ViewBag.ExistedLogo)
+            @Html.Hidden("ExistedExtn", (string)ViewBag.ExistedExtn)
+
+              <input type="hidden" id="hdnproviderid" name="hdnproviderid" value="@ViewBag.Provider_ID" />
+       @* <input type="hidden" id="hdnpracticeid" name="hdnpracticeid" />*@
+       <input type="hidden" id="hdncat" name="hdncat"/> 
+       <input type="hidden" id="hdnartid" name="hdnartid" value="@ViewBag.Article_ID" />
+   <input type="hidden" id="hdnfaqid" name="hdnfaqid" value="@ViewBag.Faqid" />
+       <input type="hidden" id="hdneditfaqid" name="hdneditfaqid" value="@ViewBag.Faqid" />
+                                         <input type="hidden" id="hdndelfaqid" name="hdndelfaqid" />
+                                  <input type="hidden" id="hdncnt" name="hdncnt" />             
+                                     <input type="hidden" id="hndmediaid" name="hndmediaid" value="@ViewBag.mediaid"/>  
+       <input type="hidden" id="hdneditmid" name="hdneditmid" value="@ViewBag.mediaid"/>  
+                                     <input type="hidden" id="hdndelmeid" name="hdndelmeid"/>  
+                                     <input type="hidden" id="hdnchecklist1" name="hdnchecklist1"/> 
+                                     <input type="hidden" id="hdnchecklist2" name="hdnchecklist2"/> 
+                                     <input type="hidden" id="hdnchecklist4" name="hdnchecklist4"/> 
+                                  
+                                                <div class="content-box">
+                                                <div class="content-box-header"><h3>Article</h3>
+                                          
+                                                </div>
+                                                <div class="content-box-content">
+                                                            @if (ViewBag.outmsg == "Y")
+        {
+    <table id="tblOutMsg" width="100%" cellspacing="0" cellpadding="0" >
+        <tr align="Center">
+            <td align="Center" style="padding-top:5px; padding-bottom:5px;">
+                <span ID="lblOutMsg" class="errormsg" style="color:Red;font-weight:bold;">Entered category already exist</span>
+            </td>
+        </tr>
+    </table>
+        }
+                                                <table class="border_style" cellpadding="4" cellspacing="1" width="100%" align="center">
+
+                                                    <tr class="nav_blue_color" height="20">
+                        <td align="right" width="25%">
+                           <strong>Article categories :&nbsp; </strong>
+                        </td>
+                        <td width="75%" align="left" id="tdCategory" runat="server">
+
+                                                                             @if (Model.StateList != null)
+                                                                             {
+                                                     @Html.DropDownList("ddlCategory", Model.StateList, new { onchange = "return ddlchange()" ,@style = "width:248px;height:25px;font:13px;" })
+                                                                             }
+                                              @*   <a class="AddCatClass" onclick="return false;" id="lnkmotive" href="../OfficeExpenses/NewCategory" style="font-weight:normal;">Add new category</a>*@
+                            <a id="Addcategory" href="#" onclick="return Displaydialog('divaddcategory','@Url.Action("AddNewCategory", "Admin", null)','auto',900,'dvLoading',null,null);">New category</a>
+                            &nbsp&nbsp;
+                            <span id="lblErrCat" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                                                    <tr class="white_color">
+                                                        <th align="right">
+                                                            <strong>Article index :&nbsp;</strong> </th>
+                                                        <td>
+                                                            <table>
+                                                                <tr valign="middle">
+                                                                    <td id="tdartindex">
+                                                                     @Html.Obout(new ComboBox("ComboIndexlist") { Width = 500, MenuWidth = 500, AllowEdit = false, SelectionMode = ComboBoxSelectionMode.Multiple, AutoPostBack = false, CssSettings = new ComboBoxCssSettings() { ItemsContainer = "ob_iCboIC longbg" },
+                            ClientSideEvents = new ComboBoxClientSideEvents()
+                            {
+                                OnSelectedIndexChanged = "ComboBoxPr_ItemClick"
+                            } })
+                                                                    
+                                                                    </td>
+                                                                    <td>
+                                                                    <a id="Addindex" href="#">New index</a>
+                                                                        <table align="left">
+                                                                            <tr>
+                                                                                <td>
+                                                                                  
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                   
+                                                    <tr class="nav_blue_color">
+                                                        <th align="right" >
+                                                            <font color="red">*</font><strong>Article name :&nbsp;</strong> </th>
+                                                                    <td id="tdartname">
+                                                                         @Html.TextBox("txtArticleName", (string)ViewBag.txtArticleName, new { @class = "textfield", MaxLength = "300", style = "width:500px;", autocomplete = "off" })
+                                                                    </td>
+                                                    </tr>
+                                                                                                        <tr class="nav_blue_color">
+                                                        <th align="right">
+                                                            <font color="red">*</font><strong>Article description :&nbsp;</strong> </th>
+                                                        <td style="padding-left:4px" id="tdartdes">
+                                                     @Html.Obout(new Obout.Mvc.HTMLEditor.Editor("txtArticleDesc") { ShowQuickFormat = false, Height = 300, Template = "example", Submit = false, Content = (string)ViewData["txtArticleDesc"], ModeSwitch = false, ShowWaitMessage = true, NoDrop = true, DefaultContextMenu = false })
+                                                  </td>
+                                                    </tr>
+
+
+                                                    <tr class="white_color">
+                                                        <th align="right">
+                                                            <strong>Related articles :&nbsp;</strong></th>
+                                                        <td>
+                                                            <table cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                <tr class="white_color">
+                                                                    <th align="right" width="20%">
+                                                                        <font color="red">*</font><strong>Add articles :</strong> &nbsp;</th>
+                                                                    <td width="50%" align="left">
+                                                                     <input type="text" id="txtrelquestion" name="txtrelquestion" readonly="true" class="textfield" style="width:300px;" />
+                                                                    </td>
+                                                                    <td align="left" width="10%" >
+                                                                      <a id="arelfaq" href="#">
+                                                                    <img id="btnrelfaq" src="~/Images/dots.jpg" /></a>
+                                                                    </td>
+                                                                    <td width="20%" style="display: none;">
+                                                                   @*     <asp:ImageButton ID="btnAddFAQ" runat="server" ImageUrl="../../Images/add.jpg" />*@
+                                                                    </td>
+                                                                </tr>
+                                                                <tr width="80%" class="white_color">
+                                                                    <td colspan="4">
+                                                                      
+                                                                                <table id="dlFaqs" style="display:none;" class="border_style" cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                                    <tr class="white_color">
+                                                                                       
+                                                                                        <td align="left" width="80%">
+                                                                                           <strong> Article title</strong> </td>
+                                                                                        <td align="center" width="10%">
+                                                                                            <strong>Delete</strong> </td>
+                                                                                    </tr>
+                                                                                      @if (ViewBag.relatedfaqcount > 0)
+                                                                                      {
+                                                                                          foreach (var item2 in ViewBag.relatedfaqs)
+                                                                                     {
+                                                                                         string question = item2["Title"];
+                                                                                         string faqid = Convert.ToString(item2["RelatedArticle_Id"]);
+                                                                                         string hdnfaid = "hdnfaq" + faqid;
+                                                                                          <tr >
+                                                                                      @*  <td >
+                                                                                            <span></span> </td>*@
+                                                                                        <td >
+                                                                                            <span>@question</span> </td>
+                                                                                        <td>
+
+                                                                                           <img src="../Images/cross.png" id="@faqid" onclick="deleteRow1(this,id)" /> </td>
+                                                                                              <td style="display:none;">
+                                                                                                  <input type="hidden" id="@hdnfaid" name="@hdnfaid" value="@question" />
+                                                                                              </td>
+                                                                                    </tr>
+                                                                                     }
+                                                                                     }
+                                                                                </table>
+                                                                   
+                                                                                                                                                          
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+
+
+                                                                                                        <tr class="nav_blue_color">
+                                                        <th align="right">
+                                                            <strong>Related video :&nbsp;</strong></th>
+                                                        <td>
+                                                            <table cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                <tr class="nav_blue_color">
+                                                                    <th align="right" width="20%">
+                                                                        <font color="red">*</font><strong>Add video :&nbsp;</strong> </th>
+                                                                    <td width="50%" align="left">
+                                                                    <input type="text" id="TxtLinks" name="TxtLinks" readonly="true" class="textfield" style="width:300px;" />
+                                                                    </td>
+                                                                    <td align="left" width="10%">
+                                                                    <a id="adots" href="#">
+                                                                    <img id="ImgDots" src="~/Images/dots.jpg" /></a>
+                                                                    </td>
+                                                                    <td width="20%" style="display: none;">
+                                                                     <img id="ImgAdd" src="~/Images/dots.jpg" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr width="80%" class="white_color">
+                                                                    <td colspan="4">
+                                                                     
+                                                                                <table id="DataList1" style="display:none;" cellpadding="1" cellspacing="1" width="100%" class="border_style">
+                                                                                    <tr class="white_color">
+                                                                                       
+                                                                                        <td align="left" width="80%">
+                                                                                            <strong>Title</strong> </td>
+                                                                                        <td align="center" width="10%">
+                                                                                           <strong> Delete</strong> </td>
+                                                                                    </tr>
+                                                                                      @if (ViewBag.relatedlinkcount>0){
+                                                                                     foreach (var item1 in ViewBag.relatedlinks)
+                                                                                     {
+                                                                                         string str = item1["Title"];
+                                                                                         string videoid = Convert.ToString(item1["Relatedvideo_Id"]);
+                                                                                         string hdnid = "hdn" + videoid;
+                                                                                          <tr >
+                                                                                       @* <td >
+                                                                                            <span></span> </td>*@
+                                                                                        <td >
+                                                                                            <span>@str</span> </td>
+                                                                                        <td>
+
+                                                                                           <img src="../Images/cross.png" id="@videoid" onclick="deleteRow(this,id)" /> </td>
+                                                                                              <td style="display:none;">
+                                                                                                  <input type="hidden" id="@hdnid" name="@hdnid" value="@str" />
+                                                                                              </td>
+                                                                                    </tr>
+                                                                                     }
+                                                                                     }
+                                                                                </table>
+                                                                           
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                      <tr class="nav_blue_color">
+                     <td align="Right" ID="tdimagemain">
+                                                                                <table ID="Table1"  align="right">
+                                                                                    <tr class="nav_blue_color">
+                                                                                     @if (ViewBag.image == "Y")
+                                                                                     {
+                                                                                        <td ID="tdimage" >
+                                                                                            <img alt="" id="providerimage" height="100"  width="80" src="@ViewBag.providerimage"  />
+                                                                                            <br />
+                                                                                            <span ID="imagename"  Visible="false"></span><br />
+                                                                                            <a id="removeLogo" style="cursor:pointer;"  onclick="return RemoveImage();">Remove image</a>
+                                                                                        </td>
+                                                                                     }
+                                                                                        <td align="Right">
+                                                            <b>Picture :&nbsp;</b>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>
+                                                                            </td>
+                                                                            <td width="65%" ID="tdformatmain">
+                                                                                <input  id="flLogo" type="file" name="flLogo" onchange="return ClearImage();" />
+                                                                                <a ID="lnkClear" style="display:none;cursor:pointer;" onclick="return RemoveMozila();"  >Clear image</a>
+                                                                            </td>
+                                                                        </tr>
+                                                            <tr class="nav_blue_color">
+                                                        <th align="right" >
+                                                            <strong>Author(Last/first name) :&nbsp;</strong> </th>
+                                                                    <td>
+                                                                         @Html.TextBox("txtauthor", (string)ViewBag.txtauthor, new { @class = "textfield", MaxLength = "300", style = "width:500px;", autocomplete = "off" })
+                                                                    </td>
+                                                    </tr>
+                                                                                                                                                <tr class="nav_blue_color">
+                                                        <th align="right">
+                                                            <strong>Author description :&nbsp;</strong> </th>
+                                                        <td style="padding-left:4px">
+                                                                                                                       @Html.Obout(new Obout.Mvc.HTMLEditor.Editor("txtautherdes") { ShowQuickFormat = false, Height = 300, Template = "example", Submit = false, Content = (string)ViewData["txtautherdes"], ModeSwitch = false, ShowWaitMessage = true, NoDrop = true, DefaultContextMenu = false })
+                                                  </td>
+                                                    </tr>
+                                                    <tr height="10" class="white_color" id="trnotedate" runat="server">
+                            <th align="right"> <strong>Created on :</strong>&nbsp;</th>
+                            <td align="left" id="tdNDate" runat="server">
+                                 @Html.TextBox("txt_Date", (string)ViewBag.txt_Date, new { @class = "textfield Datefield", MaxLength = "10", style = "width:80px", autocomplete = "off" })
+                                &nbsp;&nbsp;
+                                <span id="lblNoteDate" style="font-weight: bold; color: Black"></span>
+                            </td>
+                        </tr>
+                                                                </table>
+
+                                                    <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain" runat="server"
+                    style="display: none;">
+                                                                            <tr class="white_color" align="center">
+                        <td id="tderrorartindex" height="30px" style="display: none;">
+                        <label id="lblerrorartindex" style="font-weight:bold; color:Black;"></label>
+                            
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tderrorartname" height="30px" style="display: none;">
+                        <label id="lblerrorartname" style="font-weight:bold; color:Black;"></label>
+                            
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tderrorartdesc" height="30px" style="display: none;">
+                          <label id="lblerrorartdesc" style="font-weight:bold; color:Black;"></label>
+                           
+                        </td>
+                    </tr>
+                </table>
+                                                </div></div>
+                                                                   <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                           
+                                                    <tr class="white_color">
+                                                        <th style="height: 28px">
+                                                        </th>
+                                                        <td align="right" style="height: 28px; padding:5px 5px 5px 5px;">
+                                                    <input type="submit" id="btnAdd" name="btnAdd" value="Save" onclick="return ValidateArticle();" class="button" />
+                                                    <input id="btnClose" name="btnClose" value="Cancel" class="button" onclick="return cancelclick();" style="width:40px;" />
+                                                        </td>
+                                                    </tr>
+                                                </table></div>
+    <div>
+     @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+     <div id="divaddcategory" title="Add new category" ></div>
+    <div id="divaddindex" title="Add new index" ></div>
+     <div id="divaddvideo" title="Related video list"></div>
+     <div id="divaddFAQ" title="Related article list"></div>
+           <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div> 
+}  
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</body>
+</html>

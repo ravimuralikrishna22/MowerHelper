@@ -1,0 +1,466 @@
+﻿@model MowerHelper.Models.BLL.Billing.Invocie
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @* <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Scripts.Render("~/ThScripts/ThOtherscripts")
+    <style type="text/css">
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$(function () {
+            //$("#Fromdate,#Todate").datepicker({
+            //    dateFormat: 'mm/dd/yy',
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    //                showCurrentAtPos: 1,
+            //    showWeeks: true,
+            //    inline: true,
+            //    numberOfMonths: [1, 1],
+            //    yearRange: "1950:2020",
+            //    showOn: "button",
+            //    buttonImage: "../Images/calender.gif",
+            //    buttonImageOnly: true
+            //});
+            //});
+            $("#Fromdate").on('change keyup paste mouseup', function () {
+                //  alert("1");
+                if ($(this).val().length == 10) {
+                    //alert("2");
+                    if (CheckValidDate(document.getElementById('Fromdate')) == 0) { return false; }
+                    var St = document.getElementById('Fromdate').value; St = new Date(St);
+                    // alert(St);
+                    var targetDate = new Date(St);
+                    targetDate.setDate(targetDate.getDate() + 365);
+                    //   alert(targetDate);
+                    var todaydate = new Date();
+                    todaydate.setDate(todaydate.getDate());
+                    var dd = todaydate.getDate();
+                    var mm = todaydate.getMonth() + 1; //January is 0!
+                    var yyyy = todaydate.getFullYear();
+                    var today = mm + '/' + dd + '/' + yyyy;
+                    var dd1 = targetDate.getDate();
+                    var mm1 = targetDate.getMonth() + 1;
+                    var yyyy1 = targetDate.getFullYear();
+                    var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+                    //  alert(target1);
+                    if (targetDate > todaydate) { document.getElementById('Todate').value = today; return false; }
+                    else { document.getElementById('Todate').value = target1; return false; }
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function Invoice(Invid, InvName) {
+            $.ajax({
+                type: 'GET',
+                url: 'FileExists?InvoiceName=' + InvName,
+                success: function (data) {
+                    if (data.Object == "false") {
+                        alert("File is not existed in the system");
+                    }
+                    else {
+                        window.location.href = "@Url.Action("DownloadInvoice", "Clients")?invoiceid=" + Invid + "&InvoiceName=" + InvName;
+                    }
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        $(function () {
+
+            if ('@Session["roleid"].ToString()' != "1") {
+                $("#tdtabsadmin").removeClass("tab-background");
+            }
+            var roleid = $("#hdnrole").val();
+            if (roleid == "1") {
+                document.getElementById('auditdiv').style.display = '';
+            }
+            else {
+                document.getElementById('auditdiv').style.display = 'none';
+            }
+            //var psize = $('#NoofRecords').val();
+
+            var psize = '@Model.NoofRecords';
+            if (psize != '' && psize != 'undefined') {
+                $('#NoofRecords').val(psize);
+            }
+            else {
+                $('#NoofRecords').val(psize);
+
+            }
+            if (document.getElementById('Daterange').value == 'Custom') {
+                var fromdate = $('#Fromdate').val();
+                //alert(document.getElementById('Daterange').value);
+                //alert(fromdate)
+                if (fromdate != '') {
+                    $('#Fromdate').val(fromdate);
+                    document.getElementById('tddaterange').style.display = '';
+                }
+                else {
+                    $('#Fromdate').val("");
+                    document.getElementById('tddaterange').style.display = 'none';
+
+                }
+
+                var todate = $('#Todate').val();
+                if (todate != '') {
+                    $('#Todate').val(todate);
+                    document.getElementById('tddaterange').style.display = '';
+                }
+                else {
+                    $('#Todate').val("");
+                    document.getElementById('tddaterange').style.display = 'none';
+
+                }
+            }
+
+            var drange = $('#Daterange').val();
+            if (drange != '') {
+                $('#Daterange').val(drange);
+                if (drange == "Custom") {
+                    document.getElementById('tdmax').style.display = '';
+                    // document.getElementById('tdmax1').style.display = 'none';
+                }
+            }
+            else {
+                $('#Daterange').val("30");
+
+
+            }
+            $('#Daterange').change(function () {
+                if (document.getElementById('Daterange').value == 'Custom') {
+                    document.getElementById('tddaterange').style.display = '';
+                    document.getElementById('tdmax').style.display = '';
+                    // document.getElementById('tdmax1').style.display = 'none';
+                    $('#Fromdate').val("");
+                    $('#Todate').val("");
+                }
+                else {
+                    document.getElementById('tddaterange').style.display = 'none';
+                    document.getElementById('tdmax').style.display = 'none';
+                    // document.getElementById('tdmax1').style.display = '';
+                    $('#Fromdate').val("");
+                    $('#Todate').val("");
+                }
+                return false;
+            });
+            $("#NoofRecords").change(function () {
+                window.location.href = "../Clients/SentInvoices?sortdir=" + $("#orderBy").val() + "&Daterange=" + $("#Daterange").val() + "&Fromdate=" + $("#Fromdate").val() + "&Todate=" + $("#Todate").val() + "&NoofRecords=" + $("#NoofRecords").val();
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        Date.prototype.days = function (to) {
+            return Math.abs(Math.floor(to.getTime() / (3600 * 24 * 1000)) - Math.floor(this.getTime() / (3600 * 24 * 1000)))
+
+        }
+        function ValidSearch() {
+
+            if (document.getElementById('Daterange').selectedIndex == 0) {
+                alert("Select date");
+                return false;
+            }
+            if (document.getElementById('Daterange').value == 'Custom') {
+
+                if (document.getElementById('Fromdate').value != '' && document.getElementById('Fromdate').value != "mm/dd/yyyy") {
+                    if (CheckValidDate(document.getElementById('Fromdate')) == 0) {
+                        return false;
+                    }
+                }
+                if (document.getElementById('Todate').value != '' && document.getElementById('Todate').value != "mm/dd/yyyy") {
+                    if (CheckValidDate(document.getElementById('Todate')) == 0) {
+                        return false;
+                    }
+                }
+                var CDate = new Date()
+                var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear();
+                var FromDate = document.getElementById('Fromdate').value;
+                if (document.getElementById('Fromdate').value == '' || document.getElementById('Fromdate').value == "mm/dd/yyyy") {
+                    alert('Select from date');
+                    document.getElementById('Fromdate').focus();
+                    return false;
+                }
+                if (document.getElementById('Todate').value == '' || document.getElementById('Todate').value == "mm/dd/yyyy") {
+                    alert('Select to date');
+                    document.getElementById('Todate').focus();
+                    return false;
+                }
+                var St = document.getElementById('Fromdate').value;
+                St = new Date(St);
+                var En = document.getElementById('Todate').value;
+                En = new Date(En);
+                if (St > En) {
+                    alert("From date should not be greater than to date")
+                    return false;
+                }
+                var frmdt1 = new Date(document.getElementById('Fromdate').value);
+                var tdt1 = new Date(document.getElementById('Todate').value);
+                var diffdate = new Date(frmdt1).days(new Date(tdt1));
+                if (diffdate > 365) {
+                    alert("maximum 12 months is allowed");
+                    return false;
+                }
+            }
+
+            var Daterange = document.getElementById('Daterange').value;
+            var Fromdate = document.getElementById('Fromdate').value;
+            var Todate = document.getElementById('Todate').value;
+
+
+
+            if (Daterange == 'Custom') {
+                window.location.href = "../Clients/SentInvoices?orderBy=" + $("#orderBy").val() + "&Daterange=" + $("#Daterange").val() + "&Fromdate=" + $("#Fromdate").val() + "&Todate=" + $("#Todate").val() + "&NoofRecords=" + $("#NoofRecords").val();
+            }
+            else {
+                window.location.href = "../Clients/SentInvoices?orderBy=" + $("#orderBy").val() + "&Daterange=" + $("#Daterange").val() + "&NoofRecords=" + $("#NoofRecords").val();
+            }
+        }
+
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("SentInvoices", "Clients", FormMethod.Get, null))
+    {
+        <div>
+            @{Html.RenderAction("Topsection", "Tools");}
+        </div>
+        <div id="main-content">
+            @if (Session["RoleID"].ToString() == "1")
+            {
+                @Html.Partial("_NavigationTool")
+            }
+            <input type="hidden" id="hdnrole" name="hdnrole" value="@Session["RoleID"]" />
+            @*<input id="hndfrmdate" name="hndfrmdate" type="hidden" value="@Model.Fromdate"/>
+            <input id="hdntodate" name="hdntodate" type="hidden" value="@Model.Todate"/>*@
+            @*<input id="Daterange" name="Daterange" type="hidden" value="@ViewBag.Daterange"/>*@
+            <input type="hidden" name="hdnnoofrecords" id="hdnnoofrecords" value="@ViewBag.totrec" />
+            <input type="hidden" name="orderBy" id="orderBy" value="@Model.orderBy" />
+            <input type="hidden" name="OrderByItem" id="OrderByItem" value="@Model.OrderByItem" />
+            <input type="hidden" name="PageNo" id="PageNo" value="@Model.PageNo"
+            @*<input type="hidden" id="hdnfrmdt1" name="hdnfrmdt1" value="@ViewBag.Fromdate1" />
+            <input type="hidden" id="hdntodt1" name="hdntodt1" value="@ViewBag.Todate1" />*@
+            @*<input id="NoofRecords" name="NoofRecords" type="hidden" value="@Model.NoofRecords"/>*@
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr class="background_color">
+                    <td id="tdtabsadmin" class="tab-background" width="100%">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr class="background_color">
+                                <td align="left" valign="top" width="100%">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr id="trtabs">
+                                            <td width="100%" class="navigation">
+                                                <div class="admin-tab">
+                                                    <a class="inadmin-link" href="ClientFile" id="aprovider"><span>@Session["Patname"]</span>
+                                                    </a>
+                                                </div>
+
+                                                @* <div class="admin-tab">
+                                    <a class="inadmin-link" id="avideo" href="TransactionsList"><span>Transactions old</span>
+                                    </a>
+                                </div>*@
+                                                @if (Session["roleid"].ToString() != "8")
+                                                {                        <div class="admin-tab">
+                                                    <a class="inadmin-link" id="admin-linknew" href="TransactionsList"><span>Transactions</span>
+                                                    </a>
+                                                </div>
+                               
+                                                    <div class="admin-tab">
+                                                        <a class="inadmin-link" id="astatistic" href="ClentAppointments"><span>Appointments & General notes</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="admin-tab">
+                                                        <a class="admin-link" id="asentinvoices" href="SentInvoices"><span>Sent Invoices</span>
+                                                        </a>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="admin-tab">
+                                                        <a class="inadmin-link" id="astatistic1" href="ClentAppointments"><span>Appointments</span>
+                                                        </a>
+                                                    </div>
+                                                }
+                                                <div class="admin-tab" id="auditdiv">
+                                                    <a class="inadmin-link" id="aauditlog" href="AuditLoginfo"><span>Audit Log</span></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="background_color">
+                                            <td id="tdtabs" class="tab-background" width="100%" align="left">
+                                                <table width="100%" style="padding-top: 10px; padding-bottom: 10px;">
+                                                    <tr class="background_color">
+                                                        <td align="left" width="35%"></td>
+                                                        <td width="25%">
+                                                            <strong>Date range&nbsp;:&nbsp; </strong>
+                                                            @Html.DropDownList("Daterange", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                                                        </td>
+                                                        @*@Html.Partial("_CustomDate")*@
+                                                        <td id="tddaterange" style="display: none;" align="left">
+                                                            <strong>&nbsp;From&nbsp;:&nbsp;</strong>
+                                                            <input type="text" name="Fromdate" id="Fromdate" value="@Model.FromDate" class="textfield Datefield" maxlength="10" style="width: 70px;" />
+                                                            &nbsp;<strong>&nbsp;To :&nbsp;</strong>
+                                                            <input type="text" name="Todate" id="Todate" value="@Model.ToDate" class="textfield Datefield" maxlength="10" style="width: 70px;" />
+
+                                                        </td>
+                                                        <td id="tdmax" align="left" style="display: none;">
+                                                            <span>(Maximum 12 months)</span>
+                                                        </td>
+
+                                                        <td align="left">
+                                                            <a id="lnkSearch" href="#" onclick="return ValidSearch();" title="Search">
+                                                                <img alt="" id="" src="~/Images/search_button_green.png" style="width: 30px;" /></a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <div class="content-box">
+                                                    <div class="content-box-header">
+                                                        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+                                                            <tr>
+                                                                <td width="30%" align="left">
+                                                                    <h3>Sent Invoices</h3>
+                                                                </td>
+                                                                @if (ViewBag.totrec > 0)
+                                                                {
+                                                                    <td width="50%" align="center">
+                                                                        <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+
+                                                                            <li>
+                                                                                <strong>Rows per page :&nbsp;</strong>
+                                                                                @*  @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}*@
+                                                                                @Html.DropDownList("NoofRecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                }
+
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                    <div class="content-box-content">
+                                                        @{string heading1;
+                                                          if (Request["sort"] == "Invoice_Date" && Request["sortdir"] == "ASC")
+                                                          {
+                                                              heading1 = "Invoice Date ▲";
+                                                          }
+                                                          else if (Request["sort"] == "Invoice_Date" && Request["sortdir"] == "DESC")
+                                                          {
+                                                              heading1 = "Invoice Date ▼";
+                                                          }
+                                                          else
+                                                          {
+                                                              heading1 = "Invoice Date .";
+                                                          }
+                                                        }
+                                                        @{//string expsize = (ViewBag.expsize == null ? "10" : ViewBag.expsize);
+                                                          WebGrid Expgrid = new WebGrid(rowsPerPage: Model.NoofRecords);}
+                                                        @{WebGrid grid = Expgrid.Bind(rowCount: ViewBag.totrec, source: Model.ListOfInvoice, autoSortAndPage: false);
+                                                          if (grid.TotalRowCount != 0)
+                                                          {
+
+                                                              string pager = grid.Pager().ToString();
+                                                              int count = 0;
+                                                              string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                              string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                              string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                              columns: grid.Columns(grid.Column("SLNo", "#", canSort: false),
+                                                             grid.Column("Invoice_Date", heading1, canSort: true),
+                                                              grid.Column("ReceiptNo", "Receipt number", canSort: false),
+                                                                grid.Column("", "Action", canSort: false,
+                                                              format:@<text>
+                                                            <a href="#" onclick="return Invoice('@item.InvoiceID', '@item.InvoiceFileName')" class = "ViewImageClass", title = "Click here to download invoice" >Download Invoice
+                                                @*<img src="~/Images/pictures_folder_badged.png" width="24" height="24" />*@
+                                                            </a>
+                                                            @*<a href="@Url.Action("DownloadInvoice", "Clients", new { invoiceid = item.InvoiceID, InvoiceName = item.InvoiceFileName })" class = "ViewImageClass", title = "Click here to download invoice" >Download Invoice
+                                                <img src="~/Images/pictures_folder_badged.png" width="24" height="24" />
+                                                            </a>*@
+
+
+                                                            </text>
+)
+                                                             )).ToString();
+                                                              gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                            @(new HtmlString(gridhtml))
+                                                            <br />
+                                                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                            <br />
+
+
+
+                                                          }
+                                                          else
+                                                          {
+                                                            <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                                <tr id="trcpterror" class="white_color">
+                                                                    <td align="center" height="25px" valign="middle" colspan="2">
+                                                                        <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">No records found</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                          }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+    }
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var TopIndex = '@Session["TopIndex"]';
+        var roleid = '@Session["roleid"]';
+        if (roleid == "1") {
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        }
+    });
+</script>
+<script type="text/javascript" src="~/Scripts/DatepickerNew.js"></script>
+</html>

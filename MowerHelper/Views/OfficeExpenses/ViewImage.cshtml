@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <title>ViewImage</title>
+</head>
+<body>
+    <div>
+                                                    <table ID="Table1"  align="center">
+                                                        <tr class="nav_blue_color" style="padding-top:10px;">
+                                                            <td width="50%" style="text-align:right;padding-top:10px;" >
+                                                               <strong>Total cost :</strong>
+                                                            </td>
+                                                            <td width="50%" style="text-align: left;padding-top:10px;">
+                                                             
+                                                                @ViewBag.TotalCost
+                                                            </td>
+                                                            </tr>
+                                                                                    <tr class="nav_blue_color">
+                                                                                        <td style="text-align:center;padding-top:10px;"  colspan="2">
+                                                                                                <img id="providerimage" height="500" width="500" src="@ViewBag.providerimage"   />
+                                                                                        </td>
+                                                                                      @*  <td width="50%"></td>*@
+                                                                                     
+                                                                                    </tr>
+                                                                                </table>
+        <br />
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+                                              <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+    </div>
+</body>
+</html>

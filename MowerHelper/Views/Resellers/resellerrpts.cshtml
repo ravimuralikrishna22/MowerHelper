@@ -1,0 +1,121 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+@*<meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+   @Scripts.Render("~/ThScripts/ThJquery")
+ @*   @Styles.Render("~/Content/themes/base/TherpistStyles")*@
+<style type="text/css">
+    .button {
+	font-family: Verdana, Arial, sans-serif;
+	display: inline-block;
+	background: #459300 url('../images/bg-button-green.gif') top left repeat-x !important;
+	border: 1px solid #459300 !important;
+	padding: 4px 7px 4px 7px !important;
+	color: #fff !important;
+	font-size: 11px !important;
+	cursor: pointer;
+}
+    </style>
+<script type="text/javascript">
+    function goback() {
+       
+        window.location = "../Resellers/ResellerReport";
+                 return false;
+           
+         }
+         function Printpage() {
+             window.print();
+             return false;
+         }
+         $(document).ready(function () {
+             var apptdates = "@ViewBag.apptdate";
+            if (apptdates != null) {
+                $("#ApptDate").val(apptdates);
+            }
+            else {
+                var beginDate = "@ViewBag.begindate";
+                var endDate = "@ViewBag.enddate";
+                $("#ApptDate").val(beginDate + " to " + endDate);
+            }
+         });
+    function printResellerrptsexcel() {
+        //var fromdate = document.getElementById('hdnfrmdate').value;
+        //var todate = document.getElementById('hdntodate').value;
+        //var hdnPid = document.getElementById('hdnPid').value;
+        //var sort = document.getElementById('hdnsort').value;
+        //var sortdir = document.getElementById('hdnsortdir').value;
+        //var noofrecords = document.getElementById('hdnnoofrecords').value;
+        ////var noofrecords = document.getElementById('hdnnoofrecords').value;
+        // var daterange = document.getElementById('hdndaterange').value;
+        // var sortdir = document.getElementById('hdnsortdirection').value;
+        window.location.href ='@Url.Action("Resellerrptsexcel", "Resellers", new {Promocode=ViewBag.Promocode,From_date=ViewBag.From_date,To_Date=ViewBag.To_Date,Agent_id=ViewBag.Agent_id,name=ViewBag.name })';
+        return false;
+    }
+    function printResellerrptspdf() {
+        //var fromdate = document.getElementById('hdnfrmdate').value;
+        //var todate = document.getElementById('hdntodate').value;
+        //var hdnPid = document.getElementById('hdnPid').value;
+        //var sort = document.getElementById('hdnsort').value;
+        //var sortdir = document.getElementById('hdnsortdir').value;
+        //var noofrecords = document.getElementById('hdnnoofrecords').value;
+        //var noofrecords = document.getElementById('hdnnoofrecords').value;
+        // var daterange = document.getElementById('hdndaterange').value;
+        // var sortdir = document.getElementById('hdnsortdirection').value;
+        window.location.href = '@Url.Action("Resellerrptspdf","Resellers", new {Promocode=ViewBag.Promocode,From_date=ViewBag.From_date,To_Date=ViewBag.To_Date,Agent_id=ViewBag.Agent_id,name=ViewBag.name })';
+        return false;
+    }
+</script>
+</head>
+<body>   
+    <table style="border-collapse: collapse" bordercolor="#111111" cellspacing="0" cellpadding="0"
+            width="100%" align="center" border="0">
+            <tr>
+                <td class="lbl" width="2%">
+                </td>
+                <td class="lbl" align="right" width="96%" valign="baseline">
+                    <div class='noPrint'>
+                        @if (Convert.ToInt32(ViewBag.totalrecords)>0){
+                          <a id="lnkprint" href="" onclick="return printResellerrptspdf();" style="color: #0066CC;font-weight:bold;font-size:14px;">
+         <img alt="" id="" src="../Images/thumbnailCADZAOWV.png" style="width:40px;border-width:0px;" />
+           </a>
+                          <a id="lnkprint1" href="" onclick="return printResellerrptsexcel();" style="color: #0066CC;font-weight:bold;font-size:14px;">
+         <img alt="" id="" src="~/Images/ExportExcel.png" style="width:40px;border-width:0px;" />
+           </a>
+                        <input class="button" id="btnPrint" runat="server" type="button" value="Print" name="btnPrint" onclick="return Printpage();" />
+                        }
+                            <input class="button" id="btnCancel" runat="server" type="button" value="Close" name="Close" onclick="return goback();" />                       
+                    </div> 
+                </td>
+                <td class="lbl" width="2%">
+                </td>
+            </tr>
+        </table>
+    <table style="border-collapse: collapse" style="border-color:#111111" cellspacing="1" cellpadding="8"
+            width="100%" align="center" border="0" id="tblschedulerpt" runat="server">
+           
+            <tr>                
+                <td width="96%" >
+                   
+                </td>                
+            </tr>
+        </table>
+  @*  <br />*@
+    @Html.Raw(ViewBag.prntview)
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr style="height:40px">
+    <td></td>
+    </tr>
+      <tr>
+        <td class="ReportAlign" height="30px" align="center" colspan="10"><strong>***End-of-report***</strong></td>
+      </tr>
+    </table>
+        
+</body>
+</html>

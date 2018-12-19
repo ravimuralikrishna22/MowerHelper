@@ -1,0 +1,199 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+    <title>MobileSitevisitinghistory</title>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var psize = $('#hdnpagesize').val();
+            if (psize != '') {
+                $('#ddlrecords').val(psize);
+            }
+            else {
+                $('#ddlrecords').val("10");
+
+            }
+            //$('#diverrordialog').dialog({
+            //    autoOpen: false,
+            //    width: 1000,
+            //    resizable: false,
+            //    modal: true
+            //});
+            $(".close").live("click", function (e) {
+                e.preventDefault();
+                $('#diverrordialog').dialog('close');
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        var linkObj;
+        $(function () {
+
+            //$(".Errordetailslink").click(function () {
+            //    //change the title of the dialog
+            //    linkObj = $(this);
+            //    var dialogDiv = $('#diverrordialog');
+            //    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //    var viewUrl = linkObj.attr('href');
+            //    $.get(viewUrl, function (data) {
+            //        dialogDiv.html(data);
+            //        $('#dvLoading').dialog('close');
+            //        dialogDiv.dialog('open');
+            //    });
+            //    return false;
+            //});
+
+        });
+    </script>
+</head>
+<body>
+        @using (Html.BeginForm("MobileSitevisitinghistory", "Technicalarea", FormMethod.Get, null))
+    {
+             <input id="hdnpagesize" name="hdnpagesize" type="hidden" value="@ViewBag.gridsize"/>
+    <div>
+                <div class="content-box">
+            <div class="content-box-header">
+
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="85%" align="left">
+                    <h3>
+                        List of mobile site history details</h3>
+                </td>
+           @*     <td width="15%" align="center">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                     @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}
+                                    </li>
+                                </ul>
+                            </td>*@
+                 <td width="15%" align="center">
+                                <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                    <li><strong>Rows per page :&nbsp;</strong>
+                                  @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                             
+                                    </li>
+                                </ul>
+                            </td>
+            </tr>
+        </table>
+                    <script>$("#ddlrecords").change(function () {
+    if (document.getElementById('dt_filter').value != 'Custom' && document.getElementById('txtipaddress').value == '') {
+
+        window.location.href = '@Url.Action("Sitevisitinghistory", "Technicalarea")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ddlsite=' + document.getElementById('ddlsite').value + '&dt_filter=' + document.getElementById('dt_filter').value;
+    }
+    else if (document.getElementById('txtipaddress').value != '' && document.getElementById('dt_filter').value != 'Custom') {//  + '&hdnipadd=' + document.getElementById('hdnipadd').value +
+        window.location.href = '@Url.Action("Sitevisitinghistory", "Technicalarea")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ddlsite=' + document.getElementById('ddlsite').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&txtipaddress=' + document.getElementById('txtipaddress').value;
+
+    }
+    else if (document.getElementById('txtipaddress').value != '' && document.getElementById('dt_filter').value == 'Custom') {//+ '&hdnipadd=' + document.getElementById('hdnipadd').value
+        window.location.href = '@Url.Action("Sitevisitinghistory", "Technicalarea")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ddlsite=' + document.getElementById('ddlsite').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&txtipaddress=' + document.getElementById('txtipaddress').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value + '&txt_FromDate=' + document.getElementById('txt_FromDate').value;
+
+    }
+
+    else if (document.getElementById('dt_filter').value == 'Custom') {// '&hdnpagesize=' + document.getElementById('hdnpagesize').value +
+
+        window.location.href = '@Url.Action("Sitevisitinghistory", "Technicalarea")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ddlsite=' + document.getElementById('ddlsite').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value + '&txt_FromDate=' + document.getElementById('txt_FromDate').value;
+
+    } else { document.forms.item(0).submit(); }
+});
+    </script>
+     </div>
+
+
+
+                    <div class="content-box-content">
+                                            @{string heading1;
+                       if (Request["sort"] == "CreatedOn" && Request["sortdir"] == "ASC")
+                      {
+                          heading1 = "Created on ▲";
+                      }
+                       else if (Request["sort"] == "CreatedOn" && Request["sortdir"] == "DESC")
+                      {
+                          heading1 = "Created on ▼";
+                      }
+                      else
+                      {
+                          heading1 = "Created on .";
+                      }
+                    }
+                                            @{string gridsize = (ViewBag.gridsize == null ? "10" : ViewBag.gridsize);
+                                              WebGrid grid = new WebGrid(Model, rowsPerPage: Convert.ToInt32(gridsize));}
+                                            @if (grid.TotalRowCount != 0)
+                                            {
+
+
+                                                string pager = grid.Pager().ToString();
+                                                string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRowmax", alternatingRowStyle: "gridAltRowmax",
+      columns: grid.Columns(
+      grid.Column("deviceownername", "Device owner name", canSort: false),
+      grid.Column("deviceaddress", "Device address", canSort: false),
+       grid.Column("devicePhone", "Device Phone", canSort: false),
+                          grid.Column("CreatedOn", heading1, canSort: true, style: "width: 200px;",
+                          format: @<text>@{string strdate = (string)item.CreatedOn;
+                                           if (strdate != null & strdate != "")
+                                           {
+                                               string[] Idate = strdate.Split(' ');
+                                             //@Html.ActionLink(Idate[0], "MobileSitevisitinghistoryView", "Technicalarea", new { Mobileowner_id = item.Mobileowner_id }, new { @class = "Errordetailslink", @style = "color:#0066CC;cursor:pointer;" })
+                                               <a href="#" class = "Errordetailslink" style = "color:#0066CC;cursor:pointer;" onclick="return Displaydialog('diverrordialog','@Url.Action("MobileSitevisitinghistoryView", "Technicalarea", new { Mobileowner_id = item.Mobileowner_id })','auto',1000,'dvLoading',null,null);">@Idate[0]</a>
+                                           }
+                            
+                           }
+                          </text>),
+                                 grid.Column("Mobile_type", "Mobile type", canSort: false)
+
+      )).ToString();
+                                                gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                <br />
+                                                <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                                <br />
+
+                                   
+                                            }
+                                            else
+                                            {
+                                                <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                    <tr id="trdsmerror" class="white_color">
+                                                        <td style="text-align:center; vertical-align:middle;" height="25px" colspan="2">
+                                                            <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                                No mobile site history details found </span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            }
+                                        </div>
+ 
+    
+    </div>
+    </div>
+            <div id="diverrordialog" title="Mobile site history details"></div>
+             <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle;">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+    }
+</body>
+</html>

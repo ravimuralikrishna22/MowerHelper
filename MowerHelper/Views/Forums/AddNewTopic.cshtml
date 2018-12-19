@@ -1,0 +1,175 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+       <title>Mower Helper-Find an Mower Helper</title>
+
+   <script language="javascript" type="text/javascript">
+       $(document).ready(function () {
+           document.getElementById('rdStatus_0').checked = true;
+       });
+
+       function rbtncheck() {
+
+           document.getElementById('rdStatus_0').checked = true;
+           document.getElementById('rdStatus_1').checked = false;
+           document.getElementById('rdStatus_2').checked = false;
+
+
+       }
+       function rbtncheck1() {
+           document.getElementById('rdStatus_0').checked = false;
+           document.getElementById('rdStatus_1').checked = true;
+           document.getElementById('rdStatus_2').checked = false;
+       }
+       function rbtncheck2() {
+           document.getElementById('rdStatus_0').checked = false;
+           document.getElementById('rdStatus_1').checked = false;
+           document.getElementById('rdStatus_2').checked = true;
+       }
+
+        </script>
+   <script type="text/javascript">
+
+       function clearalerts() {
+           ClearInlineAlert('lbltopic', 'tdtopic', 'white')
+           ClearInlineAlert('lbldesc', 'tddesc', 'white')
+       }
+       function validatetask() {
+           if (trim(document.getElementById('txtSubject').value) == '') {
+               clearalerts()
+               var strcptcode = document.getElementById('txtSubject').value;
+               strcptcode = strcptcode.replace(/^\s+/, '');
+               document.getElementById('txtSubject').value = strcptcode;
+               InlineAlert('lbltopic', 'tdtopic', 'Please enter fourm topic');
+               document.getElementById('txtSubject').focus();
+               return false;
+           }
+           else {
+               ClearInlineAlert('lbltopic', 'tdtopic', 'white')
+           }
+
+           if (document.getElementById('txtSubject').value.length > 100) {
+               clearalerts()
+               InlineAlert('lbltopic', 'tdtopic', 'Please enter at most 100 characters in the topic');
+               document.getElementById('txtSubject').focus();
+               return false;
+           }
+           else {
+               ClearInlineAlert('lbltopic', 'tdtopic', 'white')
+           }
+           if (document.getElementById('txtdesc').value == '') {
+               clearalerts()
+               InlineAlert('lbldesc', 'tddesc', 'Please enter description.');
+               document.getElementById('txtdesc').focus();
+               return false;
+           }
+           if (document.getElementById('txtdesc').value.length > 5000) {
+               clearalerts()
+               InlineAlert('lbldesc', 'tddesc', 'Description can be up to 1000 characters.');
+               document.getElementById('txtdesc').focus();
+               return false;
+           }
+           else {
+               ClearInlineAlert('lbldesc', 'tddesc', 'white')
+           }
+       }
+</script>
+
+</head>
+<body>
+
+
+
+
+@using (Html.BeginForm("AddNewTopic", "Forums", FormMethod.Post, null))
+{
+                <input type="hidden" id="hdnForum_ID" name="hdnForum_ID" value="@ViewBag.Forum_ID" />
+    <input type="hidden" id="hdnind" name="hdnind" value="@ViewBag.ind" />
+     <div class="content-box" >
+    <div class="content-box-content">
+         <table align="center" border="0" class="border_style" cellpadding="7" cellspacing="1" id="tblErrPwd"
+                                        width="100%">
+             <tr class="white_color">
+                                            <td align="right" style="width:30%;">
+                                                <strong>Forum Name&nbsp;:&nbsp;</strong>
+                                                 
+                                            </td>
+                                             <td align="left" style="width:70%;">
+                                                <span> @ViewBag.ForumName</span>
+                                                         </td>
+                                            </tr>
+                          
+
+                                        <tr class="white_color">
+                                            <td align="right" style="width:30%;">
+                                                <font color="Red"><b>&nbsp;*</b></font><strong>Topic&nbsp;:&nbsp;</strong>
+                                                 
+                                            </td>
+                                             <td align="left" id= "tdtopic" style="width:70%;">
+                                                         @Html.TextBox("txtSubject", null, new { @class = "textfield", MaxLength = "150", style = "width:200px", autocomplete = "off" })
+                                                           
+                                                           &nbsp;&nbsp;<span id="lbltopic" style="font-weight: bold; color: Black;"></span>
+                                                         </td>
+                                            </tr>
+                                                     <tr class="white_color">
+                                                        <td align="right" style="width:30%;">
+                                                            <font color="Red"><b>&nbsp;*</b></font><strong>Topic icon&nbsp;:&nbsp;</strong>
+                                                        </td>
+                                                        <td align="left" style="width:70%;">
+
+
+                                                         @Html.RadioButton("rdStatus_0", "0", new { @IconMessage = "grpoffice", onclick = "return rbtncheck();" })&nbsp;nothing&nbsp;
+                                                         @Html.RadioButton("rdStatus_1", "1", new { @IconMessage = "grpoffice", onclick = "return rbtncheck1();" })&nbsp;
+                                                                                                                        
+                                       <img src="../Images/exclamation.gif" alt="" style="no-repeat;height: 20px;width:20px;padding-left:0px;padding-bottom:0px;" />
+                                                            &nbsp;
+                                                             @Html.RadioButton("rdStatus_2", "2", new { @IconMessage = "grpoffice", onclick = "return rbtncheck2();" })&nbsp;
+                                                             <img src="../Images/question.gif" alt="" style="no-repeat;height: 20px;width:20px;padding-left:0px;padding-bottom:0px;" /> &nbsp;
+                                                       
+                                                        </td>
+                                                       
+                                                        </tr>
+
+
+                                                          <tr id="Tr5" class="white_color">
+                                                        <td align="right" style="width:30%;">
+                                                            <font color="Red"><b>&nbsp;*</b></font><strong>Topic description&nbsp;:&nbsp;</strong>
+                                                        </td>
+                                                        <td align="left" id="tddesc" style="width:70%;">
+                                                        @Html.TextArea("txtdesc", null, 3, 3, new { @class = "textfield", @style = "width:350px;height:110px;" })&nbsp;&nbsp
+                                                       <br /> <span id="lbldesc" style="font-weight: bold; color: Black;"></span><br />
+                                                            (Maximum length 5000 characters)
+                                                        </td>
+                                                    </tr>
+                                                    </table>
+                                                    <table border="0" cellpadding="5" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td width="66%">
+                        </td>
+                        <td align="right" width="64%">
+                        <input type="submit" title="Save" value="Save"  onclick="return validatetask();" class="button" />
+                            &nbsp;
+                           <input type="button" class="btnTask button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+                                                 
+    </div>
+    </div>
+}
+
+
+
+
+
+
+     
+</body>
+</html>

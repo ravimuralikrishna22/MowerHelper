@@ -1,0 +1,261 @@
+﻿@model MowerHelper.Models.Classes.clsAuthorization
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title>
+     <link href="~/Content/common.css" rel="stylesheet" type="text/css" media="all" />
+    <meta name="revisit-after" content="2 days"/>
+    <meta name="robots" content="index,follow"/>
+    <script type="text/javascript">
+        window.history.forward(-1);
+        function Validatelogindetails() {
+            if (document.getElementById('Username').value == '') {
+                alert("Please enter email");
+                document.getElementById('Username').focus();
+                return false;
+            }
+            if (document.getElementById('Password').value == '') {
+                alert("Please enter password");
+                document.getElementById('Password').focus();
+                return false;
+            }
+        }
+    </script>
+    <style type="text/css">
+     td
+    {
+        padding:1px;
+    }
+    </style>
+</head>
+<body>
+  @using (Html.BeginForm("Login", "Home", FormMethod.Post, null))
+  {
+       @Html.AntiForgeryToken()
+    <div id="wrapper">
+           @Html.Partial("_TopSection")
+      @*  <div id="flttop">
+            <div id="header01">
+                <div id="headermain02">
+                    <div id="logopublic">
+                        <a id="logo_find1" runat="server" title="Home" href="@Url.Action("Index", "Home", null)" style="text-decoration:none;" class="bluemenuPublic">
+                           Mower Helper-Find an Mower Helper</a></div>
+                    <div id="mainnavcon">
+                        <div class="mainnav">
+                            <ul>
+                                    
+                                   @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                                <li class="current_page_item"> @Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                                   }
+                                 <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        <div id="flt02">
+            <div id="bodycon">
+                <div id="contentpannel" class="padding-top">
+                    <div class="greenridge" style="height: 400px; margin-top: 100px;">
+                        <table cellpadding="10" cellspacing="0" border="0" style="background-color: #C5DAED;"
+                            align="center" runat="server" id="tblLogin">
+                            <tr>
+                                <td width="310px" style="font-family: Arial; font-size: 10pt; color: #FF0000;" bgcolor="#C5DAED"
+                                    colspan="2" align="center">
+                                    @Html.ValidationSummary(true)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="310px" style="font-family: Arial; font-size: 9pt;" bgcolor="#C5DAED" colspan="2">
+                                    <div class="login_thera" style="font-family: Arial; font-size: 9pt;">
+                                        LOGIN
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr height="20px">
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="font-family: Arial; font-size: 9pt; padding-left: 25px; padding-top: 2px;">
+                                    <span style="font-size: 9pt; font-weight: bold;">Your email :&nbsp;</span>
+                                </td>
+                                <td align="right" style="font-family: Arial; font-size: 9pt; padding-right: 60px;">
+                                    <div class="editor-field">
+                                        @Html.TextBoxFor(Model => Model.Username, new { @class = "textfield", style = "width:12em;" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="font-family: Arial; font-size: 9pt; padding-right: 70px;"
+                                    colspan="2" height="20px">
+                                    <div class="editor-field" style="color: #FF0000; font-size: 1em;">
+                                        <span style="clear: both; float: right;">
+                                            @Html.ValidationMessageFor(Model => Model.Username)
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="font-family: Arial; font-size: 9pt; padding-left: 25px; padding-top: 2px;">
+                                    <span style="font-size: 9pt; font-weight: bold;">Password :&nbsp;</span>
+                                </td>
+                                <td align="right" style="font-family: Arial; font-size: 9pt; padding-right: 60px;">
+                                    <div class="editor-field">
+                                        @Html.PasswordFor(Model => Model.Password, new { @class = "textfield", style = "width:12em;" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr align="left">
+                                <td align="right" style="font-family: Arial; font-size: 9pt; padding-right: 70px;"
+                                    colspan="2" height="20px">
+                                    <div class="editor-field">
+                                        <span style="clear: both; float: right; color: #FF0000; font-size: 1em;">
+                                            @Html.ValidationMessageFor(Model => Model.Password)
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <span style="float: right; padding-right: 60px;">
+                                        <input type="submit" class="button" value="Log In" onclick="javascript:if(Validatelogindetails()==false){return false;};" style="font-weight: bold; cursor: pointer;" />
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: Arial; font-size: 9pt; height: 15px; padding-left: 60px;"
+                                    align="left" colspan="2">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: Arial; font-size: 11pt; padding-bottom: 5px; padding-right: 40px;
+                                    height: 20px;" align="right" colspan="2">
+                                    @Html.ActionLink("Forgot password?", "ForgotPassword", "Home",null, new {@style="font-family: Arial;font-size: 11pt; color: red; text-decoration: none;" })
+                                   @* <a class="blockmenu" id="aForgotPassword" runat="server" style="font-family: Arial;
+                                        font-size: 11pt; color: red; text-decoration: none;">Forgot password?</a>*@
+                                </td>
+                            </tr>
+                        </table>
+                        
+                    </div>
+                    <br />
+                </div>
+                   @Html.Partial("_Footer")
+             @*   <div id="footercon">
+                        <div id="footerpublic" style="text-align: right;">
+                            <div >
+                            @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                            {
+                            <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                         
+                                <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.ShowArticles == "Y")
+                            {
+                                <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.Showforums == "Y")
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                      <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li style="display:none;">
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                    
+                            </ul>
+                            }
+                                </div>
+                            <div class="copy" style="font-size: small;">
+                                Copyright © 2016.Mower Helper-Find an Mower Helper, Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+  }
+</body>
+</html>

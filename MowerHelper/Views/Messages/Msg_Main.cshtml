@@ -1,0 +1,212 @@
+﻿@{
+    Layout = null;
+}
+
+@*<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Msg_Main</title>*@
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".close").live("click", function (e) {
+                    var dialogDiv = $('#CmpMsgDialog');
+                    dialogDiv.dialog('close');
+                });
+            });
+
+    </script>
+    <style type="text/css">
+         .dvLoading1 .ui-dialog-titlebar{display:none;}  
+    </style>
+@*</head>
+<body>*@
+    <div>
+    <table id="tblcomposemsg" runat="server" width="100%">
+    <tr  class="background_color">
+    <td width="50%">
+    </td>
+    <td width="50%" align="right" style="padding-right:20px;padding-top:5px;">
+    @{string role=ViewBag.Roleid;
+      string Dirlink = null;
+      if (role == "1")
+      {
+          Dirlink = "ComposeMessage1";
+      }
+      else
+      {
+          Dirlink = "ComposeMessage";
+      }
+   
+      }
+        @if(ViewBag.Tabid == "2" || ViewBag.Tabid == "6") {
+          
+             //viewUrl = viewUrl + "&ddlListingMsgsType=" + $('#ddlListingMsgsType').val() + "&ddlrecords=" + $('#ddlrecords').val() + "&curPage=" + curPage
+                 <a id="ImgBtncmpmsg" href="#" onclick="return  Displaydialog('CmpMsgDialog','@Url.Action(Dirlink.ToString(), "Messages", new { Tabid = ViewBag.Tabid })'+'&ddlListingMsgsType=' + $('#ddlListingMsgsType').val() + '&ddlrecords=' + $('#ddlrecords').val() + '&curPage=' + curPage,'auto',900,'dvLoading1',null,null);" style="color: #0066CC;font-weight:bold;font-size:14px;">Compose message&nbsp;&nbsp;</a>
+         }
+        else
+        {
+    <a id="ImgBtncmpmsg1" href="#" onclick="return  Displaydialog('CmpMsgDialog','@Url.Action(Dirlink.ToString(), "Messages", new { Tabid = ViewBag.Tabid })','auto',900,'dvLoading1',null,null);" style="color: #0066CC;font-weight:bold;font-size:14px;">Compose message&nbsp;&nbsp;</a>
+        }
+    </td>
+    </tr>
+    </table>
+      
+     
+    </div>
+<div id="CmpMsgDialog" title="Compose message"></div>
+    <div id="dvLoading1" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+    <script type="text/javascript">
+
+        var linkObj;
+        $(function () {
+            $("#ImgBtncmpmsg").click(function (event) {
+                event.preventDefault();
+            });
+            $("#ImgBtncmpmsg1").click(function (event) {
+                event.preventDefault();
+            });
+     //       $('#CmpMsgDialog').dialog({
+     //           autoOpen: false,
+     //           width: 900,
+     //           //                height: 600,
+     //           resizable: false,
+     //           modal: true
+     //       });
+
+     //       $("#ImgBtncmpmsg").click(function () {
+     //           linkObj = $(this);
+     //           var dialogDiv = $('#CmpMsgDialog');
+     //    $('#dvLoading1').dialog({ modal: true, dialogClass: 'dvLoading1', draggable: false, resizable: false });
+     //           var viewUrl = linkObj.attr('href');
+     //           $.get(viewUrl, function (data) {
+     //               dialogDiv.html(data);
+     //$('#dvLoading1').dialog('close');
+     //               dialogDiv.dialog('open');
+     //           });
+     //           return false;
+     //       });
+        });
+    </script>
+<script  type="text/javascript">
+    function Save1() {
+        ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+        ValidateAlertClear('tblmain', 'lblattach', 'tdattach', 'tdattachmain', 'white')
+
+        if (document.getElementById('HdnRoleid').value == 3) {
+            ValidateAlertClear('tblmain', 'lblreceiver', 'tdreceiver', 'tdSelectedPatient1', 'white');
+            if (document.getElementById('tdSelectedPatient1').style.display == '') {
+                if (combobox2.selectedIndex() == -1) {
+                    ValidateAlert('tblmain', 'lblreceiver', 'tdreceiver', 'tdSelectedPatient1', 'Please select sender');
+                    return false;
+
+                }
+                else {
+                    ValidateAlertClear('tblmain', 'lblreceiver', 'tdreceiver', 'tdSelectedPatient1', 'white');
+                }
+            }
+            else {
+                ValidateAlertClear('tblmain', 'lblreceiver', 'tdreceiver', 'tdSelectedPatient1', 'white');
+            }
+        }
+
+        document.getElementById('txtTopics').value = trim(document.getElementById('txtTopics').value);
+        var str_Msg;
+        str_Msg = trim(document.getElementById('txtMessages').value);
+        document.getElementById('txtMessages').value = str_Msg;
+        if (str_Msg == '') {
+            //Glb_ShowAlert('Please enter message', 'Alert', '', '');
+            ValidateAlert('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'Please enter message');
+            document.getElementById('txtMessages').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+        }
+        //if (MyChars(document.getElementById('txtMessages')) == "SpaceError") {
+        //    //Glb_ShowAlert("Please enter message without spaces first");
+        //    ValidateAlert('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'Please enter message without spaces first');
+        //    document.getElementById('txtMessages').focus();
+        //    return false;
+        //}
+        //else {
+        //    ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+        //}
+        if (str_Msg.length > 8000) {
+            //Glb_ShowAlert('Please enter at most 8000 characters in the message field', 'Alert', '', '');
+            ValidateAlert('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'Please enter at most 8000 characters in the message field');
+            document.getElementById('txtMessages').focus();
+            return false;
+        }
+        else {
+            ValidateAlertClear('tblmain', 'lblmessages', 'tdmessages', 'tdmessagesmain', 'white');
+        }
+        var Adddata = new FormData();
+        var files = $("#fileAttachment").get(0).files;
+        if (document.getElementById('fileAttachment').value != 0) {
+            Adddata.append("fileAttachment", files[0]);
+            var strFilePath = document.getElementById('fileAttachment').value;
+            var Files1 = new Array();
+            var Files = new Array();
+            Files = strFilePath.split('\\');
+            var strFileName = Files[parseInt(Files.length) - 1];
+            var strreverse = revString(strFileName);
+            var strExtn = revString(Mid(strreverse, 0, 3)).toUpperCase();
+
+            if (strExtn.toUpperCase() == "GIF" || strExtn.toUpperCase() == "JPG" || strExtn.toUpperCase() == "BMP" || strExtn.toUpperCase() == "PNG" || strExtn.toUpperCase() == "IFF" || strExtn.toUpperCase() == "TIF" || strExtn.toUpperCase() == "TEXT" || strExtn.toUpperCase() == "TXT" || strExtn.toUpperCase() == "DOC" || strExtn.toUpperCase() == "OCX" || strExtn.toUpperCase() == "XLS" || strExtn.toUpperCase() == "LSX" || strExtn.toUpperCase() == "PPT" || strExtn.toUpperCase() == "PTX" || strExtn.toUpperCase() == "PDF" || strExtn.toUpperCase() == "WMV" || strExtn.toUpperCase() == "ASF" || strExtn.toUpperCase() == "WM" || strExtn.toUpperCase() == "AVI" || strExtn.toUpperCase() == "MPE" || strExtn.toUpperCase() == "PEG") {
+                ValidateAlertClear('tblmain', 'lblattach', 'tdattach', 'tdattachmain', 'white');
+            }
+            else {
+                //Glb_ShowAlert('Invalid File format !!!.');
+                ValidateAlert('tblmain', 'lblattach', 'tdattach', 'tdattachmain', 'Invalid File format !!!.');
+                document.getElementById('fileAttachment').value = '';
+                return false;
+            }
+
+        }
+        Adddata.append("txtMessages", $('#txtMessages').val());
+        Adddata.append("txtTopics", $('#txtTopics').val());
+        Adddata.append("HdnTab_ID", $('#HdnTab_ID').val());
+        Adddata.append("combobox2", $('#combobox2').val());
+        Adddata.append("HdnRoleid", $('#HdnRoleid').val());
+        Adddata.append("ddlRoles1", $('#ddlRoles1').val());
+        var token = $('[name=__RequestVerificationToken]').val();
+        var headers = {};
+        headers['__RequestVerificationToken'] = token;
+     
+     
+        $.ajax({
+            headers: headers,
+            url: "@Url.Action("ComposeMessage", "Messages")",
+                 contentType: false,
+                 processData: false,
+                 data: Adddata,
+                 type: "POST",
+                 //contentType: "application/json;charset=utf-8",
+                 success: function (data) {
+               
+                     $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                     $('#CmpMsgDialog').dialog('close');
+                     if (data = "DisplayMessageFromHelp") {
+                       
+                         $("#MessageFrom").load("@Url.Action("DisplayMessageFromHelp", "Messages")?ddlListingMsgsType=" + $('#ddlListingMsgsType').val() + "&ddlrecords=" + $('#ddlrecords').val() + "&page=" + curPage, function (data) { $('#dvLoading').dialog("close"); });
+                     }
+                      if (data = "DisplaySentMessages") {
+                     
+                          $("#SentMessageslist").load("@Url.Action("DisplaySentMessages", "Messages")?ddlListingMsgsType=" + $('#ddlListingMsgsType').val() + "&ddlrecords=" + $('#ddlrecords').val() + "&page=" + curPage, function (data) { $('#dvLoading').dialog("close"); });
+                     }
+                     //alert(JSON.stringify(data)); DisplaySentMessages
+                     //$('#gridcontent1').html(data);
+                 }
+
+             });
+         return true;
+    }
+       </script>
+@*</body>
+</html>
+*@

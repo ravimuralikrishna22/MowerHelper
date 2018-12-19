@@ -1,0 +1,938 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <title>Mower Helper-Find an Mower Helper</title>
+     @Scripts.Render("~/ThScripts/ThAjaxscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ThOtherscripts")
+    <script src="~/Scripts/CCValidation.js"></script>
+        <style type="text/css">
+.no-close .ui-dialog-titlebar-close {display: none }
+.dvLoading .ui-dialog-titlebar{display:none;}
+            .gridTable { width: 100%;}
+</style>
+</head>
+<body>
+    <div>
+        @{Html.RenderAction("Topsection", "Tools");}
+    </div>
+    <div id="main-content">
+          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr id="trtabs" runat="server">
+                                <td width="100%" class="navigation">
+                                  
+                                   @* <div class="admin-tab">
+                                        <a class="inadmin-link" id="acontent2"  href="../Billing/TransactionDisplay"><span>Customer Transactions</span>
+                                        </a>
+                                    </div>*@
+                                 @*   <div class="admin-tab">
+                                        <a class="inadmin-link" id="avideo" href="VideoAudioFiles" ><span>Video/Audio Files</span>
+                                        </a>
+                                    </div>*@
+                                      <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument1" href="../OfficeExpenses/ExpenseLedger" ><span>My Business Expenses</span>
+                                        </a>
+                                    </div>
+                                   @* <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument" href="../Notes/ProfileNotes"><span>Notes</span>
+                                        </a>
+                                    </div>*@
+                                  
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument2" href="../Common/PasswordManagement" ><span>Password Management</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument3" href="FT_servicesTransaction" ><span>Mower Helper Transactions</span>
+                                        </a>
+                                    </div>
+                                    @if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("Showtask").ToUpper() == "YES")
+                                     {
+                                    <div class="admin-tab">
+                                        <a class="inadmin-link" id="adocument4" href="../Task/TaskList" ><span>Tasks</span>
+                                        </a>
+                                    </div>
+                                     }
+                                     <div class="admin-tab" style="display:none;">
+                                        <a class="inadmin-link" id="adocument5" href="@Url.Action("Index","Technicians")" ><span>Technicians</span>
+                                        </a>
+                                    </div>
+                                    <div class="admin-tab">
+                                    <a class="admin-link" href="FTservices_addnewpayment" id="acontent"><span>Payment method</span>
+                                    </a>
+                                </div>
+                                     <div class="admin-tab">                                        
+                                        <a class="inadmin-link" href="../Messages/MessageFromHelp" id="amsgcontent"><span>Messages</span></a>
+                                    </div>
+                                    @*<div class="admin-tab">                                        
+                                        <a class="inadmin-link" href="../Article/ArticleJqGrid" id="aArticles"><span>Articles</span></a>
+                                    </div>*@
+                                     @if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("ShowForumsInElectricianLogin").ToUpper() == "YES")
+                                     {
+                                      <div class="admin-tab">
+                                    <a class="inadmin-link" href="../Forums/ForumsHome" id="acontent5"><span>Forums</span>
+                                    </a>
+                                </div>
+                                    }
+                                </td>
+                            </tr>
+                        <tr class="background_color">
+                            <td id="tdtabs" class="tab-background" width="100%">
+                                <table cellpadding="0" cellspacing="0" width="100%" id="Table2" runat="server" align="center">
+                                    <tr>
+                                        <td >
+                                            <div class="content-box">
+                                                <div class="content-box-header">
+                                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td width="40%" align="left">
+                                                                <h3>
+                                                                    Payment method</h3>
+                                                            </td>
+                                                            <td width="25%">
+                                                            </td>
+                                                            <td align="right">
+                                                                <a id="lnknew" style="color: #0066CC; font-weight: bold; font-size: 15px; cursor: pointer;"
+                                                                    title="To add a Payment method" href="#" onclick="return Displaydialog('updateDialog','Addnewpaymentmethod', 450,950, 'dvLoading', null, null);">Add a payment method
+                                                                    @* @Ajax.ActionLink("Add a payment method", "Addnewpaymentmethod", new {@id="lnknew", @style = "color: #0066CC; font-weight: bold; font-size: 15px; cursor: pointer;" })*@
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <div class="clear">
+                                                    </div>
+                                                </div>
+                                                 <div id="loadPayment">
+                                                     <img src="../Images/ajax-loader2.gif" alt="Processing" style="margin-left:550px"/>
+                                              </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+          </table>
+                                    </div>
+   
+    <div id="updateDialog1" title="Edit payment method">
+    </div>
+    <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            Do you want to delete the payment method?
+        </p>
+    </div>
+    <div>
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+     <div id="updateDialog" title="Add new payment method">
+    </div>
+     <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle;">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#loadPayment").load("@Url.Action("FTservicesAddnewpayment", "Admin")");
+      });
+    $(".confirmDialog").live("click", function (e) {
+        var nodel = "@ViewBag.totrec";
+//        alert(nodel);
+        if (nodel == "1") {
+            alert("Atleast one payment card details is required.");
+            return false;
+        }
+        var url = $(this).attr('href');
+        $("#dialog-confirm").dialog({
+            autoOpen: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            buttons: {
+                "Yes": function () {
+                    $(this).dialog("close");
+                    //window.location = url;
+                    $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                    $.ajax({
+
+                        url: url,
+                    type: "get",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        $('#loadPayment').html(data);
+                        $("#dvLoading").dialog('close');
+                    }
+
+                });
+
+                },
+                "No": function () {
+                    $(this).dialog("close");
+
+                }
+            }
+        });
+        $("#dialog-confirm").dialog('open');
+        return false;
+    });
+
+
+    var linkObj;
+    $(function () {
+
+        $(".close").live("click", function (e) {
+            var dialogDiv = $('#updateDialog');
+            dialogDiv.dialog('close');
+        });
+        $(".close").live("click", function (e) {
+            var dialogDiv = $('#updateDialog1');
+            dialogDiv.dialog('close');
+        });
+    });
+    </script>
+   
+      <script type="text/javascript">
+          $(document).ready(function () {
+              var TopIndex = '@Session["TopIndex"]';
+              $("#Menu0").removeClass();
+              $("#Menu1").removeClass();
+              $("#Menu2").removeClass();
+              $("#Menu3").removeClass();
+              $("#Menu4").addClass("active");
+          });
+    </script>
+    @*Add Payment method*@
+    <script type="text/javascript">
+        function Addclearalerts() {
+            document.getElementById('lbcardtype').style.display = 'none';
+            document.getElementById('TableCell29').bgColor = "white";
+            document.getElementById('TableCell25').bgColor = "White";
+            document.getElementById('lblcardnumber').style.display = 'none';
+            document.getElementById('tdfl2').bgColor = "white";
+            document.getElementById('lblfullname').style.display = 'none';
+            //document.getElementById('Td2').bgColor = "white";
+            //document.getElementById('lblfirstname').style.display = 'none';
+            //document.getElementById('Td4').bgColor = "White";
+            //document.getElementById('lbllastname').style.display = 'none';
+            document.getElementById('TableCell31').bgColor = "white";
+            document.getElementById('lblExpyear').style.display = 'none';
+            document.getElementById('TableCell35').bgColor = "white";
+            document.getElementById('lbladdress').style.display = 'none';
+            document.getElementById('Etdzip').bgColor = "white";
+            document.getElementById('Elblzip').style.display = 'none';
+            document.getElementById('Etdstate').bgColor = "White";
+            document.getElementById('Elblstate').style.display = 'none';
+            document.getElementById('Etdcity').bgColor = "white";
+            document.getElementById('Elblcity').style.display = 'none';
+
+        }
+        function CognodeProcess() {
+            //var txtZip = $('#txtZip').val();
+            //if (!txtZip.match("^[a-zA-Z0-9]*$")) {
+            //    alert("aa");
+            //    document.getElementById('Elblzip').innerHTML = "Please enter valid zip";
+            //    $("#lblzip").show();
+            //    document.getElementById('Etdzip').bgColor = "orange";
+            //    return false;
+            //}
+            $('#hdnstate').val($('#DDState').val());
+            $('#hdncity').val($('#DDCity').val());
+            $('#hdnzip').val($('#txtZip').val()); 
+            $('#hdnadd1').val($('#EAddress1').val());
+            $('#hdnadd2').val($('#EAddress2').val());
+            var my_str = document.getElementById('CardNumber').value;
+            var str = "*";
+            if (my_str.indexOf(str) == -1) {
+                Addclearalerts()
+                document.getElementById('CardNumber1').value = document.getElementById('CardNumber').value;
+            }
+            else {
+                if (document.getElementById('CardNumber1').value == '') {
+                    Addclearalerts()
+                    document.getElementById('CardNumber1').value = document.getElementById('CardNumber').value;
+                }
+                else if (document.getElementById('CardNumber1').value != '' && document.getElementById('CardNumber').value != '') {
+                    Addclearalerts()
+                    if (document.getElementById('hdncardnumber').value != document.getElementById('CardNumber').value) {
+                        Addclearalerts()
+                        //				                Glb_ShowAlert("Please enter valid Credit Card Number");
+                        document.getElementById('lblcardnumber').style.display = '';
+                        document.getElementById('lblcardnumber').innerHTML = 'Please enter valid Credit Card Number';
+                        document.getElementById('TableCell25').bgColor = "orange";
+                        document.getElementById('CardNumber').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('TableCell25').bgColor = "White";
+                        document.getElementById('lblcardnumber').style.display = 'none';
+                    }
+                }
+            }
+            if (document.getElementById('CardNumber').value == '') {
+                Addclearalerts()
+                //                 alert('5')
+                //Glb_ShowAlert("Please enter credit card number");
+                //					    document.frmCreditCard.lblcardnumber.style.display = '';
+                document.getElementById('lblcardnumber').style.display = '';
+                document.getElementById('lblcardnumber').innerHTML = 'Please enter credit card number';
+                document.getElementById('TableCell25').bgColor = "orange";
+                document.getElementById('CardNumber').focus();
+                return false;
+            }
+            else {
+                document.getElementById('TableCell25').bgColor = "White";
+                document.getElementById('lblcardnumber').style.display = 'none';
+            }
+            var StrCardValue;
+            StrCardValue = document.getElementById('CardNumber').value;
+            //            alert(StrCardValue);
+            if (StrCardValue.length < 13) {
+                Addclearalerts()
+                document.getElementById('lblcardnumber').style.display = '';
+                //                Glb_ShowAlert("Please enter 13 Digit Card Number");
+                document.getElementById('lblcardnumber').innerHTML = 'Please enter 13 Digit Card Number';
+                document.getElementById('TableCell25').bgColor = "orange";
+                document.getElementById('CardNumber').focus();
+                return false;
+            }
+            else {
+                document.getElementById('TableCell25').bgColor = "White";
+                document.getElementById('lblcardnumber').style.display = 'none';
+            }
+
+            if (CheckCardNumber() == true) {
+                var strfullname = trim(document.getElementById('FullName').value);
+                document.getElementById('FullName').value = strfullname;
+                if (MyChars(document.getElementById('FullName')) == 'BlankError') {
+                    Addclearalerts()
+                    //						    Glb_ShowAlert("Please enter first name");
+                    //document.getElementById('lbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                   // document.getElementById('TableCell29').bgColor = "white";
+                    document.getElementById('lblfullname').style.display = '';
+                    document.getElementById('lblfullname').innerHTML = 'Please enter name on card';
+                    document.getElementById('tdfl2').bgColor = "orange";
+                    document.getElementById('FullName').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdfl2').bgColor = "white";
+                    document.getElementById('lblfullname').style.display = 'none';
+                }
+                if (MyChars(document.getElementById('FullName')) == "NumError" || MyChars(document.getElementById('FullName')) == "InvalidCharAtFirstError") {
+                    Addclearalerts()
+                    //						    Glb_ShowAlert("Please enter first name in alphabets");
+                    //document.getElementById('lbcardtype').style.display = 'none';
+                    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                    //document.getElementById('TableCell29').bgColor = "white";
+                    document.getElementById('lblfullname').style.display = '';
+                    document.getElementById('lblfullname').innerHTML = 'Please enter name on card in alphabets';
+                    document.getElementById('tdfl2').bgColor = "orange";
+                    document.getElementById('FullName').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('tdfl2').bgColor = "white";
+                    document.getElementById('lblfullname').style.display = 'none';
+                }
+
+
+                //var strlastname = trim(document.getElementById('txtlastname').value);
+                //document.getElementById('txtlastname').value = strlastname;
+                //if (MyChars(document.getElementById('txtlastname')) == 'BlankError') {
+                //    Addclearalerts()
+                //    //						    Glb_ShowAlert("Please enter Last Name");
+                //    document.getElementById('lbcardtype').style.display = 'none';
+                //    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                //    document.getElementById('TableCell29').bgColor = "white";
+                //    document.getElementById('lbllastname').style.display = '';
+                //    document.getElementById('lbllastname').innerHTML = 'Please enter Last Name';
+                //    document.getElementById('Td4').bgColor = "orange";
+                //    document.getElementById('txtlastname').focus();
+                //    return false;
+                //}
+                //else {
+                //    document.getElementById('Td4').bgColor = "White";
+                //    document.getElementById('lbllastname').style.display = 'none';
+
+                //}
+
+                //if (MyChars(document.getElementById('txtlastname')) == "NumError") {
+                //    Addclearalerts()
+                //    //						    Glb_ShowAlert("Please enter last name in alphabets");
+                //    document.getElementById('lbcardtype').style.display = 'none';
+                //    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                //    document.getElementById('TableCell29').bgColor = "white";
+                //    document.getElementById('lbllastname').style.display = '';
+                //    document.getElementById('lbllastname').innerHTML = 'Please enter last name in alphabets';
+                //    document.getElementById('Td4').bgColor = "orange";
+                //    document.getElementById('txtlastname').focus();
+                //    return false;
+                //}
+                //else {
+                //    document.getElementById('Td4').bgColor = "White";
+                //    document.getElementById('lbllastname').style.display = 'none';
+                //}
+                var tmpyear = document.getElementById('year').value;
+                var tmpmonth = document.getElementById('month').value;
+                //            alert(tmpyear);
+                //            alert(tmpmonth);
+
+                var today = new Date();
+                var expiry = new Date(tmpyear, tmpmonth);
+                //            alert(today);
+                //            alert(expiry);
+                if (today.getTime() > expiry.getTime()) {
+                    Addclearalerts();
+                    document.getElementById('lbcardtype').style.display = 'none';
+                    document.getElementById('TableCell29').bgColor = "white";
+                    document.getElementById('lblExpyear').style.display = '';
+                    document.getElementById('lblExpyear').innerHTML = 'This card has already expired';
+                    document.getElementById('TableCell31').bgColor = "orange";
+                    return false;
+                }
+                else {
+                    document.getElementById('TableCell31').bgColor = "white";
+                    document.getElementById('lblExpyear').style.display = 'none';
+                }
+
+
+                var str_BAddress1;
+                str_BAddress1 = trim(document.getElementById('EAddress1').value);
+                document.getElementById('EAddress1').value = str_BAddress1;
+                if (str_BAddress1 == '') {
+                    Addclearalerts()
+                    //                    Glb_ShowAlert("Please enter billing address");
+                    document.getElementById('lbladdress').style.display = '';
+                    document.getElementById('lbladdress').innerHTML = 'Please enter billing address';
+                    document.getElementById('TableCell35').bgColor = "orange";
+                    document.getElementById('EAddress1').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('TableCell35').bgColor = "white";
+                    document.getElementById('lbladdress').style.display = 'none';
+                }
+
+                if (document.getElementById('txtZip').value == '') {
+                    Addclearalerts()
+                    //						Glb_ShowAlert("Please enter zip");
+                    document.getElementById('Elblzip').style.display = '';
+                    document.getElementById('Elblzip').innerHTML = 'Please enter zip';
+                    document.getElementById('Etdzip').bgColor = "orange";
+                    document.getElementById('txtZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Etdzip').bgColor = "white";
+                    document.getElementById('Elblzip').style.display = 'none';
+                }
+                var txtZip = document.getElementById('txtZip').value;
+                if (!txtZip.match("^[a-zA-Z0-9]*$")) {
+                    Addclearalerts()
+                    //						Glb_ShowAlert("Please enter valid zip");
+                    document.getElementById('Elblzip').style.display = '';
+                    document.getElementById('Elblzip').innerHTML = 'Please enter valid zip';
+                    document.getElementById('Etdzip').bgColor = "orange";
+                    document.getElementById('txtZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Etdzip').bgColor = "white";
+                    document.getElementById('Elblzip').style.display = 'none';
+                }
+
+
+                if (document.getElementById('txtZip').value.length != 5) {
+                    Addclearalerts()
+                    //						Glb_ShowAlert("Please enter valid zip");
+                    document.getElementById('Elblzip').style.display = '';
+                    document.getElementById('Elblzip').innerHTML = 'Please enter valid zip';
+                    document.getElementById('Etdzip').bgColor = "orange";
+                    document.getElementById('txtZip').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Etdzip').bgColor = "white";
+                    document.getElementById('Elblzip').style.display = 'none';
+                }
+                if (document.getElementById('DDState').selectedIndex == 0) {
+                    Addclearalerts()
+                    //						Glb_ShowAlert("Please select state");
+                    document.getElementById('Elblstate').style.display = '';
+                    document.getElementById('Elblstate').innerHTML = 'Please select state';
+                    document.getElementById('Etdstate').bgColor = "orange";
+                    document.getElementById('DDState').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Etdstate').bgColor = "White";
+                    document.getElementById('Elblstate').style.display = 'none';
+                }
+
+                if (document.getElementById('DDCity').selectedIndex == 0) {
+                    Addclearalerts()
+                    //					    Glb_ShowAlert("Please select city");
+                    document.getElementById('Elblcity').style.display = '';
+                    document.getElementById('Elblcity').innerHTML = 'Please select city';
+                    document.getElementById('Etdcity').bgColor = "orange"
+                    document.getElementById('DDCity').focus();
+                    return false;
+                }
+                else {
+                    document.getElementById('Etdcity').bgColor = "white";
+                    document.getElementById('Elblcity').style.display = 'none';
+                }
+            }
+            else {
+                return false;
+            }
+            document.getElementById('hdnadd1').value = document.getElementById('EAddress1').value;
+            document.getElementById('hdnadd2').value = document.getElementById('EAddress2').value;
+            document.getElementById('hdnzip').value = document.getElementById('txtZip').value;
+            document.getElementById('hdnstate').value = document.getElementById('DDState').value;
+            document.getElementById('hdncity').value = document.getElementById('DDCity').value;
+            document.body.style.cursor = 'wait';
+           
+            //                  }       
+            //            document.getElementById("tblProcess").style.display = 'none';
+            //            $("#updateDialog").dialog({
+            //                modal: true,
+            //                width: 500,
+            //                resizable: false,
+            //                closeOnEscape: false,
+            //                open: function (event, ui) { $(".ui-dialog-titlebar").hide(); }
+
+            //            });
+
+        }
+
+    </script>
+   @* End Payment method*@
+    @*Edit payment method*@
+     <script type="text/javascript">
+         $("#lnknew").click(function (event) {
+             event.preventDefault();
+         });
+         function EditCheckCardNumber() {
+             var tmpyear;
+
+             if (document.getElementById('ECardNumber1').value.length == 0) {
+                 Glb_ShowAlert("Please enter a Card Number.");
+                 document.getElementById('ECardNumber').focus();
+                 return false;
+             }
+             if (document.getElementById('ECardNumber1').value.length > 0) {
+                 var ccnum = document.getElementById('ECardNumber1').value;
+                 var sum = 0;
+                 var mods = ccnum.length % 2;
+                 var i = 0;
+                 while (i < ccnum.length) {
+                     var digit = parseInt(ccnum.charAt(i));
+                     if (i % 2 == mods)
+                         digit = digit * 2;
+                     if (digit > 9) {
+                         digit = digit - 9;
+                     }
+                     sum += digit;
+                     i += 1;
+                 }
+                 if ((sum % 10) != 0) {
+                     //                    Glb_ShowAlert("r.");
+                     document.getElementById('Elblcardnumber').style.display = '';
+                     document.getElementById('Elblcardnumber').innerHTML = 'Please re enter your full credit card number to save.';
+                     document.getElementById('ECardNumber').focus();
+                     document.getElementById('ETableCell25').bgColor = "orange";
+                     return false;
+                 }
+             }
+
+             /*if (form.ExpYear.value.length == 0) {
+             Glb_ShowAlert("Please enter the Expiration Year.");
+             form.ExpYear.focus();
+             return;
+             }
+ 
+             if (form.ExpYear.value > 96)
+             tmpyear = "19" + form.ExpYear.value;
+             else if (form.ExpYear.value < 21)
+             tmpyear = "20" + form.ExpYear.value;
+             else {
+             Glb_ShowAlert("The Expiration Year is not valid.");
+             return;
+             }*/
+             tmpyear = document.getElementById('Eyear').options[document.getElementById('Eyear').selectedIndex].value;
+             tmpmonth = document.getElementById('Emonth').options[document.getElementById('Emonth').selectedIndex].value;
+             card = document.getElementById('ECardType').options[document.getElementById('ECardType').selectedIndex].text;
+             if (card == "American Express") {
+                 card = "AmExCard";
+             }
+             var retval = eval(card + ".checkCardNumber(\"" + document.getElementById('ECardNumber1').value +
+ "\", " + tmpyear + ", " + tmpmonth + ");");
+             cardname = "";
+             //            alert(retval);
+             if (retval)
+
+                 // comment this out if used on an order form
+                 //Glb_ShowAlert("This card number appears to be valid.");
+                 return true;
+
+             else {
+                 // The cardnumber has the valid luhn checksum, but we want to know which
+                 // cardtype it belongs to.
+                 for (var n = 0; n < Cards.size; n++) {
+                     //                    alert("1");
+                     //                    alert(form.CardNumber1.value);
+                     //                    alert(tmpyear);
+                     //                    alert(tmpmonth);
+                     //                    alert(Cards[0]);
+                     if (Cards[n].checkCardNumber(document.getElementById('ECardNumber1').value, tmpyear, tmpmonth)) {
+                         // alert("1.1");
+                         cardname = Cards[n].getCardType();
+                         //  alert(cardname);
+                         break;
+                     }
+                 }
+                 //  alert(cardname.length);
+                 //                alert(cardname);
+                 if (cardname.length > 0) {
+                     //                    alert(cardname.length);
+                     //                    alert("well");
+                     //Glb_ShowAlert("This is  " + cardname + " number,not  " + card + " number.");
+                     //                    Glb_ShowAlert("Please verify the card type.");
+                     //                    alert("Please verify the card type.");
+                     //                    return false;
+                     document.getElementById('Elbcardtype').style.display = '';
+                     //                    alert("1");
+                     document.getElementById('Elbcardtype').innerHTML = 'Please verify the card type.';
+                     //                    alert("2");
+                     document.getElementById('ETableCell29').bgColor = "orange";
+                     //                    alert("3");
+                     document.getElementById('ECardType').focus();
+                     //                    alert("4");
+                     return false;
+                 }
+                 else {
+                     //                    alert('76');
+                     document.getElementById('Elbcardtype').style.display = 'none';
+                     //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                     document.getElementById('ETableCell29').bgColor = "white";
+                     Glb_ShowAlert("This card number is not valid.");
+                     document.getElementById('ECardNumber').focus();
+                     return false;
+                 }
+             }
+
+             // The following line doesn't work in IE3, you need to change it
+             // to something like "(new CardType())...".
+             // if (!CardType().isExpiryDate(tmpyear, tmpmonth)) {
+
+         }
+
+ 
+   
+         function clearalerts() {
+             document.getElementById('Elbcardtype').style.display = 'none';
+             document.getElementById('ETableCell29').bgColor = "white";
+             document.getElementById('ETableCell25').bgColor = "White";
+             document.getElementById('Elblcardnumber').style.display = 'none';
+             document.getElementById('Etdfl2').bgColor = "white";
+             document.getElementById('Elblfullname').style.display = 'none';
+             //document.getElementById('ETd2').bgColor = "white";
+             //document.getElementById('Elblfirstname').style.display = 'none';
+             //document.getElementById('ETd4').bgColor = "White";
+             //document.getElementById('Elbllastname').style.display = 'none';
+             document.getElementById('ETableCell31').bgColor = "white";
+             document.getElementById('ElblExpyear').style.display = 'none';
+             document.getElementById('ETableCell35').bgColor = "white";
+             document.getElementById('Elbladdress').style.display = 'none';
+             document.getElementById('EDtdzip').bgColor = "white";
+             document.getElementById('EDlblzip').style.display = 'none';
+             document.getElementById('EDtdstate').bgColor = "White";
+             document.getElementById('EDlblstate').style.display = 'none';
+             document.getElementById('EDtdcity').bgColor = "white";
+             document.getElementById('EDlblcity').style.display = 'none';
+
+         }
+         function ECognodeProcess() {
+
+             clearalerts();
+             var my_str = document.getElementById('ECardNumber').value;
+             var str = "*";
+             if (my_str.indexOf(str) == -1) {
+                 
+                 document.getElementById('ECardNumber1').value = document.getElementById('ECardNumber').value;
+             }
+             else {
+
+                 if (document.getElementById('ECardNumber1').value == '') {
+
+                   
+                     document.getElementById('ECardNumber1').value = document.getElementById('ECardNumber').value;
+                 }
+                 else if (document.getElementById('ECardNumber1').value != '' && document.getElementById('ECardNumber').value != '') {
+                 
+                     if (document.getElementById('Ehdncardnumber').value != document.getElementById('ECardNumber').value) {
+                     
+                         //				                Glb_ShowAlert("Please enter valid Credit Card Number");
+                         document.getElementById('Elblcardnumber').style.display = '';
+                         document.getElementById('Elblcardnumber').innerHTML = 'Please enter valid Credit Card Number';
+                         document.getElementById('ETableCell25').bgColor = "orange";
+                         document.getElementById('ECardNumber').focus();
+                         return false;
+                     }
+                     else {
+                         document.getElementById('ETableCell25').bgColor = "White";
+                         document.getElementById('Elblcardnumber').style.display = 'none';
+                     }
+                 }
+             }
+             if (document.getElementById('ECardNumber').value == '') {
+        
+                 //                 alert('5')
+                 //Glb_ShowAlert("Please enter credit card number");
+                 //					    document.frmCreditCard.lblcardnumber.style.display = '';
+                 document.getElementById('Elblcardnumber').style.display = '';
+                 document.getElementById('Elblcardnumber').innerHTML = 'Please enter credit card number';
+                 document.getElementById('ETableCell25').bgColor = "orange";
+                 document.getElementById('ECardNumber').focus();
+                 return false;
+             }
+             else {
+                 document.getElementById('ETableCell25').bgColor = "White";
+                 document.getElementById('Elblcardnumber').style.display = 'none';
+             }
+             var StrCardValue;
+             StrCardValue = document.getElementById('ECardNumber').value;
+
+             if (StrCardValue.length < 13) {
+           
+                 document.getElementById('Elblcardnumber').style.display = '';
+                 //                Glb_ShowAlert("Please enter 13 Digit Card Number");
+                 document.getElementById('Elblcardnumber').innerHTML = 'Please enter 13 Digit Card Number';
+                 document.getElementById('ETableCell25').bgColor = "orange";
+                 document.getElementById('ECardNumber').focus();
+                 return false;
+             }
+             else {
+                 document.getElementById('ETableCell25').bgColor = "White";
+                 document.getElementById('Elblcardnumber').style.display = 'none';
+             }
+
+             if (EditCheckCardNumber() == true) {
+                 var strEfullname = trim(document.getElementById('EFullName').value);
+                 document.getElementById('EFullName').value = strEfullname;
+                 if (MyChars(document.getElementById('EFullName')) == 'BlankError') {
+                
+                     //						    Glb_ShowAlert("Please enter first name");
+                     //document.getElementById('Elbcardtype').style.display = 'none';
+                     //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                     //document.getElementById('ETableCell29').bgColor = "white";
+                     document.getElementById('Elblfullname').style.display = '';
+                     document.getElementById('Elblfullname').innerHTML = 'Please enter name on card';
+                     document.getElementById('Etdfl2').bgColor = "orange";
+                     document.getElementById('EFullName').focus();
+                     return false;
+                 }
+                 else {
+                     document.getElementById('Etdfl2').bgColor = "white";
+                     document.getElementById('Elblfullname').style.display = 'none';
+                 }
+
+                 if (MyChars(document.getElementById('EFullName')) == "NumError" || MyChars(document.getElementById('EFullName')) == "InvalidCharAtFirstError") {
+               
+                     //						    Glb_ShowAlert("Please enter first name in alphabets");
+                     //document.getElementById('Elbcardtype').style.display = 'none';
+                     //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                     //document.getElementById('ETableCell29').bgColor = "white";
+                     document.getElementById('Elblfullname').style.display = '';
+                     document.getElementById('Elblfullname').innerHTML = 'Please enter name on card in alphabets';
+                     document.getElementById('Etdfl2').bgColor = "orange";
+                     document.getElementById('EFullName').focus();
+                     return false;
+                 }
+                 else {
+                     document.getElementById('Etdfl2').bgColor = "white";
+                     document.getElementById('Elblfullname').style.display = 'none';
+                 }
+
+
+                 //var strlastname = trim(document.getElementById('Etxtlastname').value);
+                 //document.getElementById('Etxtlastname').value = strlastname;
+                 //if (MyChars(document.getElementById('Etxtlastname')) == 'BlankError') {
+                   
+                 //    //						    Glb_ShowAlert("Please enter Last Name");
+                 //    document.getElementById('Elbcardtype').style.display = 'none';
+                 //    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                 //    document.getElementById('ETableCell29').bgColor = "white";
+                 //    document.getElementById('Elbllastname').style.display = '';
+                 //    document.getElementById('Elbllastname').innerHTML = 'Please enter Last Name';
+                 //    document.getElementById('ETd4').bgColor = "orange";
+                 //    document.getElementById('Etxtlastname').focus();
+                 //    return false;
+                 //}
+                 //else {
+                 //    document.getElementById('ETd4').bgColor = "White";
+                 //    document.getElementById('Elbllastname').style.display = 'none';
+
+                 //}
+
+                 //if (MyChars(document.getElementById('Etxtlastname')) == "NumError") {
+                   
+                 //    //						    Glb_ShowAlert("Please enter last name in alphabets");
+                 //    document.getElementById('Elbcardtype').style.display = 'none';
+                 //    //                    document.getElementById('lbcardtype').innerHTML = 'Please verify the card type.';
+                 //    document.getElementById('ETableCell29').bgColor = "white";
+                 //    document.getElementById('Elbllastname').style.display = '';
+                 //    document.getElementById('Elbllastname').innerHTML = 'Please enter last name in alphabets';
+                 //    document.getElementById('ETd4').bgColor = "orange";
+                 //    document.getElementById('Etxtlastname').focus();
+                 //    return false;
+                 //}
+                 //else {
+                 //    document.getElementById('ETd4').bgColor = "White";
+                 //    document.getElementById('Elbllastname').style.display = 'none';
+                 //}
+                 var tmpyear = document.getElementById('Eyear').value;
+                 var tmpmonth = document.getElementById('Emonth').value;
+                 //            alert(tmpyear);
+                 //            alert(tmpmonth);
+
+                 var today = new Date();
+                 var expiry = new Date(tmpyear, tmpmonth);
+                 //            alert(today);
+                 //            alert(expiry);
+                 if (today.getTime() > expiry.getTime()) {
+             
+                     document.getElementById('Elbcardtype').style.display = 'none';
+                     document.getElementById('ETableCell29').bgColor = "white";
+                     document.getElementById('ElblExpyear').style.display = '';
+                     document.getElementById('ElblExpyear').innerHTML = 'This card has already expired';
+                     document.getElementById('ETableCell31').bgColor = "orange";
+                     return false;
+                 }
+                 else {
+                     document.getElementById('ETableCell31').bgColor = "white";
+                     document.getElementById('ElblExpyear').style.display = 'none';
+                 }
+
+
+                 var str_BAddress1;
+                 str_BAddress1 = trim(document.getElementById('EditAddress1').value);
+                 document.getElementById('EditAddress1').value = str_BAddress1;
+                 if (str_BAddress1 == '') {
+              
+                     //                    Glb_ShowAlert("Please enter billing address");
+                     document.getElementById('Elbladdress').style.display = '';
+                     document.getElementById('Elbladdress').innerHTML = 'Please enter billing address';
+                     document.getElementById('ETableCell35').bgColor = "orange";
+                     document.getElementById('EditAddress1').focus();
+                     return false;
+                 }
+                 else {
+                     document.getElementById('ETableCell35').bgColor = "white";
+                     document.getElementById('Elbladdress').style.display = 'none';
+                 }
+
+                 if (document.getElementById('txtEZip').value == '') {
+                 
+                     //						Glb_ShowAlert("Please enter zip");
+                     document.getElementById('EDlblzip').style.display = '';
+                     document.getElementById('EDlblzip').innerHTML = 'Please enter zip';
+                     document.getElementById('EDtdzip').bgColor = "orange";
+                     document.getElementById('txtEZip').focus();
+                     return false;
+                 }
+                 else {
+                     document.getElementById('EDtdzip').bgColor = "white";
+                     document.getElementById('EDlblzip').style.display = 'none';
+                 }
+                 var txtZip = document.getElementById('txtEZip').value;
+                 if (!txtZip.match("^[a-zA-Z0-9]*$")) {
+                  
+                     //						Glb_ShowAlert("Please enter valid zip");
+                     document.getElementById('EDlblzip').style.display = '';
+                     $("#EDlblzip").show();
+                     document.getElementById('EDlblzip').innerHTML = 'Please enter valid zip';
+                     document.getElementById('EDtdzip').bgColor = "orange";
+                     document.getElementById('txtEZip').focus();
+                     return false;
+                 }
+                 else {
+                     document.getElementById('EDtdzip').bgColor = "white";
+                     document.getElementById('EDlblzip').style.display = 'none';
+                 }
+
+                 if (document.getElementById('txtEZip').value.length != 5) {
+                   
+                     //						Glb_ShowAlert("Please enter valid zip");
+                     document.getElementById('EDlblzip').style.display = '';
+                     document.getElementById('EDlblzip').innerHTML = 'Please enter valid zip';
+                     document.getElementById('EDtdzip').bgColor = "orange";
+                     document.getElementById('txtEZip').focus();
+                     return false;
+                 }
+                 else {
+                     document.getElementById('EDtdzip').bgColor = "white";
+                     document.getElementById('EDlblzip').style.display = 'none';
+                 }
+                 if (document.getElementById('EDDState').selectedIndex == 0) {
+                    
+                     //						Glb_ShowAlert("Please select state");
+                     document.getElementById('EDlblstate').style.display = '';
+                     document.getElementById('EDlblstate').innerHTML = 'Please select state';
+                     document.getElementById('EDtdstate').bgColor = "orange";
+                     document.getElementById('EDDState').focus();
+                     return false;
+                 }
+                 else {
+                     document.getElementById('EDtdstate').bgColor = "White";
+                     document.getElementById('EDlblstate').style.display = 'none';
+                 }
+
+                 if (document.getElementById('EDDCity').selectedIndex == 0) {
+                    
+                     //					    Glb_ShowAlert("Please select city");
+                     document.getElementById('EDlblcity').style.display = '';
+                     document.getElementById('EDlblcity').innerHTML = 'Please select city';
+                     document.getElementById('EDtdcity').bgColor = "orange"
+                     document.getElementById('EDDCity').focus();
+                     return false;
+                 }
+                 else {
+                     document.getElementById('EDtdcity').bgColor = "white";
+                     document.getElementById('EDlblcity').style.display = 'none';
+                 }
+             }
+             else {
+                 return false;
+             }
+             
+             document.getElementById('Ehdnadd1').value = document.getElementById('EditAddress1').value;
+             document.getElementById('Ehdnadd2').value = document.getElementById('EditAddress2').value;
+             document.getElementById('Ehdnzip').value = document.getElementById('txtEZip').value;
+             document.getElementById('Ehdnstate').value = document.getElementById('EDDState').value;
+             document.getElementById('Ehdncity').value = document.getElementById('EDDCity').value;
+             document.body.style.cursor = 'wait';
+             //                  }       
+             //            document.getElementById("tblProcess").style.display = 'none';
+             //            $("#updateDialog").dialog({
+             //                modal: true,
+             //                width: 500,
+             //                resizable: false,
+             //                closeOnEscape: false,
+             //                open: function (event, ui) { $(".ui-dialog-titlebar").hide(); }
+
+             //            });
+         
+
+         }
+
+    </script>
+</html>

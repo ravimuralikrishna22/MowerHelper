@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+</head>
+<body>
+    <table cellpadding="0" cellspacing="0" align="center" border="0" width="100%">
+                        <tbody><tr>
+                            <td align="center">
+                                <textarea name="lblRequestData" rows="2" cols="20" readonly="readonly" id="lblRequestData" class="textfield" style="border-width:0px;height:180px;width:99%">@ViewBag.requestdata </textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table cellpadding="0" cellspacing="0" align="center" border="0" height="25px" width="100%">
+                                    <tbody><tr class="tr_bgcolor" style="font-size:15px;">
+                                            <td style="padding-left:5px;"><strong>Response data:</strong></td>
+                                    </tr>
+                                </tbody></table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <textarea name="lblResponseData" rows="2" cols="20" readonly="readonly" id="lblResponseData" class="textfield" style="border-width:0px;height:100px;width:99%"">@ViewBag.responsedata</textarea>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                    <br /><br />
+     <table border="0" cellpadding="0" cellspacing="0" width="98%">
+                <tr style="height: 50px">
+                    <td align="right">
+                      
+                        <input type="button" id="btnview" class="respclose button" value="close" name="btnview"/>
+                    </td>
+                </tr>
+            </table>
+    
+    
+   
+</body>
+</html>

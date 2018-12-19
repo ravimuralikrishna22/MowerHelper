@@ -1,0 +1,275 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    @* <link href="../../Content/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="../../SCRIPTS/scriptCognetwork.js" type="text/javascript"></script>*@
+   
+</head>
+<body>
+    @using (Html.BeginForm("AddProviderCertificate", "Directory", null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        <div id="update-message" class="error" style="padding-left: 250px; font-weight: bold;">
+        </div>
+        <div class="content-box">
+           @* <div class="content-box-header">
+                <h3>
+                    <span id="lblattribute">Add document</span>
+                </h3>
+                <div class="clear">
+                </div>
+            </div>*@
+            <div class="content-box-content">
+                <table id="tblProvAttributes" border="0" cellspacing="1" cellpadding="6" width="100%"
+                    class="border_style" align="center">
+                    <tr class="white_color">
+                        <td style="font-weight:bold;" align="right" width="40%">
+                            <span style="color: Red;">*</span>Title :&nbsp;
+                        </td>
+                        <td width="60%" align="Left" id="tdtitlemain">
+                               @Html.RadioButton("rbtdriverlicense", "1", false, new { @GroupName = "LicenseType",onclick = "return drivercheck();" })&nbsp;Driver license&nbsp;
+                                @Html.RadioButton("rbtelelicense", "2", true, new { @GroupName = "LicenseType",onclick = "return electriciancheck();"})&nbsp;Mower helper license
+                           @* @Html.TextBox("txtTitle",null, new {@class = "textfield", maxlength = "100", style = "width:300px;" })*@
+                            @* <asp:TextBox ID="txtTitle"  class="textfield" MaxLength="100" Width="300px"></asp:TextBox>*@
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td align="right" width="40%">
+                            <b>Description :&nbsp;</b>
+                        </td>
+                        <td width="60%" align="Left" id="tddescriptionmain">
+                            @Html.TextArea("txtDescription", null, 3, 3, new { @class = "textfield", maxlength = "1000", style = "width:500px;height:100px;" })
+                            @*<asp:TextBox ID="txtDescription"  Rows="3" class="textfield" TextMode="MultiLine"
+                            Height="100px" Width="500px"></asp:TextBox>*@<br />
+                            &nbsp;&nbsp;<span>(Maximum length 1000 characters)</span>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td style="height: 15px" align="right" width="40%">
+                            <a id="FileName" href="#"></a>&nbsp;&nbsp; &nbsp;&nbsp;<font color="red">*</font><span
+                                id="Label2" style="font-weight:bold;">Attach new file :</span> &nbsp;
+                        </td>
+                        <td style="height: 15px" width="60%" align="Left" id="tduploadmain">
+                            <table cellspacing="1" cellpadding="1" id="tblFiles" width="100%" border="0">
+                                <tr id="attachcheck">
+                                    <td>
+                                        <div id="inputsPlace">
+                                            <div id="div1">
+                                                <input type="checkbox" id="check1" style="display:none;" /><input type="file" id="myFile1" name="myFile1"
+                                                    style="margin-left: 0px; background-color: White;" />&nbsp;&nbsp;(Maximum file
+                                                size : 10mb)
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                   
+                </table>
+                <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" id="tblmain"
+                    style="display: none;">
+                    <tr class="white_color" align="center">
+                        <td id="tdtitle" height="30px" style="display: none;">
+                            <span id="lbltitle" style="font-weight:bold;color:Black;" ></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tddescription" height="30px" style="display: none;">
+                            <span id="lbldescription" style="font-weight:bold;color:Black;"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" align="center">
+                        <td id="tdupload" height="30px" style="display: none;">
+                            <span id="lblupload" style="font-weight:bold;color:Black;"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            <table id="tblbuttons" width="100%">
+                <tr>
+                    <td width="100%" align="right" style="padding-right: 10px; padding-bottom: 5px;">
+                        <input type="submit" id="imgbtnSaveFile" value="Save" class="button" onclick="return Validate('');" />
+                        <input type="button" class="close button" name="Cancel" value="Cancel" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        
+    }
+</body>
+     <script type="text/javascript">
+         function clearalerts() {
+             //ValidateAlertClear('tblmain', 'lbltitle', 'tdtitle', 'tdtitlemain', 'white');
+             ValidateAlertClear('tblmain', 'lbldescription', 'tddescription', 'tddescriptionmain', 'white');
+             ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+         }
+         function Validate(Filename) {
+             //var str_Title;
+             //str_Title = trim(document.getElementById('txtTitle').value);
+             //document.getElementById('txtTitle').value = str_Title;
+             //if (str_Title == '') {
+             //       clearalerts();
+             //    //Glb_ShowAlert("Please enter title");
+             //    document.getElementById('tblmain').style.display = '';
+             //    document.getElementById('lbltitle').innerHTML = "Please enter title";
+             //    document.getElementById('tdtitle').style.display = '';
+             //    document.getElementById('tdtitle').bgColor = "orange";
+             //    document.getElementById('tdtitlemain').bgColor = "orange";
+             //    document.getElementById('txtTitle').focus();
+             //    return false;
+             //}
+             //else {
+
+             //    ValidateAlertClear('tblmain', 'lbltitle', 'tdtitle', 'tdtitlemain', 'white');
+             //}
+             var ta = document.getElementById('txtDescription');
+             if (ta.value.length > 1000) {
+                 clearalerts();
+                 //Glb_ShowAlert('Please enter description less than  1000 characters');
+                 document.getElementById('tblmain').style.display = '';
+                 document.getElementById('lbldescription').innerHTML = "Please enter description less than  1000 characters";
+                 document.getElementById('tddescription').style.display = '';
+                 document.getElementById('tddescription').bgColor = "orange";
+                 document.getElementById('tddescriptionmain').bgColor = "orange";
+                 document.getElementById('txtDescription').focus();
+                 return false;
+             }
+             else {
+
+                 ValidateAlertClear('tblmain', 'lbldescription', 'tddescription', 'tddescriptionmain', 'white');
+             }
+             if (document.getElementById("tblFiles").style.display == '') {
+                 clearalerts();
+                 var container = document.getElementById("inputsPlace");
+                 var inputElls = container.getElementsByTagName("input");
+                 var count = 0;
+                 var count1 = 0;
+                 for (var i = 0; i < inputElls.length; i++) {
+                     var inputElement = inputElls[i];
+                     if (inputElement.type == "checkbox") {
+                         clearalerts();
+                         count += 1;
+                         // alert(count);
+                         var fileval = inputElement.id.replace('check', 'myFile');
+                         if (document.getElementById(fileval).value != "") {
+                             clearalerts();
+                             count1 += 1;
+
+                             var str = document.getElementById(fileval).value;
+                             var Strr = str.toUpperCase();
+                             if ((Strr.indexOf(".DOC") == -1) && (Strr.indexOf(".DOCX") == -1) && (Strr.indexOf(".TXT") == -1) && (Strr.indexOf(".XLS") == -1) && (Strr.indexOf(".PPS") == -1) && (Strr.indexOf(".PPT") == -1) && (Strr.indexOf(".PDF") == -1) && (Strr.indexOf(".XLSX") == -1) && (Strr.indexOf(".PPTX") == -1) && (Strr.indexOf(".ZIP") == -1) && (Strr.indexOf(".RAR") == -1) && (Strr.indexOf(".GIF") == -1) && (Strr.indexOf(".PNG") == -1) && (Strr.indexOf(".JPG") == -1)) {
+                                 clearalerts();
+                                 //Glb_ShowAlert("Please select only doc,docx,txt,xls,pps,ppt,pdf,zip,rar, GIF, PNG, JPG files for document file");
+                                 document.getElementById('tblmain').style.display = '';
+                                 document.getElementById('lblupload').innerHTML = "Please select only doc, docx, txt, xls, pps, ppt, pdf, zip, rar, gif, png, jpg files for document file";
+                                 document.getElementById('tdupload').style.display = '';
+                                 document.getElementById('tdupload').bgColor = "orange";
+                                 document.getElementById('tduploadmain').bgColor = "orange";
+                                 return false;
+                             }
+                             else {
+
+                                 ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+                             }
+                         }
+                     }
+                 }
+                 if (count != 0) {
+                     clearalerts();
+                     if (count1 == 0) {
+
+                         clearalerts();
+                         //Glb_ShowAlert('Please select at least one file');
+                         document.getElementById('tblmain').style.display = '';
+                         document.getElementById('lblupload').innerHTML = "Please select at least one file";
+                         document.getElementById('tdupload').style.display = '';
+                         document.getElementById('tdupload').bgColor = "orange";
+                         document.getElementById('tduploadmain').bgColor = "orange";
+                         return false;
+                     }
+                     else {
+
+                         ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+                     }
+                 }
+                 else {
+                     if (count1 == 0) {
+
+                         clearalerts();
+                         //Glb_ShowAlert('Please select at least one file');
+                         document.getElementById('tblmain').style.display = '';
+                         document.getElementById('lblupload').innerHTML = "Please select at least one file";
+                         document.getElementById('tdupload').style.display = '';
+                         document.getElementById('tdupload').bgColor = "orange";
+                         document.getElementById('tduploadmain').bgColor = "orange";
+                         return false;
+                     }
+                     else {
+
+                         ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+                     }
+                 }
+
+             }
+             //            if (document.getElementById("FileUpLoad").style.display == '') {
+             //                clearalerts();
+             //                if (Filename == '') {
+             //                    clearalerts();
+             //                    if (document.getElementById("FileUpLoad").value == '') {
+             //                        clearalerts();
+             //                        //Glb_ShowAlert("PLease select file");
+             //                        document.getElementById('tblmain').style.display = '';
+             //                        document.getElementById('lblupload').innerHTML = "PLease select file";
+             //                        document.getElementById('tdupload').style.display = '';
+             //                        document.getElementById('tdupload').bgColor = "orange";
+             //                        document.getElementById('tduploadmain').bgColor = "orange";
+             //                        return false;
+             //                    }
+             //                    else {
+
+             //                        ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+             //                    }
+             //                }
+             //                if (document.getElementById('FileUpLoad').value != "") {
+             //                    clearalerts();
+             //                    var str = document.getElementById('FileUpLoad').value;
+             //                    var Strr = str.toUpperCase();
+             //                    if ((Strr.indexOf(".DOC") == -1) && (Strr.indexOf(".DOCX") == -1) && (Strr.indexOf(".TXT") == -1) && (Strr.indexOf(".XLS") == -1) && (Strr.indexOf(".PPS") == -1) && (Strr.indexOf(".PPT") == -1) && (Strr.indexOf(".PDF") == -1) && (Strr.indexOf(".XLSX") == -1) && (Strr.indexOf(".PPTX") == -1) && (Strr.indexOf(".ZIP") == -1) && (Strr.indexOf(".RAR") == -1) && (Strr.indexOf(".GIF") == -1) && (Strr.indexOf(".PNG") == -1) && (Strr.indexOf(".JPG") == -1)) {
+             //                        //Glb_ShowAlert("Please select only doc,docx,txt,xls,pps,ppt,pdf,zip,rar, GIF, JPG, PNG files for document file");
+             //                        document.getElementById('tblmain').style.display = '';
+             //                        document.getElementById('lblupload').innerHTML = "Please select only doc, docx, txt, xls, pps, ppt, pdf, zip, rar, gif, jpg, png files for document file";
+             //                        document.getElementById('tdupload').style.display = '';
+             //                        document.getElementById('tdupload').bgColor = "orange";
+             //                        document.getElementById('tduploadmain').bgColor = "orange";
+             //                        return false;
+             //                    }
+             //                    else {
+
+             //                        ValidateAlertClear('tblmain', 'lblupload', 'tdupload', 'tduploadmain', 'white');
+             //                    }
+             //                }
+             //            }
+             //            document.getElementById('divloading').style.display = '';
+             //            document.body.style.cursor = 'wait';
+         }
+         function drivercheck() {
+
+             document.getElementById("rbtdriverlicense").checked = true;
+             document.getElementById("rbtelelicense").checked = false;
+
+         }
+         function electriciancheck() {
+             document.getElementById("rbtdriverlicense").checked = false;
+             document.getElementById("rbtelelicense").checked = true;
+         }
+    </script>
+</html>

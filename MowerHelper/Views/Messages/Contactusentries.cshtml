@@ -1,0 +1,456 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+ @*   <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+           @Styles.Render("~/Content/themes/base/TherpistStyles")
+         @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+     <style type="text/css">
+        .phone
+        {
+            width: 10%;
+        }
+       
+    </style>
+      <script type="text/javascript">
+          function ondescriptionover(obj) {
+              // alert(obj);
+              document.getElementById(obj).style.position = 'absolute';
+              document.getElementById(obj).style.display = '';
+              return false;
+          }
+          function ondescriptionout(obj) {
+              //alert(obj);
+              document.getElementById(obj).style.display = 'none';
+              return false;
+          }
+    </script>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    var psize = $('#hdnpagesize').val();
+                    if (psize != '') {
+                        $('#ddlrecords').val(psize);
+                    }
+                    else {
+                        $('#ddlrecords').val("10");
+
+                    }
+                    var lname = $('#hdnlname').val();
+                    if (lname != '') {
+                        $('#txtlastname').val(lname);
+                    }
+
+                    var phone = $('#hdnphone').val();
+                    if (phone != '') {
+                        $('#txtphone').val(phone);
+                    }
+
+
+                    var mail = $('#hdnmail').val();
+                    if (mail != '') {
+                        $('#txtmail').val(mail);
+                    }
+
+                    var sub = $('#hdnsub').val();
+                    if (sub != '') {
+                        $('#txtsubject').val(sub);
+                    }
+
+                });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".close").live("click", function (e) {
+                var dialogDiv = $('#ReplyDialog');
+                dialogDiv.dialog('close');
+            });
+            var tabaname = document.getElementById('hdntab').value;
+            if (tabaname == '1') {
+                document.getElementById('tdtabs').className = '';
+                document.getElementById('trtabs').style.display = 'none';
+                document.getElementById('tdsearch').className = 'background_color';
+                document.getElementById('trempty').style.display = '';
+                document.getElementById('divcomp').style.display = 'none';
+                document.getElementById('btnclose').style.display = '';
+            }
+            else {
+                document.getElementById('tdtabs').className = 'tab-background';
+                document.getElementById('trtabs').style.display = '';
+                document.getElementById('tdsearch').className = 'tab-background';
+                document.getElementById('trempty').style.display = 'no';
+                document.getElementById('divcomp').style.display = '';
+                document.getElementById('btnclose').style.display = 'none';
+
+            }
+        });
+
+    </script>
+    <script type="text/javascript">
+
+        function ddlactionchange(id, Contact_ID) {
+
+            if (id == 2) {
+
+                //var dialogDiv = $('#ReplyDialog');
+                //$('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                var viewUrl = "../Messages/ContactReply?Contact_ID=" + Contact_ID;
+                Displaydialog('ReplyDialog', viewUrl, 'auto', 1200, 'dvLoading', null, null);
+                $('.ddlactionclass').val("0");
+                //$.get(viewUrl, function (data) {
+                //    dialogDiv.html(data);
+                //    $('#dvLoading').dialog('close');
+                //    dialogDiv.dialog('open');
+                //});
+                //return false;
+
+            }
+
+
+            if (id == 1) {
+                if (confirm("Do you want to delete the contact ?")) {
+                    window.location = '../Messages/Deletecontact?Contact_ID=' + Contact_ID;
+                    $('.ddlactionclass').val("0");
+                }
+
+                else {
+                    $('.ddlactionclass').val("0");
+
+                    //                    alert("no");
+                }
+            }
+
+        }
+        function ValidSearch() {
+            //if ($("#txtlastname").val() != "") {
+            //    window.location.href = "../Messages/Contactusentries?txtlastname=" + $("#txtlastname").val() ;
+            //}
+            //else if ($("#txtmail").val() != "") {
+
+            //    window.location.href = "../Messages/Contactusentries?txtlastname=" + $("#txtlastname").val() + "&txtmail=" + $('#txtmail').val();
+            //}
+            //else if ($("#txtphone").val() != "") {
+
+            //    window.location.href = "../Messages/Contactusentries?txtlastname=" + $("#txtlastname").val() + "&txtmail=" + $('#txtmail').val() + "&txtphone=" + $('#txtphone').val();
+            //}
+            //else if ($("#txtsubject").val() != "") {
+
+            //    window.location.href = "../Messages/Contactusentries?txtlastname=" + $("#txtlastname").val() + "&txtmail=" + $('#txtmail').val() + "&txtphone=" + $('#txtsubject').val() + "&txtsubject=" + $('#txtsubject').val();
+            //}
+            //else { return; }
+            //document.forms.item(0).submit();
+            window.location.href = '@Url.Action("Contactusentries", "Messages")?txtlastname=' + document.getElementById('txtlastname').value + '&txtmail=' + document.getElementById('txtmail').value
++ '&txtphone=' + document.getElementById('txtphone').value
+//+ '&ddlrecords=' + document.getElementById('ddlrecords').value
++ '&txtsubject=' + document.getElementById('txtsubject').value + '&tabId=' + "@ViewBag.tabid";
+        }
+</script>
+            <script type="text/javascript">
+                function cancel() {
+                    window.location.href = "@Url.Action("AdminArea", "AdminHome")";
+         }
+    </script>
+@*    <style type="text/css">
+        .dvLoading .ui-dialog-titlebar{display:none;}             
+                  tr.gridHead th:nth-child(1) { width: 15%; }
+          tr.gridHead th:nth-child(2) { width: 10%; }
+          tr.gridHead th:nth-child(3) { width: 55%; }
+          tr.gridHead th:nth-child(4) { width: 10%; }
+          tr.gridHead th:nth-child(5) { width: 10%; }
+          tr.gridRow td:nth-child(3) { width: 55%;text-align:left; }
+          tr.gridAltRow td:nth-child(3) { width: 55%;text-align:left; }
+    </style>*@
+    
+</head>
+<body>
+        <input id="hdnpagesize" type="hidden" value="@ViewBag.Thpagesize"/>
+            <input id="hdnlname" name="hdnlname" type="hidden" value="@ViewBag.txtlastname"/>
+            <input id="hdnphone" name="hdnphone" type="hidden" value="@ViewBag.txtphone"/>
+            <input id="hdnmail" name="hdnmail" type="hidden" value="@ViewBag.txtmail"/>
+            <input id="hdnsub" name="hdnsub" type="hidden" value="@ViewBag.txtsubject"/>
+    @using (Html.BeginForm("Contactusentries", "Messages", FormMethod.Post, null))
+    {
+                    
+        
+        <input id="hdntab" type="hidden" name="hdntab" value="@ViewBag.tabid"/>
+    <div>
+        @{Html.RenderAction("Topsection", "Tools");}
+    </div>
+            <div id="divcomp">
+       @{Html.RenderAction("Msg_Main", "Messages", new { @Tabid = "1" });}
+                
+    </div>
+    <div id="main-content">
+        @if(ViewBag.tabid == "1")
+                {
+                @Html.Partial("_NavigationTool")
+                }
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr class="background_color">
+                <td align="left" valign="top" width="100%">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr id="trtabs">
+                            <td width="100%" class="navigation">
+                                <div class="admin-tab">
+                                    @{int FromcontactCount = Convert.ToInt32(ViewBag.contactcount);}
+                                    <a class="admin-link" href="Contactusentries" id="acontactus"><span>Contact us entries&nbsp;(@FromcontactCount)</span>
+                                    </a>
+                                </div>
+                                                                <div class="admin-tab">
+                                    @{int supervisercnt = Convert.ToInt32(ViewBag.supervisercnt);}
+                                    @{int vusercount = Convert.ToInt32(ViewBag.vusercount);}
+                                      @{int vericount = supervisercnt + vusercount;}
+                                    <a class="inadmin-link" id="aFromveri" href="Fromveriuserandsup"><span>From verification user/supervisor&nbsp;(@vericount)</span>
+                                    </a>
+                                </div>
+
+                                                                <div class="admin-tab">
+                                                                 @{int paapcount = Convert.ToInt32(ViewBag.paapcount);}
+                                    @{int newpaapcount = Convert.ToInt32(ViewBag.Newpaapcount);}
+                                    @{int practicecount = paapcount + newpaapcount;}
+                                    <a class="inadmin-link" id="afromnewpaap" href="frompractices"><span>From mower helper&nbsp;(@practicecount)</span>
+                                    </a>
+                                </div>
+                                <div class="admin-tab">
+                                    @{int Sentcount = Convert.ToInt32(ViewBag.Sentcount);}
+                                    <a class="inadmin-link" id="aSentMessages" href="SentMessages"><span>Sent messages&nbsp;(@Sentcount)</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+           <tr class="background_color">
+            <td id="tdsearch" width="100%">
+             <table id="tblsearch" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+             <tr class="background_color">
+                    <td height="30px" align="left">
+                       <strong> Last name&nbsp;:&nbsp;</strong> 
+                            @Html.TextBox("txtlastname", null, new { @class = "textfield", style = "width:130px", autocomplete = "off" })
+                    </td>
+                                        <td height="30px" align="left" colspan="2">
+                       <strong> Mail&nbsp;:&nbsp;</strong> 
+                            @Html.TextBox("txtmail", null, new { @class = "textfield", style = "width:119px", autocomplete = "off" })
+                    </td>
+                                                           <td height="30px" align="left" colspan="2">
+                       <strong> Phone&nbsp;:&nbsp;</strong> 
+                            @Html.TextBox("txtphone", null, new { @class = "textfield", style = "width:107px", autocomplete = "off", onkeypress = "return checkValidNumeric(txtphone,15,0,event)" })
+                    </td>
+                                                           <td height="30px" align="left" colspan="2">
+                       <strong> Subject&nbsp;:&nbsp;</strong> 
+                            @Html.TextBox("txtsubject", null, new { @class = "textfield", style = "width:134x", autocomplete = "off" })
+                    </td>
+                                                                <td align="left" width="15%">
+                                                                    <a id="btnSearch" href="#" onclick="return ValidSearch();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                       @*<input type="submit" name="btnSearch" value="Search" id="btnSearch" class="button" />*@&nbsp;
+                                                                     <input value="Cancel"  type="button" class="button" style="width: 60px;vertical-align:top" id="btnclose" onclick="return cancel();"/>
+                    </td>
+                    </tr>
+                    </table>
+                    </td>
+                </tr>
+                        <tr class="background_color" id="trempty" style="display:none;">
+                            <td class="background_color" style="height:20px;">
+
+                            </td>
+                        </tr>
+                        <tr class="background_color">
+                            <td id="tdtabs" class="tab-background" width="100%">
+                                <div class="content-box">
+                                    <div class="content-box-header">
+                                        <table id="Table1" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                            <tr>
+                                                <td width="80%">
+                                                    <h3>
+                                                        Contact list</h3>
+                                                </td>
+                                                @if (Convert.ToInt32(ViewBag.totrec) > 0)
+                                                {
+                                                <td width="20%" align="center">
+                                                    <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                        <li><strong>Rows per page :&nbsp;</strong>
+                                                      @*   @{Html.RenderAction("Rowsperpage", "Profiles", new { @id = "1" });}*@
+                                                              @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                                        </li>
+                                                    </ul>
+                                                        <script>$("#ddlrecords").change(function () {
+    window.location.href = '@Url.Action("Contactusentries", "Messages")?txtlastname=' + document.getElementById('txtlastname').value + '&txtmail=' + document.getElementById('txtmail').value
++ '&txtphone=' + document.getElementById('txtphone').value
++ '&ddlrecords=' + document.getElementById('ddlrecords').value
++ '&txtsubject=' + document.getElementById('txtsubject').value;
+
+});
+    </script>
+                                                </td>
+                                                    
+                                                }
+                                            </tr>
+                                        </table>
+                                        <div class="clear">
+                                        </div>
+                                    </div>
+                                    <div class="content-box-content">
+                                        @{string heading1;
+                                          if (Request["sort"] == "Sender" && Request["sortdir"] == "ASC")
+                                          {
+                                              heading1 = "Sender ▲";
+                                          }
+                                          else if (Request["sort"] == "Sender" && Request["sortdir"] == "DESC")
+                                          {
+                                              heading1 = "Sender ▼";
+                                          }
+                                          else
+                                          {
+                                              heading1 = "Sender .";
+                                          }
+                                        }
+                                        @{
+                                          WebGrid Dsmgrid = new WebGrid(rowsPerPage: Convert.ToInt32(ViewBag.Thpagesize));}
+                                        @{WebGrid grid = Dsmgrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                          if (grid.TotalRowCount != 0)
+                                          {
+                                              int count = 0;
+                                              string pager = grid.Pager().ToString();
+                                              string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                              string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                              if (ViewBag.Type != "Archived")
+                                              {
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(
+                                                  grid.Column("ContactName", "Contact name", canSort: false),
+                                                   grid.Column("ContactMail", "Mail", canSort: false),
+                                                    grid.Column("ContactPhone", "Phone", style: "phone", canSort: false),
+                                                     grid.Column("ContactSubject", "Subject", canSort: false),
+                                                      grid.Column("DateOfSubmit", "Submited date", canSort: false),
+                                                      grid.Column("ContactMessage", "Message", canSort: false, 
+                                                      format:@<text>
+                                                         @{string description = (string)item.ContactMessage;
+                                                           if (description.Length > 100)
+                                                           {
+                                                               count = count + 1;
+                                                               description = description.Substring(0, 100);
+                                                           
+                                                           <span>@description</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 500px; height: 100px; display: none;  left:500px;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Message :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@HttpUtility.HtmlDecode(item.ContactMessage)</span> </td> </tr>
+                                                             </table> </div>
+                                                           }
+                                                           else
+                                                           {
+                                                               
+                                                               <span>@HttpUtility.HtmlDecode(item.ContactMessage)</span>
+                                                           }
+                                                           }
+                                                
+                                                </text> ),
+                                                       grid.Column("Action", canSort: false, style: "action", format: @<text>
+                                                                                              @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select one--", Value = "0" },
+                                                               new SelectListItem{ Text="Delete", Value = "1" },
+                                                               new SelectListItem{ Text="View contact Information", Value = "2" }
+                                                              },
+                                                                                                                            new { @class = "ddlactionclass", onchange = "ddlactionchange(this.value, '" + item.Contact_ID + "');", style = "font-family:arial;font-size:13px;height:20px;width:160px;" })</text>)
+
+                                                    )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                            @(new HtmlString(gridhtml))
+                                            
+                                            
+                                            
+                                              }
+                                            <br />
+                                            <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                            <br />
+
+
+
+                                          }
+                                          else
+                                          {
+                                            <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                <tr id="trdsmerror" class="white_color">
+                                                    <td align="center" height="25px" valign="middle" colspan="2">
+                                                        <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                                            No contact list found</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                          }
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="ReplyDialog" title="View/Reply Contact Info">
+      </div>
+        <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+     <img src="../Images/ajax-loader2.gif" alt="Processing"  />
+    </div>
+
+                            <div>
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>
+  
+    <script type="text/javascript">
+        var linkObj;
+        $(function () {
+            //$('#ReplyDialog').dialog({
+            //    autoOpen: false,
+            //    width: 1200,
+            //    resizable: false,
+            //    modal: true,
+            //    close: function () { $('.ddlactionclass').val("0"); }
+
+            //});
+
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+            var tabid = '@ViewBag.tabid';
+            if (tabid != 1) {
+                $("#Menu0").removeClass();
+                $("#Menu1").removeClass();
+                $("#Menu2").addClass("active");
+                $("#Menu3").removeClass();
+            }
+            else {
+                $("#Menu0").removeClass();
+                $("#Menu1").removeClass();
+                $("#Menu2").removeClass();
+                $("#Menu3").addClass("active");
+            }
+           
+          });
+    </script>
+
+    }
+</body>
+</html>

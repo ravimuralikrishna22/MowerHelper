@@ -1,0 +1,124 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+   <title>Mower Helper-Find an Mower Helper</title>
+    @*@Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Styles.Render("~/Content/themes/base/TherpistStyles")*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var userInd = "@ViewBag.SendInd";
+            var groupInd = "@ViewBag.GroupInd";
+            if (userInd == "Y") {
+                $('input:checkbox[name="EchkUser"]').attr('checked', 'checked');
+            }
+            if (groupInd == "Y") {
+                $('input:checkbox[name="EchkGroup"]').attr('checked', 'checked');
+            }
+        });
+        $(document).ready(function () {
+            var TopIndex = '@Session["TopIndex"]';
+              $("#Menu0").removeClass();
+              $("#Menu1").removeClass();
+              $("#Menu2").removeClass();
+              $("#Menu3").addClass("active");
+          });
+    </script>
+</head>
+<body>
+@*<div>
+        @{Html.RenderAction("Topsection", "Tools");}
+    </div>*@
+     @using (Html.BeginForm("Msg_SettingEdit", "Messages", FormMethod.Post, null))
+     {      
+         @Html.Hidden("MrId")
+
+    @*<div id="main-content">
+        @Html.Partial("_NavigationTool")
+            <div class="content-box" style="width: 778px; margin: 0 auto;">
+                <div id="th_HeaderID" class="content-box-header">
+                    <h3>
+                        <strong>&nbsp;&nbsp;Edit settings</strong></h3>
+                </div>
+                <div class="content-box-content">*@
+                    <table border="0" cellpadding="8" cellspacing="1" width="100%" class="border_style">
+                        <tr class="white_color">
+                            <td align="right" width="35%">
+                                <strong><font color="red">*</font>From role&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                            @Html.Display("txtfromRole")
+                               @* @Html.DropDownList("fromrolesDdl", null, "--Select Role--", new { @onchange = "return ddlFromRole(this.value);", @style = "font-family:arial;font-size:13px;height:30px;width:300px;" })*@
+                            </td>
+                        </tr>
+                        <tr class="nav_blue_color">
+                            <td align="right" width="35%">
+                                <strong><font color="red">*</font>To role&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                             @Html.Display("txtToRole")
+                               @* @Html.DropDownList("toRolesDdl", null, "--Select Role--", new { @onchange = "return ddlToRole(this.value);", @style = "font-family:arial;font-size:13px;height:30px;width:300px;" })*@
+                            </td>
+                        </tr>
+                        <tr class="white_color">
+                            <td align="right" width="35%">
+                                <strong><font color="red">*</font>Group name&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.TextBox("txtEGroupName", null, new { @class = "textfield", @maxLength = "50", @title = "Enter Group Name", @style = "width:300px" })
+                            </td>
+                        </tr>
+                        <tr class="nav_blue_color">
+                            <td align="right" width="35%">
+                                <strong><font color="red">*</font>Category&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.DropDownList("EditCatDdl", null, "--Select Category--", new { @style = "font-family:arial;font-size:13px;height:30px;width:300px;" })
+                            </td>
+                        </tr>
+                        <tr class="white_color">
+                            <td align="right" width="35%">
+                                <strong>Can send user level messages&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.CheckBox("EchkUser")
+                            </td>
+                        </tr>
+                        <tr class="nav_blue_color">
+                            <td align="right" width="35%">
+                                <strong>Can send group level messages&nbsp;:&nbsp;</strong>
+                            </td>
+                            <td align="left">
+                                @Html.CheckBox("EchkGroup")
+                            </td>
+                        </tr>
+                    </table>
+                @*</div>
+            </div>*@
+            <br />
+            <table cellpadding="0" cellspacing="0" align="center" width="778px">
+                <tr class="background_color">
+                    <td align="right">
+                        <input name="btnESave" value="Save" id="btnESave" title="Click here to save the information"
+                            class="button" type="submit" />
+                        &nbsp;<input name="btnECancel" value="Cancel" id="btnECancel" title="Click here to cancel the operation and return to main window"
+                            class="button" type="button" />
+                    </td>
+                </tr>
+            </table>
+                <br />
+        @*</div>*@
+     }
+       @* <div style="height: 150Px">
+    </div>
+    <div>
+        @{Html.RenderAction("Bottomsections", "Tools");}
+    </div>*@
+</body>
+</html>

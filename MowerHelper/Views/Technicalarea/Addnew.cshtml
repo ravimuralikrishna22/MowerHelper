@@ -1,0 +1,149 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+                function rblInUseyesCheck() {
+                 if (document.getElementById('rblInUseyes').checked == true) {
+                    document.getElementById('rblInUseyes').checked = true;
+                    document.getElementById('rblInUseno').checked = false;
+                }
+            }
+                        function rblInUsenocheck() {
+                if (document.getElementById('rblInUseno').checked == true) {
+                    document.getElementById('rblInUseno').checked = true;
+                    document.getElementById('rblInUseyes').checked = false;
+                }
+
+            }
+            </script>
+            <script type="text/javascript">
+                function Validate() {
+                    var uname = trim(document.getElementById('txtParameter_Key').value);
+                    document.getElementById('txtParameter_Key').value = uname;
+                    if (document.getElementById('txtParameter_Key').value == '') {
+                        document.getElementById('tddesc').bgColor = "White";
+                        document.getElementById('lblErrdesc').style.display = 'none';
+                        document.getElementById('lblErrparakey').style.display = '';
+                        document.getElementById('lblErrparakey').innerHTML = 'Please enter Parameter Key';
+
+                        document.getElementById('tdparakey').bgColor = "orange";
+                        document.getElementById('txtParameter_Key').focus();
+
+                        return false;
+                    }
+                    else {
+                        document.getElementById('tdparakey').bgColor = "White";
+                        document.getElementById('lblErrparakey').style.display = 'none';
+
+                    }
+
+                    var des = trim(document.getElementById('txtDescription').value);
+                    document.getElementById('txtDescription').value = des;
+                    if (document.getElementById('txtDescription').value != '') {
+                        if (document.getElementById('txtDescription').value.length > 1000) {
+                            //                            alert("Description can be up to 1000 characters.");
+                            //                            document.getElementById('txtDescription').focus();
+                            document.getElementById('lblErrdesc').style.display = '';
+                            document.getElementById('lblErrdesc').innerHTML = 'Description can be up to 1000 characters.';
+
+                            document.getElementById('tddesc').bgColor = "orange";
+                            document.getElementById('txtDescription').focus();
+                            return false;
+                        }
+                        else {
+                            document.getElementById('tddesc').bgColor = "White";
+                            document.getElementById('lblErrdesc').style.display = 'none';
+
+                        }
+                    }
+                }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("Addnew", "Technicalarea", FormMethod.Post, null))
+    {
+        @Html.AntiForgeryToken()
+    <div class="content-box">
+       <div class="content-box-content">
+                 <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                        border="0">
+ <tr height="10" runat="server" class="white_color">
+                            <th align="right" width="30%"><b><font color="red">*</font></b> <strong>Project :</strong>&nbsp;</th>
+                            <td align="left" id="tdMainPhone" runat="server" width="70%">
+
+                                                                                          @Html.DropDownList("ddlProject", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="Cognode", Value = "1" }
+                                                              },
+                                                                      new { style = "font-family:arial;font-size:13px;height:25px;width:200px;" })
+                            </td>
+                        </tr>
+                         <tr height="10" runat="server" class="white_color">
+                            <th align="right" width="30%"><b><font color="red">*</font></b> <strong>Project Status :</strong>&nbsp;</th>
+                            <td align="left" runat="server" width="70%">
+
+                                                                                          @Html.DropDownList("ddlProject_Status_Ind", new List<SelectListItem>
+
+                                                              {
+                                                                  new SelectListItem{ Text="Release", Value = "1" },
+                                                               new SelectListItem{ Text="Test", Value = "2" }
+                                                               
+                                                              },
+                                                                      new { style = "font-family:arial;font-size:13px;height:25px;width:200px;" })
+                            </td>
+                        </tr>
+                        <tr height="10" class="white_color" runat="server">
+                            <th align="right"> <b><font color="red">*</font></b><strong> Parameter Key :</strong>&nbsp;</th>
+                            <td align="left" id="tdparakey"  runat="server">
+                                 @Html.TextBox("txtParameter_Key", null, new { @class = "textfield", style = "width:350px", autocomplete = "off" })
+                                                            &nbsp;&nbsp;&nbsp
+                                <span id="lblErrparakey" style="font-weight: bold; color: Black"></span>
+                            </td>
+                        </tr>
+                        <tr height="10" class="white_color" runat="server">
+                            <th align="right"> <strong>Parameter Value :</strong>&nbsp;</th>
+                            <td align="left" runat="server">
+                                 @Html.TextBox("txtParameter_Value", null, new { @class = "textfield", style = "width:350px", autocomplete = "off" })
+
+                            </td>
+                        </tr>
+                        <tr height="10" class="white_color" runat="server">
+                            <th align="right"> <strong>Description :</strong>&nbsp;</th>
+                            <td align="left" id="tddesc" runat="server">
+                                  @Html.TextArea("txtDescription", null, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })
+                                  <br />
+                                (Maximum length upto 1000 characters)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                               <span id="lblErrdesc" style="font-weight: bold; color: Black"></span>
+                            </td>
+                        </tr>
+                        <tr height="10" class="white_color" runat="server">
+                            <th align="right"> <strong>In Use :</strong>&nbsp;</th>
+                            <td align="left" runat="server">
+                                 @Html.RadioButton("rblInUseyes", "1", true, new { @GroupName = "use", onclick = "return rblInUseyesCheck();" })&nbsp;Yes&nbsp;
+                                 @Html.RadioButton("rblInUseno", "1", false, new { @GroupName = "use", onclick = "return rblInUsenocheck();" })&nbsp;No&nbsp;
+                            </td>
+                        </tr>
+                    </table>
+                                                                                       <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Validate();" />
+                                                          &nbsp;
+                                              <input type="button" class="close button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+      </div></div>
+        
+    }
+</body>
+</html>

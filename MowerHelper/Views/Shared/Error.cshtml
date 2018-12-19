@@ -1,0 +1,61 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Therapist-Help";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+    <link href="~/Content/common.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript">
+        window.history.forward(-1);
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        @{Html.RenderAction("_Reg_New_Top_Section", "Public", null);}
+        <div id="flt02">
+            <div id="bodycon">
+                <div id="contentpannel" class="padding-top">
+                    <div style="height: 450px; margin-top: 110px;">
+                        <p style="font-family: Arial; font-weight: bold; font-size: 15px; text-align: center;">
+                            Sorry Some Problem Exist in the System.Please contact Mower Helper Admin.
+                        </p>
+                    </div>
+                </div>
+                @{Html.RenderAction("_New_bottom_section", "Public", null);}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<hgroup class="title">
+    <h1 class="error">Error.</h1>
+    <h2 class="error">An error occurred while processing your request.</h2>
+</hgroup>
+<div class="list-header clearfix">
+    <span>Error</span>
+</div>
+<div class="list-sfs-holder">
+    <div class="alert alert-error">
+        An unexpected error has occurred. Please contact the system administrator.</div>
+    @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+    {
+     
+        <div>
+            <p>
+                <b>Exception:</b> @Model.Exception.Message<br />
+                <b>Controller:</b> @Model.ControllerName<br />
+                <b>Action:</b> @Model.ActionName
+            </p>
+            <div style="overflow:scroll">
+                <pre>
+@Model.Exception.StackTrace
+                </pre>
+            </div>
+        </div>
+    }
+</div>

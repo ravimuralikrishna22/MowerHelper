@@ -1,0 +1,160 @@
+﻿@{
+    Layout = null;
+}
+@using Obout.Mvc.HTMLEditor;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <link href="~/Content/style.css" rel="stylesheet" type="text/css" media="all" />
+     @Scripts.Render("~/Scripts/Thscriptscript")
+            <script type="text/javascript">
+                function Edit_Validate() {
+
+                    document.getElementById('Edit_tdsub').bgColor = "White";
+                    document.getElementById('Edit_lblErrsub').style.display = 'none';
+                    document.getElementById('Edit_tdbody').bgColor = "White";
+                    document.getElementById('Edit_lblErrbody').style.display = 'none';
+
+                    var footer = trim(document.getElementById('Edit_txtFooter').value);
+                    document.getElementById('Edit_txtFooter').value = footer;
+
+                    var title = trim(document.getElementById('Edit_txtSubjectTitle').value);
+                    document.getElementById('Edit_txtSubjectTitle').value = title;
+                    if (document.getElementById('Edit_txtSubjectTitle').value == '') {
+                        document.getElementById('Edit_lblErrsub').style.display = '';
+                        document.getElementById('Edit_lblErrsub').innerHTML = 'Please enter email msg subject';
+                        document.getElementById('Edit_tdsub').bgColor = "orange";
+                        document.getElementById('Edit_txtSubjectTitle').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('Edit_tdsub').bgColor = "White";
+                        document.getElementById('Edit_lblErrsub').style.display = 'none';
+
+                    }
+
+                    var title = trim(document.getElementById('Edit_txtSubjectText').value);
+                    document.getElementById('Edit_txtSubjectText').value = title;
+                    if (document.getElementById('Edit_txtSubjectText').value == '') {
+                        document.getElementById('Edit_lblErrbody').style.display = '';
+                        document.getElementById('Edit_lblErrbody').innerHTML = 'Please enter email msg body';
+                        document.getElementById('Edit_tdbody').bgColor = "orange";
+                        document.getElementById('Edit_txtSubjectText').focus();
+                        return false;
+                    }
+                    else {
+                        document.getElementById('Edit_tdbody').bgColor = "White";
+                        document.getElementById('Edit_lblErrbody').style.display = 'none';
+
+                    }
+
+
+                }
+    </script>
+                    <script type="text/javascript">
+         function cancel() {
+            window.location.href = "@Url.Action("Emailcontent", "Technicalarea")"; 
+         }
+                        $(document).ready(function () {
+                            var TopIndex = '@Session["TopIndex"]';
+                             $("#Menu0").removeClass();
+                             $("#Menu1").removeClass();
+                             $("#Menu2").removeClass();
+                             $("#Menu3").addClass("active");
+                         });
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("EmailcontentEdit", "Technicalarea", FormMethod.Post, null))
+    {
+       Html.RenderAction("Topsection", "Tools");
+           <input type="hidden" id="HdnOption_ID" name="HdnOption_ID" value="@ViewBag.EmailMessage_Option_ID" />
+           <input type="hidden" id="HdnOptionBody_ID" name="HdnOptionBody_ID" value="@ViewBag.EmailMsgOptionBody_ID" />
+          <div id="main-content">
+        @Html.Partial("_NavigationTool")
+    <div class="content-box">
+    <div class="content-box-header">
+
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="float: left;">
+            <tr>
+
+                <td width="70%" align="left">
+                    <h3>
+                      Edit E-mail message</h3>
+                </td>
+               
+            </tr>
+        </table>
+     </div>
+       <div class="content-box-content">
+           <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+               border="0">
+               <tr height="10" runat="server" class="white_color">
+                   <th align="right" width="30%">
+                       <b><font color="red">*</font></b> <strong>E-mail Category :</strong>&nbsp;
+                   </th>
+                   <td align="left" runat="server" width="70%">
+  @Html.Label((string)ViewBag.category)
+                   </td>
+               </tr>
+               <tr height="10" runat="server" class="white_color">
+                   <th align="right" width="30%">
+                       <b><font color="red">*</font></b> <strong>E-mail subcategory :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="Edit_tdsubcat" runat="server" width="70%">
+  @Html.Label((string)ViewBag.subcategory)
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <strong>E-mail Msg footer :</strong>&nbsp;
+                   </th>
+                   <td align="left">
+                       @Html.TextBox("Edit_txtFooter", (string)ViewBag.Edit_txtFooter, new { @class = "textfield", style = "width:280px", autocomplete = "off" })
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <b><font color="red">*</font></b><strong>E-mail Msg subject :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="Edit_tdsub" runat="server">
+                       @Html.TextBox("Edit_txtSubjectTitle", (string)ViewBag.Edit_txtSubjectTitle, new { @class = "textfield", style = "width:280px", autocomplete = "off" })
+                         &nbsp;&nbsp;&nbsp <span id="Edit_lblErrsub" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <b><font color="red">*</font></b> <strong>E-mail Msg body :</strong>&nbsp;
+                   </th>
+                   <td align="left" id="Edit_tdbody" runat="server">
+@*                       @Html.TextArea("Edit_txtSubjectText", (string)ViewBag.Edit_txtSubjectText, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })*@
+                        @Html.Obout(new Obout.Mvc.HTMLEditor.Editor("Edit_txtSubjectText") { ShowQuickFormat = false, Height = 225, Template = "example", Submit = false, Content = (string)ViewData["Edit_txtSubjectText"], ModeSwitch = false, ShowWaitMessage = true, NoDrop = true, DefaultContextMenu = false })
+                       &nbsp;&nbsp;&nbsp <span id="Edit_lblErrbody" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+           </table>
+                                                                                       
+      </div></div>
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Edit_Validate();" />
+                                                          &nbsp;
+                                              <input value="Cancel" type="button" class="button" style="width: 60px;" id="btnclose1" onclick="return cancel();"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+      </div>
+       <br />
+        
+       Html.RenderAction("Bottomsections", "Tools");
+    }
+</body>
+</html>

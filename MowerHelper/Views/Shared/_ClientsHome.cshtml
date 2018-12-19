@@ -1,0 +1,437 @@
+﻿@model MowerHelper.Models.BLL.Practice.PracticeblHome
+<style>
+    .gridFooter span
+    {
+        background:white !important;
+        border:none !important;
+    }
+    .gridFooter span span
+        {
+            background:#469400 url('../../../images/bg-button-green.gif') top left repeat-x !important;
+        }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.gridFooter span a').click(function () {
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("ClientsHomePartial", "Clients")' + queryString;
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $('#gridcontent1').load(requestUrl, function(data){$('#dvLoading').dialog('close');});
+            return false;
+        });
+        $('.gridHead th a').click(function () {
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("ClientsHomePartial", "Clients")' + queryString;
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $('#gridcontent1').load(requestUrl, function(data){$('#dvLoading').dialog('close');});
+            return false;
+        });
+
+        $("#totVisits").click(function (event) {
+            event.preventDefault();
+        });
+    });
+    </script>
+<input type="hidden" id="hdnproviderid" name="hdnproviderid" value="@ViewBag.ProviderID" />
+<input type="hidden" id="hdnlname" name="hdnlname" value="@Model.LastName" />
+          <input type="hidden" id="hdbfunm" name="hdbfunm" value="@Model.fullname" />
+          <input type="hidden" id="hdnnorec" name="hdnnorec" value="@Model.NoofRecords" />
+          <input type="hidden" id="hdnpgno" name="hdnpgno" value="@Model.PageNo" />
+          <input type="hidden" id="hdnordby" name="hdnordby" value="@Model.OrderBy" />
+        <input type="hidden" id="hdnorbyitem" name="hdnorbyitem" value="@Model.Orderbyitem" />
+        <input type="hidden" id="hdnstatus1" name="hdnstatus1" value="@Model.Patient_Status_ID" />
+        <input type="hidden" id="hdnproid" name="hdnproid" value="@Model.Provider_ID" />
+ <div class="content-box-content">
+                    @{string heading1;
+                      if (Request["sort"] == "StrPatientName" && Request["sortdir"] == "ASC")
+                      {
+                          heading1 = "Client ▲";
+                      }
+                      else if (Request["sort"] == "StrPatientName" && Request["sortdir"] == "DESC")
+                      {
+                          heading1 = "Client ▼";
+                      }
+                      else
+                      {
+                          heading1 = "Client .";
+                      }
+                    }
+                    @{string Patpagesize = (Model.NoofRecords ?? "10");
+                      WebGrid patgrid = new WebGrid(canPage: true, rowsPerPage: Convert.ToInt32(Patpagesize), ajaxUpdateContainerId: "tblcustomers");}
+                    @{WebGrid grid = patgrid.Bind(Model.PatientList, rowCount: ViewBag.totrec, autoSortAndPage: false);
+                      if (grid.TotalRowCount != 0)
+                      {
+
+                          string pager = HttpUtility.HtmlDecode(grid.Pager().ToString());
+                          string pageno = (Request["page"] ?? "1");
+                          string roleid1 = Session["roleid"].ToString();
+                          string newpager = HttpUtility.HtmlDecode(System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>"));
+                          string gridhtml = grid.GetHtml(htmlAttributes: new { id = "tblcustomers" }, tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                          columns: grid.Columns(grid.Column("StrPatientName", heading1, canSort: true, style: "width: 200px;",
+                          format: @<text>
+                          @{
+                              string Status_Ind = (string)item.Status_Ind;
+                              if (Status_Ind != "Active")
+                              {
+                                  if (Session["RoleID"].ToString() == "1")
+                                  {
+                                      //@Html.ActionLink((string)item.StrPatientName, "quickview", null, new { PId = (item.intpatientid), status = item.Status_Ind, PracticeID = item.StrPractice_ID, ProviderID = item.StrActualProvider_ID, LoginID = item.Login_ID }, new { @class = "Quickviewlink", title = "Click here to view quick view", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })   
+                                      <a href="#" title = "Click here to view quick view" style = "font-weight:bold;color:#0066CC;cursor:pointer;" onclick="return Displaydialog('divquickview','../Clients/quickview?PId='+'@item.intpatientid' + '&status=' +'@item.Status_Ind'+ '&PracticeID='+'@item.StrPractice_ID'+'&ProviderID='+'@item.StrActualProvider_ID'+'&LoginID='+'@item.Login_ID','auto',950,'dvLoading',null,null)">@item.StrPatientName</a>
+                                  }
+                                  else
+                                  {
+                                      //@Html.ActionLink((string)item.StrPatientName, "quickview", null, new { PId = (item.intpatientid), status = item.Status_Ind }, new { @class = "Quickviewlink", title = "Click here to view quick view", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                      <a href="#" title = "Click here to view quick view" style = "font-weight:bold;color:#0066CC;cursor:pointer;" onclick="return Displaydialog('divquickview','../Clients/quickview?PId='+'@item.intpatientid' + '&status=' +'@item.Status_Ind','auto',950,'dvLoading',null,null)">@item.StrPatientName</a>
+                                  }
+                              }
+                              else
+                              {
+                                  if (Session["RoleID"].ToString() == "1")
+                                  {
+                                      @Html.ActionLink((string)item.StrPatientName, "ClientFile", "Clients", new { CustomerID = item.intpatientid, PracticeID = item.StrPractice_ID, ProviderID = item.StrActualProvider_ID, LoginID = item.Login_ID, @PatientLoginID = item.StrPatientLogin_ID}, new { @style = "color:#0066CC;cursor:pointer;" })
+                                      
+                                  }
+                                  else
+                                  {
+                                  @Html.ActionLink((string)item.StrPatientName, "ClientFile", "Clients", new { CustomerID = item.intpatientid, @PatientLoginID = item.StrPatientLogin_ID }, new { @style = "color:#0066CC;cursor:pointer;" })
+                                  }
+                              }
+                              }
+                         
+                          </text>),
+
+                          grid.Column("", "Phone number", canSort: false, style: "width: 70px;",
+                          format: @<text>@{
+                              string HomePhone = (string)item.HomePhone + " (";
+                              string WorkPhone = (string)item.WorkPhone + " (";
+                              string CellPhone = (string)item.CellPhone + " (";
+                              if (HomePhone.ToString() != "- (" & HomePhone.ToString() != " (" & HomePhone.ToString() != null & CellPhone.ToString() != "- (" & CellPhone.ToString() != " (" & CellPhone.ToString() != null)
+                              {
+                                   @Html.Label(HomePhone)<span style="color:green;" title="home phone">H)</span>  <br /><br />
+                               @Html.Label(CellPhone);<span style="color:blue;" title="cell phone">C)</span>
+                              }
+                              else if (WorkPhone.ToString() != "- (" & WorkPhone.ToString() != " (" & WorkPhone.ToString() != null & CellPhone.ToString() != "- (" & CellPhone.ToString() != " (" & CellPhone.ToString() != null)
+                              {
+                                   @Html.Label(WorkPhone)<span style="color:red;" title="work phone">W)</span>  <br /><br />
+                               @Html.Label(CellPhone);<span style="color:blue;" title="cell phone">C)</span>
+                              }
+                              else if (WorkPhone.ToString() != "- (" & WorkPhone.ToString() != " (" & WorkPhone.ToString() != null)
+                              {
+                              @Html.Label(WorkPhone);<span style="color:red;" title="work phone">W)</span>
+                              }
+                              else if (HomePhone.ToString() != "- (" & HomePhone.ToString() != " (" & HomePhone.ToString() != null)
+                              {
+                             @Html.Label(HomePhone);<span style="color:green;" title="home phone">H)</span>
+                              }
+                              else if (CellPhone.ToString() != "- (" & CellPhone.ToString() != " (" & CellPhone.ToString() != null)
+                              {
+                             @Html.Label(CellPhone);<span style="color:blue;" title="cell phone">C)</span>
+                              }
+                              else if (WorkPhone.ToString() != "- (" & WorkPhone.ToString() != " (" & WorkPhone.ToString() != null)
+                              {
+                              @Html.Label(WorkPhone);<span style="color:red;" title="work phone">W)</span>
+                              }
+                              else
+                              {
+                                  <span>-</span>
+                              }
+                              }
+                         </text>),
+                                grid.Column("Address", "Address", canSort: false, style: "width: 90px;", format:@<text>
+                    @{
+                        string add = (string)item.Address;
+                        string patid = Convert.ToString(item.intpatientid);
+
+                        if (add != null && add != "")
+                        {
+                        <span>@Html.Raw(item.Address)</span>
+                    <a href="@Url.Action("#")"  class = "Showmap1", title = "Click here to show client address directions">
+                        <img src="~/Images/Map1.gif" onclick="return fnlanglat('@item.Address');" width="24" height="24" />
+                    </a>@*
+                                                 @Html.ActionLink(" ", "#", new { patid = (int)item.intpatientid },
+                    new { @style = "background: url('../Images/Map3.png') no-repeat ;padding-left:35px;padding-bottom:20px;margin-left:10px;", @class = "Showmap1",@onclick="javascript:return fnlanglat( '" + item.intpatientid + "');", @title = "Click here to show customer address directions" })*@
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    }
+                                 </text>
+),
+                                grid.Column("email", "Email", canSort: false, style: "width: 20px;", format:@<text>
+                    @{
+                        string email = (string)item.email;
+
+                        if (email != null && email != "")
+                        {
+                        <span>@Html.Raw(item.email)</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    }
+                                 </text>
+),
+                          grid.Column("StrNextAppt", "Next visit", canSort: false, style: "width: 70px;",
+                          format: @<text>
+                          
+                         @if (item.StrNextAppt.ToString() != "")
+                         {
+                          @DateTime.Parse(item.StrNextAppt.ToString()).ToShortDateString()
+                         }
+                         else
+                         {
+                             @Html.Label("-");
+                         }
+                         </text>),
+                          grid.Column("StrApptCount", "Total visits", canSort: false, style: "width: 40px;", format: @<text>
+                                                @{
+                                                    string Status_Ind = (string)item.Status_Ind;
+                                                    if (roleid1 != "8")
+                                                    {
+                                                        if (Status_Ind != "Active")
+                                                        {
+                                                            if (Session["RoleID"].ToString() == "1")
+                                                            {
+                                                                //@Html.ActionLink((string)item.StrPatientName, "quickview", null, new { PId = (item.intpatientid), status = item.Status_Ind, PracticeID = item.StrPractice_ID, ProviderID = item.StrActualProvider_ID, LoginID = item.Login_ID }, new { @class = "Quickviewlink", title = "Click here to view quick view", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })   
+                                                                <a href="#" title = "Click here to view quick view" style = "font-weight:bold;color:#0066CC;cursor:pointer;" onclick="return Displaydialog('divquickview','../Clients/quickview?PId='+'@item.intpatientid' + '&status=' +'@item.Status_Ind'+ '&PracticeID='+'@item.StrPractice_ID'+'&ProviderID='+'@item.StrActualProvider_ID'+'&LoginID='+'@item.Login_ID','auto',950,'dvLoading',null,null)">@item.StrPatientName</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                //@Html.ActionLink((string)item.StrApptCount, "quickview", null, new { PId = (item.intpatientid), status = item.Status_Ind }, new { @class = "Quickviewlink", title = "Click here to view quick view", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                                <a href="#" title = "Click here to view quick view" style = "font-weight:bold;color:#0066CC;cursor:pointer;" onclick="return Displaydialog('divquickview','../Clients/quickview?PId='+'@item.intpatientid' + '&status=' +'@item.Status_Ind','auto',950,'dvLoading',null,null)">@item.StrApptCount</a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            //@Html.ActionLink((string)item.StrApptCount, "Totalvisits", null, new { patid = (item.intpatientid), PracticeID = item.StrPractice_ID, ProviderID = item.StrActualProvider_ID, LoginID = item.Login_ID }, new { @class = "Totalvisitslink", title = "Click here to view total visits", style = "color:#0066CC;cursor:pointer;" })
+                                                            <a href="#" id="totVisits" title = "Click here to view total visits" style = "color:#0066CC;cursor:pointer;" onclick="return Displaydialog('TotalvisitsDialog','../Clients/Totalvisits?patid='+'@item.intpatientid' + '&PracticeID=' +'@item.StrPractice_ID'+'&ProviderID='+'@item.StrActualProvider_ID'+'&LoginID='+'@item.Login_ID','auto',900,'dvLoading',null,null)">@item.StrApptCount</a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@item.StrApptCount</span>
+                                                    }
+                                                    }
+                          </text>),
+
+
+                          grid.Column("StrApptCount", "Balance", canSort: false, style: "width: 40px;", format: @<text>
+                                                    @{
+                                                        string Status_Ind = (string)item.Status_Ind;
+                                                        if (roleid1 != "8")
+                                                        {
+                                                            if (Status_Ind != "Active")
+                                                            {
+                                                                int amount = (int)item.StrTotal;
+                                                                if (amount >= 0)
+                                                                {
+                                                                    if (Session["RoleID"].ToString() == "1")
+                                                                    {
+                                                                        //@Html.ActionLink("$" + String.Format("{0:0.00}", (decimal)(item.StrTotal)), "quickview", null, new { PId = (item.intpatientid), status = item.Status_Ind, PracticeID = item.StrPractice_ID, ProviderID = item.StrActualProvider_ID, LoginID = item.Login_ID }, new { @class = "Quickviewlink", title = "Click here to view quick view", data_dialog_id = "intpatientid", data_dialog_title = "Appointments history", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                                        <a href="#" title = "Click here to view quick view" style = "font-weight:bold;color:#0066CC;cursor:pointer;" data_dialog_id = "intpatientid" data_dialog_title = "Appointments history" onclick="return Displaydialog('divquickview','../Clients/quickview?PId='+'@item.intpatientid' + '&status=' +'@item.Status_Ind'+'&PracticeID='+'@item.StrPractice_ID'+'&ProviderID='+'@item.StrActualProvider_ID'+'&LoginID='+'@item.Login_ID','auto',950,'dvLoading',null,null)">$@String.Format("{0:0.00}", (decimal)(item.StrTotal))</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        // @Html.ActionLink("$" + String.Format("{0:0.00}", (decimal)(item.StrTotal)), "quickview", null, new { PId = (item.intpatientid), status = item.Status_Ind }, new { @class = "Quickviewlink", title = "Click here to view quick view", data_dialog_id = "intpatientid", data_dialog_title = "Appointments history", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                                        <a href="#" title = "Click here to view quick view" style = "font-weight:bold;color:#0066CC;cursor:pointer;" data_dialog_id = "intpatientid" data_dialog_title = "Appointments history" onclick="return Displaydialog('divquickview','../Clients/quickview?PId='+'@item.intpatientid' + '&status=' +'@item.Status_Ind','auto',950,'dvLoading',null,null)">$@String.Format("{0:0.00}", (decimal)(item.StrTotal))</a>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (Session["RoleID"].ToString() == "1")
+                                                                    {
+                                                                        //@Html.ActionLink("($" + String.Format("{0:0.00}", (decimal)(item.StrTotal)).Replace("-", "") + ")", "quickview", null, new { PId = (item.intpatientid), status = item.Status_Ind, PracticeID = item.StrPractice_ID, ProviderID = item.StrActualProvider_ID, LoginID = item.Login_ID }, new { @class = "Quickviewlink", title = "Click here to view quick view", data_dialog_id = "intpatientid", data_dialog_title = "Appointments history", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                                        <a href="#" title = "Click here to view quick view" style = "font-weight:bold;color:#0066CC;cursor:pointer;" data_dialog_id = "intpatientid" data_dialog_title = "Appointments history" onclick="return Displaydialog('divquickview','../Clients/quickview?PId='+'@item.intpatientid' + '&status=' +'@item.Status_Ind'+'&PracticeID='+'@item.StrPractice_ID'+'&ProviderID='+'@item.StrActualProvider_ID'+'&LoginID='+'@item.Login_ID','auto',950,'dvLoading',null,null)">$@String.Format("{0:0.00}", (decimal)(item.StrTotal)).Replace("-", "")</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        //@Html.ActionLink("($" + String.Format("{0:0.00}", (decimal)(item.StrTotal)).Replace("-", "") + ")", "quickview", null, new { PId = (item.intpatientid), status = item.Status_Ind }, new { @class = "Quickviewlink", title = "Click here to view quick view", data_dialog_id = "intpatientid", data_dialog_title = "Appointments history", style = "font-weight:bold;color:#0066CC;cursor:pointer;" })
+                                                                        <a href="#" title = "Click here to view quick view" style = "font-weight:bold;color:#0066CC;cursor:pointer;" data_dialog_id = "intpatientid" data_dialog_title = "Appointments history" onclick="return Displaydialog('divquickview','../Clients/quickview?PId='+'@item.intpatientid' + '&status=' +'@item.Status_Ind','auto',950,'dvLoading',null,null)">$@String.Format("{0:0.00}", (decimal)(item.StrTotal)).Replace("-", "")</a>
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                {
+                                                                    int amount = (int)item.StrTotal;
+                                                                    if (amount >= 0)
+                                                                    {
+                                                                        if (Session["RoleID"].ToString() == "1")
+                                                                        {
+                                                                         @Html.ActionLink("$" + String.Format("{0:0.00}", (decimal)(item.StrTotal)), "TransactionsList", "Clients", new { @pid = item.intpatientid, @frm = "ph", @pname = (string)item.StrPatientName, PracticeID = item.StrPractice_ID, ProviderID = item.StrActualProvider_ID, LoginID = item.Login_ID, @PatientLoginID = item.StrPatientLogin_ID, @hdnclientEmail = item.email + 1 }, new { @style = "color:#0066CC;cursor:pointer;" })
+                                                                        }
+                                                                        else
+                                                                        {
+                                            @Html.ActionLink("$" + String.Format("{0:0.00}", (decimal)(item.StrTotal)), "TransactionsList", "Clients", new { @pid = item.intpatientid, @frm = "ph", @pname = (string)item.StrPatientName, @PatientLoginID = item.StrPatientLogin_ID, @hdnclientEmail = item.email + 1 }, new { @style = "color:#0066CC;cursor:pointer;" })
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (Session["RoleID"].ToString() == "1")
+                                                                        {
+                                                                           @Html.ActionLink("($" + String.Format("{0:0.00}", (decimal)(item.StrTotal)).Replace("-", "") + ")", "TransactionsList", "Clients", new { @pid = item.intpatientid, @frm = "ph", @pname = (string)item.StrPatientName, PracticeID = item.StrPractice_ID, ProviderID = item.StrActualProvider_ID, LoginID = item.Login_ID, @PatientLoginID = item.StrPatientLogin_ID, @hdnclientEmail = item.email + 1}, new { @style = "color:#0066CC;cursor:pointer;" })
+                                                                        }
+                                                                        else
+                                                                        {
+                                            @Html.ActionLink("($" + String.Format("{0:0.00}", (decimal)(item.StrTotal)).Replace("-", "") + ")", "TransactionsList", "Clients", new { @pid = item.intpatientid, @frm = "ph", @pname = (string)item.StrPatientName, @PatientLoginID = item.StrPatientLogin_ID, @hdnclientEmail = item.email + 1 }, new { @style = "color:#0066CC;cursor:pointer;" })
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            int amount = (int)item.StrTotal;
+                                                            string bal = null;
+                                                            if (amount >= 0)
+                                                            {
+                                                                bal = "$" + String.Format("{0:0.00}", (decimal)(item.StrTotal));
+                                                            }
+                                                            else
+                                                            {
+                                                                bal = "($" + String.Format("{0:0.00}", (decimal)(item.StrTotal)).Replace("-", "") + ")";
+                                                            }
+                                                            <span>@bal.ToString()</span>
+                                                        }
+                              }
+                         
+                          </text>),
+                                                  grid.Column("Status_Ind", "Status", canSort: false, style: "width: 10px;"),
+                                                  grid.Column("Action", canSort: false, style: "width: 50px;", format: @<text>
+                                                    @{
+                                                        string Status_Ind = (string)item.Status_Ind;
+                                                        int amount = (int)item.StrTotal;
+
+                                                        if (Status_Ind != "Archived")
+                                                        {
+                                                            if (amount != 0)
+                                                            {
+                                                                                                                                                    @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select one--", Value = "0" },
+                                                               new SelectListItem{Text="Add Appointment",Value="14"},                                                              
+                                                               new SelectListItem{ Text="Add Transaction", Value = "8" }, 
+                                                               new SelectListItem{ Text="Default Court Selection ", Value = "2" }, 
+                                                               //new SelectListItem{ Text="Add adjustment", Value = "9" },
+                                                               new SelectListItem{Text="Archive",Value="11"},
+                                                               new SelectListItem{Text="Send Invoice",Value="13"},
+                                                               new SelectListItem{ Text="Print Bill", Value = "3" }
+                                                              },
+new { @class = "ddlactionclass", onchange = "return ddlchange(this.value, '" + item.intpatientid + "','" + item.StrPatientLogin_ID + "','" + item.Status_Ind + "','" + item.StrPractice_ID + "','" + item.StrActualProvider_ID + "','" + item.Login_ID + "','" + item.email + "','" + HttpUtility.HtmlEncode(item.StrPatientName) + "','" + item.Transactionexist + "','" + item.CellPhone + "','" + item.DefaultCourtLocation_ID + "','" + Model.PatientList + "')", style = "font-family:arial;font-size:13px;height:20px;width:160px;" })
+                                                            }
+                                                            else
+                                                            {
+                                                                                                                                                    @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select one--", Value = "0" },
+                                                                new SelectListItem{Text="Add Appointment",Value="14"},
+                                                               new SelectListItem{ Text="Add Transaction", Value = "8" },
+                                                               new SelectListItem{ Text="Default Court Selection ", Value = "2" },
+                                                               //new SelectListItem{ Text="Add adjustment", Value = "9" },
+                                                                new SelectListItem{Text="Archive",Value="11"},                                                                
+                                                                 new SelectListItem{ Text="Print Bill", Value = "3" }
+                                                              },
+new { @class = "ddlactionclass", onchange = "return ddlchange(this.value, '" + item.intpatientid + "','" + item.StrPatientLogin_ID + "','" + item.Status_Ind + "','" + item.StrPractice_ID + "','" + item.StrActualProvider_ID + "','" + item.Login_ID + "','" + item.email + "','" + HttpUtility.HtmlEncode(item.StrPatientName) + "','" + item.Transactionexist + "','" + item.CellPhone + "','" + item.DefaultCourtLocation_ID + "')", style = "font-family:arial;font-size:13px;height:20px;width:160px;" })
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (amount != 0)
+                                                            {
+                                                                                                                                                    @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select one--", Value = "0" },
+                                                               //new SelectListItem{ Text="Print Bill", Value = "3" },
+                                                               //new SelectListItem{ Text="Add Transaction", Value = "8" }, 
+                                                               //new SelectListItem{ Text="Add adjustment", Value = "9" },
+                                                                new SelectListItem{Text="Active",Value="12"}
+                                                                //new SelectListItem{Text="Email Invoice",Value="13"}
+                                                              },
+          new { @class = "ddlactionclass", onchange = "return ddlchange(this.value, '" + item.intpatientid + "','" + item.StrPatientLogin_ID + "','" + item.Status_Ind + "','" + item.StrPractice_ID + "','" + item.StrActualProvider_ID + "','" + item.Login_ID + "','" + item.email + "','" + HttpUtility.HtmlEncode(item.StrPatientName) + "','" + item.Transactionexist + "','" + item.CellPhone + "')", style = "font-family:arial;font-size:13px;height:20px;width:160px;" })
+                                                            }
+                                                            else
+                                                            {
+                                                                                                                                                    @Html.DropDownList("ddlaction", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select one--", Value = "0" },
+                                                               //new SelectListItem{ Text="Print Bill", Value = "3" },
+                                                               //new SelectListItem{ Text="Add Transaction", Value = "8" }, 
+                                                               //new SelectListItem{ Text="Add adjustment", Value = "9" },
+                                                                new SelectListItem{Text="Active",Value="12"}
+                                                              },
+          new { @class = "ddlactionclass", onchange = "return ddlchange(this.value, '" + item.intpatientid + "','" + item.StrPatientLogin_ID + "','" + item.Status_Ind + "','" + item.StrPractice_ID + "','" + item.StrActualProvider_ID + "','" + item.Login_ID + "','" + item.email + "','" + HttpUtility.HtmlEncode(item.StrPatientName) + "','" + item.Transactionexist + "','" + item.CellPhone + "')", style = "font-family:arial;font-size:13px;height:20px;width:160px;" })
+                                                            }
+                                                        }
+                              }
+
+
+                                                                                                                                     </text>))).ToString();
+                          gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                          System.Text.RegularExpressions.Regex reg1 = new System.Text.RegularExpressions.Regex("<script(.|\n)*?</script>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                          string _script = reg1.Match(newpager).Value.ToString();
+                          newpager = newpager.Replace(_script, "");
+                        @(new HtmlString(gridhtml))
+                        <br />
+                        <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                        <br />
+                      }
+                      else
+                      {
+                        <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                            <tr id="trdsmerror" class="white_color">
+                                <td align="center" height="25px" valign="middle" colspan="2">
+                                    <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">
+                                        No clients found.</span>
+                                </td>
+                            </tr>
+                        </table>
+                      }
+                    }
+                </div>
+<input id="hdnProvidername" name="hdnProvidername" type="hidden" value="@Model.ProviderName"/>
+<input id="hdnpat" type="hidden" value="@Model.fullname"/>
+            <input id="hdnpagesize" type="hidden" value="@Model.NoofRecords"/>
+            <input id="hdnstatus" type="hidden" value="@Model.Patient_Status_ID"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (@Session["roleid"].ToString()!= "1") {
+                $("#tdtabs").removeClass("tab-background");
+               
+            }
+            var pat = $('#hdnpat').val();
+            $('#txtpatients').val(pat);
+            var Roleid = '@Session["RoleID"]';
+            if (Roleid == 1) {
+                var hdnProvidername = $('#hdnProvidername').val();
+                $('#txtprovider').val(hdnProvidername);
+            }
+            var psize = $('#hdnpagesize').val();
+            if (psize != '') {
+                $('#ddlrecords').val(psize);
+            }
+            else {
+                $('#ddlrecords').val("10");
+
+            }
+            var Status = $('#hdnstatus').val();
+            if (Status != '') {
+                $('#GlbSearch_PatientType').val(Status);
+            }
+            else {
+                $('#GlbSearch_PatientType').val("1");
+
+            }
+
+    });
+    </script>

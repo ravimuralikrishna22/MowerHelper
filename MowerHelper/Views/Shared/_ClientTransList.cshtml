@@ -1,0 +1,362 @@
+﻿@model MowerHelper.Models.BLL.Billing.RPBilling
+@{
+    string PId = Model.PatientID;
+    int? PLId = Model.PatientLogin_ID;
+    string Fdate = Model.FromDate;
+    string Tdate = Model.ToDate;
+    string VSetdt = Model.Date_range;
+    string frm = null;
+    if (ViewBag.frm == "ph")
+    {
+        frm = "ph1"; ;
+    }
+    }
+<style>
+    .gridFooter span
+    {
+        background:white !important;
+        border:none !important;
+    }
+        .gridFooter span span
+        {
+            background:#469400 url('../../../images/bg-button-green.gif') top left repeat-x !important;
+        }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.gridFooter span a').click(function () {
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("TransListPartial", "Clients")' + queryString;
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $('#gridcontent1').load(requestUrl, function (data) { $('#dvLoading').dialog('close'); });
+            return false;
+        });
+        $('.gridHead th a').click(function () {
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("TransListPartial", "Clients")' + queryString;
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $('#gridcontent1').load(requestUrl, function (data) { $('#dvLoading').dialog('close'); });
+            return false;
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var chgcnt = document.getElementById('hdnnoofrecords').value;
+        if (chgcnt > 0) {
+            document.getElementById('tdpdf').style.display = "";
+        }
+    });
+    </script>
+<script type="text/javascript">
+    $("#lnkinvoice").click(function (e) {
+        e.preventDefault();
+        if ($("#hdnclientEmail").val() == "" || $("#hdnclientEmail").val() == null) {
+            if ('@Session["hdnclientEmail"]' != null && '@Session["hdnclientEmail"]' != "") {
+                $("#hdnclientEmail").val('@Session["hdnclientEmail"]');
+            }
+        }
+        if ($("#hdnclientEmail").val() == "") {
+            var viewUrl = "../Clients/CustInvoice?patientid=" + $("#hdnPid").val() + '&ProviderID=' + $("#hdnProv_ID").val() + '&ProviderLoginID=' + $("#hdnUserID").val() + "&BillingInd=C" + '&hdnclientEmail=' + $('#hdnclientEmail').val() + '&hdnPlId=' + '@PLId';
+            
+            Displaydialog('divInvoice', viewUrl, 'auto', 700, 'dvLoading', null, null)
+            //alert("Please provide your customer eamil id");
+        }
+        else {
+            var msg = "An invoice in the form of PDF file is sent to " + $("#hdnclientEmail").val() + " address."
+            alert(msg);
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            //document.location = '../Clients/CustomerInvoice?patientid=' + $("#hdnPid").val() + '&Provider_ID=' + $("#hdnProv_ID").val() + '&ProviderLoginID=' + $("#hdnUserID").val() + "&Ind=C" + '&Customer_Email=' + $('#hdnclientEmail').val();
+            $('#gridcontent1').load('../Clients/CustomerInvoice?patientid=' + $("#hdnPid").val() + '&Provider_ID=' + $("#hdnProv_ID").val() + '&ProviderLoginID=' + $("#hdnUserID").val() + "&Ind=C" + '&Customer_Email=' + $('#hdnclientEmail').val() + '&PatientLogin_ID=' + '@PLId', function (data) { $('#dvLoading').dialog('close'); });
+        }
+    });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            var roleid = $("#hdnrole").val();
+            if (roleid == "1") {
+                document.getElementById('auditdiv').style.display = '';
+            }
+            else {
+                document.getElementById('auditdiv').style.display = 'none';
+            }
+        });
+    </script>
+<input type="hidden" name="hdnfrmdate" id="hdnfrmdate" value="@Model.FromDate" />
+     <input type="hidden" name="hdntodate" id="hdntodate" value="@Model.ToDate" />
+    @*  <input type="hidden" name="hdnplgid" id="hdnplgid" value="@ViewBag.patlgnid" />*@
+      <input type="hidden" name="hdnsort" id="hdnsort" value="@Model.OrderbyItem" />
+      <input type="hidden" name="hdnsortdir" id="hdnsortdir" value="@Model.orderBy" />
+      <input type="hidden" name="hdnnoofrecords" id="hdnnoofrecords" value="@ViewBag.totrec" />
+         <input type="hidden" id="hdnrole" name="hdnrole" value="@Session["RoleID"]" />
+        <input type="hidden" id="hdnPid" name="hdnPid" value="@Model.PatientID" />
+          <input type="hidden" id="hdnProv_ID" name="hdnProv_ID" value="@Session["Prov_ID"]" />
+            <input type="hidden" id="hdnUserID" name="hdnUserID" value="@Session["UserID"]" />
+          <input type="hidden" id="hdnclientEmail" name="hdnclientEmail" value="@ViewBag.hdnclientEmail" />
+                            <table  id="tblFilter" cellspacing="1" cellpadding="4" width="100%" align="center" border="0" style="display:none;">
+                    <tr  id="trpatient" runat="server" class="background_color">
+                        <td id="tdWidth" style="width:45%;" align="left">
+                            
+                        </td>
+                          <td id="tdPname" align="center" width="20%" style="display:none">
+                              <strong>Client name : @ViewBag.Pname</strong> </td>
+                        <td width="8%" align="right"> <strong>Date range&nbsp;:&nbsp; </strong></td>
+                        <td id="Td2" align="left" valign="middle"  width="35%" colspan="2" runat="server">
+                        @*<uc1:DateSearch ID="dt_filter" runat="server"></uc1:DateSearch>*@
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr class="background_color">
+                                    <td align="left" width="25%">
+                                        @Html.DropDownList("dt_filter", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                               new SelectListItem{ Text="All" ,Value="All",Selected=true},
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                                    </td>
+                                    <td id="tddaterange" runat="server" style="display:none" align="left">
+                                    <strong>&nbsp;&nbsp;From&nbsp;:&nbsp;</strong>
+                                                              <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield" maxlength="10" style="width: 75px;" />
+                                                             &nbsp;&nbsp;<strong>&nbsp;To :&nbsp;</strong>
+                                                             <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield" maxlength="10" style="width: 75px;" />
+                                    </td>
+                                </tr>
+                            </table>
+                          </td>
+                        <td id="divDates" valign="middle" align="left">
+                          <input type="submit" value="Search"  name="ibtnSearch" id="ibtnSearch" class="button" onclick="return ValidSearch();"/>
+                        </td>
+                        <td id="tdcancel" valign="middle" align="right" style="display:none ;">
+                         <input type="button" value="Cancel"  name="ibtnClear" id="ibtnClear" class="button"  onclick="return onCancel();"/>
+                        </td>
+                        <td id="tdpdf" valign="middle" align="right" style="display:none;">
+                         <ul class="content-box-tabs" id="ulALLPDF" style="list-style: none!important; padding-right: 5px;">
+      <li> 
+         <a id="lnkprint" href="" onclick="return printalltrspdf();" style="color: #0066CC;font-weight:bold;font-size:14px;">
+         <img alt="" id="" src="../Images/thumbnailCADZAOWV.png" style="width:40px;border-width:0px;" />
+           </a>
+            </li>
+   </ul>
+                    @* <li> 
+         <a id="lnkprint" href="" onclick="return printalltrspdf();" style="color: #0066CC;font-weight:bold;font-size:14px;">
+         <img alt="" id="" src="../Images/thumbnailCADZAOWV.png" style="width:40px;border-width:0px;" />
+           </a>
+            </li>*@
+                        </td>
+                    </tr>
+                </table>
+                       
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                    <tr class="background_color">
+                                        <td width="48%">
+
+                                            @*  <div class="content-box">*@
+        @*<div class="content-box-header"><h3>Customer billing summary</h3>
+        </div>
+         <div class="clear"></div>*@
+       @*  <div class="content-box-content">*@
+          @Html.Raw(ViewBag.patbillSummary)
+      @*   </div>
+        </div>*@
+                                        </td>
+                                        <td width="2%"></td>
+                                        <td wiidth="50%">
+                                            @*<div class="content-box">*@
+       @* <div class="content-box-header"><h3>By days outstanding</h3>
+        </div>
+         <div class="clear"></div>*@
+        @* <div class="content-box-content">*@
+          @Html.Raw(ViewBag.patdayout)
+        @* </div>
+        </div>*@
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+        
+        
+       
+        <br />
+        <br />
+          <div class="content-box">
+        <div class="content-box-header"><h3>List of transactions</h3>
+        
+            @if (ViewBag.totrec > 0)
+            {  
+          <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+      <li> 
+         <a id="lnkprint" href="" onclick="return printTranpdf();" style="color: #0066CC;font-weight:bold;font-size:14px;">
+         <img alt="" id="" src="../Images/thumbnailCADZAOWV.png" style="width:40px;border-width:0px;" />
+           </a>
+            </li>
+   </ul>
+                
+                 <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+      <li> 
+         <a id="lnkprint" href="" onclick="return printTranexel();" style="color: #0066CC;font-weight:bold;font-size:14px;">
+         <img alt="" id="" src="~/Images/ExportExcel.png" style="width:40px;border-width:0px;" />
+           </a>
+            </li>
+   </ul>
+            }
+        <ul class="content-box-tabs" style="list-style: none!important; padding-right: 5px;">
+@*@Html.ActionLink("Add new transaction", "CustomerTransactions", "Clients", null, new { @class = "clsTran", @style = "color:#0066CC;font-size:14px;font-weight:bold;" })*@
+            <a href="#" style="color:#0066CC;font-size:14px;font-weight:bold;" onclick="return AddTransFunc(event);">Add new transaction</a>
+</ul>
+             @if (Model.BalanceAmount != "$0.00")
+                 {
+                    <ul class="content-box-tabs" id="ullnkinvoice" style="list-style: none!important; padding-right: 10px;">
+                        <li>
+                            <a href="#" id="lnkinvoice" style="color: #0066CC; font-weight: bold; font-size: 14px;">Send Invoice</a>&nbsp;&nbsp;
+                        </li>
+                        
+                    </ul>
+                 }
+        </div>
+         <div class="clear"></div>
+         <div class="content-box-content">
+          @{string heading1;
+            if (Request["sort"] == "Transaction_Date" && Request["sortdir"] == "ASC")
+            {
+                heading1 = "Transaction date ▲";
+            }
+            else if (Request["sort"] == "Transaction_Date" && Request["sortdir"] == "DESC")
+            {
+                heading1 = "Transaction date ▼";
+            }
+            else
+            {
+                heading1 = "Transaction date ▼";
+            }
+                                            }
+                                            @{//string Chgpagesize = (ViewBag.chgpagesize == null ? "10" : ViewBag.chgpagesize);
+                                              WebGrid Chggrid = new WebGrid(rowsPerPage: 10, ajaxUpdateContainerId:"gridcontentnew");}
+                                            @{WebGrid grid = Chggrid.Bind(rowCount: ViewBag.totrec, source: Model.BillingTransList, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(htmlAttributes: new { id = "gridcontentnew"}, tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("Transaction_Date", heading1, style: "Date"),
+                                                  grid.Column("apptdate", "Appointment date", style: "Aptdate", canSort: false),
+                                                      //grid.Column("TransactionType", "Type", style: "Aptdate", canSort: false),
+                                                  grid.Column("PaymentMode", "Payment mode", style: "Aptdate", canSort: false),
+                                                  grid.Column("", "Notes",
+                                                  format:@<text>
+                                                         @{string chgNote = (string)item.Notes;
+                                                           if (chgNote != null)
+                                                           {
+                                                               if (chgNote.Length > 100)
+                                                               {
+                                                                   count = count + 1;
+                                                                   chgNote = chgNote.Substring(0, 100);
+                                                           
+                                                           <span>@chgNote</span><a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+                                                             <div id="tbldesc @count" style="width: 500px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Notes </h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4" width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:5px; padding-top: 5px;" align="left"> <span>@Html.Raw(HttpUtility.HtmlDecode(item.Notes))</span> </td> </tr>
+                                                             </table> </div>
+                                                               }
+                                                               else
+                                                               {
+                                                               <span>@Html.Raw(HttpUtility.HtmlDecode(item.Notes))</span>
+                                                               }
+
+                                                           }
+                                                           else
+                                                           {
+                                                               <span>@Html.Raw(HttpUtility.HtmlDecode(item.Notes))</span>
+                                                           }
+                                                           }
+                                                
+                                                </text>
+                                                
+),
+grid.Column("TotalCharges", "Charge($)", style: "Aptdate", canSort: false),
+grid.Column("TotalPayments", "Payment($)", style: "Aptdate", canSort: false),
+                                                                                                        grid.Column("", "Edit", style: "cDel", canSort: false,
+                                                  format:@<text>
+                                            @{string type = (string)item.TransactionType;
+                                              if (type == "Charge")
+                                              {
+                                                <a class = "EditChargediv", title = "Click here to Edit transaction" href="#" onclick="return EditChgfunc('@item.Transaction_ID', '@frm','@VSetdt','transaction','@PId','@PLId',event);">
+                                                <img src="~/Images/edit.gif" />
+                                            </a>    
+                                         @*   @Html.ActionLink(" ", "EditCharge", new { tId = (int)item.Transaction_ID, @frm = @frm, @dt_filter = @VSetdt,pagetype="transaction"},
+                    new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditChargediv", @title = "Click here to Edit charge" })*@
+                                              }
+                                              else if (type == "Payment")
+                                              {
+                                                    <a class = "EditPaydiv", title = "Click here to Edit transaction" @*href="@Url.Action("EditPayment", "Clients", new { tId = (int)item.Transaction_ID, @frm = @frm, @dt_filter = @VSetdt, pagetype = "transaction" })"*@
+                                                        href="#" onclick="return EditPymnt('@item.Transaction_ID', '@frm','@VSetdt','transaction','@PId','@PLId',event)">
+                                                <img src="~/Images/edit.gif" />
+                                            </a>  
+                                         @*  @Html.ActionLink(" ", "EditPayment", new { tId = (int)item.Transaction_ID, plid = @PLId, @frm = @frm, @dt_filter = @VSetdt,pagetype="transaction" },
+                    new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "EditPaydiv", @title = "Click here to Edit payment" })*@
+                                              }
+                                              else
+                                              {
+                                                    <a class = "Edittrandiv", title = "Click here to Edit transaction" @*href="@Url.Action("EditTransaction", "Clients", new { tId = (int)item.Transaction_ID, @frm = @frm, @dt_filter = @VSetdt, pagetype = "transaction" })"*@
+                                                        href="#" onclick="return EditTrans('@item.Transaction_ID', '@frm','@VSetdt','transaction','@PId','@PLId',event)">
+                                                <img src="~/Images/edit.gif" />
+                                            </a>  
+                                    @* @Html.ActionLink(" ", "EditTransaction", new { tId = (int)item.Transaction_ID, plid = @PLId, @frm = @frm, @dt_filter = @VSetdt,pagetype="transaction" },
+                    new { @style = "background: url('../Images/edit.gif') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;", @class = "Edittrandiv", @title = "Click here to Edit charge & payment" })*@
+                                              }
+                                          }
+                                            </text>),
+
+
+grid.Column("", "Delete", style: "cDel", canSort: false,
+                                                    format:@<text>
+                                            @*<a class = "confirmDialog" title="Click here to delete the transaction" href="@Url.Action("DeleteTran", "Clients", new { tId = (int)item.Transaction_ID, trTypeid = item.TransactionType_ID, @frm = @frm, @dt_filter = @VSetdt, @type = "New", patientid= Model.PatientID, Ind="C", Customer_Email=Model.Customer_Email, PatientLogin_ID=PLId })">
+                                                <img src="~/Images/cross.png" />
+                                            </a>*@
+                                            <a class = "confirmDialog" title="Click here to delete the transaction" href="#" onclick ="DeleteTransaction('@item.Transaction_ID', '@item.TransactionType_ID', '@frm', '@VSetdt', '@Model.PatientID', '@Model.Customer_Email', '@PLId',event)">
+                                                <img src="~/Images/cross.png" />
+                                            </a>
+                                        @*    @Html.ActionLink(" ", "DeleteTran", new { tId = (int)item.Transaction_ID, trTypeid = item.TransactionType_ID, @frm = @frm, @dt_filter = @VSetdt, @type ="New" },
+                                                  new { @style = "background: url('../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;width:8%;", @class = "confirmDialog" })*@
+             </text>)
+
+                                                       )).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                  System.Text.RegularExpressions.Regex reg1 = new System.Text.RegularExpressions.Regex("<script(.|\n)*?</script>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                                                  string _script = reg1.Match(newpager).Value.ToString();
+                                                  newpager = newpager.Replace(_script, "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />                                               
+                                                <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>                                                 
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="tdcharge" runat="server" width="100%">
+                            <tr><td align="center" valign="middle" height="25px"><span id="lblCharges" class="errormsg" style="font-size:13px;font-weight:bold;">No transactions found</span></td></tr>
+                        </table>                                               
+                                              }
+                                            }
+
+         </div>
+        </div>
+        <br />
+        <br />
+                             
+                            

@@ -1,0 +1,479 @@
+﻿@{
+    Layout = null;
+}
+@using Obout.Mvc;
+@using Obout.Mvc.ComboBox;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+     @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+       @Styles.Render("~/Content/themes/base/TherpistStyles")
+    <style type="text/css">
+        .ui-datepicker-trigger{ margin-left: 5px; vertical-align: middle; }
+        .Date{ width:20%;}
+    </style>
+     <script type="text/javascript">
+         $(document).ready(function () {
+             var TopIndex = '@Session["TopIndex"]';
+            $("#Menu0").removeClass();
+            $("#Menu1").removeClass();
+            $("#Menu2").removeClass();
+            $("#Menu3").addClass("active");
+        });
+    </script>
+    <script type="text/javascript">
+        function cancelbtn() {
+            var TopIndex = '@Session["TopIndex"]';
+            if (TopIndex != "4") {
+        
+            window.location = '../AdminHome/Home';
+            }
+            else{
+            window.location='../AdminHome/Tools';
+            }
+
+        }
+        function ComboBoxPr_ItemClick(sender, selectedIndex) {
+            if (ComboBoxPr.selectedIndex() != -1) {
+                var obj = ComboBoxPr.options[selectedIndex].value;
+                //                alert(obj);
+                document.getElementById("hdnPrid").value = obj;
+                document.getElementById("hdnname").value = ComboBoxPr.options[selectedIndex].text;
+            }
+        }
+
+
+        $(document).ready(function () {
+            //$('#tddaterange').hide();
+            var setddlfilter = "@ViewBag.setDt";
+            var setddlrec = "@ViewBag.Summarypagesize";
+            $("#dt_filter").val(setddlfilter);
+            $("#ddlrecords").val(setddlrec);
+            if (setddlfilter == "Custom") {
+                $("#dt_filter").val(setddlfilter);
+                document.getElementById('tddaterange').style.display = '';
+                $('#txt_FromDate').val("@ViewBag.frmdate");
+                $('#txt_ToDate').val("@ViewBag.todate");
+            }
+            $("#lnkbillingformula").mouseover(function () {
+                document.getElementById("divformulae").style.zIndex = '1005';
+                document.getElementById("divformulae").style.right = '140px';
+                document.getElementById("divformulae").style.top = '150px';
+                document.getElementById("divformulae").style.position = 'absolute';
+                document.getElementById("divformulae").style.display = '';
+            }
+            );
+            $("#lnkbillingformula").mouseout(function () {
+                document.getElementById("divformulae").style.display = 'none';
+            });
+            //$("#txt_FromDate,#txt_ToDate").datepicker({
+            //    dateFormat: 'mm/dd/yy',
+            //    changeMonth: true,
+            //    changeYear: true,
+            //    //                showCurrentAtPos: 1,
+            //    showWeeks: true,
+            //    inline: true,
+            //    numberOfMonths: [1, 1],
+            //    yearRange: "1950:2020",
+            //    showOn: "button",
+            //    buttonImage: "../Images/calender.gif",
+            //    buttonImageOnly: true
+
+            //});
+           
+            $('#dt_filter').change(function () {
+                if (document.getElementById('dt_filter').value == 'Custom') {
+                    $('#MaximumMonth').show();
+                    document.getElementById('tddaterange').style.display = '';
+                    $('#txt_FromDate').val("");
+                    $('#txt_ToDate').val("");
+                }
+                else {
+                    $('#MaximumMonth').hide();
+                    document.getElementById('tddaterange').style.display = 'none';
+                    $('#txt_FromDate').val("");
+                    $('#txt_ToDate').val("");
+                }
+                return false;
+            });
+            //$("#btnSearch").click(function () {
+            //    if ($("#dt_filter option:selected").val() == "Custom") {
+
+            //        if ($('#txt_FromDate').val() == '') {
+            //            alert("Please enter from date");
+            //            $('#txt_FromDate').focus();
+            //            return false;
+            //        }
+            //        if ($('#txt_ToDate').val() == '') {
+            //            alert("Please enter to date");
+            //            $('#txt_ToDate').focus();
+            //            return false;
+            //        }
+            //    }
+            //    document.forms.item(0).submit();
+
+            //});
+            //**********************changed
+            //$("#txt_FromDate").on('change keyup paste mouseup', function () {
+            //    //  alert("1");
+            //    if ($(this).val().length == 10) {
+            //        //alert("2");
+            //        if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+            //        var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+            //        // alert(St);
+            //        var targetDate = new Date(St);
+            //        targetDate.setDate(targetDate.getDate() + 365);
+            //        //   alert(targetDate);
+            //        var todaydate = new Date();
+            //        todaydate.setDate(todaydate.getDate());
+            //        var dd = todaydate.getDate();
+            //        var mm = todaydate.getMonth() + 1; //January is 0!
+            //        var yyyy = todaydate.getFullYear();
+            //        var today = mm + '/' + dd + '/' + yyyy;
+            //        var dd1 = targetDate.getDate();
+            //        var mm1 = targetDate.getMonth() + 1;
+            //        var yyyy1 = targetDate.getFullYear();
+            //        var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+            //        //  alert(target1);
+            //        if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+            //        else { document.getElementById('txt_ToDate').value = target1; return false; }
+            //    }
+            //});
+        });
+        Date.prototype.days = function (to) {
+            return Math.abs(Math.floor(to.getTime() / (3600 * 24 * 1000)) - Math.floor(this.getTime() / (3600 * 24 * 1000)))
+
+        }
+        function validDateserach() {
+            if (document.getElementById("dt_filter").value == "0") {
+                alert("Please select date");
+                document.getElementById("dt_filter").focus();
+                return false;
+            }
+            if (document.getElementById('dt_filter').value == 'Custom') {
+                var CDate = new Date(); var CFormatDate = CDate.getUTCMonth() + 1 + "/" + CDate.getDate() + "/" + CDate.getFullYear(); var FromDate = document.getElementById('txt_FromDate').value;
+                if (document.getElementById('txt_FromDate').value == '' || document.getElementById('txt_FromDate').value == 'mm/dd/yyyy') {
+                    alert('Please select from date'); document.getElementById('txt_FromDate').focus(); return false;
+                }
+                if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+                if (document.getElementById('txt_ToDate').value == '' || document.getElementById('txt_ToDate').value == 'mm/dd/yyyy') {
+                    alert('Please select to date'); document.getElementById('txt_ToDate').focus(); return false;
+                }
+                if (CheckValidDate(document.getElementById('txt_ToDate')) == 0) { return false; }
+                var St = document.getElementById('txt_FromDate').value; St = new Date(St); var En = document.getElementById('txt_ToDate').value
+                En = new Date(En);
+                if (St > En) { alert("From date should not be greater than to date"); return false; }
+                var frmdt1 = new Date(document.getElementById('txt_FromDate').value);
+                var tdt1 = new Date(document.getElementById('txt_ToDate').value);
+                var diffdate = new Date(frmdt1).days(new Date(tdt1));
+                if (diffdate > 365) {
+                    alert("maximum 12 months is allowed");
+                    return false;
+                }
+            }
+            //localhost:49219/AdminHome/AdminBillingSummary?hdnPrid=&hdnname=&ComboBoxPr_SelectedText=--+Select+Tennis+Coach+--&ComboBoxPr_SelectedIndex=-1&ComboBoxPr=&dt_filter=30&txt_FromDate=&txt_ToDate=&ddlrecords=5
+            //document.forms.item(0).submit();
+            if (document.getElementById('ComboBoxPr_SelectedIndex').value != '-1' && document.getElementById('dt_filter').value != 'Custom') {
+
+                window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ComboBoxPr_SelectedText=' + document.getElementById('ComboBoxPr_SelectedText').value + '&ComboBoxPr_SelectedIndex=' + document.getElementById('ComboBoxPr_SelectedIndex').value + '&ComboBoxPr=' + document.getElementById('ComboBoxPr').value + '&dt_filter=' + document.getElementById('dt_filter').value;// + '&hdnPrid=' + document.getElementById('hdnPrid').value + '&hdnname=' + document.getElementById('hdnname').value;
+                 }
+                 else if (document.getElementById('ComboBoxPr_SelectedIndex').value == '-1' && document.getElementById('dt_filter').value != 'Custom') {
+                     window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value + '&dt_filter=' + document.getElementById('dt_filter').value;
+             }
+
+             else if (document.getElementById('ComboBoxPr_SelectedIndex').value == '-1' && document.getElementById('dt_filter').value == 'Custom') {
+                 window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&txt_FromDate=' + document.getElementById('txt_FromDate').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value;
+             }
+             else if (document.getElementById('ComboBoxPr_SelectedIndex').value != '-1' && document.getElementById('dt_filter').value == 'Custom') {
+
+                 window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txt_FromDate=' + document.getElementById('txt_FromDate').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value + '&ComboBoxPr_SelectedText=' + document.getElementById('ComboBoxPr_SelectedText').value + '&ComboBoxPr_SelectedIndex=' + document.getElementById('ComboBoxPr_SelectedIndex').value + '&ComboBoxPr=' + document.getElementById('ComboBoxPr').value + '&dt_filter=' + document.getElementById('dt_filter').value;// + '&hdnPrid=' + document.getElementById('hdnPrid').value + '&hdnname=' + document.getElementById('hdnname').value;
+             }
+             else {
+
+                 window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value;
+             }
+        }
+    </script>
+</head>
+<body>
+@using (Html.BeginForm("AdminBillingSummary", "AdminHome", FormMethod.Get, null))
+{
+
+    <div>@{Html.RenderAction("Topsection", "Tools");}</div> 
+    @Html.Hidden("hdnPrid")
+    @Html.Hidden("hdnname")
+    <div id="main-content">
+        @Html.Partial("_NavigationTool")
+             <table cellpadding="0" cellspacing="1" width="100%" align="center" border="0">
+                 <tr class="background_color"></tr>
+            <tr class="background_color" style="height:40px;">
+                <td align="right" width="10%">
+                      <strong>Mower Helper name :&nbsp;</strong>
+                </td>
+                <td align="left" width="20%" style="padding-left:5px;">
+                        @Html.Obout(new Obout.Mvc.ComboBox.ComboBox("ComboBoxPr")
+                   {
+                       Width = 270,
+                       MenuWidth = 270,
+                       Height = 200,
+                       EnableLoadOnDemand = true,
+                       OnLoadingItems = "Schedule/LoadingItems1",
+                       EmptyText = "-- Select Mower Helper --",
+                       HeaderTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxHeaderTemplateContainerInfo>(
+                      @:<div class="header c1" >Mower Helper name</div>
+),
+
+                       ItemTemplate = new Obout.Mvc.OboutMvcTemplate<ComboBoxItem>(
+
+                       @:<div class="item c1" >@(((MowerHelper.Models.BLL.Patients.PatientRegistration)item.DataItem).PracticeName)</div>
+),
+                       ClientSideEvents = new ComboBoxClientSideEvents()
+                       {
+                           OnSelectedIndexChanged = "ComboBoxPr_ItemClick"
+                       }
+                   }
+                                             )
+                </td>
+                <td width="8%" align="right"> <strong>Date range&nbsp;:&nbsp; </strong></td>
+                        <td id="Td2" align="left" valign="middle"  width="51%" colspan="2" runat="server" class="background_color" >
+                        @*<uc1:DateSearch ID="dt_filter" runat="server"></uc1:DateSearch>*@
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr class="background_color">
+                                    <td align="left" width="25%">
+                                        @Html.DropDownList("dt_filter", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="--Select dates--", Value = "0" },
+                                                               new SelectListItem{ Text="All" ,Value="All"},
+                                                               new SelectListItem{ Text="Today", Value = "Today" },
+                                                               new SelectListItem{ Text="Last 7 days", Value = "7" },
+                                                               new SelectListItem{ Text="Last 30 days", Value = "30" }, 
+                                                               new SelectListItem{ Text="Custom", Value = "Custom" }, 
+                                                              },
+                                                               new { style = "font-family:arial;font-size:13px;height:20px;width:120px;" })
+                                    </td>
+                                     @Html.Partial("_CustomDate")
+                                     <td id="MaximumMonth"  style="display:none;"> <span>(Maximum 12 months)</span></td>
+                               @*     <td id="tddaterange" runat="server" style="display:none" align="left">
+                                    <strong>&nbsp;&nbsp;From&nbsp;:&nbsp;</strong>
+                                                              <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield" maxlength="10" style="width: 75px;" />
+                                                             &nbsp;&nbsp;<strong>&nbsp;To :&nbsp;</strong>
+                                                             <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield" maxlength="10" style="width: 75px;" />&nbsp;&nbsp;
+                                        <span>(Maximum 12 months)</span>
+                                    </td>*@
+                                </tr>
+                            </table>
+                          </td>
+                <td align="center" >
+                 
+                                @*<input type="submit" class="button" name="btnSearch" id="btnSearch" value="Search" />*@
+                    <a id="btnSearch" href="#" onclick="javascript:return validDateserach();" title="Search"><img alt="" id="" src="~/Images/search_button_green.png" style="width:30px;" /></a>
+                    &nbsp;&nbsp;<input class="button" type="button" name="btnCancel" id="btnCancel" value="Cancel" style="vertical-align:top" onclick="return cancelbtn();"/>
+                </td>
+            </tr>
+        </table> 
+        <br />
+       <div class="content-box">
+        <div class="content-box-header">
+        <table width="100%" cellpadding="0" cellspacing="0" style="float:left;">
+                                             <tr>
+                                                 <td width="70%" align="left">
+                                                     <h3>
+                                                          Billing summary</h3>
+                                                 </td>
+                                                 <td width="15%" align="right">
+                                                        <ul style="list-style:none!important; padding-right:5px;" class="content-box-tabs">
+                                                        @*<li>
+                                                         <a id="lnkTransacList" href="#" style="color:#0066CC;font-size:15px;font-weight:bold;">Transactions List</a></li> *@
+                                                         @Html.ActionLink("Transactions List", "AdminLevelTransactionsList", new {disind="N" }, new { @style = "color:#0066CC;font-size:15px;font-weight:bold;" })          
+                                                            </ul>
+                                                            </td>
+                                                            <td width="15%" align="right">
+                                                        <ul style="list-style:none!important; padding-right:10px;" class="content-box-tabs">
+                                                         @* <asp:LinkButton ID="lnkbillingformula" ForeColor="#0066CC" Font-Bold="true" Font-Size="15px" runat="server" Text="Billing formulae" OnClientClick="return false;"></asp:LinkButton>*@
+                                                         <li>
+                                                          <a id="lnkbillingformula" href="#" style="color:#0066CC;font-size:15px;font-weight:bold;">Billing formulae</a></li>
+           
+                                                            </ul>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+      
+        </div>
+         <div class="clear"></div>
+         <div class="content-box-content">
+         @Html.Raw(ViewBag.ProvBillsum)
+         </div>
+        </div>
+        <br />
+        <br />
+        <div class="content-box">
+            <div class="content-box-header"><h3>Billing</h3>
+            <ul style="list-style: none!important; padding-right: 5px; padding-top: 5px;" class="content-box-tabs">
+                                                            <li><strong>Rows per page :&nbsp;</strong>
+                                                            
+                                                                @Html.DropDownList("ddlrecords", new List<SelectListItem>
+                                                           {
+                                                                new SelectListItem{ Text="5", Value = "5" },
+                                                               new SelectListItem{ Text="10", Value = "10" },
+                                                               new SelectListItem{ Text="15", Value = "15" },
+                                                               new SelectListItem{ Text="20", Value = "20" }, 
+                                                               new SelectListItem{ Text="25", Value = "25" }, 
+                                                               new SelectListItem{ Text="30", Value = "30" }, 
+                                                               new SelectListItem{ Text="35", Value = "35" },
+                                                               new SelectListItem{ Text="40", Value = "40" },
+                                                               new SelectListItem{ Text="45", Value = "45" },
+                                                               new SelectListItem{ Text="50", Value = "50" }, 
+                                                              },
+                                                             new { onchange = "this.form.submit();", style = "font-family:arial;font-size:13px;height:20px;width:48px;" })
+                                                            </li>
+                                                        </ul>
+         <script>$("#ddlrecords").change(function () {
+
+    if (document.getElementById('ComboBoxPr_SelectedIndex').value != '-1' && document.getElementById('dt_filter').value != 'Custom') {
+
+        window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value + '&ComboBoxPr_SelectedText=' + document.getElementById('ComboBoxPr_SelectedText').value + '&ComboBoxPr_SelectedIndex=' + document.getElementById('ComboBoxPr_SelectedIndex').value + '&ComboBoxPr=' + document.getElementById('ComboBoxPr').value + '&dt_filter=' + document.getElementById('dt_filter').value;// + '&hdnPrid=' + document.getElementById('hdnPrid').value + '&hdnname=' + document.getElementById('hdnname').value;
+    }
+    else if (document.getElementById('ComboBoxPr_SelectedIndex').value == '-1' && document.getElementById('dt_filter').value != 'Custom') {
+        window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value + '&dt_filter=' + document.getElementById('dt_filter').value;
+       }
+
+       else if (document.getElementById('ComboBoxPr_SelectedIndex').value == '-1' && document.getElementById('dt_filter').value == 'Custom') {
+           window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value + '&dt_filter=' + document.getElementById('dt_filter').value + '&txt_FromDate=' + document.getElementById('txt_FromDate').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value;
+             }
+             else if (document.getElementById('ComboBoxPr_SelectedIndex').value != '-1' && document.getElementById('dt_filter').value == 'Custom') {
+
+                 window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value + '&txt_FromDate=' + document.getElementById('txt_FromDate').value + '&txt_ToDate=' + document.getElementById('txt_ToDate').value + '&ComboBoxPr_SelectedText=' + document.getElementById('ComboBoxPr_SelectedText').value + '&ComboBoxPr_SelectedIndex=' + document.getElementById('ComboBoxPr_SelectedIndex').value + '&ComboBoxPr=' + document.getElementById('ComboBoxPr').value + '&dt_filter=' + document.getElementById('dt_filter').value;// + '&hdnPrid=' + document.getElementById('hdnPrid').value + '&hdnname=' + document.getElementById('hdnname').value;
+             }
+             else {
+
+                 window.location.href = '@Url.Action("AdminBillingSummary", "AdminHome")?ddlrecords=' + document.getElementById('ddlrecords').value;
+             }
+});</script>
+        </div>
+         <div class="clear"></div>
+         <div class="content-box-content">
+         @{string heading1;
+           if (Request["sort"] == "Electricianname" && Request["sortdir"] == "ASC")
+           {
+               heading1 = "Mower helper name  ▲";
+           }
+           else if (Request["sort"] == "Electricianname" && Request["sortdir"] == "DESC")
+           {
+               heading1 = "Mower helper name  ▼";
+           }
+           else
+           {
+               heading1 = "Mower helper name  ▼";
+           }
+             
+         }
+          @{string Summarypagesize = (ViewBag.Summarypagesize == null ? "10" : ViewBag.Summarypagesize);
+            WebGrid Summarygrid = new WebGrid(rowsPerPage: Convert.ToInt32(Summarypagesize));}
+                                            @{WebGrid grid = Summarygrid.Bind(rowCount: ViewBag.totrec, source: Model, autoSortAndPage: false);
+                                              if (grid.TotalRowCount != 0)
+                                              {
+                                                  int count = 0;
+                                                  string pager = grid.Pager().ToString();
+                                                  string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                                  string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                                  string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                                  columns: grid.Columns(grid.Column("ProviderName", heading1, style: "Date", format:@<text>
+@Html.ActionLink((string)item.ProviderName, "AdminLevelTransactionsList", new { pracId = (int)item.Practice_ID, pracname = item.ProviderName }) 
+</text>), grid.Column("TotalCharges", "Charges", style: "Date"), grid.Column("TotalPayments", "Payments", style: "Date"), grid.Column("TotalCredits", "Total credits", style: "Date"), grid.Column("Balence", "Balance", style: "Date"))).ToString();
+                                                  gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                                @(new HtmlString(gridhtml))
+                                                  if (newpager != "")
+                                                  {
+                                                <br />
+                                               
+                                                <div class="gridFooter" style="padding-left: 600px;">@(new HtmlString(newpager))</div>  
+                                               
+                                                <br />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                <table id="Table1" align="center">
+                                                    <tbody>
+                                                        <tr id="trnone">
+                                                            <td style="height: 30px;" align="center" valign="middle">
+                                                                <span id="lblOutMsg" class="errormsg" style="font-weight: bold;">No practices found.</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                               
+                                              }
+                                              }
+         
+         </div>
+        </div>
+    </div>
+    <div id="divformulae" style="display:none;" runat="server">
+      <table cellspacing="0" cellpadding="0" width="600px" align="center" border="0">
+      <tr class="background_color">
+        <td>
+          <div class="content-box">
+          <div class="content-box-header" id="tblGoallist" runat="server">
+         <h3>Billing formulae</h3>
+         </div>
+          <div class="content-box-content">
+                                                                        <table cellspacing="1" class="border_style" cellpadding="3" width="100%" align="center"
+                                                                    border="0" id="Table8" runat="server">
+                                                                    <tr class="white_color" height="25px">
+                                                                        <td valign="middle" align="right" style="width: 30%">
+                                                                            <strong>Total charges&nbsp;:&nbsp;</strong></td>
+                                                                        <td style="font-style: italic; width: 70%" align="left">
+                                                                            (Total charges)
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="nav_blue_color" height="25px">
+                                                                        <td valign="middle" align="right" style="width: 30%">
+                                                                            <strong>Total payments&nbsp;:&nbsp;</strong></td>
+                                                                        <td style="font-style: italic; width: 70%" align="left">
+                                                                            (Total payments)
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="white_color" height="25px">
+                                                                        <td valign="middle" align="right" style="width: 30%">
+                                                                            <strong>Total credits&nbsp;:&nbsp;</strong></td>
+                                                                        <td style="font-style: italic; width: 70%" align="left">
+                                                                            (Total positive adjustments) - (Total negative adjustments)
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="nav_blue_color" height="25px">
+                                                                        <td valign="middle" align="right" style="width: 30%">
+                                                                            <Strong>Balance&nbsp;:&nbsp;</Strong></td>
+                                                                        <td style="font-style: italic; width: 70%" align="left">
+                                                                            ((Total charges) - (Total payments)) +/- (Total credits)
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                      
+                                                                    </div>
+         </div>
+         </td>
+      </tr>
+     </table>
+    </div>
+     <div style="height:210px"></div>
+    <div>@{Html.RenderAction("Bottomsections", "Tools");}</div>
+}    
+    <script type="text/javascript">
+      
+         $(document).ready(function () {
+             
+             if ($("#dt_filter :selected").text() == 'Custom') {
+
+                 $('#MaximumMonth').show();
+             }
+         });
+             </script>
+    <script src="~/Scripts/DatepickerNew.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   @* <meta name="viewport" content="width=device-width" />*@
+       <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+        function fnempty() {
+            document.getElementById('txtCategoryName').value = trim(document.getElementById('txtCategoryName').value);
+            if (document.getElementById('txtCategoryName').value == '') {
+                ValidateAlert('tblmain', 'lblCategoryName', 'tdlblCategoryName', 'tdmainCategoryName', 'Please enter category');
+                document.getElementById('txtCategoryName').focus();
+               // Glb_ShowAlert('Please enter category');
+                return false;
+            }
+          
+        }
+</script>
+</head>
+<body>
+ @using (Ajax.BeginForm("AddNewCategory", "AdminFaqs", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "AddcategoryeSuccess",
+            OnComplete = "SessionExpireFail"
+            
+        }, new { @id = "updateCarForm" }))
+ {
+    <div>
+         <div id="main-content"> 
+        <div class="content-box">
+                  
+                    <div class="content-box-content">
+                    <table class="border_style" cellpadding="1" cellspacing="1" width="100%" align="center">
+                        <tr id="trcatmsg" runat="server" style="display: none;" class="white_color">
+                            <td colspan="2" align="center">
+                                <asp:Label ID="lblcaterr" Font-Bold="true" ForeColor="Red" runat="server"></asp:Label>
+                            </td>
+                        </tr>
+                        <tr class="white_color">
+                            <td align="right">
+                                <font color="red">*</font> <strong>New faq category :</strong>
+                            </td>
+                            <td align="left" id="tdmainCategoryName">
+                            <input type="text" id="txtCategoryName" name="txtCategoryName" />
+                               @* <asp:TextBox ID="txtCategoryName"  runat="server"></asp:TextBox>*@
+                            </td>
+                        </tr>
+                        </table>
+
+                         <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain" runat="server"
+                    style="display: none;">
+                    <tr class="white_color" align="center">
+                        <td id="tdlblCategoryName" height="30px" style="display: none;">
+                            <asp:Label ID="lblCategoryName" runat="server" Font-Bold="true" ForeColor="Black"></asp:Label>
+                        </td>
+                    </tr>
+                    </table>
+                    </div></div>
+                        <table width="100%">
+                        <tr>
+                            <td colspan="2" align="right" class="white_color">
+                            <input type="submit" id="addsave" name="addsave" class="button" onclick="return fnempty();" value="Save" />
+                               @*<asp:Button ID="addsave" runat="server" class="button" Text="Save" />*@
+                                   
+                            </td>
+                        </tr>
+                    </table>
+                
+           </div>         
+    </div>
+ }
+</body>
+</html>

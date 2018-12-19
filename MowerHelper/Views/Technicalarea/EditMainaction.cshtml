@@ -1,0 +1,111 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+@*    <meta name="viewport" content="width=device-width" />*@
+   <title>Mower Helper-Find an Mower Helper</title>
+    <script type="text/javascript">
+        function Edit_Validate() {
+
+
+            document.getElementById('Edit_tdtype').bgColor = "White";
+            document.getElementById('Edit_lblErrtype').style.display = 'none';
+            document.getElementById('Edit_tddes').bgColor = "White";
+            document.getElementById('Edit_lblErrdes').style.display = 'none';
+
+            var type = trim(document.getElementById('Edit_txtEmailOptiontype').value);
+            document.getElementById('Edit_txtEmailOptiontype').value = type;
+            if (document.getElementById('Edit_txtEmailOptiontype').value == '') {
+                document.getElementById('Edit_lblErrtype').style.display = '';
+                document.getElementById('Edit_lblErrtype').innerHTML = 'Please enter email  option type';
+
+                document.getElementById('Edit_tdtype').bgColor = "orange";
+                document.getElementById('Edit_txtEmailOptiontype').focus();
+                return false;
+            }
+            else {
+                document.getElementById('Edit_tdtype').bgColor = "White";
+                document.getElementById('Edit_lblErrtype').style.display = 'none';
+
+            }
+
+            var des = trim(document.getElementById('Edit_txtDescription').value);
+            document.getElementById('Edit_txtDescription').value = des;
+            if (document.getElementById('Edit_txtDescription').value == '') {
+                document.getElementById('Edit_lblErrdes').style.display = '';
+                document.getElementById('Edit_lblErrdes').innerHTML = 'Please enter email option description';
+                document.getElementById('Edit_tddes').bgColor = "orange";
+                document.getElementById('Edit_txtDescription').focus();
+                return false;
+            }
+            else {
+                document.getElementById('Edit_tddes').bgColor = "White";
+                document.getElementById('Edit_lblErrdes').style.display = 'none';
+
+            }
+            if (document.getElementById('Edit_txtDescription').value.length > 1000) {
+                document.getElementById('Edit_lblErrdes').style.display = '';
+                document.getElementById('Edit_lblErrdes').innerHTML = 'Description can be up to 1000 characters';
+                document.getElementById('Edit_tddes').bgColor = "orange";
+                document.getElementById('Edit_txtDescription').focus();
+                return false;
+                return false;
+            }
+            else {
+                document.getElementById('Edit_tddes').bgColor = "White";
+                document.getElementById('Edit_lblErrdes').style.display = 'none';
+
+            }
+
+
+        }
+    </script>
+</head>
+<body>
+    @using (Html.BeginForm("EditMainaction", "Technicalarea", FormMethod.Post, null))
+    {
+          <input type="hidden" id="Hdntypeid" name="Hdntypeid" value="@ViewBag.typeid" />
+ <div class="content-box">
+       <div class="content-box-content">
+           <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+               border="0">
+               <tr height="10" runat="server" class="white_color">
+                   <th align="right" width="25%">
+                       <b><font color="red">*</font></b> <strong>E-mail  option type :</strong>
+                   </th>
+                   <td align="left" id="Edit_tdtype" runat="server" width="75%">
+                                                                              @Html.TextBox("Edit_txtEmailOptiontype", (string)ViewBag.Title, new { @class = "textfield", style = "width:350px", autocomplete = "off" })
+                                                                                          &nbsp;&nbsp;&nbsp <span id="Edit_lblErrtype" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+               <tr height="10" class="white_color" runat="server">
+                   <th align="right">
+                       <b><font color="red">*</font></b> <strong>E-mail  option description :</strong>
+                   </th>
+                   <td align="left" id="Edit_tddes" runat="server">
+                       @Html.TextArea("Edit_txtDescription", (string)ViewBag.Description, 3, 3, new { @class = "textfield", style = "width:400px;height:80px;" })
+                          <br />
+                                (Maximum length upto 1000 characters)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span id="Edit_lblErrdes" style="font-weight: bold; color: Black"></span>
+                   </td>
+               </tr>
+           </table>
+                                                                                       <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                                             <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Edit_Validate();" />
+                                                          &nbsp;
+                                              <input type="button" class="close1 button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+      </div></div>
+    }
+</body>
+</html>
+

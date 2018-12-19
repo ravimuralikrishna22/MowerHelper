@@ -1,0 +1,237 @@
+﻿@model MowerHelper.Models.BLL.Providers.Reg_ProvidersDetailInfo
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @*<meta name="viewport" content="width=device-width" />*@
+    <title>Mower Helper-Find an Mower Helper</title> 
+
+</head>
+<body>
+    @using (Ajax.BeginForm("Addnewpaymentmethod", "Admin", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccess",
+            OnComplete = "SessionExpireFail"
+
+        }, new { @id = "updateCarForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="CardNumber1" name="CardNumber1" />
+        <input id="hdncardnumber" type="hidden" name="hdncardnumber" /> 
+        <input type="hidden" id="HdnPractice_ID" name="HdnPractice_ID" value="@Convert.ToString(Session["Practice_ID"])" />
+        <input type="hidden" id="HdnProvider_ID" name="HdnProvider_ID" value="@Convert.ToString(Session["Prov_ID"])" />
+         
+        <input type="hidden" id="hdnadd1" name="hdnadd1" value="" />
+        <input type="hidden" id="hdnadd2" name="hdnadd2" value="" />
+        <input type="hidden" id="hdnzip" name="hdnzip" value="" />
+        <input type="hidden" id="hdnstate" name="hdnstate" value="" />
+        <input type="hidden" id="hdncity" name="hdncity" value="" />
+        <div id="update-message" class="error" style="padding-left: 250px; font-weight: bold;">
+        </div>
+        
+        <div id="div10" class="content-box">
+            <div class="clear"></div>
+            <div class="content-box-content">
+                <table align="center" width="100%" cellpadding="6" cellspacing="1" border="0" class="border_style">
+                    <tr class="white_color" id="row12">
+                        <td align="right" style="width: 30%" id="TableCell28" runat="server">
+                            <font color="red">*</font><strong>Card name :&nbsp;</strong>
+                        </td>
+                        <td id="TableCell29" runat="server">
+                            @Html.DropDownList("CardType", null, new { @class = "textfield", @style = "height:25px" })
+                            &nbsp;&nbsp;&nbsp;
+                            @Html.TextBox("IssuingBank",null , new { @class = "textfield", autocomplete = "off",placeholder="Issuing Bank",maxlength="50" })
+                            <img src="~/Images/help2.png" id="ImgIsBank" style="vertical-align: middle" onmouseout="hideddrivetip();" onmouseover="ddrivetip('@ViewBag.IssuingNotes' ,300);" />
+                            <span id="lbcardtype" style="display: none"></span>
+                        </td>                      
+                    </tr>
+                    <tr id="row10" class="nav_blue_color">
+                        <td id="TableCell24" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Credit card number :&nbsp;</strong>
+                        </td>
+                        <td id="TableCell25" runat="server">
+                            @Html.TextBox("CardNumber", null, new { @class = "textfield", @onkeydown = "return isValidNumeric(CardNumber,16,0,event);", autocomplete = "off" })
+                            <b>Cvv :&nbsp;</b>
+                            @Html.TextBox("txtCVV2", null, new
+                                   {
+                                       @style = "width:50px",
+                                       @class = "textfield",
+                                       @onkeypress = "return AlphaNumbers(event);"
+                                   })
+                            <img src="~/Images/help2.png" id="Img2" style="vertical-align:middle" />
+                            <div id="divCvv" style="display: none">
+                                <table id="Table7" width="100%" runat="server">
+                                    <tr>
+                                        <td>
+                                            <img src="~/Images/cvv2.jpg" style="vertical-align:middle"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="lblcardnumber" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="trfirstlastname" class="white_color" >
+                        <td id="tdfl1" align="Right" style="width: 30%">
+                            <font color="red">*</font><strong>Name on card :</strong>&nbsp;
+                        </td>
+                        <td id="tdfl2" runat="server">
+                            @Html.TextBox("FullName",(Model.FirstName + ' ' + Model.LastName), new { @class = "textfield",style = "width:180px", autocomplete = "off", placeholder="First and Last name" })&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span id="lblfullname" style="display:none"></span>
+                        </td>
+                    </tr>
+                    <tr id="trfirstname" class="white_color" style="display:none">
+                        <td id="Td1" align="Right" style="width: 30%">
+                            <font color="red">*</font><strong>First name :</strong>&nbsp;
+                        </td>
+                        <td id="Td2" runat="server">
+                            @Html.TextBox("txtfirstname",System.Web.HttpUtility.HtmlDecode(@Model.FirstName), new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                id="lblfirstname" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="trlastname" class="nav_blue_color" style="display:none">
+                        <td id="Td3" align="Right" style="width: 30%">
+                            <font color="red">*</font><strong>Last name :</strong>&nbsp;
+                        </td>
+                        <td id="Td4" runat="server">
+                            @Html.TextBox("txtlastname",System.Web.HttpUtility.HtmlDecode(@Model.LastName), new { @class = "textfield", autocomplete = "off" })&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                id="lbllastname" style="display: none"></span>
+                        </td>
+                    </tr>
+                    <tr id="row13" class="white_color">
+                        <td id="TableCell30" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Card expiry date :&nbsp;</strong>
+                        </td>
+                        <td id="TableCell31" runat="server">
+                            @Html.DropDownList("month", null, new { @class = "textfield", @style = "width:50px" })
+                            @Html.DropDownList("year", null, new { @class = "textfield", @style = "width:100px" })
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span id="lblExpyear" style="display: none;"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color" id="row15">
+                        <td id="TableCell34" align="right" style="width: 30%">
+                            <font color="red">*</font><strong>Billing address 1 :&nbsp;</strong>
+                        </td>
+                        <td id="TableCell35" runat="server">
+                            @Html.TextBox("EAddress1", Model.Address1, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })&nbsp;&nbsp;&nbsp;<span
+                                id="lbladdress" style="display: none"></span>
+                            @Html.CheckBox("chkaddress", true)&nbsp;&nbsp;&nbsp; <strong>Same as mower helper address
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr id="row16" class="nav_blue_color">
+                        <td id="TableCell36" align="right" style="width: 30%">
+                            <strong>Address 2 :&nbsp;</strong>
+                        </td>
+                        <td id="TableCell37" runat="server">
+                            @Html.TextBox("EAddress2", Model.Address2, new { @class = "textfield", autocomplete = "off", style = "width:300px", disabled = "disabled" })
+                        </td>
+                    </tr>
+                     @Html.Partial("_CitiesStatesNewPaymentMetod",Model)
+                </table>
+                <br />
+                <table width="94%" id="tblProcess">
+                    <tr id="TableRow7">
+                        <td id="TableCell11" width="100%" align="right">
+                            <input type="submit" name="btnProcess2" id="btnProcess2" value="Save" class="button"
+                                onclick="return CognodeProcess();" />
+                            &nbsp;
+                            <input type="button" class="close button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+       
+    }
+    
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $("#CardNumber").bind('contextmenu', function (e) {
+                e.preventDefault();
+                //  alert('Right Click is not allowed');
+            });
+            var objcardtype = "@ViewBag.ctype";
+            if (objcardtype != '' && objcardtype != null) {
+                //$("#CardType option:contains(" + objcardtype + ")").attr('selected', 'selected');
+                $("#CardType").val(objcardtype);
+            }
+            $('#Img2').mouseover(function () {
+                //document.getElementById("divCvv").style.zIndex = '1005';
+                //document.getElementById("divCvv").style.left = '400px';
+                //document.getElementById("divCvv").style.top = '50px';
+                document.getElementById("divCvv").style.position = 'absolute';
+                document.getElementById("divCvv").style.display = '';
+            });
+            $('#Img2').mouseout(function () {
+
+                document.getElementById('divCvv').style.display = 'none';
+            });
+        });
+    </script>
+    <script type="text/javascript" language="JavaScript">
+        window.history.forward();
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var date = new Date();
+            var Nextyear = date.getFullYear() + 1;
+            $('#year').val(Nextyear);
+
+         
+
+
+         
+
+          
+           // $('#Zip').change(function () {
+               
+          //  });
+        });
+        function updateSuccess(data) {
+          
+            if (data != '' & data.Success == true) {
+                $('#updateDialog').dialog('close');
+                @* $("#loadPayment").load("@Url.Action("FTservicesAddnewpayment", "Admin")");*@
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                $.ajax({
+
+                    url: "@Url.Action("FTservicesAddnewpayment", "Admin")",
+                      type: "get",
+                      contentType: "application/json;charset=utf-8",
+                      success: function (data) {
+
+                          $('#loadPayment').html(data);
+                          $("#dvLoading").dialog('close');
+                      }
+
+                  });
+                document.body.style.cursor = 'default';
+            }
+            else {
+                document.body.style.cursor = 'default';
+                if (data != "_Logon_") {
+                    alert(data.ErrorMessage);
+                }
+            }
+        }
+    </script>
+ 
+   @* <script type="text/javascript">
+        Ext.Ajax.on('requestexception', function (conn, response, options) {
+            if (response.status == 403) {
+                //alert("NewHello")
+                Ext.MessageBox.alert('Authentication', 'You are not logged in.');
+                /* you can display a login box or something here */
+               // window.location.href = "../Home/SessionExpire"
+            }
+        });
+    </script>*@
+</body>
+</html>

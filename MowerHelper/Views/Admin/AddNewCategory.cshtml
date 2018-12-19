@@ -1,0 +1,68 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   <title>Mower Helper-Find an Mower Helper</title>
+     <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function InlineAlert(lblErrId, tdErrid, txt_ErrMsg) {
+        document.getElementById(lblErrId).style.display = '';
+        document.getElementById(lblErrId).innerHTML = txt_ErrMsg;
+        document.getElementById(tdErrid).bgColor = 'orange';
+    }
+    function ClearInlineAlert(lblErrId, tdErrid, tdbgcolor) {
+        document.getElementById(lblErrId).style.display = 'none';
+        document.getElementById(tdErrid).bgColor = tdbgcolor;
+    }
+    function validMot() {
+        var strcatname = trim(document.getElementById('txtCategoryName').value);
+        document.getElementById('txtCategoryName').value = strcatname;
+        if (document.getElementById('txtCategoryName').value == '') {
+            InlineAlert('lblErrMot', 'tdMot', 'Please enter article category');
+            document.getElementById('txtCategoryName').focus();
+            return false;
+        }
+        else {
+            ClearInlineAlert('lblErrMot', 'tdMot', '#FFFFFF');
+        }
+        //       return false;
+    }
+</script>
+</head>
+<body>
+ @using (Ajax.BeginForm("AddNewCategory", "Admin", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "AddcategorySuccess",
+            OnComplete = "SessionExpireFail"
+
+        }, new { @id = "updateCarForm" }))
+ {
+     
+     
+     <table border="0" cellpadding="6" cellspacing="1" width="100%" class="border_style">
+        <tr class="white_color">
+            <td width="20%" align="right">
+            <font color="red">*</font><strong>Article category</strong>
+            </td>
+             <td id="tdMot">
+             <input name="txtCategoryName" maxlength="90" id="txtCategoryName" class="textfield" style="width:350px;" type="text"/>&nbsp;&nbsp<span id="lblErrMot" style="font-weight: bold; color: Black"></span>
+            </td>
+        </tr>
+    </table>
+        <div style="height:15px"></div>
+    <table border="0" cellpadding="0" cellspacing="0" width="98%">
+             <tr style="text-align:right">
+                 <td>
+                  <input class="button"  type="submit" name="Save" value="Save" onclick="return validMot();" />
+                 </td>
+             </tr>
+         </table>
+ }
+</body>
+</html>

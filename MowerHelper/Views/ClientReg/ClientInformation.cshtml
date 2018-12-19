@@ -1,0 +1,1208 @@
+﻿@model MowerHelper.Models.BLL.Providers.Reg_ProvidersDetailInfo
+@using MowerHelper.Models.Classes
+      
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mower Helper-Find an Mower Helper</title>
+    @Styles.Render("~/Content/themes/base/TherpistStyles")
+    @Scripts.Render("~/ThScripts/ElectricianHelpscripts")
+    @Scripts.Render("~/ThScripts/Thjquerycripts")
+    <style type="text/css">
+        .confirmDialog, .confirmDialog1
+        {
+            background: url("../images/bg-button-green.gif") repeat-x scroll left top #459300 !important;
+            border: 1px solid #459300 !important;
+            border-radius: 4px;
+            color: #FFFFFF !important;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Verdana,Arial,sans-serif;
+            font-size: 11px !important;
+            padding: 4px 7px !important;
+        }
+
+        input[type="radio"]
+        {
+            margin-right: 5px;
+        }
+
+        .ui-autocomplete
+        {
+            width: 800px;
+            /* prevent horizontal scrollbar */
+        }
+        /* IE 6 doesn't support max-height
+   * we use height instead, but this forces the menu to always be this tall
+   */
+        * html .ui-autocomplete
+        {
+            width: 800px;
+        }
+
+        .ui-datepicker-trigger
+        {
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .item
+        {
+            position: relative !important;
+            display: -moz-inline-stack;
+            display: inline-block;
+            zoom: 1;
+            *display: inline;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .header
+        {
+            margin-left: 2px;
+        }
+
+        .c1
+        {
+            width: 120px;
+        }
+
+        .c2
+        {
+            margin-left: 10px;
+            width: 120px;
+        }
+
+        .c3
+        {
+            margin-left: 10px;
+            width: 50px;
+        }
+
+        .ui-datepicker
+        {
+            background: #AADDFF;
+            border: 1px solid #555;
+            color: #000000;
+        }
+
+        .Highlighted a
+        {
+            background-color: Green !important;
+            background-image: none !important;
+            color: White !important;
+            font-weight: bold !important;
+            font-size: 10pt;
+        }
+
+        .ui-widget-header
+        {
+            font-size: 15px;
+            height: 25px;
+        }
+    </style>
+
+</head>
+<body ondrag="return false">
+
+
+    @{Html.RenderAction("Topsection", "Tools");}
+    @using (Ajax.BeginForm("ClientInformation", "ClientReg", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "updateSuccess",
+        OnComplete = "SessionExpireFail"
+
+    }, new { @id = "updateCarForm" }))
+    {
+
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="hdngender" name="hdngender" />
+        <input type="hidden" id="hdnSelectState" name="hdnSelectState" />
+        <input type="hidden" id="hdnSelectCity" name="hdnSelectCity" />
+        <input type="hidden" id="HdnInd" name="HdnInd" />
+        <div id="main-content">
+            <div class="content-box">
+                <div class="content-box-header">
+                    <h3>Client registration</h3>
+                    <div class="clear"></div>
+                </div>
+                <div class="content-box-content">
+                    @* <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                        <tr>
+                            <td width="100%" valign="top">*@
+
+                 @*   <table cellspacing="0" cellpadding="0" width="100%" border="0" class="border_style">*@
+                        @*   <tr height="25px">
+                                        <td align="left" colspan="2" class="tr_bgcolor">
+                                            &nbsp;&nbsp;<strong>Personal / Contact information</strong>
+                                        </td>
+                                    </tr>*@
+                        @*<tr>
+                            <td width="60%" style="vertical-align: top;">*@
+                                <table style="width: 100%;" cellspacing="1" cellpadding="6" border="0" class="border_style">
+                                    <tr class="white_color">
+                                        <td align="right" width="30%">
+                                            <font color="red"><b>*</b></font><strong>Name :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="70%" id="tdname" runat="server">
+                                            @{string[] PreArray = { " ", "Dr", "Miss", "Mr", "Mrs", "Ms" };}
+                                            @Html.DropDownList("ddlPrefix", new SelectList(PreArray, null), new { @style = "width:60px;height:22px;font-size:13px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                            <input type="text" id="txtFirstName" name="txtFirstName" value="First Name" autocomplete="off" onfocus="return Clearfirstname();" onkeypress="return fnsetfocus(event,'ImgBtnNext');" class="textfield" maxlength="50" style="width: 130px;" />
+                                            <input type="text" id="txtMiddleName" name="txtMiddleName" value="MI" autocomplete="off" onfocus="return ClearMI();" onkeypress="return fnsetfocus(event,'ImgBtnNext');" class="textfield" maxlength="1" style="width: 25px;" />
+                                            <input type="text" id="txtLastName" name="txtLastName" value="Last Name" autocomplete="off" onfocus="return Clearlastname();" onkeypress="return fnsetfocus(event,'ImgBtnNext');" class="textfield" maxlength="50" style="width: 130px;" />
+                                            @{string[] PreArray1 = { " ", "I", "II", "III", "IV", "Jr", "Sr" };}
+                                            @Html.DropDownList("ddlSuffix", new SelectList(PreArray1, null), new { @style = "width:52px;height:22px;font-size:13px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                            <br />
+                                        </td>
+                                    </tr>
+                                    <tr class="nav_blue_color">
+                                        <td style="text-align: right;">
+                                            <strong>Email :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" id="tdemail">
+                                            <input type="text" id="txtEmailID" name="txtEmailID" autocomplete="off" style="width: 270px" maxlength="100" class="textfield" onkeypress="return fnsetfocus(event,'ImgBtnNext');" />
+                                        </td>
+                                    </tr>
+                                     @if (clsWebConfigsettings.GetConfigSettingsValue("ShowClientDriversLicense").ToUpper() == "YES"){
+                                    <tr class="white_color" id="toggletr">
+                                        <td align="right">
+                                            <strong>Driver's license number :&nbsp;</strong>
+                                        </td>
+                                        <td align="left">
+                                            <input type="text" id="txtLicense" name="txtLicense" class="textfield" maxlength="50" style="width: 185px;" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" />
+
+                                        </td>
+                                    </tr>
+                                     }
+                                    <tr class="nav_blue_color">
+                                        <td style="text-align: right;">
+                                            <font color="red"><b>&nbsp;*</b></font><strong>Cell phone :&nbsp;</strong>
+                                        </td>
+                                        <td align="left">
+                                            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                <tr class="nav_blue_color">
+                                                    <td width="90%" id="tdmobile" runat="server">
+                                                        <input type="tel" id="txtMobile1" name="txtMobile1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px" maxlength="3" class="textfield" />-
+                                                                                        <input type="tel" id="txtMobile2" autocomplete="off" name="txtMobile2" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px" maxlength="3" class="textfield" />-
+                                                                                        <input type="tel" id="txtMobile3" autocomplete="off" name="txtMobile3" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 40px" maxlength="4" class="textfield" />&nbsp;
+                                                    </td>
+
+                                                    <td width="10%" align="left" style="display: none;">
+                                                        @Html.RadioButton("RbCellPhoneLeaveMsg", true, true, new { @title = "Primary phone contact", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr class="white_color">
+                                        <td style="text-align: right;">
+                                            @Html.DropDownList("ddlphone", new List<SelectListItem>
+
+                                                              {
+                                                               new SelectListItem{ Text="Home phone", Value = "0" },
+                                                               new SelectListItem{ Text="Work phone", Value = "1" }
+                                                              
+                                                              },
+                                                             new { style = "font-family:arial;font-size:13px;height:25px;width:120px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                        </td>
+                                        <td align="left" height="26">
+                                            <table width="100%" cellspacing="0" cellpadding="0">
+                                                <tr class="white_color">
+                                                    <td width="90%" id="tdhome">
+                                                        <input type="tel" id="txtHomePhone1" name="txtHomePhone1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px;" maxlength="3" class="textfield"  /><span id="spnhomephn1">-</span>
+                                                        <input type="tel" id="txtWorkPhone1" name="txtWorkPhone1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px; display: none;" maxlength="3" class="textfield" /><span id="spnworkphn1" style="display: none;">-</span>
+                                                        <input type="tel" id="txtHomePhone2" name="txtHomePhone2" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px;" maxlength="3" class="textfield" /><span id="spnhomephn2">-</span>
+                                                        <input type="tel" id="txtWorkPhone2" name="txtWorkPhone2" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px; display: none;" maxlength="3" class="textfield" /><span id="spnworkphn2" style="display: none;">-</span>
+                                                        <input type="tel" id="txtHomePhone3" name="txtHomePhone3" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 40px;" maxlength="4" class="textfield" />
+                                                        <input type="tel" id="txtWorkPhone3" name="txtWorkPhone3" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 40px; display: none;" maxlength="4" class="textfield" />
+
+                                                    </td>
+                                                    <td width="10%" align="left" style="display: none;">
+                                                        @Html.RadioButton("rbHomePhoneLeaveMsg", true, false, new { @title = "Primary phone contact", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                               
+
+                           @* </td>
+                            <td width="40%" style="vertical-align: top;">
+                                <table style="width: 100%;" cellspacing="1" cellpadding="6" border="0" class="border_style">*@
+                                    <tr class="white_color">
+                                        <td style="text-align: right;">
+                                            <font color="red"><b>&nbsp;</b></font><strong>Address 1 :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="72%" id="tdaddress1">
+                                            <input type="text" id="txtAddress1" name="txtAddress1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 270px;" maxlength="50" class="textfield" />
+
+                                        </td>
+                                    </tr>
+                                    <tr class="nav_blue_color">
+                                        <td style="text-align: right;">
+                                            <strong>Address 2 :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="72%">
+                                            <input type="text" id="txtAddress2" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" name="txtAddress2" style="width: 270px;" maxlength="50" class="textfield" />
+                                        </td>
+                                    </tr>
+                                    @Html.Partial("_CitiesStates", null, new ViewDataDictionary { { "Zip", Model.Zip }, { "State_ID", Model.State_ID }, { "City_ID", Model.City_ID }, { "Statename", Model.Statename }, { "Cityname", Model.Cityname } })
+                                @*    <tr class="white_color">
+                                        <td style="text-align: right;">&nbsp;<font color="red"><b>*</b></font><strong>Zip code :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="72%" id="tdzip">@Html.TextBox("txtZip", (string)ViewBag.Zip, new { @class = "textfield", MaxLength = "5", style = "width:50px;", autocomplete = "off", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+                                        </td>
+                                    </tr>
+                                    <tr class="nav_blue_color">
+                                        <td style="text-align: right;">&nbsp;<font color="red"><b>*</b></font><strong>State :&nbsp;</strong>
+                                        </td>
+
+                                        @if (Model.StateList != null)
+                                        {
+                                            <td align="left" width="72%" id="tdstate" runat="server">@Html.DropDownList("DDState", Model.StateList, "--Select State--", new { @style = "width:270px;height:25px;font:13px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+
+                                            </td>   }
+                                    </tr>
+                                    <tr class="white_color">
+                                        <td style="text-align: right;">&nbsp;<font color="red"><b>*</b></font><strong>City :&nbsp;</strong>
+                                        </td>
+                                        <td align="left" width="72%" id="tdcity" runat="server">@Html.DropDownList("DDCity", Model.CityList, new { @style = "width:270px;height:25px;font:13px;", onkeypress = "return fnsetfocus(event,'ImgBtnNext');" })
+
+                                        </td>
+                                    </tr>*@
+ </table>
+
+                               @* </table>*@
+
+                        @*    </td>
+                        </tr>
+
+
+
+
+                    </table>*@
+                    @*</td>
+                            
+                        </tr>
+                    </table>*@
+                    <table cellspacing="0" cellpadding="0" width="100%" border="0" id="tblmain" runat="server"
+                        style="display: none;">
+                        <tr class="white_color" align="center">
+                            <td id="tdlblname" height="30px" style="display: none;">
+                                <label id="lblfirstname" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlbllastname" height="30px" style="display: none;">
+                                <label id="lbllastname" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblssn" height="30px" style="display: none;">
+                                <label id="lblssn" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlbldob" height="30px" style="display: none;">
+                                <label id="lbldob" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlbladdress" height="30px" style="display: none;">
+                                <label id="lbladdress" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblzip" height="30px" runat="server" style="display: none;">
+                                <label id="lblzip" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblstate" height="30px" style="display: none;">
+                                <label id="lblstate" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblcity" height="30px" style="display: none;">
+                                <label id="lblcity" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblemail" height="30px" style="display: none;">
+                                <label id="lblemail" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblhome" height="30px" style="display: none;">
+                                <label id="lblhome" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblmobile" height="30px" style="display: none;">
+                                <label id="lblmobile" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblwork" height="30px" style="display: none;">
+                                <label id="lblwork" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblcontact" height="30px" style="display: none;">
+                                <label id="lblcontact" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                        <tr class="white_color" align="center">
+                            <td id="tdlblcp" height="30px" style="display: none;">
+                                <label id="lblcp" style="font-weight: bold; color: Black; display: none;"></label>
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%">
+                <tr class="background_color">
+                    <td align="right" colspan="2" style="padding-bottom: 5px; padding-right: 10px; padding-top: 10px;">
+                       @* @{
+                                              string id = ViewBag.id;
+                        }*@
+                        <input id="ImgBtnNext" name="ImgBtnNext" type="submit" class="confirmDialog1" value="Register" onclick="return validate();" />&nbsp;
+                        @*                        @Html.ActionLink("Cancel ", "../ClientReg/Conformation", new { id = id },
+                                                  new { @style = "background: url('~/../Images/cross.png') no-repeat ;height: 15px;padding-left:15px;", @class = "confirmDialog", @title = "Click here to stop registration" })*@
+                        <input type="button" name="btncancel" value="Cancel" id="btncancel" class="confirmDialog" />
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <div id="dialog-confirm" title="Mower Helper" style="display: none;">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                Do you want to stop registration?
+            </p>
+        </div>
+    }
+    <table>
+        <tr>
+            <td height="175px;"></td>
+        </tr>
+    </table>
+    @{Html.RenderAction("Bottomsections", "Tools");}
+    <div id="dvLoading" style="display: none; text-align: center; vertical-align: middle">
+        @*  <span style="font-weight: bold;">Processing</span>*@
+        <img src="~/Images/Ajax-Processing.gif" alt="Processing" />
+    </div>
+          
+</body>
+<script type="text/javascript">
+    $.ajaxSetup({ cache: false });
+    $(".confirmDialog").live("click", function (e) {
+
+        //                                            var url = $(this).attr('href');
+        $("#dialog-confirm").dialog({
+            autoOpen: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            buttons: {
+                "Yes": function () {
+                    $(this).dialog("close");
+                    window.location = '../Clients/ClientsHome';
+
+                },
+                "No": function () {
+                    $(this).dialog("close");
+
+                }
+            }
+        });
+        $("#dialog-confirm").dialog('open');
+        return false;
+    });
+</script>
+
+
+<script type="Text/JavaScript">
+    $(document).ready(function () {
+        $("#trCountry").hide();
+    });
+    //function ValidateEmail(ctrl) {
+    //    if (document.layers || document.getElementById || document.all) {
+    //        var str = ctrl.value
+
+    //        var filter = /^([\w-]+(?:\.[\w-]+)*)@@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
+    //        if (filter.test(str))
+    //            testresults = true
+    //        else
+    //            testresults = false
+
+    //        if (testresults == true) {
+    //            var sindex = str.indexOf("@@");
+    //            var strlength = str.length;
+    //            var mailstr = str.substring(sindex, strlength);
+    //            var eindex = mailstr.indexOf(".");
+    //            if (eindex < 4)
+    //                testresults = false
+    //            else
+    //                testresults = true
+    //        }
+
+    //        return (testresults)
+    //    }
+    //    else
+    //        return true;
+    //}
+
+    function clearalerts() {
+        document.getElementById('tdname').bgColor = 'White';
+        document.getElementById('tblmain').style.display = 'none';
+        document.getElementById('tdlblname').style.display = 'none';
+        document.getElementById('lblfirstname').style.display = 'none';
+        document.getElementById('tdlbllastname').style.display = 'none';
+        document.getElementById('lbllastname').style.display = 'none';
+        //document.getElementById('tdssn').bgColor = 'White';
+        //document.getElementById('tdlblssn').style.display = 'none';
+        //document.getElementById('lblssn').style.display = 'none';
+        //document.getElementById('tddob').bgColor = 'White';
+        //document.getElementById('tdlbldob').style.display = 'none';
+        // document.getElementById('lbldob').style.display = 'none';
+        document.getElementById('tdaddress1').bgColor = 'White';
+        document.getElementById('tdlbladdress').style.display = 'none';
+        document.getElementById('lbladdress').style.display = 'none';
+        document.getElementById('tdzip').bgColor = 'White';
+        document.getElementById('tdlblzip').style.display = 'none';
+        document.getElementById('lblzip').style.display = 'none';
+        document.getElementById('tdstate').bgColor = 'White';
+        document.getElementById('tdlblstate').style.display = 'none';
+        document.getElementById('lblstate').style.display = 'none';
+        document.getElementById('tdcity').bgColor = 'White';
+        document.getElementById('tdlblcity').style.display = 'none';
+        document.getElementById('lblcity').style.display = 'none';
+        document.getElementById('tdemail').bgColor = 'White';
+        document.getElementById('tdlblemail').style.display = 'none';
+        document.getElementById('lblemail').style.display = 'none';
+        document.getElementById('tdmobile').bgColor = 'White';
+        document.getElementById('tdlblmobile').style.display = 'none';
+        document.getElementById('lblmobile').style.display = 'none';
+        document.getElementById('tdlblhome').style.display = 'none';
+        document.getElementById('lblhome').style.display = 'none';
+        document.getElementById('tdhome').bgColor = 'White';
+
+        document.getElementById('tdlblwork').style.display = 'none';
+        document.getElementById('lblwork').style.display = 'none';
+        // document.getElementById('tdcontactname').bgColor = 'White';
+        // document.getElementById('tdlblcontact').style.display = 'none';
+        //document.getElementById('lblcontact').style.display = 'none';
+        //document.getElementById('tdcp').bgColor = 'White';
+        //document.getElementById('tdlblcp').style.display = 'none';
+        //document.getElementById('lblcp').style.display = 'none';
+    }
+    function validate() {
+        var global_variable = "";
+        var strfirstname = trim(document.getElementById('txtFirstName').value);
+        document.getElementById('txtFirstName').value = strfirstname;
+        if (document.getElementById('txtFirstName').value == '' || document.getElementById('txtFirstName').value == 'First Name') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter first name");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblname').style.display = '';
+            document.getElementById('tdlblname').bgColor = 'Orange';
+            document.getElementById('lblfirstname').style.display = '';
+            document.getElementById('lblfirstname').innerHTML = 'Please enter first name';
+            document.getElementById('tdname').bgColor = 'Orange';
+            document.getElementById('txtFirstName').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdname').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblname').style.display = 'none';
+            document.getElementById('lblfirstname').style.display = 'none';
+        }
+
+        if (document.getElementById('txtMiddleName').value == 'MI') {
+            clearalerts();
+            document.getElementById('txtMiddleName').value = '';
+        }
+
+        var strlastname = trim(document.getElementById('txtLastName').value);
+        document.getElementById('txtLastName').value = strlastname;
+        if (document.getElementById('txtLastName').value == '' || document.getElementById('txtLastName').value == 'Last Name') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter last name");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlbllastname').style.display = '';
+            document.getElementById('tdlbllastname').bgColor = 'Orange';
+            document.getElementById('lbllastname').style.display = '';
+            document.getElementById('lbllastname').innerHTML = 'Please enter last name';
+            document.getElementById('tdname').bgColor = 'Orange';
+            document.getElementById('txtLastName').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdname').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlbllastname').style.display = 'none';
+            document.getElementById('lbllastname').style.display = 'none';
+        }
+
+        var stremail = trim(document.getElementById('txtEmailID').value);
+        document.getElementById('txtEmailID').value = stremail;
+
+
+        if (document.getElementById('txtEmailID').value != '') {
+            clearalerts();
+            if (ValidateEmail(document.getElementById('txtEmailID')) == 0) {
+                //Glb_ShowAlert("Please enter valid email");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblemail').style.display = '';
+                document.getElementById('tdlblemail').bgColor = 'Orange';
+                document.getElementById('lblemail').style.display = '';
+                document.getElementById('lblemail').innerHTML = 'Please enter valid email';
+                document.getElementById('tdemail').bgColor = 'Orange';
+                //                    ValidateAlert('tblmain','tdlblemail','lblemail','tdemail',
+                document.getElementById('txtEmailID').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdemail').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblemail').style.display = 'none';
+                document.getElementById('lblemail').style.display = 'none';
+            }
+        }
+
+        //if (document.getElementById('txtLicense').value == 0) {
+        //    global_variable += "Driver's Licence Number" + ",";
+        //}
+        if (document.getElementById('txtMobile1').value == "" && document.getElementById('txtMobile2').value == "" && document.getElementById('txtMobile3').value == "") {
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblmobile').style.display = '';
+            document.getElementById('tdlblmobile').bgColor = 'Orange';
+            document.getElementById('lblmobile').style.display = '';
+            document.getElementById('lblmobile').innerHTML = 'Please enter phone number';
+            document.getElementById('tdmobile').bgColor = 'Orange';
+            document.getElementById('txtMobile1').focus();
+            return false;
+        }
+        // Contact Person Name
+        if (document.getElementById('txtHomePhone1').value == "" && document.getElementById('txtHomePhone2').value == "" && document.getElementById('txtHomePhone3').value == "" && document.getElementById('txtWorkPhone1').value == "" && document.getElementById('txtWorkPhone2').value == "" && document.getElementById('txtWorkPhone3').value == "" && document.getElementById('txtMobile1').value == "" && document.getElementById('txtMobile2').value == "" && document.getElementById('txtMobile3').value == "") {
+            clearalerts();
+            //Glb_ShowAlert("Please enter atleast one phone number");
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblmobile').style.display = '';
+            document.getElementById('tdlblmobile').bgColor = 'Orange';
+            document.getElementById('lblmobile').style.display = '';
+            document.getElementById('lblmobile').innerHTML = 'Please enter atleast one phone number';
+            document.getElementById('tdmobile').bgColor = 'Orange';
+            document.getElementById('txtMobile1').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdmobile').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblmobile').style.display = 'none';
+            document.getElementById('lblmobile').style.display = 'none';
+        }
+
+        if (document.getElementById('txtMobile1').value != '' || document.getElementById('txtMobile2').value != '' || document.getElementById('txtMobile3').value != '') {
+            clearalerts();
+            if (IsValidPhone(document.getElementById('txtMobile1').value + document.getElementById('txtMobile2').value + document.getElementById('txtMobile3').value) == 'false') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter valid Cell phone number");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblmobile').style.display = '';
+                document.getElementById('tdlblmobile').bgColor = 'Orange';
+                document.getElementById('lblmobile').style.display = '';
+                document.getElementById('lblmobile').innerHTML = 'Please enter valid Cell phone number';
+                document.getElementById('tdmobile').bgColor = 'Orange';
+                document.getElementById('txtMobile1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdmobile').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblmobile').style.display = 'none';
+                document.getElementById('lblmobile').style.display = 'none';
+            }
+        }
+        if (document.getElementById('txtMobile1').value != "" || document.getElementById('txtMobile2').value != "" || document.getElementById('txtMobile3').value != "") {
+            clearalerts();
+            if (fnStringFieldValidate(document.getElementById('txtMobile1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtMobile2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtWorkPhone3'), "0123456789") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid Cell phone number!!! Cell phone number must be in numeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblmobile').style.display = '';
+                document.getElementById('tdlblmobile').bgColor = 'Orange';
+                document.getElementById('lblmobile').style.display = '';
+                document.getElementById('lblmobile').innerHTML = 'Invalid Cell phone number!!! Cell phone number must be in numeric only.';
+                document.getElementById('tdmobile').bgColor = 'Orange';
+                document.getElementById('txtMobile1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdmobile').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblmobile').style.display = 'none';
+                document.getElementById('lblmobile').style.display = 'none';
+            }
+
+        }
+
+        if (document.getElementById('txtHomePhone1').value != '' || document.getElementById('txtHomePhone2').value != '' || document.getElementById('txtHomePhone3').value != '') {
+            clearalerts();
+            if (IsValidPhone(document.getElementById('txtHomePhone1').value + document.getElementById('txtHomePhone2').value + document.getElementById('txtHomePhone3').value) == 'false') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter valid home phone number")
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblhome').style.display = '';
+                document.getElementById('tdlblhome').bgColor = 'Orange';
+                document.getElementById('lblhome').style.display = '';
+                document.getElementById('lblhome').innerHTML = 'Please enter valid home phone number';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('txtHomePhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblhome').style.display = 'none';
+                document.getElementById('lblhome').style.display = 'none';
+            }
+        }
+
+        if (document.getElementById('rbHomePhoneLeaveMsg').checked == true && document.getElementById('ddlphone').value == '0') {
+            clearalerts();
+            if (document.getElementById('txtHomePhone1').value == "" || document.getElementById('txtHomePhone2').value == "" || document.getElementById('txtHomePhone3').value == "") {
+                clearalerts();
+                //Glb_ShowAlert("Please enter home phone number");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblhome').style.display = '';
+                document.getElementById('tdlblhome').bgColor = 'Orange';
+                document.getElementById('lblhome').style.display = '';
+                document.getElementById('lblhome').innerHTML = 'Please enter home phone number because home phone number is selected as primary';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('txtHomePhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblhome').style.display = 'none';
+                document.getElementById('lblhome').style.display = 'none';
+            }
+        }
+
+
+        //	 				if (document.frmPatientDetails.txtHomePhone1.value!="" || document.frmPatientDetails.txtHomePhone2.value!="" || document.frmPatientDetails.txtHomePhone3.value!="" || document.frmPatientDetails.txtHPExtention.value!="")
+        if (document.getElementById('txtHomePhone1').value != "" || document.getElementById('txtHomePhone2').value != "" || document.getElementById('txtHomePhone3').value != "") {
+            clearalerts();
+            //	 				if(fnStringFieldValidate(frmPatientDetails.txtHomePhone1,"0123456789")==0 || fnStringFieldValidate(frmPatientDetails.txtHomePhone2,"0123456789")==0 || fnStringFieldValidate(frmPatientDetails.txtHomePhone3,"0123456789")==0 || fnStringFieldValidate(frmPatientDetails.txtHPExtention,"0123456789")==0)
+            if (fnStringFieldValidate(document.getElementById('txtHomePhone1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtHomePhone2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtHomePhone3'), "0123456789") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid home phone number!!! home phone number must be in numeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblhome').style.display = '';
+                document.getElementById('tdlblhome').bgColor = 'Orange';
+                document.getElementById('lblhome').style.display = '';
+                document.getElementById('lblhome').innerHTML = 'Invalid home phone number!!! home phone number must be in numeric only.';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('txtHomePhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblhome').style.display = 'none';
+                document.getElementById('lblhome').style.display = 'none';
+            }
+
+        }
+        //Work Phone Validations	
+        if (document.getElementById('txtWorkPhone1').value != '' || document.getElementById('txtWorkPhone2').value != '' || document.getElementById('txtWorkPhone3').value != '') {
+            clearalerts();
+            if (IsValidPhone(document.getElementById('txtWorkPhone1').value + document.getElementById('txtWorkPhone2').value + document.getElementById('txtWorkPhone3').value) == 'false') {
+                clearalerts();
+                //Glb_ShowAlert("Please enter valid work phone number")
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblwork').style.display = '';
+                document.getElementById('tdlblwork').bgColor = 'Orange';
+                document.getElementById('lblwork').style.display = '';
+                document.getElementById('lblwork').innerHTML = 'Please enter valid work phone number';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('txtWorkPhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblwork').style.display = 'none';
+                document.getElementById('lblwork').style.display = 'none';
+            }
+        }
+
+
+
+
+
+        if (document.getElementById('txtWorkPhone1').value != "" || document.getElementById('txtWorkPhone2').value != "") {
+            clearalerts();
+            if (fnStringFieldValidate(document.getElementById('txtWorkPhone1'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtWorkPhone2'), "0123456789") == 0 || fnStringFieldValidate(document.getElementById('txtWorkPhone3'), "0123456789") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid work phone number!!! work phone number must be in numeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblwork').style.display = '';
+                document.getElementById('tdlblwork').bgColor = 'Orange';
+                document.getElementById('lblwork').style.display = '';
+                document.getElementById('lblwork').innerHTML = 'Invalid work phone number!!! work phone number must be in numeric only.';
+                document.getElementById('tdhome').bgColor = 'Orange';
+                document.getElementById('txtWorkPhone1').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdhome').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblwork').style.display = 'none';
+                document.getElementById('lblwork').style.display = 'none';
+            }
+
+        }
+
+        if (document.getElementById('txtZip').value == '') {
+            clearalerts();
+            //Glb_ShowAlert("Please enter zip code")
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblzip').style.display = '';
+            document.getElementById('tdlblzip').bgColor = 'Orange';
+            document.getElementById('lblzip').style.display = '';
+            document.getElementById('lblzip').innerHTML = 'Please enter zip code';
+            document.getElementById('tdzip').bgColor = 'Orange';
+            document.getElementById('txtZip').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdzip').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblzip').style.display = 'none';
+            document.getElementById('lblzip').style.display = 'none';
+        }
+        if (document.getElementById('txtZip').value != '') {
+            clearalerts();
+            if (document.getElementById('txtZip').value.length != 5) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid zip code");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblzip').style.display = '';
+                document.getElementById('tdlblzip').bgColor = 'Orange';
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Invalid zip code';
+                document.getElementById('tdzip').bgColor = 'Orange';
+                document.getElementById('txtZip').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblzip').style.display = 'none';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+            if (fnStringFieldValidate(document.getElementById('txtZip'), "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 0) {
+                clearalerts();
+                //Glb_ShowAlert("Invalid zip code!!! zip code must be in alphanumeric only.");
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblzip').style.display = '';
+                document.getElementById('tdlblzip').bgColor = 'Orange';
+                document.getElementById('lblzip').style.display = '';
+                document.getElementById('lblzip').innerHTML = 'Invalid zip code!!! zip code must be in alphanumeric only.';
+                document.getElementById('tdzip').bgColor = 'Orange';
+                document.getElementById('txtZip').focus();
+                return false;
+            }
+            else {
+                document.getElementById('tdzip').bgColor = 'White';
+                document.getElementById('tblmain').style.display = 'none';
+                document.getElementById('tdlblzip').style.display = 'none';
+                document.getElementById('lblzip').style.display = 'none';
+            }
+        }
+        
+        if (document.getElementById('DDState').selectedIndex == 0) {
+            clearalerts();
+            //Glb_ShowAlert("Please select state")
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblstate').style.display = '';
+            document.getElementById('tdlblstate').bgColor = 'Orange';
+            document.getElementById('lblstate').style.display = '';
+            document.getElementById('lblstate').innerHTML = 'Please select state';
+            document.getElementById('tdstate').bgColor = 'Orange';
+            document.getElementById('DDState').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdstate').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblstate').style.display = 'none';
+            document.getElementById('lblstate').style.display = 'none';
+        }
+        if (document.getElementById('DDCity').selectedIndex == 0) {
+            clearalerts();
+            //Glb_ShowAlert("Please select city")
+            document.getElementById('tblmain').style.display = '';
+            document.getElementById('tdlblcity').style.display = '';
+            document.getElementById('tdlblcity').bgColor = 'Orange';
+            document.getElementById('lblcity').style.display = '';
+            document.getElementById('lblcity').innerHTML = 'Please select city';
+            document.getElementById('tdcity').bgColor = 'Orange';
+            document.getElementById('DDCity').focus();
+            return false;
+        }
+        else {
+            document.getElementById('tdcity').bgColor = 'White';
+            document.getElementById('tblmain').style.display = 'none';
+            document.getElementById('tdlblcity').style.display = 'none';
+            document.getElementById('lblcity').style.display = 'none';
+        }
+        var statesSelect = document.getElementById("DDState");
+        var stateselectedText = statesSelect.options[statesSelect.selectedIndex].text;
+        document.getElementById('hdnSelectState').value = stateselectedText;
+        // alert(document.getElementById('hdnSelectState').value);
+        var citySelect = document.getElementById("DDCity");
+        var cityselectedText = citySelect.options[citySelect.selectedIndex].text;
+        document.getElementById('hdnSelectCity').value = cityselectedText;
+        //alert(document.getElementById('hdnSelectCity').value);
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        //document.getElementById("ImgBtnNext").disabled = 'true';
+        document.body.style.cursor = 'wait';
+    }
+</script>
+<script type="text/javascript">
+    function Clearfirstname() {
+        if (document.getElementById('txtFirstName').value == 'First Name') {
+            document.getElementById('txtFirstName').value = '';
+        }
+    }
+    function Clearlastname() {
+        if (document.getElementById('txtLastName').value == 'Last Name') {
+            document.getElementById('txtLastName').value = '';
+        }
+    }
+    function ClearMI() {
+        if (document.getElementById('txtMiddleName').value == 'MI') {
+            document.getElementById('txtMiddleName').value = '';
+        }
+    }
+    //function chkdob() {
+    //    var strchkdob = document.getElementById('txtDOB').value;
+    //    strchkdob = strchkdob.replace(/^\s+/, '');
+    //    document.getElementById('txtDOB').value = strchkdob;
+    //}
+</script>
+@*<script type="text/javascript">
+    function checkdob(ctrlname, mxlen, decpoint, e) {
+        if (document.all)
+        { var e = window.event.keyCode; }
+        else
+        { e = e.which; }
+        var strNumeric = '1234567890/'
+        var str = ctrlname.value; ctrLen = ctrlname.value.length + 1; ctrlname.maxLength = mxlen; if (decpoint == 0 || decpoint == '') {
+            if (e > 0) {
+                if (strNumeric.indexOf(String.fromCharCode(e)) == -1 && e != 8)
+                { return false; }
+            }
+        }
+        if (decpoint > 0 && e != 8) {
+            if (ctrlname.value.indexOf('.') != -1) {
+                if (e == 46)
+                { return false; }
+                if ((ctrlname.value.slice(ctrlname.value.indexOf('.')).length) > decpoint) {
+                    var currentRange; if (document.all)
+                    { currentRange = document.selection.createRange().text; }
+                    else
+                    { currentRange = ctrlname.value.substring(ctrlname.selectionStart, ctrlname.selectionEnd); }
+                    if (currentRange != '') {
+                        if (currentRange.indexOf('.') == -1) {
+                            if (ctrlname.value.indexOf('.') != -1) {
+                                var pos1 = ctrlname.value.indexOf('.')
+                                var pos2 = doGetCaretPosition(ctrlname); if (e != 0) {
+                                    if (ctrlname.value.length != pos2) {
+                                        if (pos2 > pos1 + 1)
+                                        { return false; }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        if (ctrlname.value.indexOf('.') != -1) {
+                            var pos1 = ctrlname.value.indexOf('.')
+                            var pos2 = doGetCaretPosition(ctrlname); if (e != 0) {
+                                if (pos2 > pos1)
+                                { return false; }
+                            }
+                        }
+                    }
+                }
+            }
+            if (strNumeric.indexOf(String.fromCharCode(e)) == -1 && e != 8 && e != 46 && e != 0)
+            { return false; }
+        }
+    }
+</script>*@
+<script type="text/javascript">
+    window.history.forward();
+    function DisableBackButton() {
+        window.history.forward(1);
+    }
+    window.onload = DisableBackButton;
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ddlphone').change(function () {
+            if (document.getElementById('ddlphone').value == '0') {
+                clearalerts();
+                document.getElementById('txtHomePhone1').style.display = '';
+                document.getElementById('txtHomePhone2').style.display = '';
+                document.getElementById('txtHomePhone3').style.display = '';
+                document.getElementById('spnhomephn1').style.display = '';
+                document.getElementById('spnhomephn2').style.display = '';
+                document.getElementById('txtWorkPhone1').style.display = 'none';
+                document.getElementById('txtWorkPhone2').style.display = 'none';
+                document.getElementById('txtWorkPhone3').style.display = 'none';
+                document.getElementById('spnworkphn1').style.display = 'none';
+                document.getElementById('spnworkphn2').style.display = 'none';
+                document.getElementById('txtWorkPhone1').value = '';
+                document.getElementById('txtWorkPhone2').value = '';
+                document.getElementById('txtWorkPhone3').value = '';
+            }
+            else if (document.getElementById('ddlphone').value == '1') {
+                clearalerts();
+                document.getElementById('txtHomePhone1').style.display = 'none';
+                document.getElementById('txtHomePhone2').style.display = 'none';
+                document.getElementById('txtHomePhone3').style.display = 'none';
+                document.getElementById('spnhomephn1').style.display = 'none';
+                document.getElementById('spnhomephn2').style.display = 'none';
+                document.getElementById('txtWorkPhone1').style.display = '';
+                document.getElementById('txtWorkPhone2').style.display = '';
+                document.getElementById('txtWorkPhone3').style.display = '';
+                document.getElementById('spnworkphn1').style.display = '';
+                document.getElementById('spnworkphn2').style.display = '';
+                document.getElementById('txtHomePhone1').value = '';
+                document.getElementById('txtHomePhone2').value = '';
+                document.getElementById('txtHomePhone3').value = '';
+            }
+        });
+        //$('#rbtninsuryes').change(function () {
+        //    if (document.getElementById('rbtninsuryes').checked == true) {
+        //        document.getElementById('rbtninsurno').checked = false;
+        //    }
+        //});
+        //$('#rbtninsurno').change(function () {
+        //    if (document.getElementById('rbtninsurno').checked == true) {
+        //        document.getElementById('rbtninsuryes').checked = false;
+        //    }
+        //});
+        document.getElementById('hdngender').value = "Male";
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#txtMobile1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtMobile2").focus();
+            }
+        });
+        $("#txtMobile2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtMobile3").focus();
+            }
+        });
+        $("#txtMobile3").keyup(function () {
+            if ($(this).val().length == 4) {
+                $("#chkMPLeaveMSG").focus();
+            }
+        });
+
+        $("#txtHomePhone1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtHomePhone2").focus();
+            }
+        });
+        $("#txtHomePhone2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtHomePhone3").focus();
+            }
+        });
+
+
+        $("#txtWorkPhone1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtWorkPhone2").focus();
+            }
+        });
+        $("#txtWorkPhone2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtWorkPhone3").focus();
+            }
+        });
+
+  
+        $("#txtCP1").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtCP2").focus();
+            }
+        });
+        $("#txtCP2").keyup(function () {
+            if ($(this).val().length == 3) {
+                $("#txtCP3").focus();
+            }
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+
+        $('#txtCP1').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+        $('#txtCP2').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+        $('#txtCP3').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+        $('#txtZip').keypress(
+         function (event) {
+             if (ValidZip(event) == false) { return false; }
+
+         }
+    );
+
+
+
+        $('#txtMobile1').keypress(
+        function (event) {
+            if (checkNumeric(event) == false) { return false; }
+        }
+    );
+        $('#txtMobile2').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#txtMobile3').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+
+        $('#txtHomePhone1').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#txtHomePhone2').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#txtHomePhone3').keypress(
+         function (event) {
+             if (checkNumeric(event) == false) { return false; }
+         }
+    );
+        $('#txtWorkPhone1').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#txtWorkPhone2').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+        $('#txtWorkPhone3').keypress(
+          function (event) {
+              if (checkNumeric(event) == false) { return false; }
+          }
+    );
+    });
+</script>
+
+<script type="text/javascript">
+
+    function updateSuccess(data) {
+        //        alert("1");
+        //        alert(data.Success);
+
+        if (data != '' & data.Success == true) {
+            var inusranceind = data.Object.Insuranceind
+            var rspind = data.Object.Respind
+            window.location.href = '../Clients/ClientsHome?register=true';
+        }
+        else if (data.ErrorMessage == 'Name already exists in the system. Do you want to create it?') {
+            var obj = confirm(data.ErrorMessage);
+            $('#dvLoading').dialog('close');
+            if (obj == true) {
+                $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+                document.body.style.cursor = 'wait';
+                document.getElementById("HdnInd").value = "Y";
+                $("#updateCarForm").submit();
+            }
+            else {
+                document.body.style.cursor = 'default';
+                document.getElementById("HdnInd").value = "";
+                $('#dvLoading').dialog('close');
+
+            }
+        }
+        else {
+            if (data != "_Logon_") {
+                $('#dvLoading').dialog('close');
+
+                //            alert(data.ErrorMessage);
+                document.getElementById('tblmain').style.display = '';
+                document.getElementById('tdlblemail').style.display = '';
+                document.getElementById('tdlblemail').bgColor = 'Orange';
+                document.getElementById('lblemail').style.display = '';
+                document.getElementById('lblemail').innerHTML = data.ErrorMessage;
+                document.getElementById('tdemail').bgColor = 'Orange';
+                document.getElementById('txtEmailID').focus();
+                document.body.style.cursor = 'default';
+                document.getElementById('ImgBtnNext').disabled = false;
+                return false;
+            }
+        }
+    }
+</script>
+</html>

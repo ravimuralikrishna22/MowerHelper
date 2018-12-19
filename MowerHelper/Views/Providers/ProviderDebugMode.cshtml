@@ -1,0 +1,66 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+    <title>ProviderDebugMode</title>
+    <script src="~/Scripts/Expire.js" type="text/javascript"></script>
+    <script type="text/javascript" >
+        function rblDebugYescheck() {
+            if (document.getElementById("rblDebugNo").checked == true) {
+                document.getElementById("rblDebugNo").checked = false;
+            }
+
+        }
+        function rblDebugNocheck() {
+            if (document.getElementById("rblDebugYes").checked == true) {
+                document.getElementById("rblDebugYes").checked = false;
+            }
+        }
+    </script>
+</head>
+<body>
+     @using (Html.BeginForm("ProviderDebugMode", "Providers", FormMethod.Post, null))
+    {
+          <input type="hidden" id="HdnProvider_ID" name="HdnProvider_ID" value="@ViewBag.Provider_ID" />
+    <table class="border_style" cellspacing="1" cellpadding="8" width="100%" align="center" border="0">
+                <tr height="10" class="white_color" runat="server">
+                    <td align="right" width="35%">
+                        <strong>Select Debug mode :</strong>
+                    </td>
+                    <td width="65%" align="left">
+                         @{ bool DebugYes;
+                                                                                                       bool DebugNo;
+                                                                                                    }
+                                                                                                    @if (ViewBag.DebugModeType == "Y")
+                                                                                                    {
+                                                                                                        DebugYes = true;
+                                                                                                        DebugNo = false;
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        DebugYes = false;
+                                                                                                        DebugNo = true;
+                                                                                                    }
+                       @Html.RadioButton("rblDebugYes",DebugYes,DebugYes , new { @onclick = "return rblDebugYescheck();" })&nbsp;True   
+                        <br />                     
+                       @Html.RadioButton("rblDebugNo",DebugNo,DebugNo , new { @onclick = "return rblDebugNocheck();" })&nbsp;False                       
+                    </td>
+                </tr>
+        </table>
+     <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                    <tr class="background_color">
+                                                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+                                                         <input type="submit" id="btnSave" value="Save" title="Save" class="button"/>&nbsp;
+
+                                              <input type="button" class="close3 button" name="Cancel" value="Cancel" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+      }
+</body>
+</html>

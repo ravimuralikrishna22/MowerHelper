@@ -1,0 +1,152 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  @*  <meta name="viewport" content="width=device-width" />*@
+   
+
+</head>
+<body>
+
+
+
+    @using (Ajax.BeginForm("AddNewTechnician", "Technicians", new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "AddTechSuccess"
+
+    }, new { @id = "newPmtform" }))
+    {
+        <div class="content-box">
+            <div class="content-box-content">
+                <table class="border_style" cellspacing="1" cellpadding="6" width="100%" align="center"
+                    border="0">
+                    <tr height="20" class="white_color">
+                        <td style="text-align: center" colspan="2">
+                            @Html.RadioButton("rbtself", "8", true, new { @onclick = "return rbtselfcheck();" })&nbsp;Limited Access
+                                                                     @Html.RadioButton("rbtfull", "39", false, new { @onclick = "return rbtfullcheck();" })&nbsp;Full access
+                        </td>
+                    </tr>
+                    <tr height="20" class="white_color" id="TrNoteType" runat="server">
+                        <th align="right" width="22%">&nbsp;&nbsp;<font color="red">*</font><strong>Name :</strong>&nbsp;</th>
+                        <td align="left" id="tdnm1">
+                            <input type="text" id="txtFirstName" name="txtFirstName" value="First Name" autocomplete="off" onfocus="return Clearfirstname();" onkeypress="return fnsetfocus(event,'ImgBtnNext');" class="textfield" maxlength="50" style="width: 120px;" />
+                            <input type="text" id="txtLastName" name="txtLastName" value="Last Name" autocomplete="off" onfocus="return Clearlastname();" onkeypress="return fnsetfocus(event,'ImgBtnNext');" class="textfield" maxlength="50" style="width: 120px;" />
+                            &nbsp; <span id="lblname" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <th align="right" width="22%">&nbsp;&nbsp;<font color="red">*</font> <strong>Phone number :</strong>&nbsp;</th>
+                        <td align="left" id="tdmbile1" runat="server">
+                            <input type="tel" id="txtMobile1" name="txtMobile1" autocomplete="off" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px" maxlength="3" class="textfield" />-
+                                 <input type="tel" id="txtMobile2" autocomplete="off" name="txtMobile2" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 30px" maxlength="3" class="textfield" />-
+                                 <input type="tel" id="txtMobile3" autocomplete="off" name="txtMobile3" onkeypress="return fnsetfocus(event,'ImgBtnNext');" style="width: 40px" maxlength="4" class="textfield" />&nbsp;
+                          <span id="lblmobile" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <td style="text-align: right;">
+                            <font color="red">*</font><strong>Email :&nbsp;</strong>
+                        </td>
+                        <td align="left" id="tdemail">
+                            <input type="text" id="txtEmail" name="txtEmail" autocomplete="off" style="width: 270px" maxlength="100" class="textfield" />
+                            &nbsp;<span id="lblemail" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+
+                    <tr class="white_color">
+                        <th align="right">
+                            <font color="red">*</font><strong>Password&nbsp;:&nbsp;</strong>
+                        </th>
+                        <td width="50%" id="tdpwd">
+                            @Html.Password("txtpwd", null, new { @style = "width:200px;", @class = "textfield" })
+                            &nbsp;<span id="lblpwd" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                    <tr class="white_color">
+                        <th align="right">
+                            <font color="red">*</font><strong>Confirm password&nbsp;:&nbsp;</strong>
+                        </th>
+                        <td id="tdCpwd">
+                            @Html.Password("txtCpwd", null, new { @style = "width:200px;", @class = "textfield" })
+                            &nbsp;<span id="lblCpwd" style="font-weight: bold; color: Black"></span>
+                        </td>
+                    </tr>
+                </table>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr class="background_color">
+                        <td align="right" style="padding-top: 5px; padding-bottom: 5px; padding-right: 10px;">
+
+                            <input type="submit" id="btnSave" value="Save" title="Save" class="button" onclick="return Validate12();" />
+                            &nbsp;
+                                              <input type="button" class="closetech button" name="Cancel" value="Cancel" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+    }
+    <script type="text/javascript">
+
+        function AddTechSuccess(data) {
+            if (data != '' & data.Success == true) {
+                window.location.href = '@Url.Action("Index", "Technicians")';
+            }
+            else {
+                InlineAlert('lblemail', 'tdemail', data.ErrorMessage)
+                document.getElementById('txtEmail').focus();
+            }
+        }
+
+        function rbtselfcheck() {
+            if (document.getElementById("rbtself").checked == true) {
+                document.getElementById("rbtfull").checked = false;
+            }
+        }
+
+        function rbtfullcheck() {
+            if (document.getElementById("rbtfull").checked == true) {
+                document.getElementById("rbtself").checked = false;
+            }
+        }
+    </script>
+    <script type="text/javascript">
+
+        $(function () {
+            $("#txtMobile1").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtMobile2").focus();
+                }
+            });
+            $("#txtMobile2").keyup(function () {
+                if ($(this).val().length == 3) {
+                    $("#txtMobile3").focus();
+                }
+            });
+            $('#txtMobile1').keypress(
+       function (event) {
+           if (checkNumeric(event) == false) { return false; }
+       }
+   );
+            $('#txtMobile2').keypress(
+              function (event) {
+                  if (checkNumeric(event) == false) { return false; }
+              }
+        );
+            $('#txtMobile3').keypress(
+             function (event) {
+                 if (checkNumeric(event) == false) { return false; }
+             }
+        );
+        });
+
+    </script>
+</body>
+
+</html>

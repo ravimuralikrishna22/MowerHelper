@@ -1,0 +1,190 @@
+﻿@model List<MowerHelper.Models.BLL.Patients.NotesInfo>
+<script>
+    @*if ('@ViewBag.Todate' == '' || '@ViewBag.Todate' == null) {
+        alert('@ViewBag.Fromdate');
+    }*@
+    $("#EdtNotes").click(function (event) {
+        event.preventDefault();
+    });
+
+    $(".EdtNotes").click(function (event) {
+        event.preventDefault();
+    });
+
+</script>
+ <div class="content-box-content">
+                                                                                    @{string heading1;
+                     if (Request["sort"] == "Notes_Date" && Request["sortdir"] == "ASC")
+                      {
+                          heading1 = "Date ▲";
+                      }
+                     else if (Request["sort"] == "Notes_Date" && Request["sortdir"] == "DESC")
+                      {
+                          heading1 = "Date ▼";
+                      }
+                      else
+                      {
+                          heading1 = "Date .";
+                      }
+                    }
+                                @{WebGrid NotesGrid = new WebGrid(rowsPerPage: 10);}
+                                @{WebGrid grid = NotesGrid.Bind(rowCount: Convert.ToInt32(ViewBag.totrec), source: Model, autoSortAndPage: false);
+                                  if (grid.TotalRowCount != 0)
+                                  {
+                                      int count = 0;
+                                      string pager = grid.Pager().ToString();
+                                      string pageno = (Request["page"] == null ? "1" : Request["page"]);
+                                      string newpager = System.Text.RegularExpressions.Regex.Replace(pager, "(\\d+) ", "<span class='selected'>" + pageno + "</span>");
+                                      string gridhtml = grid.GetHtml(tableStyle: "gridTable", headerStyle: "gridHead", rowStyle: "gridRow", alternatingRowStyle: "gridAltRow",
+                                      columns: grid.Columns(grid.Column("SINo", "#", canSort: false),
+                                     grid.Column("Notes_Date", heading1, canSort: true, format: @<text>@(@item.Notes_Date.ToString("MM/dd/yyyy") == "01/01/0001" ? String.Empty : @item.Notes_Date.ToString("MM/dd/yyyy"))</text>),
+                                        grid.Column("", "Note summary", canSort: false,
+                                      format:@<text>
+                                    @{string description = (string)item.Notes;
+                                      if (!string.IsNullOrEmpty(description)){
+                                          var pageval =1;
+                                          if (Model.Count >= 1)
+                                          {
+                                              pageval = Convert.ToInt32(pageno);
+                                          }
+                                          else
+                                          {
+                                              pageval = Convert.ToInt32(pageno) - 1;
+                                          }
+                                      if (description.Length > 100)
+                                      {
+                                          count = count + 1;
+                                          description = description.Substring(0, 100);
+                                        //@Html.ActionLink(description, "EditNotes", new { Generalnoteid = (int)item.GeneralNote_ID }, new { @class = "NoteSummaryLink", @style = "color:#0066CC;cursor:pointer;", @title = "Click here to edit notes" })
+                                         
+                                          <a href="#" id="EdtNotes" onclick="return Displaydialog('NoteSummaryDialog', '../Notes/EditNotes?Generalnoteid=' + '@item.GeneralNote_ID' + '&dt_filter=' + '@ViewBag.Daterange' + '&txt_FromDate=' + '@ViewBag.Fromdate' + '&txt_ToDate=' + '@ViewBag.Todate'+ '&page=' + '@pageval' + '&txtcustomer=' + $('#txtcustomer').val() + '&txtnotes=' + $('#txtnotes').val() + '&RecPerPage=' + '@Model.Count' +'&sortdir=' +'@Request["sortdir"]'+'&sort=' +'@Request["sort"]','auto', 850, 'dvLoading', null, null);" style = "color:#0066CC;cursor:pointer;", title = "Click here to edit notes">@description</a>
+                                          <a id="amore" onclick="return false;" onmouseover="return ondescriptionover('tbldesc @count');" onmouseout="return ondescriptionout('tbldesc @count');"  style="font-weight:bold;color:#0066CC;cursor:pointer;">...More</a>
+<div id="tbldesc @count" style="width: 400px; height: 100px; display: none;"> 
+                                                             <div class="content-box-header">
+                                                             <h3> Notes :</h3> </div>
+                                                              <table cellspacing="1" class="border_style" cellpadding="4"
+                                                             width="100%" align="center" border="0"> 
+                                                             <tr class="white_color"> 
+                                                             <td style="width:380px; text-align: justify; padding-bottom: 5px; padding-left: 5px; padding-right:
+                                                             5px; padding-top: 5px;" align="left"> <span>@HttpUtility.HtmlDecode(item.Notes)</span> </td> </tr>
+                                                             </table> </div>
+                                      }
+                                      else
+                                      {
+                                        //@Html.ActionLink((string)HttpUtility.HtmlDecode(item.Notes), "EditNotes", new { Generalnoteid = (int)item.GeneralNote_ID }, new { @class = "NoteSummaryLink", @style = "color:#0066CC;cursor:pointer;", @title = "Click here to edit notes" })
+                                       
+                                          <a href="#" class="EdtNotes" onclick="return Displaydialog('NoteSummaryDialog','../Notes/EditNotes?Generalnoteid=' + '@item.GeneralNote_ID' + '&dt_filter=' + '@ViewBag.Daterange' + '&txt_FromDate=' + '@ViewBag.Fromdate' + '&txt_ToDate=' + '@ViewBag.Todate'+ '&page=' + '@pageval'+ '&txtcustomer=' + $('#txtcustomer').val() + '&txtnotes=' + $('#txtnotes').val()+ '&RecPerPage=' + '@Model.Count'+'&sortdir=' +'@Request["sortdir"]'+'&sort=' +'@Request["sort"]','auto' , 850, 'dvLoading', null, null);" style = "color:#0066CC;cursor:pointer;", title = "Click here to edit notes">@HttpUtility.HtmlDecode(item.Notes)</a>
+                                      }
+                                    }
+                                    }
+                                    </text>),
+                           grid.Column("PatientName", "Client", canSort: false),
+                                                                                                                                                                                    grid.Column("", "Action", canSort: false,
+                          format:@<text>
+                                 @if(ViewBag.statusind=="A"){
+                                     if (string.IsNullOrEmpty(item.Transaction_id) == true && string.IsNullOrEmpty(item.Appointment_id) == true)
+                                     {
+                                    <a href="#" title = "Click here to change the status"  onclick="return Showalert('@item.Transaction_id','@item.GeneralNote_ID','@item.notetype','@item.IsPatientNote_Ind','@item.Appointment_id','@ViewBag.Daterange','@ViewBag.Fromdate','@ViewBag.Todate','@Request["page"]','@Request["sortdir"]','@Model.Count',$('#txtnotes').val()+ '&txtcustomer=' + $('#txtcustomer').val());" >
+                                        <img src="~/Images/archive.png" />
+                                    </a>
+                                 }
+                                 
+                                 else{
+                                         <label>-</label>
+                                     }
+                                     }
+                                          else if (Model.Count >1)
+                                     {
+                                      <a href="@Url.Action("deleteNote", "Notes", new { Generalnoteid = (int)item.GeneralNote_ID, notetype = (string)item.notetype, ispatient = (string)item.IsPatientNote_Ind ,dt_filter = (string)ViewBag.Daterange,txt_FromDate = (string)ViewBag.Fromdate,txt_ToDate = (string)ViewBag.Todate,page = Request["page"],sortdir = Request["sortdir"] ,txtnotes = Request["txtnotes"], txtcustomer = Request["txtcustomer"], hdnnoteclientid = Request["hdnnoteclientid"]})"  class = "confirmDialog4", title = "Click here to delete note" >
+                                         <img src="~/Images/cross.png"   />
+                                    </a>                                     
+                                     }
+                                else
+                                {
+                                    int gridpageno = Convert.ToInt32(Request["page"]);
+                                              gridpageno = gridpageno - 1;
+                                          <a href="@Url.Action("deleteNote", "Notes", new { Generalnoteid = (int)item.GeneralNote_ID, notetype = (string)item.notetype, ispatient = (string)item.IsPatientNote_Ind ,dt_filter = (string)ViewBag.Daterange,txt_FromDate = (string)ViewBag.Fromdate,txt_ToDate = (string)ViewBag.Todate,page = gridpageno,sortdir = Request["sortdir"],txtnotes = Request["txtnotes"], txtcustomer = Request["txtcustomer"], hdnnoteclientid = Request["hdnnoteclientid"]})"  class = "confirmDialog4", title = "Click here to delete note" >
+                                         <img src="~/Images/cross.png"   />
+                                    </a>  
+                                     }
+                             @*   else{                                                                                                                                         
+                                     <a href="@Url.Action("deleteNote", "Notes", new { Generalnoteid = (int)item.GeneralNote_ID, notetype = (string)item.notetype, ispatient = (string)item.IsPatientNote_Ind ,dt_filter = (string)ViewBag.Daterange,txt_FromDate = (string)ViewBag.Fromdate,txt_ToDate = (string)ViewBag.Todate,page = Request["page"]})"  class = "confirmDialog4", title = "Click here to delete note" >
+                                         <img src="~/Images/cross.png"   />
+                                    </a>                                     
+                                }*@
+                                    @* @Html.ActionLink(" ", "ChangeStatus", new { Generalnoteid = (int)item.GeneralNote_ID, notetype = (string)item.notetype, ispatient = (string)item.IsPatientNote_Ind },
+                                                  new { @style = "background: url('../Images/archive.png') no-repeat ;height: 40px;width:30px;padding-left:20px;padding-bottom:15px;padding-top:5px;", @class = "confirmDialog3", @title = "Click here to archive note" })*@
+                                    </text>)
+
+
+
+                         )).ToString();
+                                      gridhtml = System.Text.RegularExpressions.Regex.Replace(gridhtml, "<tfoot>([^<]*|<[^/]*|</[^t]*)*</tfoot>", "");
+                                    @(new HtmlString(gridhtml))
+                                    <br />
+                                    <div class="gridFooter" style="padding-left: 500px;">@(new HtmlString(newpager))</div>  
+                                    <br />
+
+
+
+                                  }
+                                  else
+                                  {
+                                    <table id="tblMsg" cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                        <tr id="trcpterror" class="white_color">
+                                            <td align="center" height="25px" valign="middle" colspan="2">
+                                                <span id="lbl_NoRecordMsg" class="errormsg" style="font-size: 13px; font-weight: bold;">No notes found</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                  }
+                                }
+                            </div>
+
+
+ 
+<script>
+  
+    $(document).ready(function () {
+        $('.gridFooter a').click(function () {
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            var href = $(this).attr("href");
+            $(this).attr("href", "#");
+            var queryString = href.substring(href.indexOf('?'), href.length);
+            var requestUrl = '@Url.Action("DisplayProfileNotes", "Notes")' + queryString;
+            //$('#gridcontent1').load(requestUrl);           
+              $.ajax({
+                url: requestUrl,
+                type: "get",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {              
+                    $('#gridcontent1').html(data);
+                    $("#dvLoading").dialog('close');
+                }
+            });
+                return false;
+            });
+
+
+    });
+    $(".gridHead th a").click(function () {
+        $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+        var page = '@Request["page"]';
+        if (page == '' || page == "undefined")
+        {
+            page = 1;
+        }
+        var href = $(this).attr("href");
+        $(this).attr("href", "#");
+        var queryString = href.substring(href.indexOf('?'), href.length);
+        var requestUrl = '@Url.Action("DisplayProfileNotes","Notes")' + queryString + '&page=' + page;
+        $("#gridcontent1").load(requestUrl);
+        $("#dvLoading").dialog('close');
+            return false;
+          });
+    newNotePage = "@Request["page"]";
+    if ("@Request["page"]" == '' || "@Request["page"]" == "undefined")
+    {
+        newNotePage = 1;
+    }
+</script>

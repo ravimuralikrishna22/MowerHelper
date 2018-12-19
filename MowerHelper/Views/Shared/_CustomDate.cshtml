@@ -1,0 +1,51 @@
+﻿ <script type="text/javascript">
+      $(document).ready(function () {
+          //$(function () {
+          //$("#txt_FromDate,#txt_ToDate").datepicker({
+          //    dateFormat: 'mm/dd/yy',
+          //    changeMonth: true,
+          //    changeYear: true,
+          //    //                showCurrentAtPos: 1,
+          //    showWeeks: true,
+          //    inline: true,
+          //    numberOfMonths: [1, 1],
+          //    yearRange: "1950:2020",
+          //    showOn: "button",
+          //    buttonImage: "../Images/calender.gif",
+          //    buttonImageOnly: true
+          //});
+          //});
+          $("#txt_FromDate").on('change keyup paste mouseup', function () {
+              //  alert("1");
+              if ($(this).val().length == 10) {
+                  //alert("2");
+                  if (CheckValidDate(document.getElementById('txt_FromDate')) == 0) { return false; }
+                  var St = document.getElementById('txt_FromDate').value; St = new Date(St);
+                  // alert(St);
+                  var targetDate = new Date(St);
+                  targetDate.setDate(targetDate.getDate() + 365);
+                  //   alert(targetDate);
+                  var todaydate = new Date();
+                  todaydate.setDate(todaydate.getDate());
+                  var dd = todaydate.getDate();
+                  var mm = todaydate.getMonth() + 1; //January is 0!
+                  var yyyy = todaydate.getFullYear();
+                  var today = mm + '/' + dd + '/' + yyyy;
+                  var dd1 = targetDate.getDate();
+                  var mm1 = targetDate.getMonth() + 1;
+                  var yyyy1 = targetDate.getFullYear();
+                  var target1 = mm1 + '/' + dd1 + '/' + yyyy1;
+                  //  alert(target1);
+                  if (targetDate > todaydate) { document.getElementById('txt_ToDate').value = today; return false; }
+                  else { document.getElementById('txt_ToDate').value = target1; return false; }
+              }
+          });
+      });
+</script>
+<td id="tddaterange" style="display: none;"  align="left">
+    <strong>&nbsp;From&nbsp;:&nbsp;</strong>
+    <input type="text" name="txt_FromDate" id="txt_FromDate" class="textfield Datefield" maxlength="10" style="width: 70px;" />
+    &nbsp;<strong>&nbsp;To :&nbsp;</strong>
+    <input type="text" name="txt_ToDate" id="txt_ToDate" class="textfield Datefield" maxlength="10" style="width: 70px;" />
+
+</td>

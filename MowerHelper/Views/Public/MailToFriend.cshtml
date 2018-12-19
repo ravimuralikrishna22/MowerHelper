@@ -1,0 +1,323 @@
+﻿@{
+    ViewBag.Title = "MailToFriend";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+<html>
+<head>
+<title></title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+   <title>Mower Helper-Find an Mower Helper</title>
+ @Styles.Render("~/Content/themes/base/jqueryCSS")
+@Scripts.Render("~/Scripts/Thscriptscript")
+<style type="text/css">
+.dvLoading .ui-dialog-titlebar{display:none;}
+</style>
+
+        <script type="text/javascript">
+            String.prototype.trim = function () {
+                return this.replace(/^\s+|\s+$/g, "");
+            }
+
+            String.prototype.lTrim = function () {
+                return this.replace(/^\s+/g, "");
+            }
+
+            String.prototype.rTrim = function () {
+                return this.replace(/\s+$/g, "");
+            }
+
+            String.prototype.trimAll = function () {
+                return this.replace(/\s+/g, "");
+            }
+    </script>
+<script type="text/javascript">
+    function Category() {
+        this.Yourname = "";
+        this.YourEmail = "";
+        this.FriendsName = "";
+        this.FriendsEmail = "";
+        this.Vrificationcode = "";
+        this.Message = "";
+        this.Providerid = "";
+        this.ProviderNmae = "";
+        this.Address = "";
+        this.PublicURL = "";
+        this.MobileText = "";
+    }
+    function cancel() {
+           window.location.href = '@Url.RouteUrl("ProviderProfile",new { randomnumber = ViewBag.rnum, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })';
+    }
+    function chkContactus() {
+        var _blnInd = true;
+
+        if (document.getElementById('txtYourEmail').value == '') {
+            alert("Please enter your email id")
+            document.getElementById('txtYourEmail').focus();
+            return false;
+        }
+        if (document.getElementById('txtYourEmail').value != '') {
+            if (ValidateEmail(document.getElementById('txtYourEmail')) == 0) {
+                _blnInd = false;
+                alert("Please enter valid email id")
+                document.getElementById('txtYourEmail').focus();
+                return false;
+            }
+        }
+        if (document.getElementById('txtFriendsEmail').value == '') {
+            alert("Please enter your email id")
+            document.getElementById('txtFriendsEmail').focus();
+            return false;
+        }
+        if (document.getElementById('txtFriendsEmail').value != '') {
+            if (ValidateEmail(document.getElementById('txtFriendsEmail')) == 0) {
+                _blnInd = false;
+                alert("Please enter valid email id")
+                document.getElementById('txtFriendsEmail').focus();
+                return false;
+            }
+        }
+        if (document.getElementById('txtimgKey').value == '') {
+            _blnInd = false;
+            alert("Enter verification code");
+            document.getElementById('txtimgKey').focus();
+            return false;
+        }
+        //var obj = document.getElementById('hdnkey').value;
+        //var obj1 = obj.trimAll();
+        //if (document.getElementById('txtimgKey').value != obj1) {
+        //    alert("You need to enter valid Security Code to register...");
+        //    document.getElementById('txtimgKey').focus();
+        //    return false;
+        //}
+        var str_Msg;
+        str_Msg = trim(document.getElementById('txtMsg').value);
+        if (str_Msg.length > 1000) {
+            alert("Please enter at most 1000 characters in the message field");
+            document.getElementById('txtMsg').focus();
+            return false;
+        }
+        if (_blnInd = true) {
+            //            alert("123");
+            var cnt = new Category();
+            cnt.Yourname = $("#txtYourName").val();
+            cnt.YourEmail = $("#txtYourEmail").val();
+            cnt.FriendsName = $("#txtFriendsName").val();
+            cnt.FriendsEmail = $("#txtFriendsEmail").val();
+            cnt.Vrificationcode = $("#txtimgKey").val();
+            cnt.Message = $("#txtMsg").val();
+            cnt.Providerid = $("#hdnproviderid").val();
+            cnt.ProviderNmae = $("#hdnprovidername").val();
+            cnt.MobileText = $("#hdnphone").val();
+            cnt.PublicURL = $("#hdnpublicurl").val();
+            cnt.Address = $("#hdnaddress").val();
+            var postData = JSON.stringify(cnt);
+            $('#dvLoading').dialog({ modal: true, dialogClass: 'dvLoading', draggable: false, resizable: false });
+            $.ajax({
+                url: '@Url.Action("SendEmail","Public")',
+                type: 'POST',
+                data: JSON.stringify(cnt), //you can serialize a form here as well OR simply put in the name value pairs of your data, ex. myTextBox='something'
+                dataType: 'json',
+                processData: false,
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $('#dvLoading').dialog('close');
+                    if (data == '1') {
+                        alert('Your request will be processed soon');
+                        // window.location.href = "../Profile" + "/" + cnt.Providerid;
+                      
+                        window.location.href = '@Url.RouteUrl("ProviderProfile",new { randomnumber = ViewBag.rnum, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })';
+                    }
+                    else if (data == '2') {
+                      
+                        alert("Due to some technical problems your request will not be processed now");
+                        window.location.href = '@Url.RouteUrl("ProviderProfile",new { randomnumber = ViewBag.rnum, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })';
+                        //window.location.href = "../Profile" + "/" + cnt.Providerid;
+                    }
+                    else if (data == 'false') {
+                       
+                        alert("You need to enter valid Security Code to register");
+                        window.location.href = '@Url.RouteUrl("Sendmailtofriend",new { randomnumber = ViewBag.rnum, Therapistname = ViewBag.businessnm1,state=ViewBag.estatenm,city=ViewBag.ecity,zip=ViewBag.zipvalue })';
+                        //window.location.href = "../MailToFriend" + "/" + cnt.Providerid;
+                    }
+                    else if (data.ErrorMessage == 'false') {
+                        alert('Session is expired. You will be redirected to session expired page');
+                        window.location = '@Url.Action("SessionExpire", "Home")';
+                    }
+                }
+                // error: function () { alert("You need to enter valid Security Code to register..."); window.location.href = "contact"; }
+            });
+            // $.post('Submitcontact', postData, recipeSuccess);
+            // document.body.style.cursor = 'wait';
+
+        }
+
+
+    }
+</script>
+</head>
+<body>
+<input type="hidden" id="hdnproviderid" value="@ViewBag.id" />
+<input type="hidden" id="hdnpublicurl" value="@ViewBag.PublicURL" />
+<input type="hidden" id="hdnphone" value="@ViewBag.Vmoffice" />
+<input type="hidden" id="hdnaddress" value="@ViewBag.address" />
+<input type="hidden" id="hdnprovidername" value="@ViewBag.ProviderName" />
+<input type="hidden" id="hdnbusinessnm" name="hdnbusinessnm" value="@ViewBag.businessnm1" />
+<table cellpadding="0" cellspacing="0" border="0" width="100%" align="center">
+        <tr>
+            <td valign="top" align="center">
+                <input type="hidden" runat="server" id="hdnflg" />
+                <table bgcolor="White" height="865px" border="0" cellpadding="0" cellspacing="1"
+                    width="100%" align="center">
+                    <tr>
+                        <td valign="top">
+                            <table width="100%" class="" cellpadding="3" cellspacing="1" align="center">
+                                <tr style="padding-left: 70px; line-height: 30px; padding-right: 70px; text-align: justify;">
+                                    <td align="left" class="login_thera" style="font-weight: bold;" colspan="2">
+                                        Mailing provider details to a friend
+                                    </td>
+                                </tr>
+                                <tr class="skybluebg">
+                                    <td align="right" width="40%" style="padding-top: 20px;">
+                                    <label class="lbltext" id="lblYourName" style="font-weight:bold;">Your Name :</label>
+                                       &nbsp;</td>
+                                    <td align="left" width="60%" style="padding-top: 20px;">
+                                    <input type="text" class="textfield" id="txtYourName" name="txtYourName" style="width:200;" />
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr class="gray">
+                                    <td width="40%" align="right" style="padding-top: 10px;">
+                                        <font color="red">*</font>
+                                             <label class="lbltext" id="lblYourEmail" style="font-weight:bold;">Your Email :</label>
+                                            &nbsp;</td>
+                                    <td width="60%" align="left" style="padding-top: 10px;">
+                                    <input type="text" class="textfield" id="txtYourEmail" name="txtYourEmail" style="width:200;" />
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr class="skybluebg">
+                                    <td width="40%" align="right" style="padding-top: 10px;">
+                                     <label class="lbltext" id="lblFriendsName" style="font-weight:bold;">Friend's Name :</label>
+                                     &nbsp;</td>
+                                    <td width="60%" align="left" style="padding-top: 10px;">
+                                    <input type="text" class="textfield" id="txtFriendsName" name="txtFriendsName" style="width:200;" />
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr class="gray">
+                                    <td width="40%" align="right" style="padding-top: 10px;">
+                                        <font color="red">*</font>
+                                         <label class="lbltext" id="lblFriendsEmail" style="font-weight:bold;">Friend's Email :</label>
+                                        &nbsp;</td>
+                                    <td width="60%" align="left" style="padding-top: 10px;">
+                                    <input type="text" class="textfield" id="txtFriendsEmail" name="txtFriendsEmail" style="width:200;" />
+                                  
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr class="skybluebg">
+                                    <td width="40%" align="right" style="padding-top: 16px;">
+                                        <font color="red">*</font>
+                                         <label class="lbltext" id="Label1" style="font-weight:bold;">Type verification code :</label>
+                                       &nbsp;</td>
+                                    <td width="60%" align="left" style="padding-top: 16px;">
+                                    <input type="text" class="textfield" id="txtimgKey" name="txtimgKey" style="width:150px; font-family:Arial; font-size:9pt;" />
+                                         <img style="padding-left:20px;width: 110px;" src="@Url.Action("ShowCaptchaImage", "Home")" />
+                                       <input type="hidden" id="hdnkey" name="hdnkey" value="@ViewBag.captcha" />
+                                       
+                                    </td>
+                                </tr>
+                                <tr class="gray">
+                                    <td width="40%" align="right" style="padding-top: 16px;">
+                                     <label class="lbltext" id="lblMsg" style="font-weight:bold;">Message :</label>
+                                       &nbsp;</td>
+                                    <td width="60%" align="left" style="padding-top: 16px;">
+                                    <textarea id="txtMsg" class="text" rows="2" cols="2" maxlength="1000" style="width:400px; height: 120px;"></textarea>
+                                        <br />(Maximum length 1000 characters)
+                                        &nbsp;
+                                        <br />
+                                        <br />
+                                        </td>
+                                </tr>
+                                <tr class="skybluebg">
+                                    <td>
+                                    </td>
+                                    <td align="left">
+                                    <input id="imgbtnSubmit" value="Submit" type="submit" class="button" onclick="return chkContactus();"/>
+                                      &nbsp;&nbsp&nbsp
+                                      <input id="imgbtnCancel" value="Cancel" type="button" class="button" onclick="return cancel();"/>
+                                    
+                                    </td>
+                                </tr>
+                                <tr class="skybluebg">
+                                    <td colspan="2" align="center">
+                                        <b>
+                                        <label class="lbltext" style="font-weight:bold;">Your message will automatically include the following information about the therapist</label>
+                                      </b>
+                                    </td>
+                                </tr>
+                                <tr class="skybluebg">
+                                    <td align="right" style="padding-top: 20px;">
+                                        <b>
+                                        <label id="lblProviderName" class="lbltext" style="font-weight:bold">Provider Name :</label>
+                                           &nbsp;</b>
+                                    </td>
+                                    <td align="left" style="padding-top: 20px;">
+                                    <label class="lbltext" id="lblName">@ViewBag.ProviderName</label>
+                                      
+                                    </td>
+                                </tr>
+                                @if (ViewBag.address != null)
+                                {
+                                <tr class="gray">
+                                    <td valign="top" align="right">
+                                        <b>
+                                         <label id="lblAddressHeader" class="lbltext" style="font-weight:bold">Address :</label>
+                                            &nbsp;</b>
+                                    </td>
+                                      <td align="left">
+                                     <label class="lbltext" id="lblAddress">@Html.Raw(ViewBag.address)</label>
+                                       
+                                    </td>
+                                </tr>
+                                }
+                                @if (ViewBag.Vmoffice != null)
+                                {
+                                <tr class="skybluebg">
+                                    <td align="right">
+                                        <b>
+                                        <label id="lblMobileHeader" class="lbltext" style="font-weight:bold">Phone :</label>
+                                            &nbsp;</b>
+                                    </td>
+                                    <td align="left">
+                                      <label class="lbltext" id="lblMobile">@ViewBag.Vmoffice</label>
+                                    
+                                    </td>
+                                </tr>
+                                }
+                                <tr class="gray">
+                                    <td align="right">
+                                    </td>
+                                    <td align="left">
+                                    <label class="lbltext" id="lblPublicUrl">@ViewBag.PublicURL</label>
+                                      
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+<table style="display: none">
+        <tr>
+            <td id="tdSiteMeter" runat="server">
+            </td>
+        </tr>
+    </table>
+    <div id="dvLoading" style="display:none; text-align:center; vertical-align:middle">
+    <img src="~/Images/Ajax-Processing.gif" alt="Processing"  />
+    </div>
+</body>
+</html>

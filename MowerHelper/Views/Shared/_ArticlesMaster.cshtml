@@ -1,0 +1,187 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+
+<head id="Head1" runat="server">
+      <title>Mower Helper-Find an Mower Helper</title>
+         @* <meta name="viewport" content="width=device-width" />*@
+@*           <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico">*@
+  <link href="~/Content/common.css" rel="stylesheet" type="text/css" />
+   </head>
+<body>    
+    <div id="wrapper">
+    <div id="flttop">
+        <div id="header01">
+           <div id="headermain02">
+                <div id="logopublic">
+                    <a id="logo_find1" runat="server" title="Home" href="@Url.Action("Index", "Home", null)" style="text-decoration:none;" class="bluemenuPublic">
+                       Mower Helper</a></div>
+                <div id="mainnavcon">
+                    <div class="mainnav">
+                        <ul>
+                               @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                            <li class="current_page_item">@Html.ActionLink("Mower Helper Directory", "Directory", "Search")</li>
+                               }
+                           <li class="page_item page-item-2">
+                                        @Html.RouteLink("Contact Us", "Contact")
+
+                                    </li>
+                                    <li class="page_item page-item-3">
+                                        @Html.RouteLink("Sign Up", "Register")</li>
+                                    <li class="page_item page-item-4">@Html.RouteLink("FAQ", "FAQSHome")</li>
+                                    <li class="page_item page-item-5">
+                                        @Html.ActionLink("Login", "login", "Home", null, null)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="flt02">
+        <div id="bodycon">
+            <div id="contentpannel" class="padding-top">
+                <div id="leftcon">                    
+                    <div class="contents">
+                        @RenderBody()
+                    </div>
+                </div>
+                 @if (ViewBag.ShowElectricians == "Y")
+                                    {
+                <div id="rightcon">
+                    <div id="divfeaured" runat="server" class="rightcon" style="width: 228px; float: left;
+                        padding: 5px 0px 18px 10px; background-repeat: no-repeat; background-position: left top;  background-image:url(../Images/raight-heading.gif);">
+                        <h2>
+                            Featured Electricians</h2>
+                    </div>
+                       
+                       <div>
+                @{Html.RenderAction("_FeaturedTherapists", "Search");}
+                        </div>                                               
+                         
+                </div>
+                 }
+                <div class="clearme">
+                    <img id="imgspace" runat="server" src="~/Images/speacer.gif"/></div>
+                  
+            </div>
+       <div id="footercon" style="padding-top:220px;">
+            <div id="footerpublic">
+                @{
+                   // MowerHelper.Models.Classes.clsWebConfigsettings clsweb = new MowerHelper.Models.Classes.clsWebConfigsettings();
+                    if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("ShowArticles").ToUpper() == "YES")
+                    {
+                        ViewBag.ShowArticles = "Y";
+                    }
+                    else
+                    {
+                        ViewBag.ShowArticles = "N";
+                    }
+                    if (MowerHelper.Models.Classes.clsWebConfigsettings.GetConfigSettingsValue("ShowForumsInPublic").ToUpper() == "YES")
+                    {
+                        ViewBag.Showforums = "Y";
+                    }
+                    else
+                    {
+                        ViewBag.Showforums = "N";
+                    }
+                }
+                     @if (ViewBag.ShowArticles == "Y" && ViewBag.Showforums == "Y")
+                            {
+                            <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 100px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                         
+                                <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.ShowArticles == "Y")
+                            {
+                                <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                               
+                                 <li>
+                                      @Html.RouteLink("Learn & Explore", "LearnExplore/Articles")
+                                </li>
+                                      
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                            </ul>
+                            }
+                            else if (ViewBag.Showforums == "Y")
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 250px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li>
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li>
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li>
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                      <li>
+                                    @Html.ActionLink("Forums", "ForumsHome", "Publicforums", null, null)
+                                </li>
+                            </ul>
+                            }
+                            else
+                            {
+                                 <ul id="footer-nav" style="text-align: center; padding: 20px 0 0 370px;">
+                                <li>
+                                    @Html.RouteLink("Frequently Asked Questions", "FAQSHome")
+                                </li>
+                                <li style="display:none;">
+                                    @Html.RouteLink("Contact Us", "Contact")
+                                </li>                              
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Terms Of Use", "Termsofuse")
+                                </li>
+                                 <li style="display:none;">
+                                    @Html.RouteLink("Partner Sites", "MoreHelp")
+                                </li>
+                                    
+                            </ul>
+                            }
+                            <div class="copy">
+                                Copyright © 2018.Mower Helper , Inc. All Rights Reserved.</div>
+                        </div>
+                    </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
